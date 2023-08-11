@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://docker:docker@localhost:3306/sample"
+}
+
+model enum_sample {
+  id          Int @id @default(autoincrement())
+  enum_column Int
+}
+
+model name {
+  id   Int    @id @default(autoincrement())
+  name String @db.Text
+}

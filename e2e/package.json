@@ -8,6 +8,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.37.0"
+    "@playwright/test": "^1.37.0",
+    "prisma": "^5.1.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.1.1"
   }
 }
