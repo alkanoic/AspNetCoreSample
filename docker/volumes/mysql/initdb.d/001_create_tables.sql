@@ -1,0 +1,9 @@
+CREATE TABLE name (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE enum_sample (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    enum_column INT NOT NULL
+);
