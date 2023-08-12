@@ -1,1 +1,1 @@
-# AspNetCore8Sample
+# AspNetCoreSample

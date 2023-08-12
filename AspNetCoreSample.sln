@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3A4584AB-5BB6-4FD4-9A44-0A423EC5B916}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore8Sample.Mvc", "src\AspNetCore8Sample.Mvc\AspNetCore8Sample.Mvc.csproj", "{679F31B1-8ACF-4F4E-9FCC-EC5F99B0983C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample.Mvc", "src\AspNetCoreSample.Mvc\AspNetCoreSample.Mvc.csproj", "{679F31B1-8ACF-4F4E-9FCC-EC5F99B0983C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
