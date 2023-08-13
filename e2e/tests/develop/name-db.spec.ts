@@ -16,14 +16,15 @@ test('name db create test', async ({ page }) => {
 
   await page.getByRole('link', { name: 'Back to List' }).click();
   await page.getByRole('link', { name: 'Create New' }).click();
-  await page.getByLabel('Name1').fill('bbb');
+  const input_name = 'bbb';
+  await page.getByLabel('Name1').fill(input_name);
   await expect(page).toHaveScreenshot('name-3.png');
   await page.getByRole('button', { name: 'Create' }).click();
   await expect(page).toHaveScreenshot('name-4.png');
 
   await page.getByRole('link', { name: 'Details' }).nth(3).click();
   await expect(page).toHaveScreenshot('name-5.png');
-  const input_name = 'bbb';
+  await page.pause();
   await page.getByText(input_name).click();
 
   const url = await page.url();
