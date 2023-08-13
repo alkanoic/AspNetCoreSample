@@ -23,10 +23,21 @@ test('test', async ({ page }) => {
 
   await page.getByRole('link', { name: 'Details' }).nth(3).click();
   await expect(page).toHaveScreenshot('name-5.png');
-  await page.getByText('bbb').click();
+  const input_name = 'bbb';
+  await page.getByText(input_name).click();
 
-  const name_count2 = await prisma.name.count();
-  expect(name_count2).toBe(4);
-  const name_first = await prisma.name.findFirst();
-  expect(name_first?.name).toBe('太郎');
+  const url = await page.url();
+  const create_id = parseInt(url.match(/(\d+)$/g)[0], 10);
+  const create_name = await prisma.name.findUnique({
+    where: {
+      id: create_id,
+    },
+  });
+  expect(create_name.name).toBe('bbb');
+
+  await prisma.name.delete({
+    where: {
+      id: create_id,
+    },
+  });
 });
