@@ -1,0 +1,11 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "openjdk@latest": {
+      "last_modified": "2020-09-09T10:48:30Z",
+      "resolved": "github:NixOS/nixpkgs/51428e8d38271d14146211867984b8742d304ea4#openjdk",
+      "source": "devbox-search",
+      "version": "8u265-ga"
+    }
+  }
+}
