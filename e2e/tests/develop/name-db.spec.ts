@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { PrismaClient } from '@prisma/client';
 
-test('test', async ({ page }) => {
+test('name db create test', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'Name' }).click();
   await expect(page).toHaveScreenshot('name-1.png');
