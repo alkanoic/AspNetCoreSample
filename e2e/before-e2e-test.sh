@@ -2,7 +2,8 @@
 
 docker compose down -v
 docker compose up -d
-rm -r allure-results
+rm -r -f allure-results
+bash after-e2e-test.sh
 dotnet run --project ../src/AspNetCoreSample.Mvc &
 for i in $(seq 1 10); do
     sleep 2;
