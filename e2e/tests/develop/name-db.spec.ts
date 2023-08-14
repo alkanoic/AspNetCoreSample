@@ -4,6 +4,11 @@ import { PrismaClient } from '@prisma/client';
 test('name db create test', async ({ page }, testinfo) => {
   testinfo.config.workers = 1;
   await page.goto('/');
+  const viewportSize = page.viewportSize();
+  if (viewportSize.width <= 480) {
+    // モバイルデバイスのコードを実行
+    await page.getByLabel('Toggle navigation').click();
+  }
   await page.getByRole('link', { name: 'Name' }).click();
   await expect(page).toHaveScreenshot('name-1.png');
 
