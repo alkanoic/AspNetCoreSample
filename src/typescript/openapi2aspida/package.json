@@ -1,0 +1,19 @@
+{
+  "name": "openapi2aspida",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "openapi2aspida": "^0.23.2"
+  },
+  "dependencies": {
+    "@aspida/axios": "^1.14.0",
+    "axios": "^1.5.1"
+  }
+}
