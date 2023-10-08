@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3A4584AB-5BB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample.Mvc", "src\AspNetCoreSample.Mvc\AspNetCoreSample.Mvc.csproj", "{679F31B1-8ACF-4F4E-9FCC-EC5F99B0983C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample.WebApi", "src\AspNetCoreSample.WebApi\AspNetCoreSample.WebApi.csproj", "{51310793-CBEA-4D8D-AE3A-C91CF5C9AF74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +22,13 @@ Global
 		{679F31B1-8ACF-4F4E-9FCC-EC5F99B0983C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{679F31B1-8ACF-4F4E-9FCC-EC5F99B0983C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{679F31B1-8ACF-4F4E-9FCC-EC5F99B0983C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51310793-CBEA-4D8D-AE3A-C91CF5C9AF74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51310793-CBEA-4D8D-AE3A-C91CF5C9AF74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51310793-CBEA-4D8D-AE3A-C91CF5C9AF74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51310793-CBEA-4D8D-AE3A-C91CF5C9AF74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{679F31B1-8ACF-4F4E-9FCC-EC5F99B0983C} = {3A4584AB-5BB6-4FD4-9A44-0A423EC5B916}
+		{51310793-CBEA-4D8D-AE3A-C91CF5C9AF74} = {3A4584AB-5BB6-4FD4-9A44-0A423EC5B916}
 	EndGlobalSection
 EndGlobal
