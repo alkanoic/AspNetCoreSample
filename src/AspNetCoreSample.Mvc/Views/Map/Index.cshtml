@@ -1,0 +1,98 @@
+﻿@{
+  ViewData["Title"] = "Map Page";
+}
+
+@section Styles {
+  <style>
+    #map {
+      height: calc(100vh - 64px - 60px - 40px);
+    }
+  </style>
+  <!-- LeafletのCSSとJSライブラリを読み込む -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+}
+
+<div>
+  <textarea id="latlngs" rows="5" cols="40"></textarea>
+  @*
+  35.681236, 139.767125, 34.693738, 135.502165
+  35, 139, 34, 135
+  *@
+  <button onclick="addLatLng()">追加</button>
+</div>
+
+<!-- 地図を表示するためのdiv要素 -->
+<div id="map"></div>
+
+@section Scripts {
+  <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+  <script>
+    // 地図オブジェクトを生成し、OpenStreetMapの画像タイルを読み込む
+    var map = L.map('map').setView([35, 135], 5); // 地図の中心とズームレベルを設定
+    var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    });
+    tileLayer.addTo(map);
+
+    var lines;
+
+    // ボタンがクリックされたときの関数
+    function addLatLng() {
+      const textarea = document.getElementById('latlngs').value;
+      console.log(textarea);
+
+      // 緯度経度の配列を空で作成
+      var latlngs = [];
+
+      Papa.parse(textarea, {
+        header: false, // ヘッダー行があるかどうか
+        dynamicTyping: true, // 数値や真偽値を自動的に変換するかどうか
+        complete: function (results) { // パース完了後のコールバック関数
+          console.log(results.data); // パースされたデータ（配列やオブジェクト）を表示
+
+          // 緯度と経度が有効な値かチェック
+          results.data.forEach((x) => {
+            if (x.length === 4) {
+              validateLatLng(x[0], [1]);
+              validateLatLng(x[2], [3]);
+              latlngs.push([
+                [x[0], x[1]],
+                [x[2], x[3]]
+              ]);
+            }
+          });
+        },
+        error: function (error) { // パース失敗時のコールバック関数
+          console.error(error); // エラー情報を表示
+        }
+      });
+
+      if (lines) {
+        console.log(lines);
+        map.removeLayer(lines);
+      }
+
+      // 線オブジェクトを作成し、緯度経度の配列から線を描く
+      lines = L.polyline(latlngs, {
+        color: 'red', // 線の色
+        weight: 3 // 線の太さ
+      });
+
+      // 線を地図に表示する
+      lines.addTo(map);
+    }
+
+    function validateLatLng(lat, lng) {
+      if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        // 無効な値ならアラートを表示
+        alert(`${lat}, ${lng} 緯度と経度は数値で、緯度は-90から90まで、経度は-180から180までの範囲で入力してください。`);
+        return false;
+      }
+      return true;
+    }
+
+  </script>
+}

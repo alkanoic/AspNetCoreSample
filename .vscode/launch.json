@@ -24,5 +24,30 @@
                 "/Views": "${workspaceFolder}/src/AspNetCoreSample.Mvc/Views"
             }
         },
+        {
+            "name": "debug-hot-reload",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "dotnet",
+            "args": [
+                "watch",
+                "--project",
+                ".",
+                "--verbose"
+            ],
+            "cwd": "${workspaceFolder}/src/AspNetCoreSample.Mvc",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/AspNetCoreSample.Mvc/Views"
+            }
+        },
     ],
 }
