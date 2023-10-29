@@ -95,11 +95,36 @@
 
       // 各座標配列に対してポリラインを作成し、アニメーションを開始
       latlngs.forEach(latlng => {
+        const color = getRandomColorfulColor()
         const polyline = L.polyline(latlng, {
-          color: getRandomColorfulColor()
+          color: color
         });
         lines.push(polyline);
         polyline.addTo(map);
+
+        // 開始地点と終了地点の座標を取得
+        const startPoint = latlng[0];
+        const endPoint = latlng[latlng.length - 1];
+
+        // 'S' と 'E' の文字を含むカスタムアイコンを作成
+        const startIcon = L.divIcon({
+          className: 'custom-icon',
+          html: '<div style="background-color: green; color: white; padding: 5px; border-radius: 50%;">S</div>',
+          iconSize: [20, 20]
+        });
+
+        const endIcon = L.divIcon({
+          className: 'custom-icon',
+          html: '<div style="background-color: red; color: white; padding: 5px; border-radius: 50%;">E</div>',
+          iconSize: [20, 20]
+        });
+
+        // 開始地点と終了地点にマーカーを作成し、マップに追加
+        const startMarker = L.marker(startPoint, { icon: startIcon });
+        const endMarker = L.marker(endPoint, { icon: endIcon });
+
+        startMarker.addTo(map);
+        endMarker.addTo(map);
 
         const animationCheckbox = document.getElementById('animation');
         // snakeend イベントのリスナーを作成
