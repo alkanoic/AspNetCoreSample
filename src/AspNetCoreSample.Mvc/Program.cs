@@ -1,5 +1,6 @@
 using AspNetCoreSample.Mvc.Models;
-
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using WebPush;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<SampleContext>();
+
+builder.Services.AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssemblyContaining<FluentViewModel>();
 
 var vapidKeys = VapidHelper.GenerateVapidKeys();
 var vapidOption = new AspNetCoreSample.Mvc.Options.VapidOption()

@@ -1,0 +1,29 @@
+@model FluentViewModel
+@{
+    ViewData["Title"] = "FluentValidation Page";
+}
+
+<form asp-formhelper="true" asp-controller="fluent" asp-action="index" method="post">
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" required />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="No"></label>
+        <input asp-for="No" />
+        <span asp-validation-for="No" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" type="email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Option"></label>
+        <input asp-for="Option" />
+        <span asp-validation-for="Option" class="text-danger"></span>
+    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger">エラー</div>
+    <input type="submit" />
+</form>
