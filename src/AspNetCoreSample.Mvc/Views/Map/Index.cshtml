@@ -29,6 +29,8 @@
 <div>
   <textarea id="latlngs" rows="5" cols="40"></textarea>
   <button onclick="addLatLng()">追加</button>
+  <input type="checkbox" id="repeatAnimation" checked> Repeat Animation
+  <input type="checkbox" id="animation" checked> Animation
 </div>
 
 <!-- 地図を表示するためのdiv要素 -->
@@ -36,6 +38,7 @@
 
 @section Scripts {
   <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+  <script src="https://unpkg.com/leaflet.polyline.snakeanim@latest/L.Polyline.SnakeAnim.js"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let lat = urlParams.get('lat') || 35;
@@ -51,7 +54,7 @@
 
     map.on('moveend zoomend', updateUrlParameters);
 
-    var lines;
+    var lines = [];
 
     // ボタンがクリックされたときの関数
     function addLatLng() {
@@ -85,18 +88,35 @@
       });
 
       if (lines) {
-        console.log(lines);
-        map.removeLayer(lines);
+        lines.forEach(line => {
+          map.removeLayer(line);
+        })
       }
 
-      // 線オブジェクトを作成し、緯度経度の配列から線を描く
-      lines = L.polyline(latlngs, {
-        color: 'red', // 線の色
-        weight: 3 // 線の太さ
-      });
+      // 各座標配列に対してポリラインを作成し、アニメーションを開始
+      latlngs.forEach(latlng => {
+        const polyline = L.polyline(latlng, {
+          color: getRandomColorfulColor()
+        });
+        lines.push(polyline);
+        polyline.addTo(map);
 
-      // 線を地図に表示する
-      lines.addTo(map);
+        const animationCheckbox = document.getElementById('animation');
+        // snakeend イベントのリスナーを作成
+        polyline.on('snakeend', function () {
+          const repeatCheckbox = document.getElementById('repeatAnimation');
+          if (repeatCheckbox.checked) {
+            // アニメーションをリセット
+            this._snaking = false;
+
+            // アニメーションを再開始
+            this.snakeIn();
+          }
+        });
+        if (animationCheckbox.checked) {
+          polyline.snakeIn();
+        }
+      });
     }
 
     function validateLatLng(lat, lng) {
@@ -106,6 +126,28 @@
         return false;
       }
       return true;
+    }
+
+    // カラフルな色のセットを定義
+    const colorfulColors = [
+      '#FF0000',  // Red
+      '#FF7F00',  // Orange
+      '#FFFF00',  // Yellow
+      '#7FFF00',  // Chartreuse
+      '#00FF00',  // Green
+      '#00FF7F',  // Spring Green
+      '#00FFFF',  // Cyan
+      '#007FFF',  // Azure
+      '#0000FF',  // Blue
+      '#7F00FF',  // Violet
+      '#FF00FF',  // Magenta
+      '#FF007F'   // Rose
+    ];
+
+    // ランダムにカラフルな色を選択する関数
+    function getRandomColorfulColor() {
+      const randomIndex = Math.floor(Math.random() * colorfulColors.length);
+      return colorfulColors[randomIndex];
     }
 
     function updateUrlParameters() {
