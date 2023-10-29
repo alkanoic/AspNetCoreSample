@@ -7,6 +7,10 @@
     #map {
       height: calc(100vh - 64px - 60px - 40px);
     }
+
+    textarea {
+      width: 100%;
+    }
   </style>
   <!-- LeafletのCSSとJSライブラリを読み込む -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -15,12 +19,15 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 }
 
+<h2>地図上に緯度経度1と緯度経度2間の線をマッピングします</h2>
+<div>
+  次のCSVの形式で入力してください<br />
+  緯度1,経度1,緯度2,経度2<br />
+  35.681236, 139.767125, 34.693738, 135.502165<br />
+  35, 139, 34, 135<br />
+</div>
 <div>
   <textarea id="latlngs" rows="5" cols="40"></textarea>
-  @*
-  35.681236, 139.767125, 34.693738, 135.502165
-  35, 139, 34, 135
-  *@
   <button onclick="addLatLng()">追加</button>
 </div>
 
@@ -30,12 +37,19 @@
 @section Scripts {
   <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
   <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    let lat = urlParams.get('lat') || 35;
+    let lng = urlParams.get('lng') || 135;
+    let zoom = urlParams.get('zoom') || 5;
+
     // 地図オブジェクトを生成し、OpenStreetMapの画像タイルを読み込む
-    var map = L.map('map').setView([35, 135], 5); // 地図の中心とズームレベルを設定
+    var map = L.map('map').setView([lat, lng], zoom); // 地図の中心とズームレベルを設定
     var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
     });
     tileLayer.addTo(map);
+
+    map.on('moveend zoomend', updateUrlParameters);
 
     var lines;
 
@@ -92,6 +106,17 @@
         return false;
       }
       return true;
+    }
+
+    function updateUrlParameters() {
+      const center = map.getCenter();
+      const zoom = map.getZoom();
+      const newUrlParams = new URLSearchParams(window.location.search);
+      newUrlParams.set('lat', center.lat.toFixed(4));
+      newUrlParams.set('lng', center.lng.toFixed(4));
+      newUrlParams.set('zoom', zoom);
+      const newUrl = window.location.origin + window.location.pathname + '?' + newUrlParams.toString();
+      history.replaceState(null, '', newUrl);
     }
 
   </script>
