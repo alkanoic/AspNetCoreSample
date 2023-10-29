@@ -1,0 +1,14 @@
+<p>
+    <button id="send-push">SendPush</button>
+</p>
+
+@section Scripts {
+    <script>
+        const btnSendPush = document.querySelector("button#send-push");
+        btnSendPush.addEventListener("click", ev => {
+            ev.preventDefault();
+            fetch("/push/trigger");
+            console.log("Just triggered server to publish notifications.");
+        });
+    </script>
+}

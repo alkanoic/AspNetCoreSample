@@ -1,0 +1,84 @@
+@model PushRegisterViewModel
+
+<p>
+    <button id="register-service-worker">ServiceWorkerの登録</button>
+</p>
+
+<p>
+    <button id="start-subscribe">Subscribeの登録</button>
+</p>
+
+<p>
+    <button id="stop-service-worker">ServiceWorkerの削除</button>
+</p>
+
+<p>Subscribeの登録が失敗する場合はブラウザの開発ツールよりサイトデータの削除を行う</p>
+
+
+@section Scripts {
+    <script>
+        const urlB64ToUint8Array = (base64String) => {
+            const padding = "=".repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+
+        var _registration = null;
+
+        const btnRegister = document.querySelector("button#register-service-worker");
+        btnRegister.addEventListener("click", ev => {
+            ev.preventDefault();
+            window.navigator.serviceWorker.register("/js/service-worker.js").then(registration => {
+                console.log("Register OK:", registration);
+                btnRegister.innerHTML += " 済み";
+                _registration = registration;
+            }).catch(err => {
+                console.log("Register Error:", err);
+            });
+        });
+
+        const btnSubscribe = document.querySelector("button#start-subscribe");
+        btnSubscribe.addEventListener("click", ev => {
+            ev.preventDefault();
+            _registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlB64ToUint8Array("@Model.PublicKey"),
+            }).then(subscription => {
+                console.log("Subscribe OK:", subscription);
+                btnSubscribe.innerHTML += " 済み";
+                return fetch("/push/subscribe", {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(subscription),
+                });
+            }).then(() => {
+                console.log("Server Stored Subscription.");
+            }).catch(err => {
+                console.log("Subscribe Error:", err);
+                console.error("[main.js][Subscription]", err);
+            });
+        });
+
+        const btnUnregister = document.querySelector("button#stop-service-worker");
+        btnUnregister.addEventListener("click", ev => {
+            ev.preventDefault();
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                    //returns installed service workers
+                    if (registrations.length) {
+                        for (let registration of registrations) {
+                            registration.unregister();
+                        }
+                    }
+                });
+            }
+            btnUnregister.innerHTML += " 済み";
+        });
+
+    </script>
+}
