@@ -4,7 +4,10 @@
 	"name": "C#",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	// "image": "mcr.microsoft.com/devcontainers/dotnet:1-6.0",
-	"dockerFile": "Dockerfile",
+	// "dockerFile": "Dockerfile",
+	"dockerComposeFile": "compose.yaml",
+	"service": "devcontainer",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
 		// "ghcr.io/devcontainers/features/git:1": {},
 		// "ghcr.io/devcontainers-contrib/features/curl-apt-get:1": {},

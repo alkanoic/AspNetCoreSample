@@ -1,13 +1,16 @@
 using AspNetCoreSample.Mvc.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 using WebPush;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<SampleContext>();
+var connectionString = builder.Configuration.GetConnectionString("Default") ?? "";
+builder.Services.AddDbContext<SampleContext>(
+    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddFluentValidationClientsideAdapters();
 
