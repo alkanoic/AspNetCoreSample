@@ -3,15 +3,16 @@
 {
 	"name": "C#",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/dotnet:1-6.0",
+	// "image": "mcr.microsoft.com/devcontainers/dotnet:1-6.0",
+	"dockerFile": "Dockerfile",
 	"features": {
-		"ghcr.io/devcontainers/features/git:1": {},
-		"ghcr.io/devcontainers-contrib/features/curl-apt-get:1": {},
-		"ghcr.io/devcontainers-contrib/features/wget-apt-get:1": {},
-		"ghcr.io/devcontainers-contrib/features/mysql-homebrew:1": {},
-		"ghcr.io/devcontainers/features/azure-cli:1": {},
-		"ghcr.io/devcontainers/features/node:1": {},
-		"docker-from-docker": {}
+		// "ghcr.io/devcontainers/features/git:1": {},
+		// "ghcr.io/devcontainers-contrib/features/curl-apt-get:1": {},
+		// "ghcr.io/devcontainers-contrib/features/wget-apt-get:1": {},
+		// "ghcr.io/devcontainers-contrib/features/mysql-homebrew:1": {},
+		// "ghcr.io/devcontainers/features/azure-cli:1": {},
+		// "ghcr.io/devcontainers/features/node:1": {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [5000, 5001],
@@ -21,17 +22,22 @@
 	//		}
 	// }
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "bash install-trivy.sh && dotnet restore && dotnet dev-certs https",
+	"postCreateCommand": "dotnet restore && dotnet dev-certs https",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"MS-CEINTL.vscode-language-pack-ja",
+				"ms-dotnettools.csharp",
 				"formulahendry.dotnet-test-explorer",
 				"Fudge.auto-using",
 				"kreativ-software.csharpextensions",
+				"ms-playwright.playwright",
 				"k--kato.docomment",
 				"mhutchie.git-graph",
-				"esbenp.prettier-vscode"
+				"esbenp.prettier-vscode",
+				"yoavbls.pretty-ts-errors",
+				"Prisma.prisma"
 			],
 			"settings": {
 				"editor.formatOnSave": true
