@@ -25,7 +25,7 @@
 	//		}
 	// }
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "dotnet restore && dotnet dev-certs https",
+	"postCreateCommand": "dotnet restore && dotnet dev-certs https --clean --import /workspaces/.aspnet/https/NetCoreWebAppOnWslDocker001.pfx --password PfxFilePassword",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
@@ -46,7 +46,7 @@
 				"editor.formatOnSave": true
 			}
 		}
-	},
+	}
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }
