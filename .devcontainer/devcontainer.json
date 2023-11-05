@@ -25,7 +25,7 @@
 	//		}
 	// }
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "dotnet restore && dotnet dev-certs https --clean --import /workspaces/.aspnet/https/NetCoreWebAppOnWslDocker001.pfx --password PfxFilePassword",
+	"postCreateCommand": ".devcontainer/postCreateCommand.sh",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
