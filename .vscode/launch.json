@@ -49,5 +49,17 @@
                 "/Views": "${workspaceFolder}/src/AspNetCoreSample.Mvc/Views"
             }
         },
+        {
+            "name": ".NET Watch Attach",
+            "type": "dotnetwatchattach",
+            "request": "launch",
+            "args": {
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development"
+                }
+            },
+            "task": "watchTaskName",
+            "program": "AspNetCoreSample.Mvc.exe"
+        },
     ],
 }

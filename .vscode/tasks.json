@@ -14,5 +14,20 @@
             "problemMatcher": "$msCompile",
             "dependsOn": "webpack",
         },
+        {
+            "label": "watchTaskName",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project",
+                "${workspaceFolder}/src/AspNetCoreSample.Mvc/AspNetCoreSample.Mvc.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            // "problemMatcher": "$msCompile",
+            "isBackground": true
+        }
     ]
 }
