@@ -19,7 +19,7 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 }
 
-<h2>地図上に緯度経度1と緯度経度2間の線をマッピングします</h2>
+<h4>地図上に緯度経度1と緯度経度2間の線をマッピングします</h4>
 <div>
   次のCSVの形式で入力してください<br />
   緯度1,経度1,緯度2,経度2<br />
@@ -31,6 +31,15 @@
   <button onclick="addLatLng()">追加</button>
   <input type="checkbox" id="repeatAnimation" checked> Repeat Animation
   <input type="checkbox" id="animation" checked> Animation
+</div>
+
+<h4>地図上にマーカーをマッピングします</h4>
+<div>
+  次のCSVの形式で入力してください<br />
+  場所名,緯度,経度<br />
+  Tokyo,35.681236,139.767125<br />
+  <textarea id="locations" rows="5" cols="40"></textarea>
+  <button onclick="addLocation()">追加</button>
 </div>
 
 <!-- 地図を表示するためのdiv要素 -->
@@ -186,5 +195,56 @@
       history.replaceState(null, '', newUrl);
     }
 
+    // マーカーのリストを保持するための配列を作成
+    var markers = [];
+
+    function addLocation() {
+      const textarea = document.getElementById('locations').value;
+      console.log(textarea);
+
+      // 場所の配列を空で作成
+      var locations = [];
+
+      Papa.parse(textarea, {
+        header: false, // ヘッダー行があるかどうか
+        dynamicTyping: true, // 数値や真偽値を自動的に変換するかどうか
+        complete: function (results) { // パース完了後のコールバック関数
+          console.log(results.data); // パースされたデータ（配列やオブジェクト）を表示
+
+          // 緯度と経度が有効な値かチェック
+          results.data.forEach((x) => {
+            if (x.length === 3) {
+              validateLatLng(x[1], x[2]);
+              locations.push({
+                name: x[0],
+                lat: x[1],
+                lng: x[2]
+              });
+            }
+          });
+        },
+        error: function (error) { // パース失敗時のコールバック関数
+          console.error(error); // エラー情報を表示
+        }
+      });
+
+      // 既存のマーカーを削除
+      markers.forEach(marker => {
+        map.removeLayer(marker);
+      });
+
+      // マーカーのリストを空にする
+      markers = [];
+
+      // 各場所に対してマーカーを作成し、地図に追加
+      locations.forEach(location => {
+        const marker = L.marker([location.lat, location.lng]);
+        marker.bindPopup(location.name); // ポップアップに場所名を表示
+        marker.addTo(map);
+
+        // マーカーをリストに追加
+        markers.push(marker);
+      });
+    }
   </script>
 }
