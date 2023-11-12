@@ -25,12 +25,12 @@
   緯度1,経度1,緯度2,経度2<br />
   35.681236, 139.767125, 34.693738, 135.502165<br />
   35, 139, 34, 135<br />
-</div>
-<div>
   <textarea id="latlngs" rows="5" cols="40" class="form-control">35.681236, 139.767125, 34.693738, 135.502165</textarea>
-  <div class="d-flex align-items-center">
-  <button class="btn btn-primary mt-2" onclick="addLatLng()">追加</button>
-</div>
+  <div class="mt-2">
+    <button class="btn btn-primary" onclick="addLatLng()">追加</button>
+    <button class="btn btn-primary ml-2" onclick="addStartHeatmap()">開始地点のヒートマップを追加</button>
+    <button class="btn btn-primary ml-2" onclick="addEndHeatmap()">到着地点のヒートマップを追加</button>
+  </div>
 </div>
 
 <h4 class="mt-2">2. 地図上にマーカーをマッピングします</h4>
@@ -72,6 +72,7 @@
 @section Scripts {
   <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
   <script src="https://unpkg.com/leaflet.polyline.snakeanim@latest/L.Polyline.SnakeAnim.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.heat/dist/leaflet-heat.min.js"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let lat = urlParams.get('lat') || 35;
@@ -89,6 +90,46 @@
 
     var lines = [];
     var latlngs = [];
+
+    var heat = L.heatLayer([]).addTo(map);
+
+    function addStartHeatmap() {
+      map.removeLayer(heat); // 既存のヒートマップを削除
+
+      const textarea = document.getElementById('latlngs').value;
+      heat = L.heatLayer([]).addTo(map);
+
+      Papa.parse(textarea, {
+        header: false,
+        dynamicTyping: true,
+        complete: function (results) {
+          results.data.forEach(function (row) {
+            if (row[0] != null && row[1] != null) {
+              heat.addLatLng([row[0], row[1]]);
+            }
+          });
+        }
+      });
+    }
+
+    function addEndHeatmap() {
+      map.removeLayer(heat); // 既存のヒートマップを削除
+
+      const textarea = document.getElementById('latlngs').value;
+      heat = L.heatLayer([]).addTo(map);
+
+      Papa.parse(textarea, {
+        header: false,
+        dynamicTyping: true,
+        complete: function (results) {
+          results.data.forEach(function (row) {
+            if (row[2] != null && row[3] != null) {
+              heat.addLatLng([row[2], row[3]]);
+            }
+          });
+        }
+      });
+    }
 
     // ボタンがクリックされたときの関数
     function addLatLng() {
