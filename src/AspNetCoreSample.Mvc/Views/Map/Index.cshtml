@@ -50,6 +50,13 @@
 <!-- 地図を表示するためのdiv要素 -->
 <div id="map"></div>
 
+<!-- 特定の距離以下のマーカーの集計 -->
+<h4>特定の距離以下のマーカーを集計します</h4>
+<div>
+  場所名,緯度,経度,開始地点件数,到着地点件数<br />
+  <textarea id="location_result"></textarea>
+</div>
+
 @section Scripts {
   <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
   <script src="https://unpkg.com/leaflet.polyline.snakeanim@latest/L.Polyline.SnakeAnim.js"></script>
@@ -260,6 +267,10 @@
             endPointsCount++;
           }
         });
+
+        // 集計結果をCSV形式で表示
+        const csvContent = `"${location.name}",${location.lat},${location.lng},${startPointsCount},${endPointsCount}\n`;
+        document.getElementById("location_result").value = csvContent;
 
         // 集計結果をマーカーの名称に追加
         const nameWithCounts = `${location.name} (Start Points: ${startPointsCount}, End Points: ${endPointsCount})`;
