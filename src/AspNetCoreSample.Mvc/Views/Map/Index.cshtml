@@ -27,7 +27,7 @@
   35, 139, 34, 135<br />
 </div>
 <div>
-  <textarea id="latlngs" rows="5" cols="40"></textarea>
+  <textarea id="latlngs" rows="5" cols="40">35.681236, 139.767125, 34.693738, 135.502165</textarea>
   <button onclick="addLatLng()">追加</button>
   <input type="checkbox" id="repeatAnimation" checked> Repeat Animation
   <input type="checkbox" id="animation" checked> Animation
@@ -38,8 +38,13 @@
   次のCSVの形式で入力してください<br />
   場所名,緯度,経度<br />
   Tokyo,35.681236,139.767125<br />
-  <textarea id="locations" rows="5" cols="40"></textarea>
+  <textarea id="locations" rows="5" cols="40">Tokyo,35.681236,139.767125</textarea>
   <button onclick="addLocation()">追加</button>
+  <!-- 特定の距離を入力するためのフィールド -->
+  <div>
+    <label for="distance">特定の距離 (km):</label>
+    <input type="number" id="distance" name="distance" value="1">
+  </div>
 </div>
 
 <!-- 地図を表示するためのdiv要素 -->
@@ -64,6 +69,7 @@
     map.on('moveend zoomend', updateUrlParameters);
 
     var lines = [];
+    var latlngs = [];
 
     // ボタンがクリックされたときの関数
     function addLatLng() {
@@ -71,7 +77,7 @@
       console.log(textarea);
 
       // 緯度経度の配列を空で作成
-      var latlngs = [];
+      latlngs = [];
 
       Papa.parse(textarea, {
         header: false, // ヘッダー行があるかどうか
@@ -239,12 +245,49 @@
       // 各場所に対してマーカーを作成し、地図に追加
       locations.forEach(location => {
         const marker = L.marker([location.lat, location.lng]);
-        marker.bindPopup(location.name); // ポップアップに場所名を表示
+
+        // 特定の距離内にある開始地点と到着地点の数を集計
+        let startPointsCount = 0;
+        let endPointsCount = 0;
+        const distance = document.getElementById('distance').value;
+        latlngs.forEach(latlng => {
+          const startPointDistance = calculateDistance(location.lat, location.lng, latlng[0][0], latlng[0][1]);
+          const endPointDistance = calculateDistance(location.lat, location.lng, latlng[1][0], latlng[1][1]);
+          if (startPointDistance <= distance) {
+            startPointsCount++;
+          }
+          if (endPointDistance <= distance) {
+            endPointsCount++;
+          }
+        });
+
+        // 集計結果をマーカーの名称に追加
+        const nameWithCounts = `${location.name} (Start Points: ${startPointsCount}, End Points: ${endPointsCount})`;
+        marker.bindPopup(nameWithCounts); // ポップアップに場所名を表示
         marker.addTo(map);
 
         // マーカーをリストに追加
         markers.push(marker);
       });
+    }
+
+    // Haversine公式を使用して2点間の距離を計算する関数
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      var R = 6371; // 地球の半径 (km)
+      var dLat = deg2rad(lat2 - lat1);
+      var dLon = deg2rad(lon2 - lon1);
+      var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        ;
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c; // 距離 (km)
+      return d;
+    }
+
+    function deg2rad(deg) {
+      return deg * (Math.PI / 180)
     }
   </script>
 }
