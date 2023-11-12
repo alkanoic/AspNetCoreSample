@@ -27,23 +27,24 @@
   35, 139, 34, 135<br />
 </div>
 <div>
-  <textarea id="latlngs" rows="5" cols="40">35.681236, 139.767125, 34.693738, 135.502165</textarea>
-  <button onclick="addLatLng()">追加</button>
-  <input type="checkbox" id="repeatAnimation" checked> Repeat Animation
-  <input type="checkbox" id="animation" checked> Animation
+  <textarea id="latlngs" rows="5" cols="40" class="form-control">35.681236, 139.767125, 34.693738, 135.502165</textarea>
+  <div class="d-flex align-items-center">
+  <button class="btn btn-primary mt-2" onclick="addLatLng()">追加</button>
+</div>
 </div>
 
-<h4>2. 地図上にマーカーをマッピングします</h4>
+<h4 class="mt-2">2. 地図上にマーカーをマッピングします</h4>
 <div>
   次のCSVの形式で入力してください<br />
   場所名,緯度,経度<br />
   Tokyo,35.681236,139.767125<br />
-  <textarea id="locations" rows="5" cols="40">Tokyo,35.681236,139.767125</textarea>
-  <button onclick="addLocation()">追加</button>
-  <!-- 特定の距離を入力するためのフィールド -->
-  <div>
-    <label for="distance">特定の距離 (km):</label>
-    <input type="number" id="distance" name="distance" value="1">
+  <textarea id="locations" rows="5" cols="40" class="form-control">Tokyo,35.681236,139.767125</textarea>
+  <button class="btn btn-primary mt-2" onclick="addLocation()">追加</button>
+  <div class="row">
+    <label for="distance" class="col-form-label col-4">特定の距離 (km):</label>
+    <div class="col-8">
+      <input type="number" id="distance" name="distance" value="1" class="form-control">
+    </div>
   </div>
 </div>
 
@@ -51,11 +52,22 @@
 <h4>3. 特定の距離以下のマーカーを集計した結果を表示します</h4>
 <div>
   場所名,緯度,経度,開始地点件数,到着地点件数<br />
-  <textarea id="location_result"></textarea>
+  <textarea id="location_result" class="form-control"></textarea>
+</div>
+
+<div class="d-flex align-items-center mt-2 gap-3">
+  <div class="form-check">
+    <input type="checkbox" id="repeatAnimation" class="form-check-input" checked>
+    <label class="form-check-label" for="repeatAnimation">Repeat Animation</label>
+  </div>
+  <div class="form-check">
+    <input type="checkbox" id="animation" class="form-check-input" checked>
+    <label class="form-check-label" for="animation">Animation</label>
+  </div>
 </div>
 
 <!-- 地図を表示するためのdiv要素 -->
-<div id="map"></div>
+<div class="mt-2" id="map"></div>
 
 @section Scripts {
   <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
