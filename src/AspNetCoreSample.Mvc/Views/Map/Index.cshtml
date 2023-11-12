@@ -19,7 +19,7 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 }
 
-<h4>地図上に緯度経度1と緯度経度2間の線をマッピングします</h4>
+<h4>1. 地図上に緯度経度1と緯度経度2間の線をマッピングします</h4>
 <div>
   次のCSVの形式で入力してください<br />
   緯度1,経度1,緯度2,経度2<br />
@@ -33,7 +33,7 @@
   <input type="checkbox" id="animation" checked> Animation
 </div>
 
-<h4>地図上にマーカーをマッピングします</h4>
+<h4>2. 地図上にマーカーをマッピングします</h4>
 <div>
   次のCSVの形式で入力してください<br />
   場所名,緯度,経度<br />
@@ -47,15 +47,15 @@
   </div>
 </div>
 
-<!-- 地図を表示するためのdiv要素 -->
-<div id="map"></div>
-
 <!-- 特定の距離以下のマーカーの集計 -->
-<h4>特定の距離以下のマーカーを集計します</h4>
+<h4>3. 特定の距離以下のマーカーを集計した結果を表示します</h4>
 <div>
   場所名,緯度,経度,開始地点件数,到着地点件数<br />
   <textarea id="location_result"></textarea>
 </div>
+
+<!-- 地図を表示するためのdiv要素 -->
+<div id="map"></div>
 
 @section Scripts {
   <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
