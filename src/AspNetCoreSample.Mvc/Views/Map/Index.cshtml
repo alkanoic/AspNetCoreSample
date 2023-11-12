@@ -249,6 +249,7 @@
       // マーカーのリストを空にする
       markers = [];
 
+      let csvContent = "";
       // 各場所に対してマーカーを作成し、地図に追加
       locations.forEach(location => {
         const marker = L.marker([location.lat, location.lng]);
@@ -269,8 +270,7 @@
         });
 
         // 集計結果をCSV形式で表示
-        const csvContent = `"${location.name}",${location.lat},${location.lng},${startPointsCount},${endPointsCount}\n`;
-        document.getElementById("location_result").value = csvContent;
+        csvContent += `"${location.name}",${location.lat},${location.lng},${startPointsCount},${endPointsCount}\n`;
 
         // 集計結果をマーカーの名称に追加
         const nameWithCounts = `${location.name} (Start Points: ${startPointsCount}, End Points: ${endPointsCount})`;
@@ -280,6 +280,7 @@
         // マーカーをリストに追加
         markers.push(marker);
       });
+      document.getElementById("location_result").value = csvContent;
     }
 
     // Haversine公式を使用して2点間の距離を計算する関数
