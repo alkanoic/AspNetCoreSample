@@ -98,6 +98,7 @@
 
     var lines = [];
     var latlngs = [];
+    var startEndMarkers = [];
 
     var heat = L.heatLayer([]).addTo(map);
 
@@ -149,6 +150,11 @@
     function addLatLng() {
       const textarea = document.getElementById('latlngs').value;
       console.log(textarea);
+
+      startEndMarkers.forEach((x) => {
+        map.removeLayer(x);
+      })
+      startendMarkers = [];
 
       // 緯度経度の配列を空で作成
       latlngs = [];
@@ -212,8 +218,8 @@
         const startMarker = L.marker(startPoint, { icon: startIcon });
         const endMarker = L.marker(endPoint, { icon: endIcon });
 
-        startMarker.addTo(map);
-        endMarker.addTo(map);
+        startEndMarkers.push(startMarker.addTo(map));
+        startEndMarkers.push(endMarker.addTo(map));
 
         const animationCheckbox = document.getElementById('animation');
         // snakeend イベントのリスナーを作成
