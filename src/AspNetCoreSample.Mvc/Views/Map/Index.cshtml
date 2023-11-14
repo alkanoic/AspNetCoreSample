@@ -28,6 +28,14 @@
   <textarea id="latlngs" rows="5" cols="40" class="form-control">35.681236, 139.767125, 34.693738, 135.502165</textarea>
   <div class="mt-2">
     <button class="btn btn-primary" onclick="addLatLng()">追加</button>
+  </div>
+  <div class="mt-2 row">
+    <label for="heatmapRadius" class="col-form-label col-4">ヒートマップの影響度</label>
+    <div class="col-8">
+      <input type="number" id="heatmapRadius" name="heatmapRadius" value="25" class="form-control">
+    </div>
+  </div>
+  <div class="mt-2">
     <button class="btn btn-primary ml-2" onclick="addStartHeatmap()">開始地点のヒートマップを追加</button>
     <button class="btn btn-primary ml-2" onclick="addEndHeatmap()">到着地点のヒートマップを追加</button>
   </div>
@@ -97,7 +105,10 @@
       map.removeLayer(heat); // 既存のヒートマップを削除
 
       const textarea = document.getElementById('latlngs').value;
-      heat = L.heatLayer([]).addTo(map);
+      const heatmapRadius = Number(document.getElementById('heatmapRadius').value);
+      heat = L.heatLayer([], {
+        radius: heatmapRadius
+      }).addTo(map);
 
       Papa.parse(textarea, {
         header: false,
@@ -116,7 +127,10 @@
       map.removeLayer(heat); // 既存のヒートマップを削除
 
       const textarea = document.getElementById('latlngs').value;
-      heat = L.heatLayer([]).addTo(map);
+      const heatmapRadius = Number(document.getElementById('heatmapRadius').value);
+      heat = L.heatLayer([], {
+        radius: heatmapRadius
+      }).addTo(map);
 
       Papa.parse(textarea, {
         header: false,
