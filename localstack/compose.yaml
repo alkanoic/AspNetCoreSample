@@ -1,0 +1,12 @@
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566" # LocalStackのデフォルトポート
+    environment:
+      - SERVICES=lambda,apigateway # 必要なAWSサービス
+      - DEBUG=1 # デバッグログの有効化
+      - LAMBDA_EXECUTOR=docker # Lambdaの実行方法
+    volumes:
+      # - "./localstack:/tmp/localstack" # ローカルのディレクトリをマウント
+      - "/var/run/docker.sock:/var/run/docker.sock" # Docker Daemonへのアクセス
