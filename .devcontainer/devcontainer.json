@@ -6,6 +6,7 @@
 	// "image": "mcr.microsoft.com/devcontainers/dotnet:1-6.0",
 	// "dockerFile": "Dockerfile",
 	"dockerComposeFile": "compose.yaml",
+	"shutdownAction": "stopCompose",
 	"service": "devcontainer",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
@@ -41,7 +42,9 @@
 				"mhutchie.git-graph",
 				"esbenp.prettier-vscode",
 				"yoavbls.pretty-ts-errors",
-				"Prisma.prisma"
+				"Prisma.prisma",
+				"dbaeumer.vscode-eslint",
+				"phind.phind"
 			],
 			"settings": {
 				"editor.formatOnSave": true
