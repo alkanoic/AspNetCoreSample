@@ -23,9 +23,9 @@
 <div>
   次のCSVの形式で入力してください<br />
   緯度1,経度1,緯度2,経度2<br />
-  35.681236, 139.767125, 34.693738, 135.502165<br />
+  35.681236, 139.767125, 34.693738, 135.502165, #F00<br />
   35, 139, 34, 135<br />
-  <textarea id="latlngs" rows="5" cols="40" class="form-control">35.681236, 139.767125, 34.693738, 135.502165</textarea>
+  <textarea id="latlngs" rows="5" cols="40" class="form-control">35.681236, 139.767125, 34.693738, 135.502165, #F00</textarea>
   <div class="mt-2">
     <button class="btn btn-primary" onclick="addLatLng()">追加</button>
   </div>
@@ -167,12 +167,13 @@
 
           // 緯度と経度が有効な値かチェック
           results.data.forEach((x) => {
-            if (x.length === 4) {
+            if (x.length === 5 || x.length === 4) {
               validateLatLng(x[0], [1]);
               validateLatLng(x[2], [3]);
               latlngs.push([
                 [x[0], x[1]],
-                [x[2], x[3]]
+                [x[2], x[3]],
+                x[4]
               ]);
             }
           });
@@ -190,8 +191,8 @@
 
       // 各座標配列に対してポリラインを作成し、アニメーションを開始
       latlngs.forEach(latlng => {
-        const color = getRandomColorfulColor()
-        const polyline = L.polyline(latlng, {
+        const color = latlng[2] ?? getRandomColorfulColor();
+        const polyline = L.polyline([latlng[0], latlng[1]], {
           color: color
         });
         lines.push(polyline);
@@ -199,7 +200,7 @@
 
         // 開始地点と終了地点の座標を取得
         const startPoint = latlng[0];
-        const endPoint = latlng[latlng.length - 1];
+        const endPoint = latlng[1];
 
         // 'S' と 'E' の文字を含むカスタムアイコンを作成
         const startIcon = L.divIcon({
