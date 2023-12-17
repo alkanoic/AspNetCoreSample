@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/devcontainers/dotnet:6.0-focal
 
-RUN apt-get update && apt-get install -y iputils-ping mysql-client
+RUN apt-get update && apt-get install -y iputils-ping mysql-client ca-certificates
 
 # install nvm
 RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash && \
