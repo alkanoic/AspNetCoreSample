@@ -6,6 +6,8 @@ docker build -t aspnetcoresample-mvc-x86:latest .
 
 # QMENUのエミュレーションをインストール
 # docker run --privileged --rm tonistiigi/binfmt --install all
+# docker buildx create --use
+# docker buildx inspect --bootstrap
 
 docker buildx build --platform linux/arm64 -t aspnetcoresample-mvc-arm64:latest .
 docker buildx build --platform linux/amd64 -t aspnetcoresample-mvc-amd64:latest .
