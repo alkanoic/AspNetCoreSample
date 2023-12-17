@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/AspNetCoreSample.Mvc/bin/Debug/net6.0/AspNetCoreSample.Mvc.dll",
+            "program": "${workspaceFolder}/src/AspNetCoreSample.Mvc/bin/Debug/net8.0/AspNetCoreSample.Mvc.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/AspNetCoreSample.Mvc",
             "stopAtEntry": false,
@@ -25,7 +25,7 @@
             }
         },
         {
-            "name": "debug-hot-reload",
+            "name": "Mvc hot-reload",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -50,7 +50,7 @@
             }
         },
         {
-            "name": ".NET Watch Attach",
+            "name": "Mvc Watch Attach",
             "type": "dotnetwatchattach",
             "request": "launch",
             "args": {
@@ -61,5 +61,39 @@
             "task": "watchTaskName",
             "program": "AspNetCoreSample.Mvc.exe"
         },
+        {
+            "name": "WebApi",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "webapi-build",
+            "program": "${workspaceFolder}/src/AspNetCoreSample.WebApi/bin/Debug/net8.0/AspNetCoreSample.WebApi.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/AspNetCoreSample.WebApi",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
     ],
+    "compounds": [
+        {
+            "name": "Mvc-and-WebApi",
+            "configurations": [
+                "Mvc",
+                "WebApi"
+            ]
+        },
+        {
+            "name": "Mvc-hotreload-and-WebApi",
+            "configurations": [
+                "Mvc Watch Attach",
+                "WebApi"
+            ]
+        }
+    ]
 }

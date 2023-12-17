@@ -19,6 +19,8 @@ builder.Services.AddFluentValidationClientsideAdapters();
 
 builder.Services.AddValidatorsFromAssemblyContaining<FluentViewModel>();
 
+builder.Services.AddHttpClient();
+
 var vapidKeys = VapidHelper.GenerateVapidKeys();
 var vapidOption = new AspNetCoreSample.Mvc.Options.VapidOption()
 {

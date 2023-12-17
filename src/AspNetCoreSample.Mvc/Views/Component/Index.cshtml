@@ -1,10 +1,17 @@
-﻿@{
+﻿@using AspNetCoreSample.Mvc.Components
+@{
   ViewData["Title"] = "Component Page";
 }
 
 <div class="text-center">
   <h1 class="display-4">Razor Component</h1>
 </div>
+
+<component type="typeof(MyComponent)" render-mode="Server" />
+
+<component type="typeof(MyComponent)" render-mode="ServerPrerendered" />
+
+<component type="typeof(MyComponent)" render-mode="Static" />
 
 <div class="text-center">
   <h1 class="display-4">View Component</h1>

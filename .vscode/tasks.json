@@ -11,8 +11,7 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$msCompile",
-            "dependsOn": "webpack",
+            "problemMatcher": "$msCompile"
         },
         {
             "label": "watchTaskName",
@@ -29,5 +28,17 @@
             // "problemMatcher": "$msCompile",
             "isBackground": true
         }
+        {
+            "label": "webapi-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/AspNetCoreSample.WebApi/AspNetCoreSample.WebApi.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
     ]
 }
