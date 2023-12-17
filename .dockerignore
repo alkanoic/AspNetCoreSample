@@ -1,0 +1,53 @@
+# .NET Core Build Folders
+**/bin/
+**/obj/
+
+# .NET Core User Specific Files
+**/*.user
+**/*.userosscache
+**/*.suo
+
+# .NET Core VS Code Specific
+.vscode/
+
+# .NET Core Web Publish Script
+**/Properties/PublishProfiles/
+
+# .NET Core Build Results
+**/build/
+
+# .NET Core Tools
+**/.tool/
+
+# Visual Studio
+**/.vs/
+
+# User-specific files
+*.mdf
+*.ldf
+*.ndf
+
+# SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+# MACOS files
+.DS_Store
+
+# Node.js
+node_modules/
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+
+# User-specific files
+*.swp
+*~
+*.db
+
+# Azure Artifacts
+**/paket-files/

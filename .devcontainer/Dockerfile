@@ -1,21 +1,18 @@
-FROM mcr.microsoft.com/devcontainers/dotnet:6.0-focal
+FROM mcr.microsoft.com/devcontainers/dotnet:8.0-jammy
 
-RUN apt-get update && apt-get install -y iputils-ping mysql-client ca-certificates
-
-# install nvm
-RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash && \
-    . $NVM_DIR/nvm.sh && \
-    nvm install --lts
+RUN apt-get update && \
+    apt-get install -y iputils-ping mysql-client curl wget ca-certificates gnupg
 
 # install azure cli
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-# install trivy
-RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb && \
-    dpkg -i trivy_0.18.3_Linux-64bit.deb && \
-    rm trivy_0.18.3_Linux-64bit.deb
+# install node.js
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    NODE_MAJOR=20 && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
+    apt-get install -y nodejs
 
-USER vscode
-
-# install bun
-RUN curl -fsSL https://bun.sh/install | bash
+# install dotnet workload aspire
+RUN dotnet workload install aspire

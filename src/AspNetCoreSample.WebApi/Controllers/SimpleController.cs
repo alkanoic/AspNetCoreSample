@@ -14,7 +14,7 @@ public class SimpleController : ControllerBase
     }
 
     [HttpGet(Name = "Simple")]
-    public SimpleOutput Get(SimpleInput input)
+    public SimpleOutput Get([FromQuery] SimpleInput input)
     {
         return new SimpleOutput { Output = input.Input };
     }

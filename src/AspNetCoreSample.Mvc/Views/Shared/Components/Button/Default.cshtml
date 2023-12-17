@@ -1,0 +1,14 @@
+@model ButtonViewModel
+<!-- Views/Shared/Components/ButtonViewComponent/Default.cshtml -->
+<button id="@Model.ControlName">Click me!</button>
+
+<div id="@(Model.ControlName)-result"></div>
+
+<script>
+    // ボタンがクリックされたときの処理
+
+   document.getElementById('@Model.ControlName').addEventListener('click', function () {
+        // ボタンがクリックされたら、結果を表示
+        document.getElementById('@(Model.ControlName)-result').innerText = 'Button Clicked!';
+    });
+</script>
