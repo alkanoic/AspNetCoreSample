@@ -18,7 +18,7 @@ else
 }
 
 @code {
-    private WeatherForecast data;
+    private WeatherForecast? data;
 
     protected override async Task OnInitializedAsync()
     {
@@ -46,7 +46,8 @@ else
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
         var d = JsonSerializer.Deserialize<WeatherForecast[]>(jsonString, options);
-        data = d[0];
+        if (d is not null && d.Length == 1)
+            data = d[0];
     }
 
     public class WeatherForecast

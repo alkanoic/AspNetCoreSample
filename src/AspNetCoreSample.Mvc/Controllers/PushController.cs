@@ -34,7 +34,7 @@ public class PushController : Controller
         return View();
     }
 
-    public static Models.SubscribeViewModel? _subscribeViewModel;
+    private static Models.SubscribeViewModel? _subscribeViewModel;
 
     [HttpPost]
     public void Subscribe([FromBody] Models.SubscribeViewModel subscribeViewModel)

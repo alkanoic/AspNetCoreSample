@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisLevel>latest-Recommended</AnalysisLevel>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Roslynator.Analyzers" Version="4.7.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+</Project>
