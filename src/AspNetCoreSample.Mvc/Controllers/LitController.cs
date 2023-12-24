@@ -15,4 +15,19 @@ public class LitController : Controller
     {
         return View();
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Index(IndexViewModel model)
+    {
+        Console.WriteLine(model.Name1);
+        return RedirectToAction("Index");
+    }
+
+    public class IndexViewModel
+    {
+        public string? Name1 { get; set; }
+
+        public string? nonComponent { get; set; }
+    }
 }

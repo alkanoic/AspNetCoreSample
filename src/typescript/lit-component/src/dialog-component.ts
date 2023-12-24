@@ -21,7 +21,7 @@ export class DialogComponent extends LitElement {
     return html`
       <div>
         <p>Hello, this is a dialog!</p>
-        <button @click="${this.close}">Close Dialog</button>
+        <button type="button" @click="${this.close}">Close Dialog</button>
       </div>
     `;
   }

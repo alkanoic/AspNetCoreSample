@@ -46,7 +46,8 @@
 				"dbaeumer.vscode-eslint",
 				"phind.phind",
 				"zbecknell.t4-support",
-				"redhat.vscode-xml"
+				"redhat.vscode-xml",
+				"formulahendry.auto-rename-tag"
 			],
 			"settings": {
 				"editor.formatOnSave": true

@@ -6,8 +6,11 @@
   @* <link rel="stylesheet" href="~/js/lit/asset.css" asp-append-version="true" /> *@
 }
 
-<my-component></my-component>
-<my-element></my-element>
+<form method="post" asp-controller="Lit" asp-action="Index">
+  <webapi-component inputName="Name1"></webapi-component>
+  <input type="text" name="nonComponent" value="test">
+  <button type="submit">Submit</button>
+</form>
 
 @section Scripts {
   <script type="module" src="~/js/lit/entry.js" asp-append-version="true"></script>

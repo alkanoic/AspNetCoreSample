@@ -10,8 +10,13 @@ export class WebApiComponent extends LitElement {
     }
   `;
 
+  // static formAssociated = true;
+
   @property()
   name?: string = 'World';
+
+  @property()
+  inputName: string = '';
 
   private async _onClick() {
     if (this.name == null) {
@@ -38,9 +43,15 @@ export class WebApiComponent extends LitElement {
   render() {
     return html`
       <p>Hello, ${this.name}!</p>
-      <input type="text" .value="${this.name}" />
-      <button @click=${this._onClick} part="button">検索</button>
-      <button @click=${this.openDialog}>ダイアログ</button>
+      <input
+        type="text"
+        placeholder="name"
+        id=${this.inputName}
+        name=${this.inputName}
+        .value="${this.name}"
+      />
+      <button type="button" @click=${this._onClick}>検索</button>
+      <button type="button" @click=${this.openDialog}>ダイアログ</button>
       <dialog-component id="dialog"></dialog-component>
     `;
   }
