@@ -1,5 +1,6 @@
 import { LitElement, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
+import { DialogComponent } from './dialog-component';
 
 @customElement('webapi-component')
 export class WebApiComponent extends LitElement {
@@ -27,11 +28,20 @@ export class WebApiComponent extends LitElement {
     console.log(result);
   }
 
+  @query('#dialog')
+  private dialog!: DialogComponent;
+
+  private openDialog() {
+    this.dialog.open();
+  }
+
   render() {
     return html`
       <p>Hello, ${this.name}!</p>
       <input type="text" .value="${this.name}" />
       <button @click=${this._onClick} part="button">検索</button>
+      <button @click=${this.openDialog}>ダイアログ</button>
+      <dialog-component id="dialog"></dialog-component>
     `;
   }
 }
