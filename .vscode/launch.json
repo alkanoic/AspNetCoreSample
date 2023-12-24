@@ -79,6 +79,13 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }
         },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "lit-component",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/src/typescript/lit-component",
+        }
     ],
     "compounds": [
         {
@@ -92,6 +99,13 @@
             "name": "Mvc-hotreload-and-WebApi",
             "configurations": [
                 "Mvc Watch Attach",
+                "WebApi"
+            ]
+        },
+        {
+            "name": "lit-and-WebApi",
+            "configurations": [
+                "lit-component",
                 "WebApi"
             ]
         }
