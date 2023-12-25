@@ -4,13 +4,9 @@ import { DialogComponent } from './dialog-component';
 
 @customElement('webapi-component')
 export class WebApiComponent extends LitElement {
-  static styles = css`
-    :host {
-      color: red;
-    }
-  `;
-
-  // static formAssociated = true;
+  protected createRenderRoot() {
+    return this;
+  }
 
   @property()
   name?: string = 'World';
@@ -41,7 +37,15 @@ export class WebApiComponent extends LitElement {
   }
 
   render() {
+    const styles = css`
+      input#name1 {
+        color: red;
+      }
+    `;
     return html`
+      <style>
+        ${styles}
+      </style>
       <p>Hello, ${this.name}!</p>
       <input
         type="text"

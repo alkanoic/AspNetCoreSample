@@ -3,6 +3,10 @@ import { customElement } from 'lit/decorators.js';
 
 @customElement('dialog-component')
 export class DialogComponent extends LitElement {
+  protected createRenderRoot() {
+    return this;
+  }
+
   static styles = css`
     :host {
       display: none;
