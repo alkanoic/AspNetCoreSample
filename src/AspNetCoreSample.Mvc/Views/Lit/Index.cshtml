@@ -7,7 +7,8 @@
 }
 
 <form method="post" asp-controller="Lit" asp-action="Index">
-  <webapi-component inputName="Name1"></webapi-component>
+  <light-webapi-component inputName="LightName"></light-webapi-component>
+  <shadow-webapi-component name="ShadowName"></shadow-webapi-component>
   <input type="text" name="nonComponent" value="test">
   <button type="submit">Submit</button>
 </form>

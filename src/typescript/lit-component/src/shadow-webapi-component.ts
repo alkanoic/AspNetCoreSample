@@ -2,10 +2,29 @@ import { LitElement, css, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { DialogComponent } from './dialog-component';
 
-@customElement('webapi-component')
-export class WebApiComponent extends LitElement {
-  protected createRenderRoot() {
-    return this;
+@customElement('shadow-webapi-component')
+export class ShadowWebApiComponent extends LitElement {
+  #value: string;
+  #internals: ElementInternals;
+  static formAssociated = true;
+
+  constructor() {
+    super();
+    this.#value = 'init';
+    this.#internals = this.attachInternals();
+  }
+
+  get value(): string {
+    return this.#value;
+  }
+
+  set value(newValue: string) {
+    this.#value = newValue;
+    this.#internals.setFormValue(newValue);
+  }
+
+  private _onChange(e: { target: HTMLInputElement }) {
+    this.value = (e.target as HTMLInputElement).value;
   }
 
   @property()
@@ -36,23 +55,22 @@ export class WebApiComponent extends LitElement {
     this.dialog.open();
   }
 
+  static styles = css`
+    :host {
+      color: red;
+    }
+  `;
+
   render() {
-    const styles = css`
-      input#name1 {
-        color: red;
-      }
-    `;
     return html`
-      <style>
-        ${styles}
-      </style>
-      <p>Hello, ${this.name}!</p>
+      <p>Shadow Hello, ${this.name}!</p>
       <input
         type="text"
         placeholder="name"
-        id=${this.inputName}
+        id="name"
+        @change=${this._onChange}
         name=${this.inputName}
-        .value="${this.name}"
+        .value="${this.#value}"
       />
       <button type="button" @click=${this._onClick}>検索</button>
       <button type="button" @click=${this.openDialog}>ダイアログ</button>

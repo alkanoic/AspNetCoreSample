@@ -20,13 +20,16 @@ public class LitController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Index(IndexViewModel model)
     {
-        Console.WriteLine(model.Name1);
+        Console.WriteLine(model.LightName);
+        Console.WriteLine(model.ShadowName);
         return RedirectToAction("Index");
     }
 
     public class IndexViewModel
     {
-        public string? Name1 { get; set; }
+        public string? LightName { get; set; }
+
+        public string? ShadowName { get; set; }
 
         public string? nonComponent { get; set; }
     }
