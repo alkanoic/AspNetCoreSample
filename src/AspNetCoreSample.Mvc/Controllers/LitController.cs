@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSample.Mvc.Controllers;
@@ -31,6 +33,10 @@ public class LitController : Controller
 
         public string? ShadowName { get; set; }
 
-        public string? nonComponent { get; set; }
+        [Display(Name = "メールアドレス")]
+        public string? Email { get; set; }
+
+        [Display(Name = "パスワード")]
+        public string? Password { get; set; }
     }
 }

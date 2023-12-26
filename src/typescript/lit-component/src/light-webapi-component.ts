@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { DialogComponent } from './dialog-component';
 
@@ -37,26 +37,22 @@ export class LightWebApiComponent extends LitElement {
   }
 
   render() {
-    const styles = css`
-      input#name1 {
-        color: red;
-      }
-    `;
     return html`
-      <style>
-        ${styles}
-      </style>
-      <p>Light Hello, ${this.name}!</p>
-      <input
-        type="text"
-        placeholder="name"
-        id=${this.inputName}
-        name=${this.inputName}
-        .value="${this.name}"
-      />
-      <button type="button" @click=${this._onClick}>検索</button>
-      <button type="button" @click=${this.openDialog}>ダイアログ</button>
-      <dialog-component id="dialog"></dialog-component>
+      <div class="form-group">
+        <lable>${this.name}!</lable>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="name"
+          name=${this.inputName}
+          .value="${this.name}"
+        />
+        <button type="button" class="btn btn-secondary" @click=${this._onClick}>検索</button>
+        <button type="button" class="btn btn-secondary" @click=${this.openDialog}>
+          ダイアログ
+        </button>
+        <dialog-component id="dialog"></dialog-component>
+      </div>
     `;
   }
 }
