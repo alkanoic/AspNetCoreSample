@@ -1,6 +1,5 @@
 import { LitElement, html } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
-import { DialogComponent } from './dialog-component';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement('light-webapi-component')
 export class LightWebApiComponent extends LitElement {
@@ -29,13 +28,6 @@ export class LightWebApiComponent extends LitElement {
     console.log(result);
   }
 
-  @query('#dialog')
-  private dialog!: DialogComponent;
-
-  private openDialog() {
-    this.dialog.open();
-  }
-
   render() {
     return html`
       <div class="form-group">
@@ -48,10 +40,15 @@ export class LightWebApiComponent extends LitElement {
           .value="${this.name}"
         />
         <button type="button" class="btn btn-secondary" @click=${this._onClick}>検索</button>
-        <button type="button" class="btn btn-secondary" @click=${this.openDialog}>
-          ダイアログ
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#${this.inputName}"
+        >
+          Open Dialog
         </button>
-        <dialog-component id="dialog"></dialog-component>
+        <bs-dialog-component dialogId="${this.inputName}"></bs-dialog-component>
       </div>
     `;
   }
