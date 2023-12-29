@@ -28,6 +28,12 @@ export class LightWebApiComponent extends LitElement {
     console.log(result);
   }
 
+  private handleSaveChanges(event: CustomEvent) {
+    console.log("handleSaveChanges");
+    event.detail.success = true;
+    return true;
+  }
+
   render() {
     return html`
       <div class="form-group">
@@ -48,7 +54,7 @@ export class LightWebApiComponent extends LitElement {
         >
           Open Dialog
         </button>
-        <bs-dialog-component dialogId="${this.inputName}"></bs-dialog-component>
+        <bs-dialog-component @saveChanges=${this.handleSaveChanges} dialogId="${this.inputName}"></bs-dialog-component>
       </div>
     `;
   }

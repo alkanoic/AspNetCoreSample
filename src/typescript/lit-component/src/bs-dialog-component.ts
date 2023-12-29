@@ -11,9 +11,32 @@ export class BsDialogComponent extends LitElement {
   @property()
   dialogId?: string;
 
-  public close() {
-    const dialog = new Modal(this.querySelector(`#${this.dialogId}`)!);
-    dialog.hide();
+  private dialog?: Modal;
+
+  updated() {
+    super.updated();
+    const dialogElement = this.querySelector(`#${this.dialogId}`);
+    
+    if (dialogElement) {
+      this.dialog = new Modal(dialogElement);
+    } else {
+      console.error(`Dialog with id ${this.dialogId} not found.`);
+    }
+  }
+
+  public close(e: Event) {
+    const detail = {success: Boolean}
+    const event = new CustomEvent('saveChanges', { detail, cancelable: true})
+    this.dispatchEvent(event);
+    if (event.defaultPrevented) {
+      e.preventDefault();
+    }
+    if(!detail.success){
+      return;
+    }
+    if (this.dialog) {
+      this.dialog.hide();
+    }
   }
 
   render() {
