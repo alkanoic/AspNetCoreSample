@@ -13,8 +13,7 @@ export class BsDialogComponent extends LitElement {
 
   private dialog?: Modal;
 
-  updated() {
-    super.updated();
+  protected updated() {
     const dialogElement = this.querySelector(`#${this.dialogId}`);
     
     if (dialogElement) {
