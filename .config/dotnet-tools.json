@@ -19,6 +19,12 @@
       "commands": [
         "t4"
       ]
+    },
+    "dotnet-aspnet-codegenerator": {
+      "version": "8.0.0",
+      "commands": [
+        "dotnet-aspnet-codegenerator"
+      ]
     }
   }
 }
