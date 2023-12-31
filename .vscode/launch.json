@@ -85,7 +85,23 @@
             "name": "lit-component",
             "url": "http://localhost:5173",
             "webRoot": "${workspaceFolder}/src/typescript/lit-component",
-        }
+        },
+        {
+            "name": "CodeGen",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "codegen-build",
+            "program": "${workspaceFolder}/src/CodeGen/bin/Debug/net8.0/CodeGen.dll",
+            "args": [
+                "--assembly-path",
+                "aaaaa",
+                "--output-path",
+                "Outputs/Output.cs"
+            ],
+            "cwd": "${workspaceFolder}/src/CodeGen",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
     ],
     "compounds": [
         {

@@ -27,7 +27,7 @@
             ],
             // "problemMatcher": "$msCompile",
             "isBackground": true
-        }
+        },
         {
             "label": "webapi-build",
             "command": "dotnet",
@@ -35,6 +35,18 @@
             "args": [
                 "build",
                 "${workspaceFolder}/src/AspNetCoreSample.WebApi/AspNetCoreSample.WebApi.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "codegen-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/CodeGen/CodeGen.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
