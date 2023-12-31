@@ -8,7 +8,7 @@
 namespace Generated
 {
 
-    public class 
+    public class Test
     {
     }
 

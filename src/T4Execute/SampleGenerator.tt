@@ -12,7 +12,7 @@
 namespace Generated
 {
 <# //foreach (var type in types) { #>
-    public class <#// type.Name #>
+    public class Test<#// type.Name #>
     {
     }
 <# //} #>
