@@ -17,7 +17,8 @@
 
   <!-- ビルド前にdotnet-t4をTextTemplateに指定された各ファイルに対して呼び出すタスク -->
   <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
-    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet t4 %(TextTemplate.FullPath)" />
+    <Exec WorkingDirectory="$(ProjectDir)"
+      Command="dotnet t4 %(TextTemplate.FullPath) --parameter targetPath=../T4Execute/bin/Debug/net8.0/T4Execute.dll" />
   </Target>
   <!-- クリーンアップ後にGeneratedに指定されたファイルを削除するタスク -->
   <Target Name="TextTemplateClean" AfterTargets="Clean">
