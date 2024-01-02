@@ -31,6 +31,8 @@ if (app.Environment.IsDevelopment())
     app.UseReDoc(); // serve ReDoc UI
 }
 
+app.MapDefaultEndpoints();
+
 app.UseHttpsRedirection();
 
 app.UseCors(); // Add this line

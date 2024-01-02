@@ -87,6 +87,26 @@
             "webRoot": "${workspaceFolder}/src/typescript/lit-component",
         },
         {
+            "name": "Mvc WebApi Aspire",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "apphost-build",
+            "program": "${workspaceFolder}/src/AspNetCoreSample.AppHost/bin/Debug/net8.0/AspNetCoreSample.AppHost.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/AspNetCoreSample.AppHost",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/AspNetCoreSample.Mvc/Views"
+            }
+        },
+        {
             "name": "CodeGen",
             "type": "coreclr",
             "request": "launch",

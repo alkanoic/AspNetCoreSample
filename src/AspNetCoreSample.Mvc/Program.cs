@@ -40,6 +40,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.MapDefaultEndpoints();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

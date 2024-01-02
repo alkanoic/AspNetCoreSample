@@ -41,6 +41,18 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "apphost-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/AspNetCoreSample.AppHost/AspNetCoreSample.AppHost.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "codegen-build",
             "command": "dotnet",
             "type": "process",
