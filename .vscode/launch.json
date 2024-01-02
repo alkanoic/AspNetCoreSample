@@ -113,6 +113,7 @@
             "preLaunchTask": "codegen-build",
             "program": "${workspaceFolder}/src/CodeGen/bin/Debug/net8.0/CodeGen.dll",
             "args": [
+                "sample",
                 "--class-file-path",
                 "../AspNetCoreSample.Templates/Models/Name.cs",
                 "--class-name",

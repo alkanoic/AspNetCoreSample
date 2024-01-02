@@ -3,9 +3,11 @@ using CodeGen;
 using System.Text;
 using System.Text.RegularExpressions;
 
+var app = CoconaApp.Create();
+
 #pragma warning disable CA1305
 
-CoconaApp.Run((string classFilePath, string className, string outputPath) =>
+app.AddCommand("sample", (string classFilePath, string className, string outputPath) =>
 {
     Console.WriteLine($"target classFilePath:{classFilePath} className:{className} output:{outputPath}");
 
@@ -18,9 +20,9 @@ CoconaApp.Run((string classFilePath, string className, string outputPath) =>
     var analysis = new ClassAnalysis(args);
     var classInfo = analysis.ReadCode();
 
-    var templateText = File.ReadAllText("Templates/MainTemplate.cs", new UTF8Encoding(false));
+    var templateText = File.ReadAllText("Templates/SampleTemplate.cs", new UTF8Encoding(false));
 
-    var templateArgs = new MainTemplateArgs()
+    var templateArgs = new SampleTemplateArgs()
     {
         NamespaceName = "TargetNamespace",
         ClassName = "TargetClass",
@@ -37,17 +39,15 @@ CoconaApp.Run((string classFilePath, string className, string outputPath) =>
     }
     templateArgs.MethodLevel = s.ToString();
 
-    var dict = TemplateControl.ClassPropertiesConvertToDictionary(typeof(MainTemplateArgs), templateArgs);
-    foreach (var key in dict.Keys)
+    var tc = new TemplateControl()
     {
-        templateText = templateText.Replace(key, dict[key]);
-    }
-
-    File.WriteAllText(outputPath, templateText, new UTF8Encoding(false));
+        TargetClass = typeof(SampleTemplateArgs),
+        Instance = templateArgs,
+        TemplateText = templateText,
+        OutputPath = outputPath
+    };
+    tc.WriteOverrideText();
     Console.WriteLine("Success generate:" + outputPath);
 });
 
-public partial class Program
-{
-    private static readonly string[] types = new[] { "bool", "byte", "int", "double" };
-}
+app.Run();
