@@ -24,23 +24,11 @@ public partial class SampleContext : DbContext
         modelBuilder.Entity<EnumSample>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("enum_sample");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.EnumColumn).HasColumnName("enum_column");
         });
 
         modelBuilder.Entity<Name>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("name");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Name1)
-                .HasColumnType("text")
-                .HasColumnName("name");
         });
 
         OnModelCreatingPartial(modelBuilder);

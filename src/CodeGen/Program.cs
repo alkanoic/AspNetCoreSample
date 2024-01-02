@@ -5,14 +5,18 @@ using System.Text.RegularExpressions;
 
 #pragma warning disable CA1305
 
-CoconaApp.Run((string assemblyPath, string outputPath) =>
+CoconaApp.Run((string classFilePath, string className, string outputPath) =>
 {
-    Console.WriteLine($"target assembly:{assemblyPath} output:{outputPath}");
+    Console.WriteLine($"target classFilePath:{classFilePath} className:{className} output:{outputPath}");
 
     var args = new SampleGenerateArgs()
     {
-        AssemblyPath = assemblyPath
+        ClassFilePath = classFilePath,
+        ClassName = className
     };
+
+    var analysis = new ClassAnalysis(args);
+    var classInfo = analysis.ReadCode();
 
     var templateText = File.ReadAllText("Templates/MainTemplate.cs", new UTF8Encoding(false));
 
