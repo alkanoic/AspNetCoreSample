@@ -119,7 +119,14 @@
                 "--class-name",
                 "Name",
                 "--output-path",
-                "Outputs/ApiOutput.cs"
+                "Outputs/ApiOutput.cs",
+                "--db-context-path",
+                "../AspNetCoreSample.Templates/Models/SampleContext.cs",
+                "--namespace-name",
+                "AspNetCoreSample.WebApi",
+                "--controller-name",
+                "NameApiController",
+                "--authorize"
             ],
             "cwd": "${workspaceFolder}/src/CodeGen",
             "stopAtEntry": false,

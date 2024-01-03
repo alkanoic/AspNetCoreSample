@@ -13,7 +13,15 @@ public class ClassAnalysis(ClassAnalysisArgs args)
 
         var root = tree.GetRoot();
         var classes = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
-        var @class = classes.Single(x => x.Identifier.ValueText == args.ClassName);
+        ClassDeclarationSyntax @class;
+        if (string.IsNullOrEmpty(args.ClassName))
+        {
+            @class = classes.Single();
+        }
+        else
+        {
+            @class = classes.Single(x => x.Identifier.ValueText == args.ClassName);
+        }
         var classInfo = new ClassAnalysisInfo()
         {
             Name = @class.Identifier.ValueText
@@ -26,6 +34,11 @@ public class ClassAnalysis(ClassAnalysisArgs args)
                 Name = p.Identifier.ValueText,
                 TypeName = p.Type.ToString()
             };
+            if (p.Type is GenericNameSyntax genericType)
+            {
+                pinfo.GenericTypeName = genericType.Identifier.ValueText;
+                pinfo.GenericInnerTypeName = genericType.TypeArgumentList.Arguments[0].ToString();
+            }
             foreach (var attrs in p.AttributeLists)
             {
                 foreach (var attr in attrs.Attributes)

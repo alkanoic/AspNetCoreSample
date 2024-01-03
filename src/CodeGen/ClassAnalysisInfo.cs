@@ -15,6 +15,10 @@ public class PropertyAnalysisInfo()
 
     public required string TypeName { get; set; }
 
+    public string? GenericTypeName { get; set; }
+
+    public string? GenericInnerTypeName { get; set; }
+
     public List<AttributeAnalysisInfo> Attributes { get; set; } = new();
 }
 
