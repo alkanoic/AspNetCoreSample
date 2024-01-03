@@ -4,7 +4,7 @@ namespace CodeGen;
 
 public class TemplateControl
 {
-    private const string ReplaceChara = "@";
+    private const string ReplaceChara = "__";
 
     public required Type TargetClass { get; set; }
 
