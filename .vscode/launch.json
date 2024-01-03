@@ -107,7 +107,26 @@
             }
         },
         {
-            "name": "CodeGen",
+            "name": "CodeGen api",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "codegen-build",
+            "program": "${workspaceFolder}/src/CodeGen/bin/Debug/net8.0/CodeGen.dll",
+            "args": [
+                "api",
+                "--class-file-path",
+                "../AspNetCoreSample.Templates/Models/Name.cs",
+                "--class-name",
+                "Name",
+                "--output-path",
+                "Outputs/ApiOutput.cs"
+            ],
+            "cwd": "${workspaceFolder}/src/CodeGen",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "CodeGen sample",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "codegen-build",
@@ -119,7 +138,7 @@
                 "--class-name",
                 "Name",
                 "--output-path",
-                "Outputs/Output.cs"
+                "Outputs/SampleOutput.cs"
             ],
             "cwd": "${workspaceFolder}/src/CodeGen",
             "stopAtEntry": false,

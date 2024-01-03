@@ -1,6 +1,6 @@
 namespace CodeGen;
 
-public class SampleGenerateArgs()
+public class ClassAnalysisArgs()
 {
     public required string ClassFilePath { get; set; }
 

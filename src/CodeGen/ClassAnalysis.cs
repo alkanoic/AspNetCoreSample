@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeGen;
 
-public class ClassAnalysis(SampleGenerateArgs args)
+public class ClassAnalysis(ClassAnalysisArgs args)
 {
     public ClassAnalysisInfo ReadCode()
     {

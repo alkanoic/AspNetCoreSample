@@ -7,9 +7,9 @@ public partial class Program
 {
     public static void Sample(string classFilePath, string className, string outputPath)
     {
-        Console.WriteLine($"target classFilePath:{classFilePath} className:{className} output:{outputPath}");
+        Console.WriteLine($"sample target classFilePath:{classFilePath} className:{className} output:{outputPath}");
 
-        var args = new SampleGenerateArgs()
+        var args = new ClassAnalysisArgs()
         {
             ClassFilePath = classFilePath,
             ClassName = className
@@ -46,6 +46,6 @@ public partial class Program
         };
         tc.WriteOverrideText();
         Console.WriteLine("Success generate:" + outputPath);
-
     }
+    private static readonly string[] types = new[] { "bool", "byte", "int", "double" };
 }
