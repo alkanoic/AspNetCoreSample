@@ -4,6 +4,8 @@ public class ClassAnalysisInfo()
 {
     public required string Name { get; set; }
 
+    public required string NamespaceName { get; set; }
+
     public List<PropertyAnalysisInfo> Properties { get; set; } = new();
 
     public List<MethodAnalysisInfo> Methods { get; set; } = new();

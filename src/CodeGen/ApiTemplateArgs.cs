@@ -2,6 +2,8 @@ namespace CodeGen;
 
 public class ApiTemplateArgs
 {
+    public string UsingNamespaces { get; set; } = "";
+
     public required string NamespaceName { get; set; }
 
     public string Authorize { get; set; } = "";

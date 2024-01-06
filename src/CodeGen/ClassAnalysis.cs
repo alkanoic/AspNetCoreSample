@@ -22,9 +22,14 @@ public class ClassAnalysis(ClassAnalysisArgs args)
         {
             @class = classes.Single(x => x.Identifier.ValueText == args.ClassName);
         }
+        var syntaxTree = @class.SyntaxTree;
+        var compilationUnit = (CompilationUnitSyntax)syntaxTree.GetRoot();
+        var namespaceName = (compilationUnit.Members.Single(x => x.Contains(@class)) as FileScopedNamespaceDeclarationSyntax)?.Name.ToString();
+
         var classInfo = new ClassAnalysisInfo()
         {
-            Name = @class.Identifier.ValueText
+            Name = @class.Identifier.ValueText,
+            NamespaceName = namespaceName ?? ""
         };
 
         foreach (var p in @class.Members.OfType<PropertyDeclarationSyntax>())

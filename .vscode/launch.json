@@ -133,6 +133,31 @@
             "console": "internalConsole"
         },
         {
+            "name": "CodeGen api-sampletable",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "codegen-build",
+            "program": "${workspaceFolder}/src/CodeGen/bin/Debug/net8.0/CodeGen.dll",
+            "args": [
+                "api",
+                "--class-file-path",
+                "../CodeGen.Result/Models/SampleTable.cs",
+                "--class-name",
+                "SampleTable",
+                "--output-path",
+                "../CodeGen.Result/Controllers/api/SampleTableController.cs",
+                "--db-context-path",
+                "../CodeGen.Result/Models/SampleContext.cs",
+                "--namespace-name",
+                "CodeGen.Result.WebApi",
+                "--controller-name",
+                "SampleTableApiController"
+            ],
+            "cwd": "${workspaceFolder}/src/CodeGen",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
             "name": "CodeGen sample",
             "type": "coreclr",
             "request": "launch",

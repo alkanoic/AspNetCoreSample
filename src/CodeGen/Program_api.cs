@@ -28,6 +28,7 @@ public partial class Program
 
         var templateArgs = new ApiTemplateArgs()
         {
+            UsingNamespaces = $"using {dbContextClassInfo.NamespaceName};",
             NamespaceName = namespaceName,
             Authorize = authorize ? "[Authorize]" : "",
             ControllerName = controllerName,
