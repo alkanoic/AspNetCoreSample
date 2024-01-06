@@ -151,6 +151,26 @@
             "stopAtEntry": false,
             "console": "internalConsole"
         },
+        {
+            "name": "CodeGen Result",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "codegen-result-build",
+            "program": "${workspaceFolder}/src/CodeGen.Result/bin/Debug/net8.0/CodeGen.Result.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/CodeGen.Result",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/CodeGen.Result/Views"
+            }
+        },
     ],
     "compounds": [
         {

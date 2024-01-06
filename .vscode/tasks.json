@@ -64,5 +64,17 @@
             ],
             "problemMatcher": "$msCompile"
         },
+        {
+            "label": "codegen-result-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/CodeGen.Result/CodeGen.Result.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
     ]
 }
