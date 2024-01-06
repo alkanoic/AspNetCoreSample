@@ -40,6 +40,22 @@ public class TemplateControl
     public void WriteOverrideText()
     {
         var text = TemplateOverride();
+        var directoryName = Path.GetDirectoryName(OutputPath);
+        if (directoryName is null)
+        {
+            throw new DirectoryNotFoundException($"OutputPath: {OutputPath}");
+        }
+        if (!Directory.Exists(directoryName))
+        {
+            Directory.CreateDirectory(directoryName);
+        }
         File.WriteAllText(OutputPath, text, new UTF8Encoding(false));
+    }
+
+    public static string ReadTemplateText(string templateFileName)
+    {
+        string appPath = AppContext.BaseDirectory;
+        return File.ReadAllText(Path.Combine(appPath, $"Templates/{templateFileName}"),
+            new UTF8Encoding(false));
     }
 }

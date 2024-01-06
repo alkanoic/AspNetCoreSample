@@ -24,7 +24,7 @@ public partial class Program
         };
         var dbContextClassInfo = new ClassAnalysis(dbContextArgs).ReadCode();
 
-        var templateText = File.ReadAllText("Templates/ApiTemplate.cs", new UTF8Encoding(false));
+        var templateText = TemplateControl.ReadTemplateText("ApiTemplate.cs");
 
         var templateArgs = new ApiTemplateArgs()
         {
