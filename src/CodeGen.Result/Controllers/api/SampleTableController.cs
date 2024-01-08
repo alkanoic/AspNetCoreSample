@@ -31,8 +31,8 @@ public class SampleTableApiController : ControllerBase
     public async ValueTask<ActionResult<SampleTable>> Get(int id)
     {
         var target = _context.SampleTables.AsNoTracking();
-target = target.Where(x => x.Id == id);
-var result = await target.SingleOrDefaultAsync();
+        target = target.Where(x => x.Id == id);
+        var result = await target.SingleOrDefaultAsync();
 
         if (result == null)
         {
@@ -103,8 +103,8 @@ var result = await target.SingleOrDefaultAsync();
     public async ValueTask<IActionResult> Delete(int id)
     {
         var target = _context.SampleTables.AsNoTracking();
-target = target.Where(x => x.Id == id);
-var result = await target.SingleOrDefaultAsync();
+        target = target.Where(x => x.Id == id);
+        var result = await target.SingleOrDefaultAsync();
 
         if (result == null)
         {
@@ -120,7 +120,7 @@ var result = await target.SingleOrDefaultAsync();
     private bool Exists(int id)
     {
         var target = _context.SampleTables.AsNoTracking();
-target = target.Where(x => x.Id == id);
-return target.Any();
+        target = target.Where(x => x.Id == id);
+        return target.Any();
     }
 }
