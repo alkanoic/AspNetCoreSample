@@ -1,4 +1,11 @@
+using AspNetCoreSample.Templates.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("Default") ?? "";
+builder.Services.AddDbContext<SampleContext>(
+    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
