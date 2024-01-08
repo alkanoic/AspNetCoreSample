@@ -133,7 +133,7 @@
             "console": "internalConsole"
         },
         {
-            "name": "CodeGen api-sampletable",
+            "name": "CodeGen api-multitable",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "codegen-build",
@@ -152,6 +152,29 @@
                 "CodeGen.Result.WebApi",
                 "--controller-name",
                 "MultiTableApiController"
+            ],
+            "cwd": "${workspaceFolder}/src/CodeGen",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "CodeGen mvc-sampletable",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "codegen-build",
+            "program": "${workspaceFolder}/src/CodeGen/bin/Debug/net8.0/CodeGen.dll",
+            "args": [
+                "mvc",
+                "--class-file-path",
+                "../CodeGen.Result/Models/SampleTable.cs",
+                "--class-name",
+                "SampleTable",
+                "--output-directory",
+                "../CodeGen.Result/",
+                "--db-context-path",
+                "../CodeGen.Result/Models/SampleContext.cs",
+                "--namespace-name",
+                "CodeGen.Result.Controllers"
             ],
             "cwd": "${workspaceFolder}/src/CodeGen",
             "stopAtEntry": false,

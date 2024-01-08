@@ -24,8 +24,6 @@ public partial class Program
         };
         var dbContextClassInfo = new ClassAnalysis(dbContextArgs).ReadCode();
 
-        var templateText = TemplateControl.ReadTemplateText("api/ApiTemplate.cs");
-
         var templateArgs = new ApiTemplateArgs()
         {
             UsingNamespaces = TemplateControl.UsingNamespace(targetClassInfo.NamespaceName),
@@ -45,14 +43,7 @@ public partial class Program
         templateArgs.ContextFindPrimaryKey = TemplateControl.ContextFindPrimaryKey(templateArgs.EntitySetName, targetClassInfo.PrimaryProperties(), true);
         templateArgs.EntitySetExist = TemplateControl.EntitySetExist(templateArgs.EntitySetName, targetClassInfo.PrimaryProperties());
 
-        var tc = new TemplateControl()
-        {
-            TargetClass = typeof(ApiTemplateArgs),
-            Instance = templateArgs,
-            TemplateText = templateText,
-            OutputPath = outputPath
-        };
-        tc.WriteOverrideText();
+        TemplateOutputFile(typeof(ApiTemplateArgs), templateArgs, "api/ApiTemplate.cs", outputPath);
         Console.WriteLine("Success generate:" + outputPath);
     }
 }
