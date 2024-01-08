@@ -10,9 +10,16 @@ internal sealed class ClassAnalysisInfo()
 
     public List<MethodAnalysisInfo> Methods { get; set; } = new();
 
+    private const string KeyAttributeName = "Key";
+
     public List<PropertyAnalysisInfo> PrimaryProperties()
     {
-        return Properties.Where(x => x.Attributes.Any(y => y.Name == "Key")).ToList();
+        return Properties.Where(x => x.Attributes.Any(y => y.Name == KeyAttributeName)).ToList();
+    }
+
+    public List<PropertyAnalysisInfo> ExcludePrimaryProperties()
+    {
+        return Properties.Where(x => !x.Attributes.Any(y => y.Name == KeyAttributeName)).ToList();
     }
 }
 

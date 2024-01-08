@@ -36,7 +36,7 @@ public partial class Program
         };
         templateArgs.CompareTargetToArguments = TemplateControl.CompareTargetToArguments(targetClassInfo.PrimaryProperties());
         templateArgs.PrimaryKeyNameAttributes = TemplateControl.PrimaryKeyNameAttributes(targetClassInfo.PrimaryProperties());
-        templateArgs.PrimaryKeyNameArguments = TemplateControl.PrimaryKeyNameArguments(targetClassInfo.PrimaryProperties());
+        templateArgs.PrimaryKeyNameArguments = TemplateControl.PropertyNameArguments(targetClassInfo.PrimaryProperties(), true);
         templateArgs.PrimaryKeyNameTargetArguments = TemplateControl.PrimaryKeyNameTargetArguments(targetClassInfo.PrimaryProperties());
         templateArgs.PrimaryKeyNameNewObject = TemplateControl.PrimaryKeyNameNewObject(targetClassInfo.PrimaryProperties());
         templateArgs.PrimaryKeyArguments = TemplateControl.PrimaryKeyArguments(targetClassInfo.PrimaryProperties());

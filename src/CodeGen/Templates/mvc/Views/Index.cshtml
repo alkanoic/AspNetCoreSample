@@ -1,0 +1,31 @@
+@model IEnumerable<__ModelTypeName__>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            __ViewTargetModelHeader__
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                __ViewTargetModelDetail__
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { __ViewLinkIndexPrimaryKey__ }) |
+                    @Html.ActionLink("Details", "Details", new { __ViewLinkIndexPrimaryKey__ }) |
+                    @Html.ActionLink("Delete", "Delete", new { __ViewLinkIndexPrimaryKey__ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
