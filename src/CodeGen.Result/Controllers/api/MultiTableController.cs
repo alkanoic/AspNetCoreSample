@@ -10,29 +10,30 @@ namespace CodeGen.Result.WebApi;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SampleTableApiController : ControllerBase
+public class MultiTableApiController : ControllerBase
 {
     private readonly SampleContext _context;
 
-    public SampleTableApiController(SampleContext context)
+    public MultiTableApiController(SampleContext context)
     {
         _context = context;
     }
 
     // GET: @routePrefix
     [HttpGet]
-    public async ValueTask<ActionResult<IEnumerable<SampleTable>>> Get()
+    public async ValueTask<ActionResult<IEnumerable<MultiTable>>> Get()
     {
-        return await _context.SampleTables.ToListAsync();
+        return await _context.MultiTables.ToListAsync();
     }
 
     // GET: @routePrefix/5
-    [HttpGet("id")]
-    public async ValueTask<ActionResult<SampleTable>> Get(int id)
+    [HttpGet("id/charid")]
+    public async ValueTask<ActionResult<MultiTable>> Get(int id, string charid)
     {
-        var target = _context.SampleTables.AsNoTracking();
-target = target.Where(x => x.Id == id);
-var result = await target.SingleOrDefaultAsync();
+        var target = _context.MultiTables.AsNoTracking();
+        target = target.Where(x => x.Id == id);
+        target = target.Where(x => x.Charid == charid);
+        var result = await target.SingleOrDefaultAsync();
 
         if (result == null)
         {
@@ -43,10 +44,10 @@ var result = await target.SingleOrDefaultAsync();
 
     // PUT: @routePrefix/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("id")]
-    public async ValueTask<IActionResult> Put(int id, SampleTable target)
+    [HttpPut("id/charid")]
+    public async ValueTask<IActionResult> Put(int id, string charid, MultiTable target)
     {
-        if (target.Id != id)
+        if (target.Id != id || target.Charid != charid)
         {
             return BadRequest();
         }
@@ -59,7 +60,7 @@ var result = await target.SingleOrDefaultAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!Exists(id))
+            if (!Exists(id, charid))
             {
                 return NotFound();
             }
@@ -75,9 +76,9 @@ var result = await target.SingleOrDefaultAsync();
     // POST: @routePrefix
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async ValueTask<ActionResult<SampleTable>> Post(SampleTable target)
+    public async ValueTask<ActionResult<MultiTable>> Post(MultiTable target)
     {
-        _context.SampleTables.Add(target);
+        _context.MultiTables.Add(target);
 
         try
         {
@@ -85,7 +86,7 @@ var result = await target.SingleOrDefaultAsync();
         }
         catch (DbUpdateException)
         {
-            if (Exists(target.Id))
+            if (Exists(target.Id, target.Charid))
             {
                 return Conflict();
             }
@@ -95,32 +96,34 @@ var result = await target.SingleOrDefaultAsync();
             }
         }
 
-        return CreatedAtAction("Get", new { id = target.Id }, target);
+        return CreatedAtAction("Get", new { id = target.Id, charid = target.Charid }, target);
     }
 
     // DELETE: @routePrefix/5
-    [HttpDelete("id")]
-    public async ValueTask<IActionResult> Delete(int id)
+    [HttpDelete("id/charid")]
+    public async ValueTask<IActionResult> Delete(int id, string charid)
     {
-        var target = _context.SampleTables.AsNoTracking();
-target = target.Where(x => x.Id == id);
-var result = await target.SingleOrDefaultAsync();
+        var target = _context.MultiTables.AsNoTracking();
+        target = target.Where(x => x.Id == id);
+        target = target.Where(x => x.Charid == charid);
+        var result = await target.SingleOrDefaultAsync();
 
         if (result == null)
         {
             return NotFound();
         }
 
-        _context.SampleTables.Remove(result);
+        _context.MultiTables.Remove(result);
         await _context.SaveChangesAsync();
 
         return NoContent();
     }
 
-    private bool Exists(int id)
+    private bool Exists(int id, string charid)
     {
-        var target = _context.SampleTables.AsNoTracking();
-target = target.Where(x => x.Id == id);
-return target.Any();
+        var target = _context.MultiTables.AsNoTracking();
+        target = target.Where(x => x.Id == id);
+        target = target.Where(x => x.Charid == charid);
+        return target.Any();
     }
 }

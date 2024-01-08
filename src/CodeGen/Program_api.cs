@@ -24,20 +24,26 @@ public partial class Program
         };
         var dbContextClassInfo = new ClassAnalysis(dbContextArgs).ReadCode();
 
-        var templateText = TemplateControl.ReadTemplateText("ApiTemplate.cs");
+        var templateText = TemplateControl.ReadTemplateText("api/ApiTemplate.cs");
 
         var templateArgs = new ApiTemplateArgs()
         {
-            UsingNamespaces = $"using {dbContextClassInfo.NamespaceName};",
+            UsingNamespaces = TemplateControl.UsingNamespace(targetClassInfo.NamespaceName),
             NamespaceName = namespaceName,
-            Authorize = authorize ? "[Authorize]" : "",
+            Authorize = TemplateControl.AuthorizeAttribute(authorize),
             ControllerName = controllerName,
             ContextTypeName = dbContextClassInfo.Name,
             ModelTypeName = targetClassInfo.Name,
-            EntitySetName = dbContextClassInfo.Properties.Single(x => x.GenericInnerTypeName == targetClassInfo.Name).Name,
-            PrimaryKeyShortTypeName = targetClassInfo.Properties.Single(x => x.Attributes.Any(y => y.Name == "Key")).TypeName,
-            PrimaryKeyName = targetClassInfo.Properties.Single(x => x.Attributes.Any(y => y.Name == "Key")).Name
+            EntitySetName = dbContextClassInfo.Properties.Single(x => x.GenericInnerTypeName == targetClassInfo.Name).Name
         };
+        templateArgs.CompareTargetToArguments = TemplateControl.CompareTargetToArguments(targetClassInfo.PrimaryProperties());
+        templateArgs.PrimaryKeyNameAttributes = TemplateControl.PrimaryKeyNameAttributes(targetClassInfo.PrimaryProperties());
+        templateArgs.PrimaryKeyNameArguments = TemplateControl.PrimaryKeyNameArguments(targetClassInfo.PrimaryProperties());
+        templateArgs.PrimaryKeyNameTargetArguments = TemplateControl.PrimaryKeyNameTargetArguments(targetClassInfo.PrimaryProperties());
+        templateArgs.PrimaryKeyNameNewObject = TemplateControl.PrimaryKeyNameNewObject(targetClassInfo.PrimaryProperties());
+        templateArgs.PrimaryKeyArguments = TemplateControl.PrimaryKeyArguments(targetClassInfo.PrimaryProperties());
+        templateArgs.ContextFindPrimaryKey = TemplateControl.ContextFindPrimaryKey(templateArgs.EntitySetName, targetClassInfo.PrimaryProperties(), true);
+        templateArgs.EntitySetExist = TemplateControl.EntitySetExist(templateArgs.EntitySetName, targetClassInfo.PrimaryProperties());
 
         var tc = new TemplateControl()
         {

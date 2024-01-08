@@ -1,6 +1,6 @@
 namespace CodeGen;
 
-public class SampleTemplateArgs
+internal sealed class SampleTemplateArgs
 {
     public required string NamespaceName { get; set; }
 

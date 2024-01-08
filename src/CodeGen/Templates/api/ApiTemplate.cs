@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 __UsingNamespaces__
@@ -28,25 +27,23 @@ public class __ControllerName__ : ControllerBase
     }
 
     // GET: @routePrefix/5
-    [HttpGet("{id}")]
-    public async ValueTask<ActionResult<__ModelTypeName__>> Get(__PrimaryKeyShortTypeName__ id)
+    [HttpGet("__PrimaryKeyNameAttributes__")]
+    public async ValueTask<ActionResult<__ModelTypeName__>> Get(__PrimaryKeyArguments__)
     {
-        var target = await _context.__EntitySetName__.FindAsync(id);
-
-        if (target == null)
+        __ContextFindPrimaryKey__
+        if (result == null)
         {
             return NotFound();
         }
-
-        return target;
+        return result;
     }
 
     // PUT: @routePrefix/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{id}")]
-    public async ValueTask<IActionResult> Put(__PrimaryKeyShortTypeName__ id, __ModelTypeName__ target)
+    [HttpPut("__PrimaryKeyNameAttributes__")]
+    public async ValueTask<IActionResult> Put(__PrimaryKeyArguments__, __ModelTypeName__ target)
     {
-        if (id != target.__PrimaryKeyName__)
+        if (__CompareTargetToArguments__)
         {
             return BadRequest();
         }
@@ -59,7 +56,7 @@ public class __ControllerName__ : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!Exists(id))
+            if (!Exists(__PrimaryKeyNameArguments__))
             {
                 return NotFound();
             }
@@ -85,7 +82,7 @@ public class __ControllerName__ : ControllerBase
         }
         catch (DbUpdateException)
         {
-            if (Exists(target.__PrimaryKeyName__))
+            if (Exists(__PrimaryKeyNameTargetArguments__))
             {
                 return Conflict();
             }
@@ -95,27 +92,27 @@ public class __ControllerName__ : ControllerBase
             }
         }
 
-        return CreatedAtAction("Get", new { id = target.__PrimaryKeyName__ }, target);
+        return CreatedAtAction("Get", new { __PrimaryKeyNameNewObject__ }, target);
     }
 
     // DELETE: @routePrefix/5
-    [HttpDelete("{id}")]
-    public async ValueTask<IActionResult> Delete(__PrimaryKeyShortTypeName__ id)
+    [HttpDelete("__PrimaryKeyNameAttributes__")]
+    public async ValueTask<IActionResult> Delete(__PrimaryKeyArguments__)
     {
-        var target = await _context.__EntitySetName__.FindAsync(id);
-        if (target == null)
+        __ContextFindPrimaryKey__
+        if (result == null)
         {
             return NotFound();
         }
 
-        _context.__EntitySetName__.Remove(target);
+        _context.__EntitySetName__.Remove(result);
         await _context.SaveChangesAsync();
 
         return NoContent();
     }
 
-    private bool Exists(__PrimaryKeyShortTypeName__ id)
+    private bool Exists(__PrimaryKeyArguments__)
     {
-        return _context.__EntitySetName__.Any(e => e.__PrimaryKeyName__ == id);
+        __EntitySetExist__
     }
 }

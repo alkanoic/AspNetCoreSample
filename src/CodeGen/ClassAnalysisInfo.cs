@@ -1,6 +1,6 @@
 namespace CodeGen;
 
-public class ClassAnalysisInfo()
+internal sealed class ClassAnalysisInfo()
 {
     public required string Name { get; set; }
 
@@ -9,9 +9,14 @@ public class ClassAnalysisInfo()
     public List<PropertyAnalysisInfo> Properties { get; set; } = new();
 
     public List<MethodAnalysisInfo> Methods { get; set; } = new();
+
+    public List<PropertyAnalysisInfo> PrimaryProperties()
+    {
+        return Properties.Where(x => x.Attributes.Any(y => y.Name == "Key")).ToList();
+    }
 }
 
-public class PropertyAnalysisInfo()
+internal sealed class PropertyAnalysisInfo()
 {
     public required string Name { get; set; }
 
@@ -24,21 +29,21 @@ public class PropertyAnalysisInfo()
     public List<AttributeAnalysisInfo> Attributes { get; set; } = new();
 }
 
-public class AttributeAnalysisInfo()
+internal sealed class AttributeAnalysisInfo()
 {
     public required string Name { get; set; }
 
     public List<ArgumentAnalysisInfo> Arguments { get; set; } = new();
 }
 
-public class ArgumentAnalysisInfo()
+internal sealed class ArgumentAnalysisInfo()
 {
     public required string Name { get; set; }
 
     public required string Value { get; set; }
 }
 
-public class MethodAnalysisInfo()
+internal sealed class MethodAnalysisInfo()
 {
     public required string Name { get; set; }
 }

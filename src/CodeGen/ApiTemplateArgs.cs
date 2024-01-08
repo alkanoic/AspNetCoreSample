@@ -1,6 +1,6 @@
 namespace CodeGen;
 
-public class ApiTemplateArgs
+internal sealed class ApiTemplateArgs
 {
     public string UsingNamespaces { get; set; } = "";
 
@@ -16,7 +16,19 @@ public class ApiTemplateArgs
 
     public required string EntitySetName { get; set; }
 
-    public required string PrimaryKeyShortTypeName { get; set; }
+    public string CompareTargetToArguments { get; set; } = "";
 
-    public required string PrimaryKeyName { get; set; }
+    public string PrimaryKeyNameAttributes { get; set; } = "";
+
+    public string PrimaryKeyNameArguments { get; set; } = "";
+
+    public string PrimaryKeyNameTargetArguments { get; set; } = "";
+
+    public string PrimaryKeyNameNewObject { get; set; } = "";
+
+    public string PrimaryKeyArguments { get; set; } = "";
+
+    public string ContextFindPrimaryKey { get; set; } = "";
+
+    public string EntitySetExist { get; set; } = "";
 }

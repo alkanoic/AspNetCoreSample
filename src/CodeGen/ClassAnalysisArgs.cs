@@ -1,6 +1,6 @@
 namespace CodeGen;
 
-public class ClassAnalysisArgs()
+internal sealed class ClassAnalysisArgs()
 {
     public required string ClassFilePath { get; set; }
 

@@ -8,4 +8,12 @@ INSERT INTO sample_table(
 )VALUES(
     1, 'table_name', 123, 123.45, SYSDATE(), 1
     , SYSDATE(), 'create_user', SYSDATE(), 'update_user'
-)
+);
+
+INSERT INTO multi_table(
+    id, charid, target_name, target_int, target_decimal, target_date, target_bit
+    , create_at, create_user, update_at, update_user
+)VALUES(
+    1, '001', 'table_name', 123, 123.45, SYSDATE(), 1
+    , SYSDATE(), 'create_user', SYSDATE(), 'update_user'
+);
