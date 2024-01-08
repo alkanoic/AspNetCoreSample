@@ -1,4 +1,5 @@
-﻿@{
+﻿@model AspNetCoreSample.Mvc.Controllers.LitController.IndexViewModel
+@{
   ViewData["Title"] = "Lit Page";
 }
 
@@ -6,8 +7,21 @@
   @* <link rel="stylesheet" href="~/js/lit/asset.css" asp-append-version="true" /> *@
 }
 
-<my-component></my-component>
-<my-element></my-element>
+<div class="container mt-5">
+  <form method="post" asp-controller="Lit" asp-action="Index">
+    <light-webapi-component inputName="LightName"></light-webapi-component>
+    @* <shadow-webapi-component name="ShadowName"></shadow-webapi-component> *@
+    <div class="form-group">
+      <label asp-for="Email">メールアドレス</label>
+      <input type="email" class="form-control" asp-for="Email" placeholder="name@example.com">
+    </div>
+    <div class="form-group">
+      <label asp-for="Password">パスワード</label>
+      <input type="password" class="form-control" asp-for="Password" placeholder="パスワード">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
 
 @section Scripts {
   <script type="module" src="~/js/lit/entry.js" asp-append-version="true"></script>

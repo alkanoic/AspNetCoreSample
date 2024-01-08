@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Langversion>12</Langversion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsRoslynComponent>true</IsRoslynComponent>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- T4ファイルをプロジェクトから参照する (TextTemplateは好きな名前でよい) -->
+    <TextTemplate Include="./**/*.tt" />
+    <!-- 生成後のファイルをプロジェクトから参照する (Generatedは好きな名前でよい) -->
+    <Generated Include="./**/*.g.cs" />
+  </ItemGroup>
+
+  <!-- ビルド前にdotnet-t4をTextTemplateに指定された各ファイルに対して呼び出すタスク -->
+  <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
+    <Exec WorkingDirectory="$(ProjectDir)"
+      Command="dotnet t4 %(TextTemplate.FullPath) --parameter targetPath=../T4Execute/bin/Debug/net8.0/T4Execute.dll" />
+  </Target>
+  <!-- クリーンアップ後にGeneratedに指定されたファイルを削除するタスク -->
+  <Target Name="TextTemplateClean" AfterTargets="Clean">
+    <Delete Files="@(Generated)" />
+  </Target>
+</Project>

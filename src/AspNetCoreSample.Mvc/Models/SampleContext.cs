@@ -6,18 +6,14 @@ namespace AspNetCoreSample.Mvc.Models;
 
 public partial class SampleContext : DbContext
 {
-    public SampleContext()
-    {
-    }
-
     public SampleContext(DbContextOptions<SampleContext> options)
         : base(options)
     {
     }
 
-    public virtual DbSet<EnumSample>? EnumSamples { get; set; }
+    public virtual DbSet<EnumSample> EnumSamples { get; set; }
 
-    public virtual DbSet<Name>? Names { get; set; }
+    public virtual DbSet<Name> Names { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

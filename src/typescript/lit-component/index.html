@@ -6,13 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Lit + TS</title>
     <link rel="stylesheet" href="./src/index.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
     <script type="module" src="/src/my-element.ts"></script>
     <script type="module" src="/src/my-component.ts"></script>
+    <script type="module" src="/src/dialog-component.ts"></script>
+    <script type="module" src="/src/bs-dialog-component.ts"></script>
+    <script type="module" src="/src/light-webapi-component.ts"></script>
+    <script type="module" src="/src/shadow-webapi-component.ts"></script>
   </head>
   <body>
-    <my-component></my-component>
-    <my-element>
-      <h1>Vite + Lit</h1>
-    </my-element>
+    <light-webapi-component inputName="name1"></light-webapi-component>
+    <!-- <light-webapi-component inputName="name2"></light-webapi-component> -->
+    <!-- <light-webapi-component></light-webapi-component> -->
+    <!-- <shadow-webapi-component></shadow-webapi-component> -->
   </body>
 </html>

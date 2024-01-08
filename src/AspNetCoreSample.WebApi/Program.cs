@@ -5,6 +5,15 @@ builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddCors(options => // Add this line
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:5173")
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
@@ -22,7 +31,11 @@ if (app.Environment.IsDevelopment())
     app.UseReDoc(); // serve ReDoc UI
 }
 
+app.MapDefaultEndpoints();
+
 app.UseHttpsRedirection();
+
+app.UseCors(); // Add this line
 
 app.UseAuthorization();
 

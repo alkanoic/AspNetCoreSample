@@ -7,6 +7,24 @@
       "commands": [
         "dotnet-lambda"
       ]
+    },
+    "dotnet-ef": {
+      "version": "8.0.0",
+      "commands": [
+        "dotnet-ef"
+      ]
+    },
+    "dotnet-t4": {
+      "version": "2.3.1",
+      "commands": [
+        "t4"
+      ]
+    },
+    "dotnet-aspnet-codegenerator": {
+      "version": "8.0.0",
+      "commands": [
+        "dotnet-aspnet-codegenerator"
+      ]
     }
   }
 }

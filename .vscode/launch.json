@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/AspNetCoreSample.Mvc/bin/Debug/net6.0/AspNetCoreSample.Mvc.dll",
+            "program": "${workspaceFolder}/src/AspNetCoreSample.Mvc/bin/Debug/net8.0/AspNetCoreSample.Mvc.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/AspNetCoreSample.Mvc",
             "stopAtEntry": false,
@@ -25,7 +25,7 @@
             }
         },
         {
-            "name": "debug-hot-reload",
+            "name": "Mvc hot-reload",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -50,7 +50,7 @@
             }
         },
         {
-            "name": ".NET Watch Attach",
+            "name": "Mvc Watch Attach",
             "type": "dotnetwatchattach",
             "request": "launch",
             "args": {
@@ -61,5 +61,163 @@
             "task": "watchTaskName",
             "program": "AspNetCoreSample.Mvc.exe"
         },
+        {
+            "name": "WebApi",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "webapi-build",
+            "program": "${workspaceFolder}/src/AspNetCoreSample.WebApi/bin/Debug/net8.0/AspNetCoreSample.WebApi.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/AspNetCoreSample.WebApi",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "lit-component",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/src/typescript/lit-component",
+        },
+        {
+            "name": "Mvc WebApi Aspire",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "apphost-build",
+            "program": "${workspaceFolder}/src/AspNetCoreSample.AppHost/bin/Debug/net8.0/AspNetCoreSample.AppHost.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/AspNetCoreSample.AppHost",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/AspNetCoreSample.Mvc/Views"
+            }
+        },
+        {
+            "name": "CodeGen api",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "codegen-build",
+            "program": "${workspaceFolder}/src/CodeGen/bin/Debug/net8.0/CodeGen.dll",
+            "args": [
+                "api",
+                "--class-file-path",
+                "../AspNetCoreSample.Templates/Models/Name.cs",
+                "--class-name",
+                "Name",
+                "--output-path",
+                "Outputs/ApiOutput.cs",
+                "--db-context-path",
+                "../AspNetCoreSample.Templates/Models/SampleContext.cs",
+                "--namespace-name",
+                "AspNetCoreSample.WebApi",
+                "--controller-name",
+                "NameApiController",
+                "--authorize"
+            ],
+            "cwd": "${workspaceFolder}/src/CodeGen",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "CodeGen api-sampletable",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "codegen-build",
+            "program": "${workspaceFolder}/src/CodeGen/bin/Debug/net8.0/CodeGen.dll",
+            "args": [
+                "api",
+                "--class-file-path",
+                "../CodeGen.Result/Models/MultiTable.cs",
+                "--class-name",
+                "MultiTable",
+                "--output-path",
+                "../CodeGen.Result/Controllers/api/MultiTableController.cs",
+                "--db-context-path",
+                "../CodeGen.Result/Models/SampleContext.cs",
+                "--namespace-name",
+                "CodeGen.Result.WebApi",
+                "--controller-name",
+                "MultiTableApiController"
+            ],
+            "cwd": "${workspaceFolder}/src/CodeGen",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "CodeGen sample",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "codegen-build",
+            "program": "${workspaceFolder}/src/CodeGen/bin/Debug/net8.0/CodeGen.dll",
+            "args": [
+                "sample",
+                "--class-file-path",
+                "../AspNetCoreSample.Templates/Models/Name.cs",
+                "--class-name",
+                "Name",
+                "--output-path",
+                "Outputs/SampleOutput.cs"
+            ],
+            "cwd": "${workspaceFolder}/src/CodeGen",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "CodeGen Result",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "codegen-result-build",
+            "program": "${workspaceFolder}/src/CodeGen.Result/bin/Debug/net8.0/CodeGen.Result.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/CodeGen.Result",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/CodeGen.Result/Views"
+            }
+        },
     ],
+    "compounds": [
+        {
+            "name": "Mvc-and-WebApi",
+            "configurations": [
+                "Mvc",
+                "WebApi"
+            ]
+        },
+        {
+            "name": "Mvc-hotreload-and-WebApi",
+            "configurations": [
+                "Mvc Watch Attach",
+                "WebApi"
+            ]
+        },
+        {
+            "name": "lit-and-WebApi",
+            "configurations": [
+                "lit-component",
+                "WebApi"
+            ]
+        }
+    ]
 }

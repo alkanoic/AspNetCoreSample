@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NSwag.AspNetCore" Version="14.0.0-preview010" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreSample.ServiceDefaults\AspNetCoreSample.ServiceDefaults.csproj" />
+    <ProjectReference
+      Include="..\AspNetCoreSample.ServiceDefaults\AspNetCoreSample.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

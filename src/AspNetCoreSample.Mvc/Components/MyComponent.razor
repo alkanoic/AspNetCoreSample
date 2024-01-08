@@ -1,0 +1,61 @@
+@page "/mycomponent"
+@inject HttpClient Http
+@using System.Net.Http.Headers
+@using System.Text.Json
+@using System.Linq
+
+<h3>Hello from MyComponent</h3>
+
+@if (data == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>Summary: @data.Summary</p>
+    <p>Temperature: @data.TemperatureC</p>
+    <button @onclick="UpdateData">Update</button>
+}
+
+@code {
+    private WeatherForecast? data;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateData();
+    }
+
+    private async Task UpdateData()
+    {
+        var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (request, cert, chain, errors) =>
+                {
+                    Console.WriteLine("SSL error skipped");
+                    return true;
+                }
+            };
+        HttpClient client = new HttpClient(handler);
+        client.BaseAddress = new Uri("https://localhost:7035/");
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        HttpResponseMessage response = await client.GetAsync("WeatherForecast");
+        string jsonString = await response.Content.ReadAsStringAsync();
+        var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+        var d = JsonSerializer.Deserialize<WeatherForecast[]>(jsonString, options);
+        if (d is not null && d.Length == 1)
+            data = d[0];
+    }
+
+    public class WeatherForecast
+    {
+        public DateTime Date { get; set; }
+
+        public int TemperatureC { get; set; }
+
+        public string? Summary { get; set; }
+    }
+}
