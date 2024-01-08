@@ -270,5 +270,5 @@ internal sealed class TemplateControl
         return target.ToString().LastCharRemove(2);
     }
 
-    private static CultureInfo DefaultCultureInfo = CultureInfo.InvariantCulture;
+    private static readonly CultureInfo DefaultCultureInfo = CultureInfo.InvariantCulture;
 }

@@ -1,4 +1,5 @@
 using AspNetCoreSample.Templates.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
