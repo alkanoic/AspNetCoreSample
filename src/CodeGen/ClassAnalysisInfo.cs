@@ -4,7 +4,13 @@ internal sealed class ClassAnalysisInfo()
 {
     public required string Name { get; set; }
 
+    public string NameAttribute { get; set; } = "";
+
+    public string CommentSummary { get; set; } = "";
+
     public required string NamespaceName { get; set; }
+
+    public List<AttributeAnalysisInfo> Attributes { get; set; } = new();
 
     public List<PropertyAnalysisInfo> Properties { get; set; } = new();
 
@@ -26,6 +32,10 @@ internal sealed class ClassAnalysisInfo()
 internal sealed class PropertyAnalysisInfo()
 {
     public required string Name { get; set; }
+
+    public string NameAttribute { get; set; } = "";
+
+    public string CommentSummary { get; set; } = "";
 
     public required string TypeName { get; set; }
 
