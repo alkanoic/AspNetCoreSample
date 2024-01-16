@@ -97,10 +97,29 @@ public static class QueryableExtensions
 
             if (c.Type == SearchColumnType.Num)
             {
+                if (!int.TryParse(c.Value, out var result))
+                {
+                    continue;
+                }
                 switch (c.NumCondition)
                 {
                     case SearchNumCondition.Equals:
                         expr = GetEqualMethod(parameter, p, c.Value);
+                        break;
+                    case SearchNumCondition.Not:
+                        expr = GetNotEqualMethod(parameter, p, c.Value);
+                        break;
+                    case SearchNumCondition.LessThan:
+                        expr = GetLessThanMethod(parameter, p, result);
+                        break;
+                    case SearchNumCondition.LessThanEqualTo:
+                        expr = GetLessThanEqualToMethod(parameter, p, result);
+                        break;
+                    case SearchNumCondition.GreaterThanEqualTo:
+                        expr = GetGreaterThanEqualToMethod(parameter, p, result);
+                        break;
+                    case SearchNumCondition.GreaterThan:
+                        expr = GetGreaterThanMethod(parameter, p, result);
                         break;
                 }
             }
@@ -128,24 +147,69 @@ public static class QueryableExtensions
         return query.Where(predicate);
     }
 
-    private static UnaryExpression GetNotContainsMethod(ParameterExpression parameter, PropertyInfo property, object searchTerm)
+    private static BinaryExpression GetLessThanMethod(ParameterExpression parameter, PropertyInfo property, int result)
     {
-        return Expression.Not(GetContainsMethod(parameter, property, searchTerm));
-    }
-
-    private static MethodCallExpression GetContainsMethod(ParameterExpression parameter, PropertyInfo property, object searchTerm)
-    {
-        return Expression.Call(
-          Expression.Property(parameter, property),
-          "Contains",
-          null,
-          Expression.Constant(searchTerm)
+        return Expression.LessThan(
+            Expression.Property(parameter, property),
+            Expression.Constant(result)
         );
     }
 
-    private static BinaryExpression? GetEqualMethod(ParameterExpression parameter, PropertyInfo property, object searchTerm)
+    private static BinaryExpression GetLessThanEqualToMethod(ParameterExpression parameter, PropertyInfo property, int result)
     {
-        if (!int.TryParse(searchTerm.ToString(), out var result))
+        return Expression.LessThanOrEqual(
+            Expression.Property(parameter, property),
+            Expression.Constant(result)
+        );
+    }
+
+    private static BinaryExpression GetGreaterThanEqualToMethod(ParameterExpression parameter, PropertyInfo property, int result)
+    {
+        return Expression.GreaterThanOrEqual(
+            Expression.Property(parameter, property),
+            Expression.Constant(result)
+        );
+    }
+
+    private static BinaryExpression GetGreaterThanMethod(ParameterExpression parameter, PropertyInfo property, int result)
+    {
+        return Expression.GreaterThan(
+            Expression.Property(parameter, property),
+            Expression.Constant(result)
+        );
+    }
+
+    private static UnaryExpression? GetNotContainsMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
+    {
+        var expr = GetContainsMethod(parameter, property, searchTerm);
+        if (expr is null) return null;
+        return Expression.Not(expr);
+    }
+
+    private static MethodCallExpression? GetContainsMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
+    {
+        if (!int.TryParse(searchTerm, out var result))
+        {
+            return null;
+        }
+        return Expression.Call(
+            Expression.Property(parameter, property),
+            "Contains",
+            null,
+            Expression.Constant(searchTerm)
+        );
+    }
+
+    private static UnaryExpression? GetNotEqualMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
+    {
+        var expr = GetContainsMethod(parameter, property, searchTerm);
+        if (expr is null) return null;
+        return Expression.Not(expr);
+    }
+
+    private static BinaryExpression? GetEqualMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
+    {
+        if (!int.TryParse(searchTerm, out var result))
         {
             return null;
         }
@@ -155,9 +219,9 @@ public static class QueryableExtensions
         );
     }
 
-    private static BinaryExpression? GetDateMethod(ParameterExpression parameter, PropertyInfo property, object searchTerm)
+    private static BinaryExpression? GetDateMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
     {
-        if (!DateTime.TryParse(searchTerm.ToString(), out var result))
+        if (!DateTime.TryParse(searchTerm, out var result))
         {
             return null;
         }
