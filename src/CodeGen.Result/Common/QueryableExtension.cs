@@ -31,12 +31,12 @@ public static class QueryableExtensions
 
     private static IOrderedQueryable<T> ApplyOrder<T>(IQueryable<T> source, string propertyName, string methodName)
     {
-        var param = Expression.Parameter(typeof(T));
-        var prop = Expression.Property(param, propertyName);
-        var lambda = Expression.Lambda(prop, param);
+        var parameter = Expression.Parameter(typeof(T));
+        var property = Expression.Property(parameter, propertyName);
+        var lambda = Expression.Lambda(property, parameter);
         var method = typeof(Queryable).GetMethods().First(m => m.Name == methodName
                                                               && m.GetParameters().Length == 2)
-                                       .MakeGenericMethod(typeof(T), prop.Type);
+                                       .MakeGenericMethod(typeof(T), property.Type);
         var result = method.Invoke(null, [source, lambda]);
         if (result != null)
         {
@@ -82,6 +82,56 @@ public static class QueryableExtensions
         return query.Where(predicate);
     }
 
+    public static IQueryable<T> WhereColumns<T>(this IQueryable<T> query, SearchBuilder searchBuilder) where T : class
+    {
+        var parameter = Expression.Parameter(typeof(T));
+
+        var predicate = PredicateBuilder.New<T>();
+
+        foreach (var c in searchBuilder.SearchConditions)
+        {
+            Expression? expr = null;
+
+            var p = typeof(T).GetProperty(c.Data);
+            if (p is null) continue;
+
+            if (c.Type == SearchColumnType.Num)
+            {
+                switch (c.NumCondition)
+                {
+                    case SearchNumCondition.Equals:
+                        expr = GetEqualMethod(parameter, p, c.Value);
+                        break;
+                }
+            }
+            else
+            {
+                switch (c.StrCondition)
+                {
+
+                }
+            }
+
+            if (expr != null)
+            {
+                if (searchBuilder.Logic == SearchLogic.AND)
+                {
+                    predicate = predicate.And(Expression.Lambda<Func<T, bool>>(expr, parameter));
+                }
+                else
+                {
+                    predicate = predicate.Or(Expression.Lambda<Func<T, bool>>(expr, parameter));
+                }
+            }
+        }
+
+        return query.Where(predicate);
+    }
+
+    private static UnaryExpression GetNotContainsMethod(ParameterExpression parameter, PropertyInfo property, object searchTerm)
+    {
+        return Expression.Not(GetContainsMethod(parameter, property, searchTerm));
+    }
 
     private static MethodCallExpression GetContainsMethod(ParameterExpression parameter, PropertyInfo property, object searchTerm)
     {

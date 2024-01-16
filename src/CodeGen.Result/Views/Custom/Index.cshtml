@@ -9,9 +9,15 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table id="example">
+<table id="example" class="table table-striped" style="width:100%">
     <thead>
         <tr>
+            <th>
+                detail
+            </th>
+            <th>
+                edit
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
@@ -45,10 +51,63 @@
             <th>
                 @Html.DisplayNameFor(model => model.UpdateUser)
             </th>
-
+            <th>
+                delete
+            </th>
         </tr>
     </thead>
+    <tfoot>
+        <tr>
+            <th>
+                detail
+            </th>
+            <th>
+                edit
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Charid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetInt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetDecimal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetBit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdateAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdateUser)
+            </th>
+            <th>
+                delete
+            </th>
+        </tr>
+    </tfoot>
 </table>
+
+@section Styles {
+    <style>
+    </style>
+}
 
 @section Scripts {
     <script>
@@ -57,6 +116,20 @@
             processing: true,
             ordering: true,
             columns: [
+                {
+                    data: 'detail',
+                    render: function (data, type, row) {
+                        return `@Html.ActionLink("Detail", "Details", new { id = "__id__", charid = "__charid__" })`.replace('__id__', row.id).replace('__charid__', row.charid);
+                    },
+                    sortable: false
+                },
+                {
+                    data: 'edit',
+                    render: function (data, type, row) {
+                        return `@Html.ActionLink("Edit", "Edit", new { id = "__id__", charid = "__charid__" })`.replace('__id__', row.id).replace('__charid__', row.charid);
+                    },
+                    sortable: false
+                },
                 { data: 'id' },
                 { data: 'charid' },
                 { data: 'targetName' },
@@ -67,13 +140,45 @@
                 { data: 'createAt' },
                 { data: 'createUser' },
                 { data: 'updateAt' },
-                { data: 'updateUser' }
+                { data: 'updateUser' },
+                {
+                    data: 'delete',
+                    render: function (data, type, row) {
+                        return `@Html.ActionLink("Delete", "Delete", new { id = "__id__", charid = "__charid__" })`.replace('__id__', row.id).replace('__charid__', row.charid);
+                    },
+                    sortable: false
+                },
             ],
             ajax: {
                 url: '/custom/get',
                 dataSrc: 'data'
             },
-            pageLength: 10
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            scrollX: true,
+            scrollCollapse: true,
+            scrollY: '400px',
+            select: true,
+            dom: 'BQfrtip',
+            buttons: [
+                'csv',
+                'excel'
+            ],
+            columnDefs: [
+                {
+                    targets: 5,
+                    render: DataTable.render.datetime('YYYY/MM/DD')
+                },
+                {
+                    targets: 7,
+                    render: DataTable.render.datetime('YYYY/MM/DD HH:mm:ss')
+                },
+                {
+                    targets: 9,
+                    render: DataTable.render.datetime('YYYY/MM/DD HH:mm:ss')
+                }
+
+            ]
         });
     </script>
 }

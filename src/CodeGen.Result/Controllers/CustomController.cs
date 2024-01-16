@@ -37,22 +37,27 @@ public class CustomController : Controller
             query = _context.MultiTables;
         }
 
+        foreach (var i in parameters.SearchBuilder.SearchConditions)
+        {
+            query = query.WhereColumns(parameters.SearchBuilder);
+        }
+
         IOrderedQueryable<MultiTable> ordered = query.OrderBy(x => x);
         if (parameters.Order.Count > 0)
         {
             var o = parameters.Order[0];
             if (o.Dir == ColumnOrderDir.asc)
             {
-                ordered = query.OrderBy(parameters.Columns[o.Column].Data);
+                ordered = query.OrderBy(parameters.Columns[o.Column + 2].Data);
             }
             else
             {
-                ordered = query.OrderByDescending(parameters.Columns[o.Column].Data);
+                ordered = query.OrderByDescending(parameters.Columns[o.Column + 2].Data);
             }
 
             foreach (var ox in parameters.Order.Skip(1).Select((x, index) => (x, index)))
             {
-                var cx = parameters.Columns[ox.x.Column];
+                var cx = parameters.Columns[ox.x.Column + 2];
                 if (ox.x.Dir == ColumnOrderDir.asc)
                 {
                     ordered = ordered.ThenBy(cx.Data);

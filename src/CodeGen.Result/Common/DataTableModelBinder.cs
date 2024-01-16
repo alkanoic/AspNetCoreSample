@@ -57,6 +57,32 @@ public class DataTableModelBinder : IModelBinder
             c++;
         }
 
+        // SearchBuilder
+        var sb = 0;
+        var searchBuilder = new SearchBuilder();
+        searchBuilder.Logic = SearchBuilder.ToSearchLogic(request.Query[$"searchBuilder[logic]"].ToString());
+        while (!StringValues.IsNullOrEmpty(request.Query[$"searchBuilder[criteria][{sb}][data]"]))
+        {
+            var searchCondition = new SearchCondition
+            {
+                Type = SearchCondition.ToSearchColumnType(request.Query[$"searchBuilder[criteria][{sb}][type]"].ToString()),
+                Data = request.Query[$"searchBuilder[criteria][{sb}][data]"].ToString().Trim(),
+                OriginalData = request.Query[$"searchBuilder[criteria][{sb}][origData]"].ToString(),
+                Value = request.Query[$"searchBuilder[criteria][{sb}][value1]"].ToString(),
+            };
+
+            if (searchCondition.Type == SearchColumnType.Num)
+            {
+                searchCondition.NumCondition = SearchCondition.ToSearchNumCondition(request.Query[$"searchBuilder[criteria][{sb}][condition]"].ToString());
+            }
+            else
+            {
+                searchCondition.StrCondition = SearchCondition.ToSearchStrCondition(request.Query[$"searchBuilder[criteria][{sb}][condition]"].ToString());
+            }
+            searchBuilder.SearchConditions.Add(searchCondition);
+            sb++;
+        }
+
         var result = new DataTableParameters
         {
             Draw = draw,
@@ -64,7 +90,8 @@ public class DataTableModelBinder : IModelBinder
             Length = length,
             Search = search,
             Order = order,
-            Columns = columns
+            Columns = columns,
+            SearchBuilder = searchBuilder
         };
 
         bindingContext.Result = ModelBindingResult.Success(result);
