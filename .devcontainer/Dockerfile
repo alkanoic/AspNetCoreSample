@@ -16,3 +16,8 @@ RUN mkdir -p /etc/apt/keyrings && \
 
 # install dotnet workload aspire
 RUN dotnet workload install aspire
+
+# install Keploy
+# RUN curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp && \
+#     mkdir -p /usr/local/bin && \
+#     mv /tmp/keploy /usr/local/bin
