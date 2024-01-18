@@ -97,29 +97,47 @@ public static class QueryableExtensions
 
             if (c.Type == SearchColumnType.Num)
             {
-                if (!int.TryParse(c.Value, out var result))
+                var result1 = 0;
+                if (!string.IsNullOrEmpty(c.Value1) && !int.TryParse(c.Value1, out result1))
+                {
+                    continue;
+                }
+                var result2 = 0;
+                if (!string.IsNullOrEmpty(c.Value2) && !int.TryParse(c.Value2, out result2))
                 {
                     continue;
                 }
                 switch (c.NumCondition)
                 {
                     case SearchNumCondition.Equals:
-                        expr = GetEqualMethod(parameter, p, c.Value);
+                        expr = GetEqualMethod(parameter, p, c.Value1);
                         break;
                     case SearchNumCondition.Not:
-                        expr = GetNotEqualMethod(parameter, p, c.Value);
+                        expr = GetNotEqualMethod(parameter, p, c.Value1);
                         break;
                     case SearchNumCondition.LessThan:
-                        expr = GetLessThanMethod(parameter, p, result);
+                        expr = GetLessThanMethod(parameter, p, result1);
                         break;
                     case SearchNumCondition.LessThanEqualTo:
-                        expr = GetLessThanEqualToMethod(parameter, p, result);
+                        expr = GetLessThanEqualToMethod(parameter, p, result1);
                         break;
                     case SearchNumCondition.GreaterThanEqualTo:
-                        expr = GetGreaterThanEqualToMethod(parameter, p, result);
+                        expr = GetGreaterThanEqualToMethod(parameter, p, result1);
                         break;
                     case SearchNumCondition.GreaterThan:
-                        expr = GetGreaterThanMethod(parameter, p, result);
+                        expr = GetGreaterThanMethod(parameter, p, result1);
+                        break;
+                    case SearchNumCondition.Between:
+                        expr = Expression.And(GetGreaterThanEqualToMethod(parameter, p, result1), GetLessThanEqualToMethod(parameter, p, result2));
+                        break;
+                    case SearchNumCondition.NotBetween:
+                        expr = Expression.Or(GetLessThanMethod(parameter, p, result1), GetGreaterThanMethod(parameter, p, result2));
+                        break;
+                    case SearchNumCondition.Empty:
+                        expr = GetIsNullMethod(parameter, p);
+                        break;
+                    case SearchNumCondition.NotEmpty:
+                        expr = GetIsNotNullMethod(parameter, p);
                         break;
                 }
             }
@@ -217,6 +235,19 @@ public static class QueryableExtensions
             Expression.Property(parameter, property),
             Expression.Constant(result)
         );
+    }
+
+    private static BinaryExpression GetIsNullMethod(ParameterExpression parameter, PropertyInfo property)
+    {
+        return Expression.Equal(
+            Expression.Property(parameter, property),
+            Expression.Constant(null)
+        );
+    }
+
+    private static UnaryExpression GetIsNotNullMethod(ParameterExpression parameter, PropertyInfo property)
+    {
+        return Expression.Not(GetIsNullMethod(parameter, property));
     }
 
     private static BinaryExpression? GetDateMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)

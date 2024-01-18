@@ -68,7 +68,8 @@ public class DataTableModelBinder : IModelBinder
                 Type = SearchCondition.ToSearchColumnType(request.Query[$"searchBuilder[criteria][{sb}][type]"].ToString()),
                 Data = request.Query[$"searchBuilder[criteria][{sb}][data]"].ToString().Trim(),
                 OriginalData = request.Query[$"searchBuilder[criteria][{sb}][origData]"].ToString(),
-                Value = request.Query[$"searchBuilder[criteria][{sb}][value1]"].ToString(),
+                Value1 = request.Query[$"searchBuilder[criteria][{sb}][value1]"].ToString(),
+                Value2 = request.Query[$"searchBuilder[criteria][{sb}][value2]"].ToString()
             };
 
             if (searchCondition.Type == SearchColumnType.Num)
