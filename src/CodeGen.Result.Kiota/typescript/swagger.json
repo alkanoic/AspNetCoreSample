@@ -1,0 +1,466 @@
+{
+  "x-generator": "NSwag v14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "My Title",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5100"
+    }
+  ],
+  "paths": {
+    "/api/MultiTableApi": {
+      "get": {
+        "tags": [
+          "MultiTableApi"
+        ],
+        "operationId": "MultiTableApi_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MultiTable"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "MultiTableApi"
+        ],
+        "operationId": "MultiTableApi_Post",
+        "requestBody": {
+          "x-name": "target",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiTable"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiTable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/MultiTableApi/id/charid": {
+      "get": {
+        "tags": [
+          "MultiTableApi"
+        ],
+        "operationId": "MultiTableApi_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "charid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiTable"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "MultiTableApi"
+        ],
+        "operationId": "MultiTableApi_Put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "charid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "target",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiTable"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 3
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "MultiTableApi"
+        ],
+        "operationId": "MultiTableApi_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "charid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SampleTableApi": {
+      "get": {
+        "tags": [
+          "SampleTableApi"
+        ],
+        "operationId": "SampleTableApi_GetAll",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SampleTable"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "SampleTableApi"
+        ],
+        "operationId": "SampleTableApi_Post",
+        "requestBody": {
+          "x-name": "target",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SampleTable"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SampleTable"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SampleTableApi/id": {
+      "get": {
+        "tags": [
+          "SampleTableApi"
+        ],
+        "operationId": "SampleTableApi_Get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SampleTable"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "SampleTableApi"
+        ],
+        "operationId": "SampleTableApi_Put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "target",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SampleTable"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SampleTableApi"
+        ],
+        "operationId": "SampleTableApi_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MultiTable": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "charid": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 0
+          },
+          "targetName": {
+            "type": "string",
+            "maxLength": 30,
+            "minLength": 0
+          },
+          "targetInt": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "targetDecimal": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "targetDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "targetBit": {
+            "type": "integer",
+            "format": "uint64",
+            "nullable": true
+          },
+          "createAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createUser": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "updateAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateUser": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          }
+        }
+      },
+      "SampleTable": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "targetName": {
+            "type": "string",
+            "maxLength": 30,
+            "minLength": 0
+          },
+          "targetInt": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "targetDecimal": {
+            "type": "number",
+            "format": "decimal",
+            "nullable": true
+          },
+          "targetDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "targetBit": {
+            "type": "integer",
+            "format": "uint64",
+            "nullable": true
+          },
+          "createAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createUser": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
+          "updateAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateUser": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          }
+        }
+      }
+    }
+  }
+}
