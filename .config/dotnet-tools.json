@@ -31,6 +31,12 @@
       "commands": [
         "dotnet-format"
       ]
+    },
+    "microsoft.openapi.kiota": {
+      "version": "1.10.1",
+      "commands": [
+        "kiota"
+      ]
     }
   }
 }
