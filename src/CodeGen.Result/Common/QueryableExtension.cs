@@ -160,6 +160,10 @@ public static class QueryableExtensions
                     predicate = predicate.Or(Expression.Lambda<Func<T, bool>>(expr, parameter));
                 }
             }
+            else
+            {
+                predicate = predicate.And(e => true);
+            }
         }
 
         return query.Where(predicate);
@@ -237,17 +241,27 @@ public static class QueryableExtensions
         );
     }
 
-    private static BinaryExpression GetIsNullMethod(ParameterExpression parameter, PropertyInfo property)
+    private static BinaryExpression? GetIsNullMethod(ParameterExpression parameter, PropertyInfo property)
     {
+        if (!(property.PropertyType.IsGenericType &&
+            property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>)))
+        {
+            return null;
+        }
         return Expression.Equal(
             Expression.Property(parameter, property),
             Expression.Constant(null)
         );
     }
 
-    private static UnaryExpression GetIsNotNullMethod(ParameterExpression parameter, PropertyInfo property)
+    private static UnaryExpression? GetIsNotNullMethod(ParameterExpression parameter, PropertyInfo property)
     {
-        return Expression.Not(GetIsNullMethod(parameter, property));
+        var isNull = GetIsNullMethod(parameter, property);
+        if (isNull is null)
+        {
+            return null;
+        }
+        return Expression.Not(isNull);
     }
 
     private static BinaryExpression? GetDateMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
