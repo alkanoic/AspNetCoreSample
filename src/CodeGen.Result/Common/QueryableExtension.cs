@@ -145,7 +145,36 @@ public static class QueryableExtensions
             {
                 switch (c.StrCondition)
                 {
-
+                    case SearchStrCondition.Equals:
+                        expr = GetEqualMethod(parameter, p, c.Value1);
+                        break;
+                    case SearchStrCondition.Not:
+                        expr = GetNotEqualMethod(parameter, p, c.Value1);
+                        break;
+                    case SearchStrCondition.Contains:
+                        expr = GetContainsMethod(parameter, p, c.Value1);
+                        break;
+                    case SearchStrCondition.DoesNotContain:
+                        expr = GetNotContainsMethod(parameter, p, c.Value1);
+                        break;
+                    case SearchStrCondition.StartsWith:
+                        expr = GetStartsWithMethod(parameter, p, c.Value1);
+                        break;
+                    case SearchStrCondition.DoesNotStartWith:
+                        expr = GetNotStartsWithMethod(parameter, p, c.Value1);
+                        break;
+                    case SearchStrCondition.EndsWith:
+                        expr = GetEndsWithMethod(parameter, p, c.Value1);
+                        break;
+                    case SearchStrCondition.DoesNotEndWith:
+                        expr = GetNotEndsWithMethod(parameter, p, c.Value1);
+                        break;
+                    case SearchStrCondition.Empty:
+                        expr = GetIsNullMethod(parameter, p);
+                        break;
+                    case SearchStrCondition.NotEmpty:
+                        expr = GetIsNotNullMethod(parameter, p);
+                        break;
                 }
             }
 
@@ -217,6 +246,38 @@ public static class QueryableExtensions
         return Expression.Call(
             Expression.Property(parameter, property),
             "Contains",
+            null,
+            Expression.Constant(searchTerm)
+        );
+    }
+
+    private static UnaryExpression GetNotStartsWithMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
+    {
+        var expr = GetStartsWithMethod(parameter, property, searchTerm);
+        return Expression.Not(expr);
+    }
+
+    private static MethodCallExpression GetStartsWithMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
+    {
+        return Expression.Call(
+            Expression.Property(parameter, property),
+            "StartsWith",
+            null,
+            Expression.Constant(searchTerm)
+        );
+    }
+
+    private static UnaryExpression GetNotEndsWithMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
+    {
+        var expr = GetEndsWithMethod(parameter, property, searchTerm);
+        return Expression.Not(expr);
+    }
+
+    private static MethodCallExpression GetEndsWithMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
+    {
+        return Expression.Call(
+            Expression.Property(parameter, property),
+            "EndsWith",
             null,
             Expression.Constant(searchTerm)
         );
