@@ -56,7 +56,7 @@ internal sealed class TemplateControl
     public static string ReadTemplateText(string templateFileName)
     {
         string appPath = AppContext.BaseDirectory;
-        return File.ReadAllText(Path.Combine(appPath, $"Templates/{templateFileName}"),
+        return File.ReadAllText(Path.Combine(appPath, templateFileName),
             new UTF8Encoding(false));
     }
 
@@ -270,5 +270,5 @@ internal sealed class TemplateControl
         return target.ToString().LastCharRemove(2);
     }
 
-    private static readonly CultureInfo DefaultCultureInfo = CultureInfo.InvariantCulture;
+    internal static readonly CultureInfo DefaultCultureInfo = CultureInfo.InvariantCulture;
 }

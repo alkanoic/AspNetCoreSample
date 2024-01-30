@@ -3,14 +3,12 @@ using System.Text;
 
 using CodeGen;
 
-#pragma warning disable CA1305
-
 public partial class Program
 {
-    public static void Api(string classFilePath, string className, string outputPath, string dbContextPath
-        , string namespaceName, string controllerName, bool authorize = false)
+    public static void DataTables(string classFilePath, string className, string outputDirectory, string dbContextPath
+        , string namespaceName, bool authorize = false)
     {
-        Console.WriteLine($"api target classFilePath:{classFilePath} className:{className} output:{outputPath}");
+        Console.WriteLine($"DataTables target classFilePath:{classFilePath} className:{className} output:{outputDirectory}");
 
         var targetArgs = new ClassAnalysisArgs()
         {
@@ -25,7 +23,8 @@ public partial class Program
         };
         var dbContextClassInfo = new ClassAnalysis(dbContextArgs).ReadCode();
 
-        var templateArgs = new ApiTemplateArgs()
+        var controllerName = className + "Controller";
+        var templateArgs = new MvcTemplateArgs()
         {
             UsingNamespaces = TemplateControl.UsingNamespace(targetClassInfo.NamespaceName),
             NamespaceName = namespaceName,
@@ -42,10 +41,19 @@ public partial class Program
         templateArgs.PrimaryKeyNameNewObject = TemplateControl.PrimaryKeyNameNewObject(targetClassInfo.PrimaryProperties());
         templateArgs.PrimaryKeyArguments = TemplateControl.PrimaryKeyArguments(targetClassInfo.PrimaryProperties());
         templateArgs.ContextFindPrimaryKey = TemplateControl.ContextFindPrimaryKey(templateArgs.EntitySetName, targetClassInfo.PrimaryProperties(), true);
+        templateArgs.CreateBindAttributes = TemplateControl.PropertyNameArguments(targetClassInfo.Properties, false);
         templateArgs.EntitySetExist = TemplateControl.EntitySetExist(templateArgs.EntitySetName, targetClassInfo.PrimaryProperties());
+        templateArgs.ViewTargetModelHeader = TemplateControl.ViewTargetModelHeader(targetClassInfo.Properties);
+        templateArgs.ViewTargetModelDetail = TemplateControl.ViewTargetModelDetail(targetClassInfo.Properties);
+        templateArgs.ViewTargetModelCreate = TemplateControl.ViewTargetModelCreate(targetClassInfo.Properties);
+        templateArgs.ViewTargetModelDetails = TemplateControl.ViewTargetModelDetails(targetClassInfo.Properties);
+        templateArgs.ViewTargetModelEditPrimaryKey = TemplateControl.ViewTargetModelEditPrimaryKey(targetClassInfo.PrimaryProperties());
+        templateArgs.ViewTargetModelEditProperties = TemplateControl.ViewTargetModelEditProperties(targetClassInfo.ExcludePrimaryProperties());
+        templateArgs.ViewLinkIndexPrimaryKey = TemplateControl.ViewLinkPrimaryKey(targetClassInfo.PrimaryProperties(), "item");
+        templateArgs.ViewLinkPrimaryKey = TemplateControl.ViewLinkPrimaryKey(targetClassInfo.PrimaryProperties(), "Model");
 
-        TargetTemplateDirectory(typeof(ApiTemplateArgs), templateArgs, "Templates/api", outputPath, className);
+        TargetTemplateDirectory(typeof(MvcTemplateArgs), templateArgs, "Templates/datatables", outputDirectory, className);
 
-        Console.WriteLine("Success generate:" + outputPath);
+        Console.WriteLine("Success generate:" + outputDirectory);
     }
 }

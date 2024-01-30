@@ -19,7 +19,7 @@ public partial class Program
         var analysis = new ClassAnalysis(args);
         var classInfo = analysis.ReadCode();
 
-        var templateText = TemplateControl.ReadTemplateText("SampleTemplate.cs");
+        var templateText = TemplateControl.ReadTemplateText("Templates/sample/SampleTemplate.cs");
 
         var templateArgs = new SampleTemplateArgs()
         {

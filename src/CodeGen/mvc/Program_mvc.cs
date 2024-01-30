@@ -54,12 +54,8 @@ public partial class Program
         templateArgs.ViewLinkIndexPrimaryKey = TemplateControl.ViewLinkPrimaryKey(targetClassInfo.PrimaryProperties(), "item");
         templateArgs.ViewLinkPrimaryKey = TemplateControl.ViewLinkPrimaryKey(targetClassInfo.PrimaryProperties(), "Model");
 
-        TemplateOutputFile(typeof(MvcTemplateArgs), templateArgs, "mvc/ControllerTemplate.cs", Path.Combine(outputDirectory, "Controllers", controllerName + ".cs"));
-        TemplateOutputFile(typeof(MvcTemplateArgs), templateArgs, "mvc/Views/Index.cshtml", Path.Combine(outputDirectory, "Views", className, "Index.cshtml"));
-        TemplateOutputFile(typeof(MvcTemplateArgs), templateArgs, "mvc/Views/Create.cshtml", Path.Combine(outputDirectory, "Views", className, "Create.cshtml"));
-        TemplateOutputFile(typeof(MvcTemplateArgs), templateArgs, "mvc/Views/Details.cshtml", Path.Combine(outputDirectory, "Views", className, "Details.cshtml"));
-        TemplateOutputFile(typeof(MvcTemplateArgs), templateArgs, "mvc/Views/Delete.cshtml", Path.Combine(outputDirectory, "Views", className, "Delete.cshtml"));
-        TemplateOutputFile(typeof(MvcTemplateArgs), templateArgs, "mvc/Views/Edit.cshtml", Path.Combine(outputDirectory, "Views", className, "Edit.cshtml"));
+        TargetTemplateDirectory(typeof(MvcTemplateArgs), templateArgs, "Templates/mvc", outputDirectory, className);
+
         Console.WriteLine("Success generate:" + outputDirectory);
     }
 }
