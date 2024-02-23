@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-  const headers = ["Name", "Age", "Email"];
+  const headers = ["name", "age", "email"];
   const rows = [
     { id: 1, name: "John Doe", age: 25, email: "john@example.com" },
     { id: 2, name: "Jane Doe", age: 30, email: "jane@example.com" },
