@@ -1,0 +1,58 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint --ext \"src/**/*.{js,ts,vue}\" --ignore-path .gitignore .",
+    "lintfix": "prettier --write --list-different . && npm run lint -- --fix",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@nuxtjs/tailwindcss": "^6.6.5",
+    "@storybook/addon-essentials": "^7.0.4",
+    "@storybook/addon-interactions": "^7.0.4",
+    "@storybook/addon-links": "^7.0.4",
+    "@storybook/blocks": "^7.0.4",
+    "@storybook/testing-library": "^0.0.14-next.2",
+    "@storybook/vue3": "^7.0.4",
+    "@storybook/vue3-vite": "^7.0.4",
+    "@tsconfig/strictest": "^2.0.0",
+    "@types/tabulator-tables": "^5.4.6",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "@vue/eslint-config-typescript": "^11.0.2",
+    "eslint": "^8.38.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-storybook": "^0.6.11",
+    "eslint-plugin-tailwindcss": "^3.11.0",
+    "eslint-plugin-vue": "^9.10.0",
+    "nuxt": "^3.3.3",
+    "prettier": "^2.8.7",
+    "prettier-plugin-tailwindcss": "^0.2.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "scss": "^0.2.4",
+    "storybook": "^7.0.4",
+    "tailwindcss": "^3.3.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.4.8",
+    "@tanstack/vue-table": "^8.8.5",
+    "daisyui": "^2.51.5",
+    "pinia": "^2.0.34",
+    "tabulator-tables": "^5.4.4",
+    "vee-validate": "^4.8.4",
+    "yup": "^1.1.0"
+  },
+  "overrides": {
+    "vue": "latest"
+  }
+}
