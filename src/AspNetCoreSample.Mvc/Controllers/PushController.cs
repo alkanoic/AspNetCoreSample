@@ -1,7 +1,9 @@
 using System.Diagnostics;
+
+using AspNetCoreSample.Mvc.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using AspNetCoreSample.Mvc.Models;
 
 namespace AspNetCoreSample.Mvc.Controllers;
 

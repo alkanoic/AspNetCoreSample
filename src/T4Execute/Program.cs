@@ -1,5 +1,7 @@
 ﻿using System.Text;
+
 using Cocona;
+
 using T4Execute;
 
 CoconaApp.Run(([Option("ap")] string assemblyPath, [Option("op")] string outputPath) =>

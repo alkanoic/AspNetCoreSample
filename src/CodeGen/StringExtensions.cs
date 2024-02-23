@@ -13,6 +13,7 @@ public static class StringExtensions
 
     public static string LastCharRemove(this string str, int removeCount = 1)
     {
+        if (string.IsNullOrWhiteSpace(str)) return "";
         return str.Remove(str.Length - removeCount);
     }
 }

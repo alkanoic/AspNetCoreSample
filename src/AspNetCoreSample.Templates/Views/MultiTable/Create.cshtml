@@ -1,0 +1,79 @@
+@model AspNetCoreSample.Templates.Models.MultiTable
+@* auto generated code *@
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>MultiTable</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Charid" class="control-label"></label>
+                <input asp-for="Charid" class="form-control" />
+                <span asp-validation-for="Charid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetName" class="control-label"></label>
+                <input asp-for="TargetName" class="form-control" />
+                <span asp-validation-for="TargetName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetInt" class="control-label"></label>
+                <input asp-for="TargetInt" class="form-control" />
+                <span asp-validation-for="TargetInt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetDecimal" class="control-label"></label>
+                <input asp-for="TargetDecimal" class="form-control" />
+                <span asp-validation-for="TargetDecimal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetDate" class="control-label"></label>
+                <input asp-for="TargetDate" class="form-control" />
+                <span asp-validation-for="TargetDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TargetBit" class="control-label"></label>
+                <input asp-for="TargetBit" class="form-control" />
+                <span asp-validation-for="TargetBit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreateAt" class="control-label"></label>
+                <input asp-for="CreateAt" class="form-control" />
+                <span asp-validation-for="CreateAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreateUser" class="control-label"></label>
+                <input asp-for="CreateUser" class="form-control" />
+                <span asp-validation-for="CreateUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdateAt" class="control-label"></label>
+                <input asp-for="UpdateAt" class="form-control" />
+                <span asp-validation-for="UpdateAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdateUser" class="control-label"></label>
+                <input asp-for="UpdateUser" class="form-control" />
+                <span asp-validation-for="UpdateUser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

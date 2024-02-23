@@ -1,7 +1,10 @@
 using AspNetCoreSample.Mvc.Models;
+
 using FluentValidation;
 using FluentValidation.AspNetCore;
+
 using Microsoft.EntityFrameworkCore;
+
 using WebPush;
 
 var builder = WebApplication.CreateBuilder(args);

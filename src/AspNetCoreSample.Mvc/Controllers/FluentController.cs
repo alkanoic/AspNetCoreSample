@@ -1,8 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
 using AspNetCoreSample.Mvc.Models;
+
 using FluentValidation;
-using FluentValidation.Results;
 using FluentValidation.AspNetCore;
+using FluentValidation.Results;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSample.Mvc.Controllers;
 

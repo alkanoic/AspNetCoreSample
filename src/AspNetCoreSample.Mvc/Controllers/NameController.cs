@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using AspNetCoreSample.Mvc.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using AspNetCoreSample.Mvc.Models;
 
 namespace AspNetCoreSample.Mvc.Controllers
 {
@@ -21,9 +23,9 @@ namespace AspNetCoreSample.Mvc.Controllers
         // GET: Name
         public async Task<IActionResult> Index()
         {
-              return _context.Names != null ? 
-                          View(await _context.Names.ToListAsync()) :
-                          Problem("Entity set 'SampleContext.Names'  is null.");
+            return _context.Names != null ?
+                        View(await _context.Names.ToListAsync()) :
+                        Problem("Entity set 'SampleContext.Names'  is null.");
         }
 
         // GET: Name/Details/5
@@ -149,14 +151,14 @@ namespace AspNetCoreSample.Mvc.Controllers
             {
                 _context.Names.Remove(name);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool NameExists(int id)
         {
-          return (_context.Names?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Names?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -56,7 +56,7 @@ internal sealed class TemplateControl
     public static string ReadTemplateText(string templateFileName)
     {
         string appPath = AppContext.BaseDirectory;
-        return File.ReadAllText(Path.Combine(appPath, $"Templates/{templateFileName}"),
+        return File.ReadAllText(Path.Combine(appPath, templateFileName),
             new UTF8Encoding(false));
     }
 
@@ -100,12 +100,19 @@ internal sealed class TemplateControl
         return target.ToString().LastCharRemove();
     }
 
-    public static string PrimaryKeyNameArguments(List<PropertyAnalysisInfo> primaryProperties)
+    public static string PropertyNameArguments(List<PropertyAnalysisInfo> properties, bool camelCase)
     {
         var target = new StringBuilder();
-        foreach (var pp in primaryProperties)
+        foreach (var pp in properties)
         {
-            target.Append(DefaultCultureInfo, $"{pp.Name.ToCamelCase()},");
+            if (camelCase)
+            {
+                target.Append(DefaultCultureInfo, $"{pp.Name.ToCamelCase()},");
+            }
+            else
+            {
+                target.Append(DefaultCultureInfo, $"{pp.Name},");
+            }
         }
         return target.ToString().LastCharRemove();
     }
@@ -161,5 +168,107 @@ internal sealed class TemplateControl
         return target.ToString();
     }
 
-    private static CultureInfo DefaultCultureInfo = CultureInfo.InvariantCulture;
+    public static string ViewTargetModelHeader(List<PropertyAnalysisInfo> properties)
+    {
+        var target = new StringBuilder();
+        foreach (var p in properties)
+        {
+            target.Append(DefaultCultureInfo, $$"""
+                <th>
+                    @Html.DisplayNameFor(model => model.{{p.Name}})
+                </th>
+
+            """);
+        }
+        return target.ToString();
+    }
+
+    public static string ViewTargetModelDetail(List<PropertyAnalysisInfo> properties)
+    {
+        var target = new StringBuilder();
+        foreach (var p in properties)
+        {
+            target.Append(DefaultCultureInfo, $$"""
+                <td>
+                    @Html.DisplayFor(modelItem => item.{{p.Name}})
+                </td>
+
+            """);
+        }
+        return target.ToString();
+    }
+
+    public static string ViewTargetModelCreate(List<PropertyAnalysisInfo> properties)
+    {
+        var target = new StringBuilder();
+        foreach (var p in properties)
+        {
+            target.Append(DefaultCultureInfo, $$"""
+                <div class="form-group">
+                    <label asp-for="{{p.Name}}" class="control-label"></label>
+                    <input asp-for="{{p.Name}}" class="form-control" />
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>
+
+            """);
+        }
+        return target.ToString();
+    }
+
+    public static string ViewTargetModelDetails(List<PropertyAnalysisInfo> properties)
+    {
+        var target = new StringBuilder();
+        foreach (var p in properties)
+        {
+            target.Append(DefaultCultureInfo, $$"""
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.{{p.Name}})
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.{{p.Name}})
+                </dd>
+
+            """);
+        }
+        return target.ToString();
+    }
+
+    public static string ViewTargetModelEditPrimaryKey(List<PropertyAnalysisInfo> primaryProperties)
+    {
+        var target = new StringBuilder();
+        foreach (var p in primaryProperties)
+        {
+            target.AppendLine(DefaultCultureInfo, $"""<input type="hidden" asp-for="{p.Name}" />""");
+        }
+        return target.ToString();
+    }
+
+    public static string ViewTargetModelEditProperties(List<PropertyAnalysisInfo> excludePrimaryProperties)
+    {
+        var target = new StringBuilder();
+        foreach (var p in excludePrimaryProperties)
+        {
+            target.Append(DefaultCultureInfo, $$"""
+                <div class="form-group">
+                    <label asp-for="{{p.Name}}" class="control-label"></label>
+                    <input asp-for="{{p.Name}}" class="form-control" />
+                    <span asp-validation-for="{{p.Name}}" class="text-danger"></span>
+                </div>
+
+            """);
+        }
+        return target.ToString();
+    }
+
+    public static string ViewLinkPrimaryKey(List<PropertyAnalysisInfo> primaryProperties, string itemName)
+    {
+        var target = new StringBuilder();
+        foreach (var p in primaryProperties)
+        {
+            target.Append(DefaultCultureInfo, $"{p.Name.ToCamelCase()}={itemName}.{p.Name}, ");
+        }
+        return target.ToString().LastCharRemove(2);
+    }
+
+    internal static readonly CultureInfo DefaultCultureInfo = CultureInfo.InvariantCulture;
 }

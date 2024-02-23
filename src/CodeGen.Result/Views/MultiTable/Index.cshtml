@@ -1,0 +1,97 @@
+@model IEnumerable<MultiTable>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Charid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetInt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetDecimal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetBit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdateAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdateUser)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Charid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TargetName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TargetInt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TargetDecimal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TargetDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TargetBit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateUser)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdateAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdateUser)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id, charid = item.Charid }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id, charid = item.Charid }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id, charid = item.Charid })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

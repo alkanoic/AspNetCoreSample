@@ -1,6 +1,7 @@
+using CodeGen.Result.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CodeGen.Result.Models;
 
 namespace CodeGen.Result.WebApi;
 
