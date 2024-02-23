@@ -16,3 +16,10 @@ RUN mkdir -p /etc/apt/keyrings && \
 
 # install dotnet workload aspire
 RUN dotnet workload install aspire
+
+# install trivy
+RUN apt-get install wget apt-transport-https gnupg lsb-release && \
+    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add - && \
+    echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list && \
+    apt-get update && \
+    apt-get install trivy
