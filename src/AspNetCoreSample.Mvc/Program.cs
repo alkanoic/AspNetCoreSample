@@ -1,9 +1,13 @@
 using AspNetCoreSample.Mvc.Models;
+using AspNetCoreSample.Mvc.Options;
 
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 using WebPush;
 
@@ -23,6 +27,33 @@ builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<FluentViewModel>();
 
 builder.Services.AddHttpClient();
+
+var keycloakOptions = builder.Configuration.GetSection(KeycloakOptions.Position).Get<KeycloakOptions>()!;
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+}).AddCookie("Cookies")
+  .AddOpenIdConnect(options =>
+  {
+      options.Authority = keycloakOptions.Authority;
+      options.MetadataAddress = keycloakOptions.MetadataAddress;
+      options.ClientId = keycloakOptions.ClientId;
+      options.ClientSecret = keycloakOptions.ClientSecret;
+      options.Scope.Add("openid");
+      options.Scope.Add("profile");
+      options.ResponseType = OpenIdConnectResponseType.Code;
+      //   options.SaveTokens = true;
+      //   options.GetClaimsFromUserInfoEndpoint = true;
+      //   options.TokenValidationParameters = new TokenValidationParameters
+      //   {
+      //       NameClaimType = "name",
+      //       RoleClaimType = "role"
+      //   };
+      // 開発のためHttpを許可する
+      options.RequireHttpsMetadata = false;
+  });
+builder.Services.AddAuthorization();
 
 var vapidKeys = VapidHelper.GenerateVapidKeys();
 var vapidOption = new AspNetCoreSample.Mvc.Options.VapidOption()
@@ -50,6 +81,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
