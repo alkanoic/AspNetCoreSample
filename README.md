@@ -22,11 +22,25 @@ test ユーザを選択。
 Credentials タブで新しいパスワードを追加。
 Password を test として設定。
 
+同様に user と admin を作成しておく。
+
 ### Create Client
 
 - Client type：OpenID Connect
 - Client ID：test-client
 - Valid redirect URIs：\*
+
+### Create Role
+
+- Realm roles
+- Create Role
+- admin and user
+
+| ユーザー名 | ロール |
+| ---------- | ------ |
+| test       |        |
+| user       | user   |
+| admin      | admin  |
 
 ### Hosts
 
