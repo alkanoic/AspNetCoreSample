@@ -22,4 +22,7 @@ export default defineNuxtConfig({
       extends: "@tsconfig/strictest/tsconfig.json",
     },
   },
+  build: {
+    transpile: ["vue-qrcode-reader"],
+  },
 });

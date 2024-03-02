@@ -2,11 +2,11 @@
   <div>
     <div class="navbar bg-base-100">
       <div class="navbar-start">
-        <div class="dropdown lg:hidden">
-          <label for="my-drawer" tabindex="0" class="btn-ghost btn-circle btn">
+        <div class="dropdown">
+          <label for="my-drawer" tabindex="0" class="btn btn-circle btn-ghost">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
+              class="size-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="navbar-center">
-        <NuxtLink class="btn-ghost btn text-xl normal-case" to="/"
+        <NuxtLink class="btn btn-ghost text-xl normal-case" to="/"
           >NuxtSample</NuxtLink
         >
       </div>
@@ -68,6 +68,9 @@
             <NuxtLink to="/parent-child" @click="closeDrawer"
               >ParentChild</NuxtLink
             >
+          </li>
+          <li>
+            <NuxtLink to="/qrod" @click="closeDrawer">QROD</NuxtLink>
           </li>
         </ul>
       </div>
