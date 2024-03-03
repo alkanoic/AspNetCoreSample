@@ -12,7 +12,11 @@
       @camera-off="onCameraOff"
       @error="onError"
     >
-      <div v-show="showScanConfirmation" class="scan-confirmation">check</div>
+      <div v-show="showScanConfirmation" class="scan-confirmation">
+        <div class="icon-confirmation">
+          <font-awesome-icon :icon="['fas', 'check']" :class="['fa-2x']" />
+        </div>
+      </div>
     </qrcode-stream>
   </div>
 </template>
@@ -52,3 +56,19 @@
     });
   };
 </script>
+<style scoped>
+  .scan-confirmation {
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  .icon-confirmation {
+    color: green;
+    font-size: large;
+
+    position: absolute;
+    top: 30%;
+    left: 50%;
+  }
+</style>
