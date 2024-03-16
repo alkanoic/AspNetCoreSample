@@ -46,7 +46,8 @@
 				"phind.phind",
 				"zbecknell.t4-support",
 				"redhat.vscode-xml",
-				"formulahendry.auto-rename-tag"
+				"formulahendry.auto-rename-tag",
+				"zxh404.vscode-proto3"
 			],
 			"settings": {
 				"editor.formatOnSave": true

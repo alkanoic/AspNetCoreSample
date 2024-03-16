@@ -41,6 +41,18 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "grpc-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/AspNetCoreSample.Grpc/AspNetCoreSample.Grpc.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "apphost-build",
             "command": "dotnet",
             "type": "process",

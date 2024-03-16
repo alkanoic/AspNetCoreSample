@@ -80,6 +80,23 @@
             }
         },
         {
+            "name": "Grpc",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "grpc-build",
+            "program": "${workspaceFolder}/src/AspNetCoreSample.Grpc/bin/Debug/net8.0/AspNetCoreSample.Grpc.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/AspNetCoreSample.Grpc",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        {
             "type": "msedge",
             "request": "launch",
             "name": "lit-component",
