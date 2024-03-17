@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "copy": "cp -r node_modules/bootstrap/dist wwwroot/lib/bootstrap"
+    "copy": "cp -r node_modules/bootstrap/dist wwwroot/lib/bootstrap && cp -r node_modules/@microsoft/signalr/dist wwwroot/lib/signalr && cp -r node_modules/html5-qrcode wwwroot/lib/html5-qrcode"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^5.3.2"
+    "@microsoft/signalr": "^8.0.0",
+    "bootstrap": "^5.3.2",
+    "html5-qrcode": "^2.3.8"
   }
 }

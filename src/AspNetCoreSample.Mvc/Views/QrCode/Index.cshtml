@@ -1,0 +1,60 @@
+@{
+  ViewData["Title"] = "QRCodeReader";
+}
+
+<h1>QRコード読み取り</h1>
+
+<div id="qr-reader" style="width:500px"></div>
+
+<button id="startButton" class="btn btn-primary">QRコードを読み取る</button>
+
+@section Scripts {
+  <script src="~/lib/html5-qrcode/html5-qrcode.min.js"></script>
+  <script>
+    const qrCodeReader = new Html5Qrcode("qr-reader", {
+      formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
+      verbose: true
+    });
+
+    const startButton = document.getElementById("startButton");
+
+    startButton.addEventListener("click", () => {
+      qrCodeReader.start(
+        { facingMode: "user" },
+        {
+          videoConstraints: {
+            width: { min: 300 },
+            height: { min: 200 }
+          }
+        },
+        (decodedText, decodedResult) => {
+          if (decodedText) {
+            qrCodeReader.stop();
+            submitQRCodeData(decodedText);
+          }
+        },
+        (errorMessage) => {
+          console.error(errorMessage);
+        }
+      );
+    });
+
+    function submitQRCodeData(qrCodeData) {
+      fetch("https://localhost:7035/api/QrCode", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ QrCode: qrCodeData })
+      })
+        .then(response => {
+          if (response.ok) {
+            console.log("QRコードの値を正常に送信しました。");
+          } else {
+            console.error("QRコードの値の送信に失敗しました。");
+          }
+        })
+        .catch(error => console.error(error));
+    }
+  </script>
+}

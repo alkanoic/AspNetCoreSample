@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text;
 
+using AspNetCoreSample.WebApi.Hubs;
 using AspNetCoreSample.WebApi.Options;
 using AspNetCoreSample.WebApi.Services.Token;
 
@@ -28,6 +29,8 @@ builder.Services.AddHttpClient();
 var keycloakSection = builder.Configuration.GetSection(KeycloakOptions.Position);
 builder.Services.Configure<KeycloakOptions>(keycloakSection);
 var keycloakOptions = keycloakSection.Get<KeycloakOptions>()!;
+
+builder.Services.AddSignalR();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -65,6 +68,11 @@ builder.Services.AddCors(options => // Add this line
     options.AddDefaultPolicy(builder =>
     {
         builder.WithOrigins("http://localhost:5173")
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+
+        builder.WithOrigins("https://localhost:7079")
+               .AllowCredentials()
                .AllowAnyHeader()
                .AllowAnyMethod();
     });
@@ -111,5 +119,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<QrCodeHub>("/qrcodeHub");
 
 app.Run();
