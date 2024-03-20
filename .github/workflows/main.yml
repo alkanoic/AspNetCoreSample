@@ -7,7 +7,7 @@ on:
 
 env:
   APP_LOCATION: "src/AspNetCoreSample.Mvc" # アプリのディレクトリパス
-  AZURE_WEBAPP_NAME: "your-appname" # Azure Web Appの名前
+  AZURE_WEBAPP_NAME: "WebSampleApp2024" # Azure Web Appの名前
 
 jobs:
   build:
