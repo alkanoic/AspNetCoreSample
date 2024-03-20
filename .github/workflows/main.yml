@@ -1,4 +1,3 @@
-# main.yml
 name: Build and deploy ASP.Net Core app to Azure Web App
 
 on:
@@ -7,8 +6,8 @@ on:
       - main
 
 env:
-  AZURE_WEBAPP_NAME: WebSampleApp2024
-  AZURE_WEBAPP_PACKAGE_PATH: "."
+  APP_LOCATION: "src/AspNetCoreSample.Mvc" # アプリのディレクトリパス
+  AZURE_WEBAPP_NAME: "your-appname" # Azure Web Appの名前
 
 jobs:
   build:
@@ -17,15 +16,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 8.0
 
-      - name: Build ASP.Net Core App
-        run: msbuild /p:Configuration=Release
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+        working-directory: ${{ env.APP_LOCATION }}
 
-      - name: Deploy ASP.Net Core App
-        uses: Azure/webapps-deploy@v2
+      - name: Publish app for deployment
+        run: |
+          dotnet publish -c Release -o published
+        working-directory: ${{ env.APP_LOCATION }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: ${{ env.APP_LOCATION }}/published
