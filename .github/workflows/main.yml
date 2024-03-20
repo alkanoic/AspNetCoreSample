@@ -6,12 +6,14 @@ on:
       - main
 
 env:
-  APP_LOCATION: "src/AspNetCoreSample.Mvc" # アプリのディレクトリパス
-  AZURE_WEBAPP_NAME: "WebSampleApp2024" # Azure Web Appの名前
+  MVC_APP_LOCATION: "src/AspNetCoreSample.Mvc"
+  MVC_AZURE_WEBAPP_NAME: "WebSampleApp2024" # Azure Web Appの名前
+  WEBAPI_APP_LOCATION: "src/AspNetCoreSample.WebApi"
+  WEBAPI_AZURE_WEBAPP_NAME: "WebSampleWebApi2024" # Azure Web Appの名前
 
 jobs:
-  build:
-    runs-on: windows-latest
+  mvc:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -23,16 +25,43 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release --framework net8.0
-        working-directory: ${{ env.APP_LOCATION }}
+        working-directory: ${{ env.MVC_APP_LOCATION }}
 
       - name: Publish app for deployment
         run: |
           dotnet publish -c Release -o published --framework net8.0
-        working-directory: ${{ env.APP_LOCATION }}
+        working-directory: ${{ env.MVC_APP_LOCATION }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.APP_LOCATION }}/published
+          app-name: ${{ env.MVC_AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.MVC_AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.MVC_APP_LOCATION }}/published
+
+  mvc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.WEBAPI_APP_LOCATION }}
+
+      - name: Publish app for deployment
+        run: |
+          dotnet publish -c Release -o published --framework net8.0
+        working-directory: ${{ env.WEBAPI_APP_LOCATION }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.WEBAPI_AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.WEBAPI_AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.WEBAPI_APP_LOCATION }}/published
