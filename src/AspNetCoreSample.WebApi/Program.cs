@@ -100,14 +100,12 @@ builder.Services.AddTransient<ITokenService, TokenService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    // app.UseSwagger();
-    // app.UseSwaggerUI();
-    app.UseOpenApi(); // serve OpenAPI/Swagger documents
-    app.UseSwaggerUi(); // serve Swagger UI
-    app.UseReDoc(); // serve ReDoc UI
-}
+// if (app.Environment.IsDevelopment())
+// {
+app.UseOpenApi(); // serve OpenAPI/Swagger documents
+app.UseSwaggerUi(); // serve Swagger UI
+app.UseReDoc(); // serve ReDoc UI
+// }
 
 app.MapDefaultEndpoints();
 
