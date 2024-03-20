@@ -17,17 +17,17 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release --framework net8.0
         working-directory: ${{ env.APP_LOCATION }}
 
       - name: Publish app for deployment
         run: |
-          dotnet publish -c Release -o published
+          dotnet publish -c Release -o published --framework net8.0
         working-directory: ${{ env.APP_LOCATION }}
 
       - name: Deploy to Azure Web App
