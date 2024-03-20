@@ -1,5 +1,14 @@
 # AspNetCoreSample
 
+## GitHub Action 設定
+
+Azure Web Apps の構成 → アプリケーション設定
+
+```bash
+WEBSITE_RUN_FROM_PACKAGE=1
+DOTNET_VERSION=8.0
+```
+
 # KeycloakTest
 
 Keycloak.AuthServices.Authentication を使用する。
