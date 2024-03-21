@@ -33,4 +33,4 @@ az webapp up --name $WEBAPI_APP_NAME --resource-group $RG_NAME --plan $WEBAPI_PL
 az webapp config appsettings set \
   --name $WEBAPI_APP_NAME \
   --resource-group $RG_NAME \
-  --settings WEBSITE_RUN_FROM_PACKAGE=1 DOTNET_VERSION=8.0
+  --settings WEBSITE_RUN_FROM_PACKAGE=1 DOTNET_VERSION=8.0 CorsOptions__MvcUrl=https://websampleapp2024.azurewebsites.net
