@@ -65,6 +65,8 @@ var vapidOption = new AspNetCoreSample.Mvc.Options.VapidOption()
 
 builder.Services.AddSingleton(vapidOption);
 
+builder.Services.Configure<WebApiOption>(builder.Configuration.GetSection(WebApiOption.Position));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

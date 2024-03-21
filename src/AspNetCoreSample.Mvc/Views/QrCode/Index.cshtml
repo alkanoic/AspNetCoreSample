@@ -1,3 +1,4 @@
+@inject IOptions<WebApiOption> _webApiOption;
 @{
   ViewData["Title"] = "QRCodeReader";
 }
@@ -40,7 +41,7 @@
     });
 
     function submitQRCodeData(qrCodeData) {
-      fetch("https://localhost:7035/api/QrCode", {
+      fetch("@(_webApiOption.Value.WebApiBaseUrl + "/api/QrCode")", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

@@ -21,7 +21,7 @@ az webapp up --name $MVC_APP_NAME --resource-group $RG_NAME --plan $MVC_PLAN_NAM
 az webapp config appsettings set \
   --name $MVC_APP_NAME \
   --resource-group $RG_NAME \
-  --settings WEBSITE_RUN_FROM_PACKAGE=1 DOTNET_VERSION=8.0
+  --settings WEBSITE_RUN_FROM_PACKAGE=1 DOTNET_VERSION=8.0 WebApiOption__WebApiBaseUrl=https://websamplewebapi2024.azurewebsites.net
 
 # for WebAPI
 az appservice plan create --name $WEBAPI_PLAN_NAME --resource-group $RG_NAME --sku F1 --is-linux --location japanwest

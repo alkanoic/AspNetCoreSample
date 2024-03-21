@@ -19,12 +19,4 @@ public class QrCodeController : Controller
         return View();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> ReadQRCode(string qrCodeData)
-    {
-        var client = _httpClientFactory.CreateClient();
-        var response = await client.PostAsync("https://localhost:7035/api/qrcode", new StringContent(qrCodeData));
-
-        return RedirectToAction("Index");
-    }
 }
