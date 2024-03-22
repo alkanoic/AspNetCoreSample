@@ -9,6 +9,8 @@
 
 <button id="startButton" class="btn btn-primary">QRコードを読み取る</button>
 
+<div id="cameraId"></div>
+
 @section Scripts {
   <script src="~/lib/html5-qrcode/html5-qrcode.min.js"></script>
   <script>
@@ -19,13 +21,13 @@
 
     const startButton = document.getElementById("startButton");
 
-    startButton.addEventListener("click", () => {
-      let backCameraId;
-      navigator.mediaDevices.enumerateDevices().then(devices => {
-        // 背面カメラのIDを探す
-        backCameraId = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'))?.deviceId;
-      });
+    navigator.mediaDevices.enumerateDevices().then(devices => {
+      // 背面カメラのIDを探す
+      const backCameraId = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'))?.deviceId;
+      document.querySelector("#cameraId").textContent = JSON.stringify(devices);
+    });
 
+    startButton.addEventListener("click", () => {
       qrCodeReader.start(
         { deviceId: { exact: backCameraId } },
         {
