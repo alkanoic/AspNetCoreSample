@@ -21,10 +21,12 @@
 
     const startButton = document.getElementById("startButton");
 
+    let backCameraId;
     navigator.mediaDevices.enumerateDevices().then(devices => {
       // 背面カメラのIDを探す
-      const backCameraId = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'))?.deviceId;
-      document.querySelector("#cameraId").textContent = JSON.stringify(devices);
+      const backCamera = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'));
+      backCameraId = backCamera.deviceId;
+      document.querySelector("#cameraId").textContent = JSON.stringify(backCamera);
     });
 
     startButton.addEventListener("click", () => {
