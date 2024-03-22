@@ -20,12 +20,18 @@
     const startButton = document.getElementById("startButton");
 
     startButton.addEventListener("click", () => {
+      let backCameraId;
+      navigator.mediaDevices.enumerateDevices().then(devices => {
+        // 背面カメラのIDを探す
+        backCameraId = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'))?.deviceId;
+      });
+
       qrCodeReader.start(
-        { facingMode: { exact: "environment"} },
+        { deviceId: { exact: backCameraId } },
         {
           videoConstraints: {
-            width: { min: 300 },
-            height: { min: 200 }
+            width: { min: 500 },
+            height: { min: 500 }
           }
         },
         (decodedText, decodedResult) => {
