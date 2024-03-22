@@ -9,29 +9,18 @@
 
 <button id="startButton" class="btn btn-primary">QRコードを読み取る</button>
 
-<div id="cameraId"></div>
-
 @section Scripts {
   <script src="~/lib/html5-qrcode/html5-qrcode.min.js"></script>
   <script>
     const qrCodeReader = new Html5Qrcode("qr-reader", {
-      formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE],
-      verbose: true
+      formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
     });
 
     const startButton = document.getElementById("startButton");
 
-    let backCameraId;
-    navigator.mediaDevices.enumerateDevices().then(devices => {
-      // 背面カメラのIDを探す
-      const backCamera = devices.find(device => device.kind === 'videoinput' && device.label.includes('back'));
-      backCameraId = backCamera.deviceId;
-      document.querySelector("#cameraId").textContent = JSON.stringify(backCamera);
-    });
-
     startButton.addEventListener("click", () => {
       qrCodeReader.start(
-        { deviceId: { exact: backCameraId } },
+        { facingMode: { exact: "environment" } },
         {
           videoConstraints: {
             width: { min: 500 },
