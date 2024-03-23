@@ -31,7 +31,7 @@
 
     startButton.addEventListener("click", () => {
       qrCodeReader.start(
-        { facingMode: { exact: cameraId } },
+        cameraId,
         {
           videoConstraints: {
             width: { min: 500 },
