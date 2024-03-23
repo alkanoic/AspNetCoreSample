@@ -20,16 +20,16 @@
 
     const startButton = document.getElementById("startButton");
 
-    startButton.addEventListener("click", () => {
-      let cameraId;
-      Html5Qrcode.getCameras().then(devices => {
-        document.querySelector("#devices").textContent = JSON.stringify(devices);
-        cameraId = devices[0];
-        if (devices.Length == 2) {
-          cameraId = devices[1];
-        }
-      });
+    let cameraId;
+    Html5Qrcode.getCameras().then(devices => {
+      document.querySelector("#devices").textContent = JSON.stringify(devices);
+      cameraId = devices[0].id;
+      if (devices.Length == 2) {
+        cameraId = devices[1].id;
+      }
+    });
 
+    startButton.addEventListener("click", () => {
       qrCodeReader.start(
         { facingMode: { exact: cameraId } },
         {
