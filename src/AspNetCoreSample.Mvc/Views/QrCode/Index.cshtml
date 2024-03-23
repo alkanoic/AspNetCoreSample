@@ -59,41 +59,41 @@
 
     const toggleLightBtn = document.getElementById('toggleLightBtn');
     let isLightOn = false;
-    let stream;
+    let track;
 
     toggleLightBtn.addEventListener('click', toggleLight);
 
     function toggleLight() {
-      if (isLightOn) {
-        turnOffLight();
+      if (!track) {
+        getMedia();
+      }
+      if (light) {
+        lightOff();
+        light = false;
       } else {
-        turnOnLight();
+        lightOn();
+        light = true;
       }
+      button.classList.toggle("pressed");
     }
 
-    function turnOnLight() {
-      navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: 'environment',
-          torch: true
-        }
-      })
-        .then(newStream => {
-          stream = newStream;
-          isLightOn = true;
+    function getMedia() {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(function (stream) {
+          track = stream.getVideoTracks()[0];
         })
-        .catch(err => {
-          console.error('ライトのONに失敗しました:', err);
-        });
     }
 
-    function turnOffLight() {
-      if (stream) {
-        stream.getTracks().forEach(track => {
-          track.stop();
-        });
-      }
-      isLightOn = false;
+    function lightOn() {
+      track.applyConstraints({
+        advanced: [{ torch: true }]
+      });
+    }
+
+    function lightOff() {
+      track.applyConstraints({
+        advanced: [{ torch: false }]
+      });
     }
   </script>
 }
