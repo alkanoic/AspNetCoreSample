@@ -20,15 +20,6 @@
 
     const startButton = document.getElementById("startButton");
 
-    let cameraId;
-    Html5Qrcode.getCameras().then(devices => {
-      cameraId = devices[0].id;
-      if (devices.length == 2) {
-        cameraId = devices[1].id;
-      }
-      document.querySelector("#devices").textContent = JSON.stringify(devices) + " cameraId:" + cameraId;
-    });
-
     startButton.addEventListener("click", () => {
       qrCodeReader.start(
         { facingMode: "environment" },
