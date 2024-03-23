@@ -23,7 +23,7 @@
     let cameraId;
     Html5Qrcode.getCameras().then(devices => {
       cameraId = devices[0].id;
-      if (devices.Length == 2) {
+      if (devices.length == 2) {
         cameraId = devices[1].id;
       }
       document.querySelector("#devices").textContent = JSON.stringify(devices) + " cameraId:" + cameraId;
