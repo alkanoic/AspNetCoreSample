@@ -22,11 +22,11 @@
 
     let cameraId;
     Html5Qrcode.getCameras().then(devices => {
-      document.querySelector("#devices").textContent = JSON.stringify(devices);
       cameraId = devices[0].id;
       if (devices.Length == 2) {
         cameraId = devices[1].id;
       }
+      document.querySelector("#devices").textContent = cameraId;
     });
 
     startButton.addEventListener("click", () => {
