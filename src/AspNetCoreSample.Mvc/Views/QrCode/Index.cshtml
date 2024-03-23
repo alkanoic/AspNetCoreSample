@@ -9,6 +9,8 @@
 
 <button id="startButton" class="btn btn-primary">QRコードを読み取る</button>
 
+<div id="devices"></div>
+
 @section Scripts {
   <script src="~/lib/html5-qrcode/html5-qrcode.min.js"></script>
   <script>
@@ -19,8 +21,17 @@
     const startButton = document.getElementById("startButton");
 
     startButton.addEventListener("click", () => {
+      let cameraId;
+      Html5Qrcode.getCameras().then(devices => {
+        document.querySelector("#devices").textContent = JSON.stringify(devices);
+        cameraId = devices[0];
+        if (devices.Length == 2) {
+          cameraId = devices[1];
+        }
+      });
+
       qrCodeReader.start(
-        { facingMode: { exact: "environment" } },
+        { facingMode: { exact: cameraId } },
         {
           videoConstraints: {
             width: { min: 500 },
