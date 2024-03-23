@@ -26,7 +26,7 @@
       if (devices.Length == 2) {
         cameraId = devices[1].id;
       }
-      document.querySelector("#devices").textContent = cameraId;
+      document.querySelector("#devices").textContent = JSON.stringify(devices) + " cameraId:" cameraId;
     });
 
     startButton.addEventListener("click", () => {
