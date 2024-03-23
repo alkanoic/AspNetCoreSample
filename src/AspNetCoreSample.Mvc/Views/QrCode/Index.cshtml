@@ -9,7 +9,7 @@
 
 <button id="startButton" class="btn btn-primary">QRコードを読み取る</button>
 
-<div id="devices"></div>
+<button id="toggleLightBtn" class="btn btn-outline-secondary">ライトをON/OFFする</button>
 
 @section Scripts {
   <script src="~/lib/html5-qrcode/html5-qrcode.min.js"></script>
@@ -34,7 +34,7 @@
           }
         },
         (errorMessage) => {
-          console.error(errorMessage);
+          // console.error(errorMessage);
         }
       );
     });
@@ -55,6 +55,45 @@
           }
         })
         .catch(error => console.error(error));
+    }
+
+    const toggleLightBtn = document.getElementById('toggleLightBtn');
+    let isLightOn = false;
+    let stream;
+
+    toggleLightBtn.addEventListener('click', toggleLight);
+
+    function toggleLight() {
+      if (isLightOn) {
+        turnOffLight();
+      } else {
+        turnOnLight();
+      }
+    }
+
+    function turnOnLight() {
+      navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment',
+          torch: true
+        }
+      })
+        .then(newStream => {
+          stream = newStream;
+          isLightOn = true;
+        })
+        .catch(err => {
+          console.error('ライトのONに失敗しました:', err);
+        });
+    }
+
+    function turnOffLight() {
+      if (stream) {
+        stream.getTracks().forEach(track => {
+          track.stop();
+        });
+      }
+      isLightOn = false;
     }
   </script>
 }
