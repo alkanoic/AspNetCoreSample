@@ -65,7 +65,7 @@
     toggleLightBtn.addEventListener('click', toggleLightClick);
 
     function toggleLightClick() {
-      if (!track) {
+      if (!track || track.readyState == "ended") {
         getMedia();
       }
       toggleLight(!light);
