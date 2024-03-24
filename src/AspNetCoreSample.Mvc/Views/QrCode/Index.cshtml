@@ -30,6 +30,7 @@
         (decodedText, decodedResult) => {
           if (decodedText) {
             qrCodeReader.stop();
+            track.stop();
             submitQRCodeData(decodedText);
           }
         },
@@ -61,20 +62,13 @@
     let light = false;
     let track;
 
-    toggleLightBtn.addEventListener('click', toggleLight);
+    toggleLightBtn.addEventListener('click', toggleLightClick);
 
-    function toggleLight() {
+    function toggleLightClick() {
       if (!track) {
         getMedia();
       }
-      if (light) {
-        lightOff();
-        light = false;
-      } else {
-        lightOn();
-        light = true;
-      }
-      button.classList.toggle("pressed");
+      toggleLight(!light);
     }
 
     function getMedia() {
@@ -84,16 +78,11 @@
         })
     }
 
-    function lightOn() {
+    function toggleLight(lightOn) {
       track.applyConstraints({
-        advanced: [{ torch: true }]
+        advanced: [{ torch: lightOn }]
       });
-    }
-
-    function lightOff() {
-      track.applyConstraints({
-        advanced: [{ torch: false }]
-      });
+      light = lightOn;
     }
   </script>
 }
