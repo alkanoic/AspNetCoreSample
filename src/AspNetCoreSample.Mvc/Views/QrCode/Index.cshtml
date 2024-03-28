@@ -30,7 +30,9 @@
         (decodedText, decodedResult) => {
           if (decodedText) {
             qrCodeReader.stop();
-            track.stop();
+            if (track) {
+              track.stop();
+            }
             submitQRCodeData(decodedText);
           }
         },
