@@ -72,6 +72,9 @@
           <li>
             <NuxtLink to="/qrod" @click="closeDrawer">QROD</NuxtLink>
           </li>
+          <li>
+            <NuxtLink to="/grpc" @click="closeDrawer">gRPC</NuxtLink>
+          </li>
         </ul>
       </div>
     </div>

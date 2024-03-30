@@ -23,7 +23,9 @@ export default defineNuxtConfig({
       extends: "@tsconfig/strictest/tsconfig.json",
     },
   },
+  // middleware: ["middleware/greet_pb.js", "middleware/greet_grpc_pb.js"],
   build: {
     transpile: ["vue-qrcode-reader"],
   },
+  devtools: { enabled: true },
 });

@@ -11,7 +11,10 @@
     "lintfix": "prettier --write --list-different . && npm run lint -- --fix",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "updates": "npx npm-check-updates -u"
+    "updates": "npx npm-check-updates -u",
+    "generate:grpc": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./src/middleware --grpc_out=grpc_js:./src/middleware --plugin=protoc-gen-grpc=./node_modules/.bin/grpc_tools_node_protoc_plugin --ts_out=grpc_js:./src/middleware -I ../AspNetCoreSample.Grpc/Protos ../AspNetCoreSample.Grpc/Protos/*.proto",
+    "generate:grpc2": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./src/middleware --grpc_out=grpc_js:./src/middleware --ts_out=grpc_js:./src/middleware -I ../AspNetCoreSample.Grpc/Protos ../AspNetCoreSample.Grpc/Protos/*.proto",
+    "grpc": "grpc_tools_node_protoc --grpc-web_out=import_style=commonjs,mode=grpcwebtext:./src/middleware -I ../AspNetCoreSample.Grpc/Protos ../AspNetCoreSample.Grpc/Protos/greet.proto"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
@@ -34,9 +37,12 @@
     "eslint-plugin-storybook": "^0.8.0",
     "eslint-plugin-tailwindcss": "^3.14.3",
     "eslint-plugin-vue": "^9.22.0",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "grpc-tools": "^1.12.4",
     "nuxt": "^3.10.3",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
+    "protoc-gen-ts": "^0.8.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "scss": "^0.2.4",
@@ -47,9 +53,12 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.6",
+    "@grpc/grpc-js": "^1.10.3",
     "@pinia/nuxt": "^0.5.1",
     "@tanstack/vue-table": "^8.12.0",
     "daisyui": "^4.7.2",
+    "google-protobuf": "^3.21.2",
+    "grpc-web": "^1.5.0",
     "pinia": "^2.1.7",
     "tabulator-tables": "^5.6.1",
     "vee-validate": "^4.12.5",
