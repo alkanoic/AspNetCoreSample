@@ -26,4 +26,11 @@ export default defineNuxtConfig({
   build: {
     transpile: ["vue-qrcode-reader"],
   },
+  runtimeConfig: {
+    public: {
+      keycloakUrl: "http://localhost:8080",
+      keycloakRealm: "Test",
+      keycloakClientId: "spa-client",
+    },
+  },
 });
