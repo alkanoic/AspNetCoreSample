@@ -5,29 +5,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "msedge",
+      "name": "client: chrome",
       "request": "launch",
-      "name": "Launch Chrome",
+      "type": "chrome",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/src"
     },
     {
+      "name": "server: nuxt",
       "type": "node",
       "request": "launch",
-      "name": "Launch via NPM",
+      "cwd": "${workspaceFolder}",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "run",
         "dev"
-      ]
+      ],
+      "console": "integratedTerminal"
     }
   ],
   "compounds": [
     {
       "name": "Full-stack",
       "configurations": [
-        "Launch via NPM",
-        "Launch Chrome"
+        "client: chrome",
+        "server: nuxt"
       ],
       "stopAll": true
     }
