@@ -36,7 +36,7 @@ export const useAuthStore = defineStore("auth", {
         if (this.keycloak.authenticated) {
           const profile = await this.keycloak.loadUserProfile();
           console.log(profile);
-          console.log(this.keycloak.idToken);
+          console.log(this.keycloak.token);
         } else {
           await this.keycloak.login();
         }

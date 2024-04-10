@@ -78,6 +78,11 @@ builder.Services.AddCors(options => // Add this line
                .AllowAnyHeader()
                .AllowAnyMethod();
 
+        builder.WithOrigins("http://localhost:3000")
+               .AllowCredentials()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+
         builder.WithOrigins(corsSection.MvcUrl).AllowAnyHeader().AllowAnyHeader().AllowAnyMethod();
     });
 });
