@@ -73,6 +73,9 @@
             <NuxtLink to="/qrod" @click="closeDrawer">QROD</NuxtLink>
           </li>
           <li>
+            <NuxtLink to="/login" @click="closeDrawer">Login</NuxtLink>
+          </li>
+          <li>
             <NuxtLink to="/keycloak-login" @click="closeDrawer"
               >KeycloakLogin</NuxtLink
             >

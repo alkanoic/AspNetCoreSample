@@ -31,6 +31,7 @@ export default defineNuxtConfig({
       keycloakUrl: "http://keycloak:8080",
       keycloakRealm: "Test",
       keycloakClientId: "spa-client",
+      apiBaseUrl: process.env.API_BASE_URL || "https://localhost:7035",
     },
   },
 });
