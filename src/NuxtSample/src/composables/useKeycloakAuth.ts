@@ -1,14 +1,14 @@
 import { defineStore } from "pinia";
 import Keycloak from "keycloak-js";
 
-interface AuthState {
+interface KeycloakAuthState {
   isAuthenticated: boolean;
   accessToken: string | null;
   username: string | null;
 }
 
-export const useAuthStore = defineStore("auth", {
-  state: (): AuthState => ({
+export const useKeycloakAuthStore = defineStore("auth", {
+  state: (): KeycloakAuthState => ({
     isAuthenticated: false,
     accessToken: null,
     username: null,

@@ -1,6 +1,9 @@
 <template>
   <div class="hero min-h-screen bg-base-200">
-    <div v-if="!authStore.isAuthenticated" class="hero-content flex-col">
+    <div
+      v-if="!keycloakAuthStore.isAuthenticated"
+      class="hero-content flex-col"
+    >
       <div class="hero-content flex-col">
         <div class="text-center lg:text-left">
           <h1 class="text-5xl font-bold">Login</h1>
@@ -17,7 +20,7 @@
     <div v-else class="hero-content text-center">
       <div class="max-w-md">
         <h1 class="text-5xl font-bold">
-          Welcome, {{ authStore.getUsername }}!
+          Welcome, {{ keycloakAuthStore.getUsername }}!
         </h1>
         <p class="py-6">You are now logged in.</p>
       </div>
@@ -26,11 +29,11 @@
 </template>
 
 <script setup lang="ts">
-  import { useAuthStore } from "@/composables/useAuth";
+  import { useKeycloakAuthStore } from "~/composables/useKeycloakAuth";
 
-  const authStore = useAuthStore();
+  const keycloakAuthStore = useKeycloakAuthStore();
 
   const login = async () => {
-    await authStore.login();
+    await keycloakAuthStore.login();
   };
 </script>
