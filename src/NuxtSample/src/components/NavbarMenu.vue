@@ -76,6 +76,9 @@
             <NuxtLink to="/login" @click="closeDrawer">Login</NuxtLink>
           </li>
           <li>
+            <NuxtLink to="/logined" @click="closeDrawer">Logined</NuxtLink>
+          </li>
+          <li>
             <NuxtLink to="/keycloak-login" @click="closeDrawer"
               >KeycloakLogin</NuxtLink
             >

@@ -37,9 +37,16 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   const username = ref("");
   const password = ref("");
+
+  onMounted(() => {
+    const cookie = useCookie("access_token");
+    if (cookie.value) {
+      navigateTo("/logined");
+    }
+  });
 
   const login = async () => {
     try {
@@ -57,7 +64,6 @@
       });
       const data = await response.json();
       if (response.ok) {
-        // アクセストークンを保存する
         // アクセストークンをHTTPOnly Cookieに保存
         const cookie = useCookie("access_token", {
           path: "/",
@@ -66,7 +72,7 @@
         });
         cookie.value = data.access_token;
         // ログイン後の画面に遷移する
-        navigateTo("/");
+        navigateTo("/logined");
       } else {
         // エラーメッセージを表示する
         alert(data.error);

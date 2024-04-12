@@ -26,6 +26,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ["vue-qrcode-reader"],
   },
+  router: {
+    middleware: ["auth"],
+  },
   runtimeConfig: {
     public: {
       keycloakUrl: "http://keycloak:8080",
