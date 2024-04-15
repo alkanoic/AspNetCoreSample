@@ -13,9 +13,16 @@
 			<staticText>
 				<reportElement x="110" y="10" width="100" height="30" uuid="c3f347cc-b515-4560-b682-329b08d61397"/>
 				<textElement>
+					<font fontName="IPAexゴシック"/>
+				</textElement>
+				<text><![CDATA[IPAexゴシック]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="10" width="100" height="30" uuid="eb2fa5bb-8484-4f1c-be58-8fd8e5841e55"/>
+				<textElement>
 					<font fontName="IPAex明朝"/>
 				</textElement>
-				<text><![CDATA[Static Text]]></text>
+				<text><![CDATA[IPAex明朝]]></text>
 			</staticText>
 		</band>
 	</title>
