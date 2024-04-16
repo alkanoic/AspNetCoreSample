@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="navbar bg-base-100">
+    <div class="navbar bg-gray-800 text-white">
       <div class="navbar-start">
-        <div class="dropdown">
+        <div class="dropdown lg:hidden">
           <label for="my-drawer" tabindex="0" class="btn btn-circle btn-ghost">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@
       </div>
       <div class="navbar-end"></div>
     </div>
-    <div class="drawer-mobile drawer" style="height: calc(100dvh - 64px)">
+    <div class="drawer-mobile drawer lg:drawer-open">
       <input
         id="my-drawer"
         v-model="openedDrawer"
@@ -36,49 +36,50 @@
         class="drawer-toggle"
       />
       <div class="drawer-content">
-        <!-- Page content here -->
         <div class="p-4">
           <slot />
         </div>
       </div>
       <div class="drawer-side">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <ul class="menu w-80 bg-base-100 p-4 text-base-content">
-          <!-- Sidebar content here -->
-          <li><NuxtLink to="/table" @click="closeDrawer">Table</NuxtLink></li>
-          <li>
+        <ul class="menu min-h-full w-60 bg-gray-800 p-4">
+          <label class="mb-4 text-xl text-white lg:hidden">NuxtSample</label>
+          <li class="menu-item">
+            <NuxtLink to="/table" @click="closeDrawer">Table</NuxtLink>
+          </li>
+          <li class="menu-item">
             <NuxtLink to="/tabulator" @click="closeDrawer">Tabulator</NuxtLink>
           </li>
-          <li>
+          <li class="menu-item">
             <NuxtLink to="/tantable" @click="closeDrawer"
               >TanStackTable</NuxtLink
             >
           </li>
-          <li>
+          <li class="menu-item">
             <NuxtLink to="/ref-counter" @click="closeDrawer"
               >RefCounter</NuxtLink
             >
           </li>
-          <li>
+          <li class="menu-item">
             <NuxtLink to="/state-counter" @click="closeDrawer"
               >StateCounter</NuxtLink
             >
           </li>
-          <li>
+          <li class="menu-item">
             <NuxtLink to="/parent-child" @click="closeDrawer"
               >ParentChild</NuxtLink
             >
           </li>
-          <li>
+          <li class="menu-item">
             <NuxtLink to="/qrod" @click="closeDrawer">QROD</NuxtLink>
           </li>
-          <li>
+          <li class="menu-item">
             <NuxtLink to="/login" @click="closeDrawer">Login</NuxtLink>
           </li>
-          <li>
+          <li class="menu-item">
             <NuxtLink to="/logined" @click="closeDrawer">Logined</NuxtLink>
           </li>
-          <li>
+          <li class="menu-item">
             <NuxtLink to="/keycloak-login" @click="closeDrawer"
               >KeycloakLogin</NuxtLink
             >
@@ -88,9 +89,23 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
   const openedDrawer = ref(false);
   const closeDrawer = () => {
     openedDrawer.value = false;
   };
 </script>
+
+<style scoped lang="postcss">
+  @tailwind utilities;
+  .menu-item {
+    @apply transition-colors rounded-lg text-white hover:bg-gray-500;
+  }
+  .menu-item a:active {
+    @apply bg-gray-600 text-white;
+  }
+  .menu-item a:focus {
+    @apply text-white;
+  }
+</style>
