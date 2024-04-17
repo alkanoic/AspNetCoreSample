@@ -22,10 +22,10 @@ jobs:
           node-version: "18.x"
 
       - name: install modules
-        run: npm ci
+        run: npm --prefix src/NuxtSample ci
 
       - name: generate nuxt
-        run: npx nuxi generate
+        run: npx --prefix src/NuxtSample nuxi generate
 
       - name: Build And Deploy To Azure
         id: builddeploy
