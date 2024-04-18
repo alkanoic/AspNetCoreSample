@@ -102,14 +102,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          path: src/SpringBoot.Reports
 
       - name: Set up JDK ${{ env.SPRING_JAVA_VERSION }}
         uses: actions/setup-java@v2
         with:
           java-version: ${{ env.SPRING_JAVA_VERSION }}
           distribution: "adopt"
+          working-directory: src/SpringBoot.Reports
 
       - name: Build with Maven
         run: mvn clean install
