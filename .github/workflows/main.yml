@@ -14,7 +14,7 @@ env:
   NUXT_AZURE_WEBAPP_NAME: "WebSampleApp2024"
   SPRING_JAVA_VERSION: "21" # Java のバージョン
   SPRING_AZURE_WEBAPP_NAME: "WebSampleSpring2024" # セットアップした Azure Web App の名前
-  SPRING_AZURE_WEBAPP_PACKAGE_PATH: "src/SpringBoot.Reports" # アプリケーションが存在するフォルダ
+  SPRING_AZURE_WEBAPP_PACKAGE_PATH: "src/SpringBoot.Reports/target" # アプリケーションが存在するフォルダ
 
 jobs:
   mvc:
