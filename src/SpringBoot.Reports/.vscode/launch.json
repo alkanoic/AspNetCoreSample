@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.sample.SampleApplication",
+            "projectName": "sample",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "serverReadyAction": {
+                "pattern": "Tomcat started on port ([0-9]+)",
+                "uriFormat": "http://localhost:%s/swagger-ui.html",
+                "action": "openExternally"
+            }
+        }
+    ]
+}
