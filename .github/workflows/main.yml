@@ -12,6 +12,9 @@ env:
   WEBAPI_AZURE_WEBAPP_NAME: "WebSampleWebApi2024" # Azure Web Appの名前
   NUXT_APP_LOCATION: "/src/NuxtSample/"
   NUXT_AZURE_WEBAPP_NAME: "WebSampleApp2024"
+  SPRING_JAVA_VERSION: "17" # Java のバージョン
+  SPRING_AZURE_WEBAPP_NAME: "WebSampleSpring2024" # セットアップした Azure Web App の名前
+  SPRING_AZURE_WEBAPP_PACKAGE_PATH: "." # アプリケーションが存在するフォルダ
 
 jobs:
   mvc:
@@ -93,3 +96,41 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "src/NuxtSample/.output/public"
+
+  spring:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK ${{ env.SPRING_JAVA_VERSION }}
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ env.SPRING_JAVA_VERSION }}
+          distribution: "adopt"
+
+      - name: Change directory
+        run: cd src/SpringBoot.Reports
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app
+          path: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: java-app
+          path: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: Azure WebApp
+        id: azure-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.SPRING_AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.SPRING_AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
