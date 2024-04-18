@@ -12,7 +12,7 @@ env:
   WEBAPI_AZURE_WEBAPP_NAME: "WebSampleWebApi2024" # Azure Web Appの名前
   NUXT_APP_LOCATION: "/src/NuxtSample/"
   NUXT_AZURE_WEBAPP_NAME: "WebSampleApp2024"
-  JAVA_VERSION: "17" # Java のバージョン
+  SPRING_JAVA_VERSION: "21" # Java のバージョン
   SPRING_AZURE_WEBAPP_NAME: "WebSampleSpring2024" # セットアップした Azure Web App の名前
   SPRING_AZURE_WEBAPP_PACKAGE_PATH: "src/SpringBoot.Reports" # アプリケーションが存在するフォルダ
 
@@ -103,10 +103,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
+      - name: Set up JDK ${{ env.SPRING_JAVA_VERSION }}
         uses: actions/setup-java@v2
         with:
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: ${{ env.SPRING_JAVA_VERSION }}
           distribution: "adopt"
           working-directory: src/SpringBoot.Reports
 
