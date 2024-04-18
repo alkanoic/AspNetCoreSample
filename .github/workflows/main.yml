@@ -14,7 +14,7 @@ env:
   NUXT_AZURE_WEBAPP_NAME: "WebSampleApp2024"
   SPRING_JAVA_VERSION: "17" # Java のバージョン
   SPRING_AZURE_WEBAPP_NAME: "WebSampleSpring2024" # セットアップした Azure Web App の名前
-  SPRING_AZURE_WEBAPP_PACKAGE_PATH: "." # アプリケーションが存在するフォルダ
+  SPRING_AZURE_WEBAPP_PACKAGE_PATH: "src/SpringBoot.Reports/" # アプリケーションが存在するフォルダ
 
 jobs:
   mvc:
@@ -108,10 +108,11 @@ jobs:
         with:
           java-version: ${{ env.SPRING_JAVA_VERSION }}
           distribution: "adopt"
-          working-directory: src/SpringBoot.Reports
 
       - name: Build with Maven
         run: mvn clean install
+        with:
+          working-directory: src/SpringBoot.Reports
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
