@@ -23,12 +23,14 @@ services:
       TZ: 'Asia/Tokyo'
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-    - ./docker/volumes/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-    - ./docker/volumes/mysql/initdb.d:/docker-entrypoint-initdb.d
+      - ./docker/volumes/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/volumes/mysql/initdb.d:/docker-entrypoint-initdb.d
+    expose:
+      - 3306
     ports:
-    - 3306:3306
+      - 3306:3306
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping"]
+      test: [ "CMD", "mysqladmin", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -53,10 +55,11 @@ services:
       # KC_HTTPS_KEY_STORE_PASSWORD:
     volumes:
       - ./docker/volumes/keycloak/data/import:/opt/keycloak/data/import
-    command: [
-      start-dev, # 開発モードで起動 # start --optimized
-      --import-realm
-    ]
+    command:
+      [
+        start-dev, # 開発モードで起動 # start --optimized
+        --import-realm
+      ]
     depends_on:
       - keycloak-mysql
       - mailpit

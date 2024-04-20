@@ -38,6 +38,6 @@ RUN wget https://github.com/fullstorydev/grpcurl/releases/download/v1.8.9/grpcur
     rm LICENSE
 
 # install Keploy
-# RUN curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp && \
-#     mkdir -p /usr/local/bin && \
-#     mv /tmp/keploy /usr/local/bin
+RUN curl --silent --location "https://github.com/keploy/keploy/releases/latest/download/keploy_linux_amd64.tar.gz" | tar xz -C /tmp && \
+    mkdir -p /usr/local/bin && \
+    mv /tmp/keploy /usr/local/bin
