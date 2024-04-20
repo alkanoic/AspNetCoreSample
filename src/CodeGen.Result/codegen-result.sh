@@ -13,3 +13,17 @@ dotnet run --project ../CodeGen -- api \
     --db-context-path ../CodeGen.Result/Models/SampleContext.cs \
     --namespace-name CodeGen.Result.WebApi \
     --controller-name MultiTableApiController
+
+dotnet run --project ../CodeGen -- mvc \
+    --class-file-path Models/SampleTable.cs \
+    --class-name SampleTable \
+    --output-directory ../CodeGen.Result/ \
+    --db-context-path ../CodeGen.Result/Models/SampleContext.cs \
+    --namespace-name CodeGen.Result.Controllers
+
+dotnet run --project ../CodeGen -- mvc \
+    --class-file-path Models/MultiTable.cs \
+    --class-name MultiTable \
+    --output-directory ../CodeGen.Result/ \
+    --db-context-path ../CodeGen.Result/Models/SampleContext.cs \
+    --namespace-name CodeGen.Result.Controllers

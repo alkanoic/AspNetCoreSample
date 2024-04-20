@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Text;
+
 using CodeGen;
 
 #pragma warning disable CA1305
@@ -24,8 +25,6 @@ public partial class Program
         };
         var dbContextClassInfo = new ClassAnalysis(dbContextArgs).ReadCode();
 
-        var templateText = TemplateControl.ReadTemplateText("api/ApiTemplate.cs");
-
         var templateArgs = new ApiTemplateArgs()
         {
             UsingNamespaces = TemplateControl.UsingNamespace(targetClassInfo.NamespaceName),
@@ -38,21 +37,15 @@ public partial class Program
         };
         templateArgs.CompareTargetToArguments = TemplateControl.CompareTargetToArguments(targetClassInfo.PrimaryProperties());
         templateArgs.PrimaryKeyNameAttributes = TemplateControl.PrimaryKeyNameAttributes(targetClassInfo.PrimaryProperties());
-        templateArgs.PrimaryKeyNameArguments = TemplateControl.PrimaryKeyNameArguments(targetClassInfo.PrimaryProperties());
+        templateArgs.PrimaryKeyNameArguments = TemplateControl.PropertyNameArguments(targetClassInfo.PrimaryProperties(), true);
         templateArgs.PrimaryKeyNameTargetArguments = TemplateControl.PrimaryKeyNameTargetArguments(targetClassInfo.PrimaryProperties());
         templateArgs.PrimaryKeyNameNewObject = TemplateControl.PrimaryKeyNameNewObject(targetClassInfo.PrimaryProperties());
         templateArgs.PrimaryKeyArguments = TemplateControl.PrimaryKeyArguments(targetClassInfo.PrimaryProperties());
         templateArgs.ContextFindPrimaryKey = TemplateControl.ContextFindPrimaryKey(templateArgs.EntitySetName, targetClassInfo.PrimaryProperties(), true);
         templateArgs.EntitySetExist = TemplateControl.EntitySetExist(templateArgs.EntitySetName, targetClassInfo.PrimaryProperties());
 
-        var tc = new TemplateControl()
-        {
-            TargetClass = typeof(ApiTemplateArgs),
-            Instance = templateArgs,
-            TemplateText = templateText,
-            OutputPath = outputPath
-        };
-        tc.WriteOverrideText();
+        TargetTemplateDirectory(typeof(ApiTemplateArgs), templateArgs, "Templates/api", outputPath, className);
+
         Console.WriteLine("Success generate:" + outputPath);
     }
 }

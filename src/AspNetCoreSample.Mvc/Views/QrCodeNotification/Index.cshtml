@@ -1,0 +1,38 @@
+@inject IOptions<WebApiOption> _webApiOption;
+
+@{
+  ViewData["Title"] = "Notification";
+}
+
+<div class="text-center">
+  <h1 class="display-4">Notification</h1>
+  <div id="qrCodeData">audio not ready</div>
+</div>
+
+@section Scripts {
+  <script src="~/lib/signalr/browser/signalr.js"></script>
+  <script>
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl("@(_webApiOption.Value.WebApiBaseUrl + "/qrcodeHub")")
+      .build();
+
+    const audioElement = new Audio('/audio/notification.mp3');
+
+    // ユーザー操作時にオーディオ再生を許可するように設定
+    document.addEventListener('click', function () {
+      document.querySelector("#qrCodeData").innerHTML = "audio standby";
+    }, { once: true });
+
+
+    connection.on("ReceiveQRCodeData", function (data) {
+      const qrCodeDataElement = document.getElementById("qrCodeData");
+      qrCodeDataElement.textContent = data;
+      audioElement.play();
+    });
+
+    connection.start()
+      .catch(function (err) {
+        return console.error(err.toString());
+      });
+  </script>
+}

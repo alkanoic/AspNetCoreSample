@@ -1,6 +1,8 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+
 using AspNetCoreSample.Templates.Models;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSample.Templates.Controllers;
 

@@ -1,0 +1,4 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "~/tabulator-tables/dist/css/tabulator.min.css";

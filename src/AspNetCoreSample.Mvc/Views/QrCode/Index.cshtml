@@ -1,0 +1,90 @@
+@inject IOptions<WebApiOption> _webApiOption;
+@{
+  ViewData["Title"] = "QRCodeReader";
+}
+
+<h1>QRコード読み取り</h1>
+
+<div id="qr-reader" style="width:500px"></div>
+
+<button id="startButton" class="btn btn-primary">QRコードを読み取る</button>
+
+<button id="toggleLightBtn" class="btn btn-outline-secondary">ライトをON/OFFする</button>
+
+@section Scripts {
+  <script src="~/lib/html5-qrcode/html5-qrcode.min.js"></script>
+  <script>
+    const qrCodeReader = new Html5Qrcode("qr-reader", {
+      formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
+    });
+
+    const startButton = document.getElementById("startButton");
+
+    startButton.addEventListener("click", () => {
+      qrCodeReader.start(
+        { facingMode: "environment" },
+        {
+          fps: 10,    // Optional, frame per seconds for qr code scanning
+          qrbox: { width: 250, height: 250 }  // Optional, if you want bounded box UI
+        },
+        (decodedText, decodedResult) => {
+          if (decodedText) {
+            qrCodeReader.stop();
+            if (track) {
+              track.stop();
+            }
+            submitQRCodeData(decodedText);
+          }
+        },
+        (errorMessage) => {
+          // console.error(errorMessage);
+        }
+      );
+    });
+
+    function submitQRCodeData(qrCodeData) {
+      fetch("@(_webApiOption.Value.WebApiBaseUrl + "/api/QrCode")", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ QrCode: qrCodeData })
+      })
+        .then(response => {
+          if (response.ok) {
+            console.log("QRコードの値を正常に送信しました。");
+          } else {
+            console.error("QRコードの値の送信に失敗しました。");
+          }
+        })
+        .catch(error => console.error(error));
+    }
+
+    const toggleLightBtn = document.getElementById('toggleLightBtn');
+    let light = false;
+    let track;
+
+    toggleLightBtn.addEventListener('click', toggleLightClick);
+
+    function toggleLightClick() {
+      if (!track || track.readyState == "ended") {
+        getMedia();
+      }
+      toggleLight(!light);
+    }
+
+    function getMedia() {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(function (stream) {
+          track = stream.getVideoTracks()[0];
+        })
+    }
+
+    function toggleLight(lightOn) {
+      track.applyConstraints({
+        advanced: [{ torch: lightOn }]
+      });
+      light = lightOn;
+    }
+  </script>
+}

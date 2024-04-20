@@ -32,3 +32,55 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    hostname: keycloak
+    tty: true
+    stdin_open: true
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      KC_DB: mysql
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KC_DB_URL: jdbc:mysql://keycloak-mysql:3306/keycloak
+      KEYCLOAK_ADMIN: admin # 管理ユーザーIDを設定
+      KEYCLOAK_ADMIN_PASSWORD: passwd # 管理ユーザーのパスワードを設定
+      # KC_HOSTNAME: localhost:8080
+      # KC_HTTPS_KEY_STORE_FILE:
+      # KC_HTTPS_KEY_STORE_PASSWORD:
+    volumes:
+      - ./docker/volumes/keycloak/data/import:/opt/keycloak/data/import
+    command: [
+      start-dev, # 開発モードで起動 # start --optimized
+      --import-realm
+    ]
+    depends_on:
+      - keycloak-mysql
+      - mailpit
+  keycloak-mysql:
+    image: mysql:latest
+    container_name: keycloak-mysql
+    hostname: keycloak-mysql
+    ports:
+      - "33060:3306"
+    expose:
+      - 3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: mailpit
+    hostname: mailpit
+    ports:
+      - 8025:8025
+    expose:
+      - 1025
+    environment:
+      - TZ=Asia/Tokyo

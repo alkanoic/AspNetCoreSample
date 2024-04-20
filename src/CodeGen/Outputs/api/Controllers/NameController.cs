@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AspNetCoreSample.Templates.Models;
 
 namespace AspNetCoreSample.WebApi;
 
@@ -27,25 +27,26 @@ public class NameApiController : ControllerBase
     }
 
     // GET: @routePrefix/5
-    [HttpGet("{id}")]
+    [HttpGet("id")]
     public async ValueTask<ActionResult<Name>> Get(int id)
     {
-        var target = await _context.Names.FindAsync(id);
+        var target = _context.Names.AsNoTracking();
+        target = target.Where(x => x.Id == id);
+        var result = await target.SingleOrDefaultAsync();
 
-        if (target == null)
+        if (result == null)
         {
             return NotFound();
         }
-
-        return target;
+        return result;
     }
 
     // PUT: @routePrefix/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{id}")]
+    [HttpPut("id")]
     public async ValueTask<IActionResult> Put(int id, Name target)
     {
-        if (id != target.Id)
+        if (target.Id != id)
         {
             return BadRequest();
         }
@@ -98,16 +99,19 @@ public class NameApiController : ControllerBase
     }
 
     // DELETE: @routePrefix/5
-    [HttpDelete("{id}")]
+    [HttpDelete("id")]
     public async ValueTask<IActionResult> Delete(int id)
     {
-        var target = await _context.Names.FindAsync(id);
-        if (target == null)
+        var target = _context.Names.AsNoTracking();
+        target = target.Where(x => x.Id == id);
+        var result = await target.SingleOrDefaultAsync();
+
+        if (result == null)
         {
             return NotFound();
         }
 
-        _context.Names.Remove(target);
+        _context.Names.Remove(result);
         await _context.SaveChangesAsync();
 
         return NoContent();
@@ -115,6 +119,8 @@ public class NameApiController : ControllerBase
 
     private bool Exists(int id)
     {
-        return _context.Names.Any(e => e.Id == id);
+        var target = _context.Names.AsNoTracking();
+        target = target.Where(x => x.Id == id);
+        return target.Any();
     }
 }

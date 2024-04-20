@@ -1,0 +1,30 @@
+{
+	"storybook": {
+		"scope": "javascript,typescript,typescriptreact,javascriptreact",
+		"prefix": [
+			"storybook"
+		],
+		"body": [
+			"import { type Meta, type StoryObj } from '@storybook/vue3';",
+			"import ${TM_FILENAME_BASE/.stories//g} from '../../components/${TM_FILENAME_BASE/.stories//g}.vue';",
+			"",
+			"const meta: Meta<typeof ${TM_FILENAME_BASE/.stories//g} > = {",
+			"  component: ${TM_FILENAME_BASE/.stories//g} ,",
+			"  render: (args) => ({",
+			"    components: { ${TM_FILENAME_BASE/.stories//g}  },",
+			"    setup: () => ({ args }),",
+			"    template: `",
+			"      <${TM_FILENAME_BASE/.stories//g}  />",
+			"    `,",
+			"  }),",
+			"};",
+			"",
+			"export default meta;",
+			"",
+			"type Story = StoryObj<typeof ${TM_FILENAME_BASE/.stories//g} >;",
+			"",
+			"export const Default: Story = {};"
+		],
+		"description": "storybook"
+	}
+}

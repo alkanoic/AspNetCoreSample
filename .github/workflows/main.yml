@@ -1,0 +1,135 @@
+name: Build and deploy ASP.Net Core app to Azure Web App
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  MVC_APP_LOCATION: "src/AspNetCoreSample.Mvc"
+  MVC_AZURE_WEBAPP_NAME: "WebSampleApp2024" # Azure Web Appの名前
+  WEBAPI_APP_LOCATION: "src/AspNetCoreSample.WebApi"
+  WEBAPI_AZURE_WEBAPP_NAME: "WebSampleWebApi2024" # Azure Web Appの名前
+  NUXT_APP_LOCATION: "/src/NuxtSample/"
+  NUXT_AZURE_WEBAPP_NAME: "WebSampleApp2024"
+  SPRING_JAVA_VERSION: "21" # Java のバージョン
+  SPRING_AZURE_WEBAPP_NAME: "WebSampleSpring2024" # セットアップした Azure Web App の名前
+  SPRING_AZURE_WEBAPP_PACKAGE_PATH: "src/SpringBoot.Reports/target" # アプリケーションが存在するフォルダ
+
+jobs:
+  mvc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.MVC_APP_LOCATION }}
+
+      - name: Publish app for deployment
+        run: |
+          dotnet publish -c Release -o published --framework net8.0
+        working-directory: ${{ env.MVC_APP_LOCATION }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.MVC_AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.MVC_AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.MVC_APP_LOCATION }}/published
+
+  webapi:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.WEBAPI_APP_LOCATION }}
+
+      - name: Publish app for deployment
+        run: |
+          dotnet publish -c Release -o published --framework net8.0
+        working-directory: ${{ env.WEBAPI_APP_LOCATION }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.WEBAPI_AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.WEBAPI_AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.WEBAPI_APP_LOCATION }}/published
+
+  nuxt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: install modules
+        run: npm --prefix src/NuxtSample ci
+
+      - name: generate nuxt
+        run: npm --prefix src/NuxtSample run generate
+
+      - name: Build And Deploy To Azure
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "src/NuxtSample/.output/public"
+
+  spring:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK ${{ env.SPRING_JAVA_VERSION }}
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ env.SPRING_JAVA_VERSION }}
+          distribution: "adopt"
+          working-directory: src/SpringBoot.Reports
+
+      - name: Build with Maven
+        run: mvn clean install
+        working-directory: src/SpringBoot.Reports
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app
+          path: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: java-app
+          path: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: Azure WebApp
+        id: azure-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.SPRING_AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.SPRING_AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
