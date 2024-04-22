@@ -9,12 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting" Version="8.0.0-preview.2.23619.3" />
+    <ProjectReference Include="..\AspNetCoreSample.Mvc\AspNetCoreSample.Mvc.csproj" />
+    <ProjectReference Include="..\AspNetCoreSample.WebApi\AspNetCoreSample.WebApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreSample.Mvc\AspNetCoreSample.Mvc.csproj" />
-    <ProjectReference Include="..\AspNetCoreSample.WebApi\AspNetCoreSample.WebApi.csproj" />
+    <PackageReference Include="Aspire.Hosting" Version="8.0.0-preview.5.24201.12" />
   </ItemGroup>
 
 </Project>
