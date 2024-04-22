@@ -74,6 +74,9 @@
             <NuxtLink to="/qrod" @click="closeDrawer">QROD</NuxtLink>
           </li>
           <li class="menu-item">
+            <NuxtLink to="/modal" @click="closeDrawer">Modal</NuxtLink>
+          </li>
+          <li class="menu-item">
             <NuxtLink to="/login" @click="closeDrawer">Login</NuxtLink>
           </li>
           <li class="menu-item">
