@@ -77,6 +77,9 @@
             <NuxtLink to="/modal" @click="closeDrawer">Modal</NuxtLink>
           </li>
           <li class="menu-item">
+            <NuxtLink to="/accordion" @click="closeDrawer">Accordion</NuxtLink>
+          </li>
+          <li class="menu-item">
             <NuxtLink to="/login" @click="closeDrawer">Login</NuxtLink>
           </li>
           <li class="menu-item">
