@@ -48,6 +48,11 @@
             <NuxtLink to="/table" @click="closeDrawer">Table</NuxtLink>
           </li>
           <li class="menu-item">
+            <NuxtLink to="/tabledetail" @click="closeDrawer"
+              >TableDetail</NuxtLink
+            >
+          </li>
+          <li class="menu-item">
             <NuxtLink to="/tabulator" @click="closeDrawer">Tabulator</NuxtLink>
           </li>
           <li class="menu-item">

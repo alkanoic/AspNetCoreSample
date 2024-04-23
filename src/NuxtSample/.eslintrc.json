@@ -30,6 +30,9 @@
       {
         "config": "tailwind.config.cs"
       }
+    ],
+    "vue/no-v-for-template-key": [
+      "off"
     ]
   }
 }
