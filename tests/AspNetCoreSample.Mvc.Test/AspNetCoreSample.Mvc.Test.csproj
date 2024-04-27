@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <None Include="migrate/*.sql" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="my.cnf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

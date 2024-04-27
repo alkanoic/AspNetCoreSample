@@ -32,7 +32,10 @@ public sealed class DbFixture : IAsyncLifetime
 
         _mySqlContainer = new MySqlBuilder()
             .WithImage("mysql:8.0")
+            .WithResourceMapping("my.cnf", "/etc/mysql/conf.d/my.cnf")
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
+            .WithEnvironment("TZ", "Asia/Tokyo")
+            .WithEnvironment("LANG", "ja_JP.UTF-8")
             .WithNetwork(_network)
             .WithNetworkAliases(nameof(_mySqlContainer))
             .Build();

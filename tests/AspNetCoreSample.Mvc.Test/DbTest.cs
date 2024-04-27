@@ -2,11 +2,11 @@ using System.Data.Common;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class FlywayTest : IClassFixture<DbFixture>, IDisposable
+public sealed class DbTest : IClassFixture<DbFixture>, IDisposable
 {
     private readonly DbConnection _dbConnection;
 
-    public FlywayTest(DbFixture db)
+    public DbTest(DbFixture db)
     {
         _dbConnection = db.DbConnection;
         _dbConnection.Open();
@@ -22,15 +22,17 @@ public sealed class FlywayTest : IClassFixture<DbFixture>, IDisposable
     {
         // Given
         using var command = _dbConnection.CreateCommand();
-        command.CommandText = "SELECT username, email, age FROM users;";
+        command.CommandText = "SELECT name FROM name;";
 
         // Whening
         using var dataReader = command.ExecuteReader();
 
         // Then
         Assert.True(dataReader.Read());
-        Assert.Equal("john_doe", dataReader.GetString(0));
-        Assert.Equal("john@example.com", dataReader.GetString(1));
-        Assert.Equal(30, dataReader.GetInt32(2));
+        Assert.Equal("太郎", dataReader.GetString(0));
+        Assert.True(dataReader.Read());
+        Assert.Equal("花子", dataReader.GetString(0));
+        Assert.True(dataReader.Read());
+        Assert.Equal("令和", dataReader.GetString(0));
     }
 }
