@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample.Grpc", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B12F1D4F-7CEE-41BD-BBBE-1CD1C85E675B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample.Mvc.Test", "tests\AspNetCoreSample.Mvc.Test\AspNetCoreSample.Mvc.Test.csproj", "{AEA3EB10-BDFB-4C35-8027-D799B701BDAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample.WebApi.Test", "tests\AspNetCoreSample.WebApi.Test\AspNetCoreSample.WebApi.Test.csproj", "{AEA3EB10-BDFB-4C35-8027-D799B701BDAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -41,7 +41,9 @@ public sealed class DbFixture : IAsyncLifetime
             .Build();
     }
 
-    public DbConnection DbConnection => new MySqlConnection(_mySqlContainer.GetConnectionString());
+    public string DbConnectionString => _mySqlContainer.GetConnectionString();
+
+    public DbConnection DbConnection => new MySqlConnection(DbConnectionString);
 
     public Task InitializeAsync()
     {
