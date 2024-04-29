@@ -1,16 +1,11 @@
 using System.Net;
-using System.Security.AccessControl;
 using System.Text;
 using System.Text.Json;
 
-using AspNetCoreSample.Mvc.Test;
-using AspNetCoreSample.WebApi;
 using AspNetCoreSample.WebApi.EfModels;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-
-using Testcontainers.MySql;
 
 namespace AspNetCoreSample.Mvc.Test;
 

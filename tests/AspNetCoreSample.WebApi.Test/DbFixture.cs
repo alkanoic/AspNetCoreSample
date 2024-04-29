@@ -31,7 +31,7 @@ public sealed class DbFixture : IAsyncLifetime
         // container exits, and the database container becomes available for tests.
 
         _mySqlContainer = new MySqlBuilder()
-            .WithImage("mysql:8.0")
+            .WithImage("mysql:latest")
             .WithResourceMapping("my.cnf", "/etc/mysql/conf.d/my.cnf")
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
             .WithEnvironment("TZ", "Asia/Tokyo")
