@@ -7,7 +7,7 @@ using AspNetCoreSample.WebApi.EfModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AspNetCoreSample.Mvc.Test;
+namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class DbAccessWebApiTest : IClassFixture<DbFixture>, IDisposable
 {

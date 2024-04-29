@@ -1,6 +1,6 @@
 using System.Data.Common;
 
-namespace AspNetCoreSample.WebApi.Test;
+namespace AspNetCoreSample.Mvc.Test;
 
 public sealed class DbTest : IClassFixture<DbFixture>, IDisposable
 {

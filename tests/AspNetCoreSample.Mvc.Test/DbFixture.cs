@@ -12,7 +12,7 @@ using Testcontainers.MySql;
 
 using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
-namespace AspNetCoreSample.WebApi.Test;
+namespace AspNetCoreSample.Mvc.Test;
 
 public sealed class DbFixture : IAsyncLifetime
 {
