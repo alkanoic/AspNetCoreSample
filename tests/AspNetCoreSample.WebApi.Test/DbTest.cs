@@ -18,7 +18,7 @@ public sealed class DbTest : IClassFixture<DbFixture>, IDisposable
     }
 
     [Fact]
-    public void UsersTableContainsJohnDoe()
+    public void NamesTableContainsName()
     {
         // Given
         using var command = _dbConnection.CreateCommand();
