@@ -4,6 +4,13 @@ namespace AspNetCoreSample.Mvc.Test;
 
 public static class AvailablePort
 {
+    public static int GetAvailablePort()
+    {
+        Random random = new Random();
+        int randomPortNumber = random.Next(5000, 65000);
+        return GetAvailablePort(randomPortNumber);
+    }
+
     public static int GetAvailablePort(int startPort)
     {
         var ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();

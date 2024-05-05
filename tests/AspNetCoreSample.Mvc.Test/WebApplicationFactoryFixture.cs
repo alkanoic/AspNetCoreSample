@@ -11,10 +11,7 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        if (string.IsNullOrWhiteSpace(HostUrl))
-        {
-            HostUrl = $"https://localhost:{AvailablePort.GetAvailablePort(8000)}";
-        }
+        HostUrl = $"https://localhost:{AvailablePort.GetAvailablePort()}";
         builder.UseUrls(HostUrl);
     }
 
