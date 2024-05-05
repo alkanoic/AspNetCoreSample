@@ -15,7 +15,7 @@ using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class MvcFixture : HttpClient, IAsyncLifetime
+public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
 {
     private readonly INetwork _network;
 
@@ -27,7 +27,7 @@ public sealed class MvcFixture : HttpClient, IAsyncLifetime
 
     private readonly IContainer _mvcContainer;
 
-    public MvcFixture() : base(new HttpClientHandler
+    public MvcDbFixture() : base(new HttpClientHandler
     {
         // Trust the development certificate.
         ServerCertificateCustomValidationCallback = (_, certificate, _, _) => Certificate.Equals(certificate)

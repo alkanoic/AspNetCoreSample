@@ -2,13 +2,13 @@ using System.Data.Common;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class DbTest : IClassFixture<MvcFixture>, IDisposable
+public sealed class DbTest : IClassFixture<MvcDbFixture>, IDisposable
 {
     private readonly DbConnection _dbConnection;
 
-    public DbTest(MvcFixture db)
+    public DbTest(MvcDbFixture db)
     {
-        _dbConnection = MvcFixture.DbConnection;
+        _dbConnection = MvcDbFixture.DbConnection;
         _dbConnection.Open();
     }
 
