@@ -6,7 +6,7 @@ using AspNetCoreSample.WebApi;
 namespace WebApiSample.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ValidationController : ControllerBase
 {
     [HttpPost]

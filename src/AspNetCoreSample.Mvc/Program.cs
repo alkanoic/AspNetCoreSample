@@ -79,7 +79,7 @@ if (!app.Environment.IsDevelopment())
 
 app.MapDefaultEndpoints();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -92,3 +92,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+public partial class Program { }
