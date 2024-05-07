@@ -27,7 +27,7 @@ public sealed class DbAccessWebApiAuthTest : IClassFixture<DbFixture>, IAssembly
         // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Path", "certificate.crt");
         // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Password", "password");
         Environment.SetEnvironmentVariable("ConnectionStrings__Default", db.DbConnectionString);
-        Environment.SetEnvironmentVariable("KeycloakOptions__TokenEndpoint", $"http://{keycloak.HostName}:8080/realms/Test/protocol/openid-connect/token");
+        Environment.SetEnvironmentVariable("KeycloakOptions__TokenEndpoint", $"{keycloak.BaseAddress}/realms/Test/protocol/openid-connect/token");
         _webApplicationFactory = new WebApplicationFactory<Program>();
         _serviceScope = _webApplicationFactory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _httpClient = _webApplicationFactory.CreateClient();

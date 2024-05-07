@@ -28,7 +28,7 @@ public sealed class KeycloakFixture : IAsyncLifetime
             .Build();
     }
 
-    public string HostName => _keycloakContainer.Hostname;
+    public string BaseAddress => _keycloakContainer.GetBaseAddress();
 
     public Task InitializeAsync()
     {
