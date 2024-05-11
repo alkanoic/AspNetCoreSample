@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Child</h1>
-    <button class="btn-primary btn" @click="handleClick">Click me!</button>
+    <button class="btn btn-primary" @click="handleClick">Click me!</button>
     <h1>parent: {{ parentData }}</h1>
   </div>
 </template>
