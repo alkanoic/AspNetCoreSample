@@ -11,8 +11,7 @@
     "plugin:vue/essential",
     "plugin:tailwindcss/recommended",
     "@nuxtjs/eslint-config-typescript",
-    "prettier",
-    "plugin:storybook/recommended"
+    "prettier"
   ],
   "parserOptions": {
     "ecmaVersion": "latest",
