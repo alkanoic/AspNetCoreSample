@@ -5,14 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "client: chrome",
-      "request": "launch",
-      "type": "chrome",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}/src"
-    },
-    {
-      "name": "server: nuxt",
+      "name": "nuxt",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}",
@@ -21,17 +14,33 @@
         "run",
         "dev"
       ],
+      "serverReadyAction": {
+        "pattern": "\\bLocal:\\s+https?://localhost:?([0-9]+)",
+        "uriFormat": "http://localhost:%s",
+        "action": "debugWithChrome",
+        "killOnServerStop": true,
+        "webRoot": "${workspaceFolder}/src",
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "story",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "story:dev",
+      ],
+      "serverReadyAction": {
+        "pattern": "\\bLocal:\\s+https?://localhost:?([0-9]+)",
+        "uriFormat": "http://localhost:%s",
+        "action": "debugWithChrome",
+        "killOnServerStop": true,
+        "webRoot": "${workspaceFolder}/src",
+      },
       "console": "integratedTerminal"
     }
   ],
-  "compounds": [
-    {
-      "name": "Full-stack",
-      "configurations": [
-        "client: chrome",
-        "server: nuxt"
-      ],
-      "stopAll": true
-    }
-  ]
 }

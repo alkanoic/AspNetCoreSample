@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <button class="btn-primary btn" @click="increment()">increment</button>
-      <button class="btn-secondary btn" @click="reset()">reset</button>
+      <button class="btn btn-primary" @click="increment()">increment</button>
+      <button class="btn btn-secondary" @click="reset()">reset</button>
     </div>
     <div>count: {{ counterStore.count }}</div>
     <div>double: {{ counterStore.double }}</div>

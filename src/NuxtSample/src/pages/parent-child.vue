@@ -1,5 +1,5 @@
 <template>
   <div>
-    <Parent />
+    <ComParent />
   </div>
 </template>

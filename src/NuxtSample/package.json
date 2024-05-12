@@ -11,9 +11,14 @@
     "lintfix": "prettier --write --list-different . && npm run lint -- --fix",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "updates": "npx npm-check-updates -u"
+    "updates": "npx npm-check-updates -u",
+    "story:dev": "histoire dev --config historie.config.ts",
+    "story:build": "histoire build",
+    "story:preview": "histoire preview"
   },
   "devDependencies": {
+    "@histoire/plugin-nuxt": "^0.17.17",
+    "@histoire/plugin-vue": "^0.17.17",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@storybook/addon-essentials": "^7.6.17",
@@ -34,6 +39,7 @@
     "eslint-plugin-storybook": "^0.8.0",
     "eslint-plugin-tailwindcss": "^3.14.3",
     "eslint-plugin-vue": "^9.22.0",
+    "histoire": "^0.17.17",
     "nuxt": "^3.10.3",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",

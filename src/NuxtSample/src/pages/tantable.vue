@@ -49,7 +49,7 @@
       </tfoot>
     </table>
     <div class="h-4" />
-    <button @click="rerender" class="border p-2">Rerender</button>
+    <button class="border p-2" @click="rerender">Rerender</button>
   </div>
 </template>
 
