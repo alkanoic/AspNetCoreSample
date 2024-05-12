@@ -1,6 +1,6 @@
 <template>
   <Story>
-    <Variant>
+    <Variant title="Default">
       <TableList :headers="headers" :rows="rows" />
     </Variant>
   </Story>
