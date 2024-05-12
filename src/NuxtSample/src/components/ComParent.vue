@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-  import Child from "./Child.vue";
+  import Child from "./ComChild.vue";
 
   const parentData = ref("input parent data");
   const childData = ref("");

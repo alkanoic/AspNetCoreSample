@@ -2,15 +2,15 @@
   <div>
     <h1>Main Page</h1>
     <button class="btn">Button</button>
-    <button class="btn-primary btn">Button</button>
-    <button class="btn-secondary btn">Button</button>
-    <button class="btn-accent btn">Button</button>
-    <button class="btn-ghost btn">Button</button>
-    <button class="btn-link btn">Button</button>
-    <button class="btn-info btn">Button</button>
-    <button class="btn-success btn">Button</button>
-    <button class="btn-warning btn">Button</button>
-    <button class="btn-error btn">Button</button>
+    <button class="btn btn-primary">Button</button>
+    <button class="btn btn-secondary">Button</button>
+    <button class="btn btn-accent">Button</button>
+    <button class="btn btn-ghost">Button</button>
+    <button class="btn btn-link">Button</button>
+    <button class="btn btn-info">Button</button>
+    <button class="btn btn-success">Button</button>
+    <button class="btn btn-warning">Button</button>
+    <button class="btn btn-error">Button</button>
   </div>
 </template>
 <script setup lang="ts">

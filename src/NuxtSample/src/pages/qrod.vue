@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card></Card>
+    <StopCard></StopCard>
     <p>
       Last result: <b>{{ result }}</b>
     </p>

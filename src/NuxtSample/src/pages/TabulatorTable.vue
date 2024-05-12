@@ -3,7 +3,7 @@
     <div ref="tableElm"></div>
 
     <div class="mt-2">
-      <button type="button" class="btn-success btn" @click="csvDownload()">
+      <button type="button" class="btn btn-success" @click="csvDownload()">
         CsvDownload
       </button>
     </div>
