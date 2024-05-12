@@ -5,6 +5,5 @@ import { defineSetupVue3 } from "@histoire/plugin-vue";
 import "assets/css/main.css";
 
 export const setupVue3 = defineSetupVue3(({ app }) => {
-  const pinia = createPinia();
-  app.use(pinia);
+  app.use(createPinia());
 });
