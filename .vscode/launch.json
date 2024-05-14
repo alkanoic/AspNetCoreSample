@@ -14,8 +14,9 @@
             "cwd": "${workspaceFolder}/src/AspNetCoreSample.Mvc",
             "stopAtEntry": false,
             "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+                "action": "debugWithChrome",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot"
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
@@ -39,7 +40,7 @@
             "cwd": "${workspaceFolder}/src/AspNetCoreSample.Mvc",
             "stopAtEntry": false,
             "serverReadyAction": {
-                "action": "openExternally",
+                "action": "debugWithChrome",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             },
             "env": {
