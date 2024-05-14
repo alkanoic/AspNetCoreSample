@@ -41,7 +41,8 @@
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "debugWithChrome",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot"
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
