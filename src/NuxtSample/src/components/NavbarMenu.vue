@@ -76,6 +76,9 @@
             >
           </li>
           <li class="menu-item">
+            <NuxtLink to="/person" @click="closeDrawer">Person</NuxtLink>
+          </li>
+          <li class="menu-item">
             <NuxtLink to="/qrod" @click="closeDrawer">QROD</NuxtLink>
           </li>
           <li class="menu-item">
