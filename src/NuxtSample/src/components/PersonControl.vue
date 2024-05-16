@@ -1,8 +1,9 @@
 <template>
   <div>
-    <h1>Person Control</h1>
+    <h1 class="text-secondary">Person Control</h1>
     <p>Name: {{ person.Name }}</p>
     <p>Age: {{ person.Age }}</p>
+    <button class="btn btn-sm btn-primary" @click="personClick()">Click</button>
   </div>
 </template>
 
@@ -18,4 +19,12 @@
       required: true,
     },
   });
+
+  const emit = defineEmits<{
+    (event: "personClick", person: PersonProps): void;
+  }>();
+
+  const personClick = (): void => {
+    emit("personClick", props.person);
+  };
 </script>

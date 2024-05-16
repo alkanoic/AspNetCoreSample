@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Person Page</h1>
-    <PersonControl :person="personProps" />
+    <h1 class="text-primary">Person Page</h1>
+    <PersonControl :person="personProps" @personClick="personClick" />
     <PersonArrayControl :people="peopleProps" />
   </div>
 </template>
@@ -23,4 +23,8 @@
       Age: "15",
     },
   ];
+
+  const personClick = (person: PersonProps): void => {
+    console.log(person);
+  };
 </script>
