@@ -26,10 +26,8 @@
     "nuxt": "^3.11.2",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.14",
     "scss": "^0.2.4",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.4.5"
+    "tailwindcss": "^3.4.3"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
@@ -40,9 +38,8 @@
     "keycloak-js": "^24.0.4",
     "pinia": "^2.1.7",
     "tabulator-tables": "^6.2.1",
-    "vue-qrcode-reader": "^5.5.4"
-  },
-  "overrides": {
-    "vue": "latest"
+    "vee-validate": "^4.12.8",
+    "vue-qrcode-reader": "^5.5.4",
+    "yup": "^1.4.0"
   }
 }

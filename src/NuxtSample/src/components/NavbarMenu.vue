@@ -88,6 +88,9 @@
             <NuxtLink to="/accordion" @click="closeDrawer">Accordion</NuxtLink>
           </li>
           <li class="menu-item">
+            <NuxtLink to="/validate" @click="closeDrawer">Validate</NuxtLink>
+          </li>
+          <li class="menu-item">
             <NuxtLink to="/login" @click="closeDrawer">Login</NuxtLink>
           </li>
           <li class="menu-item">
