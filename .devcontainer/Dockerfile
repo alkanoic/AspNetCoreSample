@@ -36,3 +36,8 @@ RUN wget https://github.com/fullstorydev/grpcurl/releases/download/v1.8.9/grpcur
     chmod +x /usr/local/bin/grpcurl && \
     rm grpcurl_1.8.9_linux_x86_64.tar.gz && \
     rm LICENSE
+
+# install mysqldef
+RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/v0.17.8/mysqldef_linux_amd64.tar.gz && \
+    tar xf mysqldef_linux_amd64.tar.gz -C /usr/local/bin/ && \
+    rm mysqldef_linux_amd64.tar.gz
