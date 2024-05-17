@@ -1,0 +1,18 @@
+{
+	"historie": {
+		"scope": "vue",
+		"prefix": [
+			"historie"
+		],
+		"body": [
+            "<template>",
+            "  <Story>",
+            "    <Variant title=\"Default\">",
+            "      <${TM_FILENAME_BASE/.story//g}></${TM_FILENAME_BASE/.story//g}>",
+            "    </Variant>",
+            "  </Story>",
+            "</template>"
+		],
+		"description": "historie"
+	}
+}

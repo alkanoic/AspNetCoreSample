@@ -1,0 +1,72 @@
+@model VueIndexViewModel
+@{
+    ViewData["Title"] = "Vue Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Vue</h1>
+</div>
+
+<input type="hidden" id="vue-target" value="@System.Text.Json.JsonSerializer.Serialize(Model)" />
+
+<div id="app">
+    <div class="container mt-5">
+        <h2>お問い合わせフォーム</h2>
+        <form class="needs-validation" novalidate>
+            <!-- ユーザー名 -->
+            <div class="mb-3 row">
+                <label for="username" class="col-sm-2 col-form-label">ユーザー名 <span class="text-danger">*</span></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="username" placeholder="ユーザー名を入力" required
+                        :value="userName">
+                    <div class="invalid-feedback">
+                        ユーザー名を入力してください。
+                    </div>
+                </div>
+            </div>
+            <!-- メールアドレス -->
+            <div class="mb-3 row">
+                <label for="email" class="col-sm-2 col-form-label">メールアドレス <span class="text-danger">*</span></label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="email" placeholder="メールアドレスを入力" required
+                        :value="email">
+                    <div class="invalid-feedback">
+                        using System.Text.Encodings.Web;
+                        有効なメールアドレスを入力してください。
+                    </div>
+                </div>
+            </div>
+            <!-- 年齢 -->
+            <div class="mb-3 row">
+                <label for="age" class="col-sm-2 col-form-label">年齢</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="age" placeholder="年齢を入力" required :value="age">
+                    <div class="invalid-feedback">
+                        年齢を入力してください。
+                    </div>
+                </div>
+            </div>
+            <!-- 誕生日 -->
+            <div class="mb-3 row">
+                <label for="birthday" class="col-sm-2 col-form-label">誕生日</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" id="birthday" required :value="birthday">
+                    <div class="invalid-feedback">
+                        誕生日を入力してください。
+                    </div>
+                </div>
+            </div>
+            <!-- 送信ボタン -->
+            <div class="mb-3 row">
+                <div class="offset-sm-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">送信</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="~/js/vue-page.js" asp-append-version="true"></script>
+}
