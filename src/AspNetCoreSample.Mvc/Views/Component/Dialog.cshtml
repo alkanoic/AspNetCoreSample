@@ -1,0 +1,20 @@
+﻿@using AspNetCoreSample.Mvc.Components
+@{
+  ViewData["Title"] = "Component Page";
+}
+
+<div class="text-center">
+  <h1 class="display-4">Dialog Component</h1>
+</div>
+
+<p>Server</p>
+<component type="typeof(DialogComponent)" render-mode="Server" />
+
+<p>ServerPrerendered</p>
+<component type="typeof(DialogComponent)" render-mode="ServerPrerendered" />
+
+<p>Static</p>
+<component type="typeof(DialogComponent)" render-mode="Static" />
+
+<p>WebAssemblyPrerendered</p>
+<component type="typeof(DialogComponent)" render-mode="WebAssemblyPrerendered" />

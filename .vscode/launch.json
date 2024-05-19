@@ -16,7 +16,8 @@
             "serverReadyAction": {
                 "action": "debugWithChrome",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot"
+                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot",
+                "killOnServerStop": true
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
@@ -42,7 +43,8 @@
             "serverReadyAction": {
                 "action": "debugWithChrome",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot"
+                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot",
+                "killOnServerStop": true
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
@@ -59,6 +61,12 @@
                 "env": {
                     "ASPNETCORE_ENVIRONMENT": "Development"
                 }
+            },
+            "serverReadyAction": {
+                "action": "debugWithChrome",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot",
+                "killOnServerStop": true
             },
             "task": "watchTaskName",
             "program": "AspNetCoreSample.Mvc.exe"

@@ -1,0 +1,35 @@
+@using AspNetCoreSample.Mvc.Components
+@{
+    ViewData["Title"] = "Component Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Razor My Component</h1>
+</div>
+
+<p>Server</p>
+<component type="typeof(MyComponent)" render-mode="Server" />
+
+<p>ServerPrerendered</p>
+<component type="typeof(MyComponent)" render-mode="ServerPrerendered" />
+
+<p>Static</p>
+<component type="typeof(MyComponent)" render-mode="Static" />
+
+<p>WebAssemblyPrerendered</p>
+<component type="typeof(MyComponent)" render-mode="WebAssemblyPrerendered" />
+
+<div class="text-center">
+    <h1 class="display-4">View Component</h1>
+</div>
+
+<!-- MVCのビューでの呼び出し -->
+@(await Component.InvokeAsync<ButtonViewComponent>("No1"))
+
+@(await Component.InvokeAsync<ButtonViewComponent>("No2"))
+
+@(await Component.InvokeAsync<ButtonViewComponent>("No3"))
+
+@section Scripts {
+
+}

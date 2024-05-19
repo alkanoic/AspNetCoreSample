@@ -15,4 +15,14 @@ public class ComponentController : Controller
     {
         return View();
     }
+
+    public IActionResult My()
+    {
+        return View();
+    }
+
+    public IActionResult Dialog()
+    {
+        return View();
+    }
 }

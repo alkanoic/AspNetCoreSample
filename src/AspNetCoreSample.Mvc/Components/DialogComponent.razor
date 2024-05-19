@@ -1,4 +1,4 @@
-@page "/mycomponent"
+@page "/dialogcomponent"
 @inject HttpClient Http
 @inject IOptions<WebApiOption> _webApiOption
 @using System.Net.Http.Headers
@@ -7,29 +7,35 @@
 @using AspNetCoreSample.Mvc.Options
 @using Microsoft.Extensions.Options
 
-<h3>Hello from MyComponent</h3>
+<h3>Hello from DialogComponent</h3>
 
-<button @onclick="UpdateData">Update</button>
+<input type="text" />
+<button @onclick="UpdateData()">dialog</button>
 
-@if (data == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <p>Summary: @data.Summary</p>
-    <p>Temperature: @data.TemperatureC</p>
-}
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Summary</th>
+            <th>Temperature</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in data ?? new List<WeatherForecast>())
+        {
+            <tr>
+                <td>@d.Date</td>
+                <td>@d.Summary</td>
+                <td>@d.TemperatureC</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
-    private WeatherForecast? data;
+    private IEnumerable<WeatherForecast>? data;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await UpdateData();
-    }
-
-    private async Task UpdateData()
+    private void UpdateData()
     {
         var handler = new HttpClientHandler
             {
@@ -43,15 +49,15 @@ else
         client.BaseAddress = new Uri($"{_webApiOption.Value.WebApiBaseUrl}/api/");
         client.DefaultRequestHeaders.Accept.Clear();
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        HttpResponseMessage response = await client.GetAsync("WeatherForecast");
-        string jsonString = await response.Content.ReadAsStringAsync();
+        HttpResponseMessage response = client.GetAsync("WeatherForecast").Result;
+        string jsonString = response.Content.ReadAsStringAsync().Result;
         var options = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
         var d = JsonSerializer.Deserialize<WeatherForecast[]>(jsonString, options);
-        if (d is not null && d.Length != 0)
-            data = d[0];
+        if (d is not null)
+            data = d;
     }
 
     public class WeatherForecast
