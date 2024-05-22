@@ -82,6 +82,31 @@
             }
         },
         {
+            "name": "Aspire",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "aspire-build",
+            "program": "${workspaceFolder}/src/AspNetCoreSample.AppHost/bin/Debug/net8.0/AspNetCoreSample.AppHost.dll",
+            "args": [],
+            "launchSettingsProfile": "http",
+            "cwd": "${workspaceFolder}/src/AspNetCoreSample.AppHost",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "debugWithChrome",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                // "pattern": "Login to the dashboard at\\s+(https?://\\S+)",
+                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot",
+                "killOnServerStop": true
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPIRE_ALLOW_UNSECURED_TRANSPORT": "true"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/src/AspNetCoreSample.Mvc/Views"
+            }
+        },
+        {
             "name": "Grpc",
             "type": "coreclr",
             "request": "launch",
