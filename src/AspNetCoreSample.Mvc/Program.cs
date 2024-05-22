@@ -19,7 +19,7 @@ builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddServerSideBlazor();
 
 var connectionString = builder.Configuration.GetConnectionString("Default") ?? "";
 builder.Services.AddDbContext<SampleContext>(
@@ -92,9 +92,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.MapBlazorHub();
 
 app.Run();
 

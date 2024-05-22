@@ -1,4 +1,5 @@
-﻿@{
+﻿@using AspNetCoreSample.Mvc.Views.Components
+@{
   ViewData["Title"] = "Component Page";
 }
 
@@ -10,3 +11,10 @@
   <li><a asp-controller="Component" asp-action="My">MyComponent</a></li>
   <li><a asp-controller="Component" asp-action="Dialog">DialogComponent</a></li>
 </ul>
+
+<p>ServerPrerendered</p>
+<component type="typeof(CounterComponent)" render-mode="ServerPrerendered" />
+
+@section Scripts {
+  <script src="~/_framework/blazor.server.js"></script>
+}

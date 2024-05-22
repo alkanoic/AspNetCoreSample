@@ -1,4 +1,4 @@
-@using AspNetCoreSample.Mvc.Components
+@using AspNetCoreSample.Mvc.Views.Components
 @{
     ViewData["Title"] = "Component Page";
 }
@@ -31,5 +31,5 @@
 @(await Component.InvokeAsync<ButtonViewComponent>("No3"))
 
 @section Scripts {
-
+    <script src="_framework/blazor.server.js"></script>
 }

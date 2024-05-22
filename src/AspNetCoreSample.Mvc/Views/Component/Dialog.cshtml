@@ -1,4 +1,4 @@
-﻿@using AspNetCoreSample.Mvc.Components
+﻿@using AspNetCoreSample.Mvc.Views.Components
 @{
   ViewData["Title"] = "Component Page";
 }
@@ -18,3 +18,7 @@
 
 <p>WebAssemblyPrerendered</p>
 <component type="typeof(DialogComponent)" render-mode="WebAssemblyPrerendered" />
+
+@section Scripts {
+  <script src="/_framework/blazor.server.js"></script>
+}
