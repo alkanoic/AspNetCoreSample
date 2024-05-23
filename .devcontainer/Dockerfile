@@ -38,6 +38,18 @@ RUN wget https://github.com/fullstorydev/grpcurl/releases/download/v1.8.9/grpcur
     rm LICENSE
 
 # install mysqldef
-RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/v0.17.8/mysqldef_linux_amd64.tar.gz && \
+ARG SQLDEF_VERSION=v0.17.10
+
+RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/mysqldef_linux_amd64.tar.gz && \
     tar xf mysqldef_linux_amd64.tar.gz -C /usr/local/bin/ && \
     rm mysqldef_linux_amd64.tar.gz
+
+# install psqldef
+RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/psqldef_linux_amd64.tar.gz && \
+    tar xf psqldef_linux_amd64.tar.gz -C /usr/local/bin/ && \
+    rm psqldef_linux_amd64.tar.gz
+
+# install mssqldef
+RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/mssqldef_linux_amd64.tar.gz && \
+    tar xf mssqldef_linux_amd64.tar.gz -C /usr/local/bin/ && \
+    rm mssqldef_linux_amd64.tar.gz

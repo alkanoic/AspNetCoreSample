@@ -1,0 +1,16 @@
+USE sample;
+GO
+
+CREATE TABLE name
+(
+    id INT NOT NULL IDENTITY (1, 1) PRIMARY KEY,
+    name NVARCHAR (10) NOT NULL
+);
+GO
+
+CREATE TABLE csv_table
+(
+    id INT NOT NULL PRIMARY KEY,
+    name NVARCHAR (10) NOT NULL
+);
+GO
