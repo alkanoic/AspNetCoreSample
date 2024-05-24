@@ -1,10 +1,15 @@
-import { defineStore } from "pinia";
+import { defineStore, mapActions } from "pinia";
 import Keycloak from "keycloak-js";
 
 interface KeycloakAuthState {
   isAuthenticated: boolean;
   accessToken: string | null;
   username: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  token: string | null;
+  keycloak: Keycloak | null;
 }
 
 export const useKeycloakAuthStore = defineStore("auth", {
@@ -12,15 +17,23 @@ export const useKeycloakAuthStore = defineStore("auth", {
     isAuthenticated: false,
     accessToken: null,
     username: null,
+    firstName: null,
+    lastName: null,
+    email: null,
+    token: null,
     keycloak: null,
   }),
 
   getters: {
     getUsername: (state) => state.username,
+    getLastName: (state) => state.lastName,
+    getFirstName: (state) => state.firstName,
+    getEmail: (state) => state.email,
+    getToken: (state) => state.token,
   },
 
   actions: {
-    async login() {
+    async login(redirectUri: string) {
       const runtimeConfig = useRuntimeConfig();
       this.keycloak = new Keycloak({
         url: runtimeConfig.public.keycloakUrl,
@@ -35,10 +48,15 @@ export const useKeycloakAuthStore = defineStore("auth", {
         });
         if (this.keycloak.authenticated) {
           const profile = await this.keycloak.loadUserProfile();
-          console.log(profile);
-          console.log(this.keycloak.token);
+          this.username = profile.username ?? "";
+          this.lastName = profile.lastName ?? "";
+          this.firstName = profile.firstName ?? "";
+          this.email = profile.email ?? "";
+          this.token = this.keycloak.token!;
         } else {
-          await this.keycloak.login();
+          await this.keycloak.login({
+            redirectUri: redirectUri,
+          });
         }
       } catch (error) {
         console.error("Authentication failed:", error);

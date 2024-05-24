@@ -27,7 +27,7 @@
 			"settings": {
 				"editor.formatOnSave": true,
 				"[vue]": {
-					"editor.defaultFormatter": "esbenp.prettier-vscode"
+					"editor.defaultFormatter": "Vue.volar"
 				}
 			}
 		}
