@@ -9,6 +9,7 @@ interface KeycloakAuthState {
   lastName: string | null;
   email: string | null;
   token: string | null;
+  roles: string[] | null;
   keycloak: Keycloak | null;
 }
 
@@ -21,6 +22,7 @@ export const useKeycloakAuthStore = defineStore("auth", {
     lastName: null,
     email: null,
     token: null,
+    roles: null,
     keycloak: null,
   }),
 
@@ -30,6 +32,7 @@ export const useKeycloakAuthStore = defineStore("auth", {
     getFirstName: (state) => state.firstName,
     getEmail: (state) => state.email,
     getToken: (state) => state.token,
+    getRoles: (state) => state.roles,
   },
 
   actions: {
@@ -53,6 +56,7 @@ export const useKeycloakAuthStore = defineStore("auth", {
           this.firstName = profile.firstName ?? "";
           this.email = profile.email ?? "";
           this.token = this.keycloak.token!;
+          this.roles = this.keycloak.realmAccess?.roles || [];
         } else {
           await this.keycloak.login({
             redirectUri: redirectUri,
@@ -61,6 +65,11 @@ export const useKeycloakAuthStore = defineStore("auth", {
       } catch (error) {
         console.error("Authentication failed:", error);
       }
+    },
+    async Logout(redirectUri: string) {
+      await this.keycloak?.logout({
+        redirectUri: redirectUri,
+      });
     },
   },
 });

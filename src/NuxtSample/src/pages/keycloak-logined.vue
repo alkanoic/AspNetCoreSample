@@ -6,6 +6,8 @@
     <p>LastName: {{ keycloakAuthStore.getLastName }}</p>
     <p>Email: {{ keycloakAuthStore.getEmail }}</p>
     <p>Token: {{ keycloakAuthStore.getToken }}</p>
+    <p>Roles: {{ keycloakAuthStore.getRoles }}</p>
+    <button class="btn btn-primary" @click="logout">logout</button>
   </div>
 </template>
 
@@ -16,5 +18,9 @@ const keycloakAuthStore = useKeycloakAuthStore();
 definePageMeta({
   middleware: ["keycloak-auth"],
 });
+
+async function logout() {
+  await keycloakAuthStore.Logout(location.origin);
+}
 
 </script>
