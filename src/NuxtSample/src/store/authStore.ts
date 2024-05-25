@@ -1,9 +1,19 @@
 import { jwtDecode, type JwtPayload } from "jwt-decode";
 import { defineStore } from "pinia";
-import StateCounter from "~/pages/state-counter.vue";
 
-function getAccessTokenDecode(accessToken: string): JwtPayload {
-  return jwtDecode(accessToken);
+interface KeycloakJwtPayload extends JwtPayload {
+  realm_access: {
+    roles: string[];
+  };
+  name: string;
+  preferred_username: string;
+  given_name: string;
+  family_name: string;
+  email: string;
+}
+
+function getAccessTokenDecode(accessToken: string): KeycloakJwtPayload {
+  return jwtDecode<KeycloakJwtPayload>(accessToken);
 }
 
 export const useAuthStore = defineStore("auth", {
