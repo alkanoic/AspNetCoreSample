@@ -1,6 +1,9 @@
+import { useAuthStore } from "~/store/authStore";
+
 export default defineNuxtRouteMiddleware(() => {
-  const cookie = useCookie("access_token");
-  if (!cookie.value) {
+  const authStore = useAuthStore();
+  if (!authStore.isAuthenticate) {
     return { path: "/login" };
   }
+  return;
 });

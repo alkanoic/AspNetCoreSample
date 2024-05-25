@@ -3,7 +3,6 @@ import Keycloak from "keycloak-js";
 
 interface KeycloakAuthState {
   isAuthenticated: boolean;
-  accessToken: string | null;
   username: string | null;
   firstName: string | null;
   lastName: string | null;
@@ -16,7 +15,6 @@ interface KeycloakAuthState {
 export const useKeycloakAuthStore = defineStore("auth", {
   state: (): KeycloakAuthState => ({
     isAuthenticated: false,
-    accessToken: null,
     username: null,
     firstName: null,
     lastName: null,
