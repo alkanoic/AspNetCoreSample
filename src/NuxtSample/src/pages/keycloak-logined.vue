@@ -16,11 +16,10 @@ import { useKeycloakAuthStore } from "~/store/keycloakAuthStore";
 const keycloakAuthStore = useKeycloakAuthStore();
 
 definePageMeta({
-  middleware: ["keycloak-auth"],
+  middleware: "keycloak-auth",
 });
 
 async function logout() {
   await keycloakAuthStore.Logout(location.origin);
 }
-
 </script>

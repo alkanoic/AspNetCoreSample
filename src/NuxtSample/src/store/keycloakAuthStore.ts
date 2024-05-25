@@ -1,4 +1,4 @@
-import { defineStore, mapActions } from "pinia";
+import { defineStore } from "pinia";
 import Keycloak from "keycloak-js";
 
 interface KeycloakAuthState {
