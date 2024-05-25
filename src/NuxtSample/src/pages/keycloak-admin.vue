@@ -1,5 +1,5 @@
 <template>
-    <p>Admin Page</p>
+    <p>Keycloak Admin Page</p>
 </template>
 
 <script setup lang="ts">

@@ -1,23 +1,29 @@
+import { jwtDecode, type JwtPayload } from "jwt-decode";
 import { defineStore } from "pinia";
+import StateCounter from "~/pages/state-counter.vue";
 
-interface AuthState {
-  accessToken: string | null;
-  roles: string[] | null;
+function getAccessTokenDecode(accessToken: string): JwtPayload {
+  return jwtDecode(accessToken);
 }
 
 export const useAuthStore = defineStore("auth", {
-  state: (): AuthState => ({
-    accessToken: null,
-    roles: null,
+  state: () => ({
+    accessToken: "",
   }),
-
   getters: {
-    isAuthenticate: (): boolean => {
-      const cookie = useCookie("access_token");
-      return cookie.value ? true : false;
-    },
-    getAccessToken: (state) => state.accessToken,
-    getRoles: (state) => state.roles,
+    isAuthenticate: (state): boolean => (state.accessToken ? true : false),
+    getAccessToken: (state): string => state.accessToken ?? "",
+    getRoles: (state): string[] =>
+      getAccessTokenDecode(state.accessToken ?? "").realm_access.roles,
+    getName: (state) => getAccessTokenDecode(state.accessToken ?? "").name,
+    getPreferredUsername: (state) =>
+      getAccessTokenDecode(state.accessToken ?? "").preferred_username,
+    getGivenName: (state) =>
+      getAccessTokenDecode(state.accessToken ?? "").given_name,
+    getFamilyName: (state) =>
+      getAccessTokenDecode(state.accessToken ?? "").family_name,
+    getEmail: (state) => getAccessTokenDecode(state.accessToken ?? "").email,
+    getDetails: (state) => getAccessTokenDecode(state.accessToken ?? ""),
   },
 
   actions: {
@@ -47,6 +53,7 @@ export const useAuthStore = defineStore("auth", {
             maxAge: 3600, // 1時間
           });
           cookie.value = data.access_token;
+          this.accessToken = data.access_token;
 
           return true;
         } else {
@@ -61,6 +68,7 @@ export const useAuthStore = defineStore("auth", {
     logout() {
       const cookie = useCookie("access_token");
       cookie.value = null;
+      this.accessToken = "";
     },
   },
 });

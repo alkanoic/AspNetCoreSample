@@ -70,6 +70,9 @@
             <NuxtLink to="/logined" @click="closeDrawer">Logined</NuxtLink>
           </li>
           <li class="menu-item">
+            <NuxtLink to="/login-admin" @click="closeDrawer">LoginAdminPage</NuxtLink>
+          </li>
+          <li class="menu-item">
             <NuxtLink to="/keycloak-logined" @click="closeDrawer">KeycloakLogined</NuxtLink>
           </li>
           <li class="menu-item">

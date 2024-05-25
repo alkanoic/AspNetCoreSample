@@ -1,9 +1,9 @@
-import { useKeycloakAuthStore } from "~/store/keycloakAuthStore";
+import { useAuthStore } from "~/store/authStore";
 
 export default defineNuxtRouteMiddleware(() => {
-  const keycloakStore = useKeycloakAuthStore();
-  if (keycloakStore.getRoles?.includes("admin")) {
+  const authStore = useAuthStore();
+  if (authStore.getRoles.includes("admin")) {
     return;
   }
-  return { path: "/keycloak-access-denied" };
+  return { path: "/login-access-denied" };
 });
