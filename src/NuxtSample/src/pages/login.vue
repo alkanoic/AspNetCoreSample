@@ -43,7 +43,8 @@ async function login() {
   error.value = "";
   const result = await authStore.login(username.value, password.value);
   if (result) {
-    navigateTo("/logined");
+    const route = useRoute();
+    navigateTo(route.query.redirectUri || "/logined");
   } else {
     error.value = "login failed: username or password is invalid";
     username.value = "";
