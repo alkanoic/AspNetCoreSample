@@ -54,8 +54,8 @@ export const useAuthStore = defineStore("auth", {
             }),
           }
         );
-        const data = await response.json();
         if (response.ok) {
+          const data = await response.json();
           // アクセストークンをHTTPOnly Cookieに保存
           const cookie = useCookie("access_token", {
             path: "/",

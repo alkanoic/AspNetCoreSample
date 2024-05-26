@@ -8,10 +8,14 @@
     <p>Token: {{ keycloakAuthStore.getToken }}</p>
     <p>RefreshToken: {{ keycloakAuthStore.getRefreshToken }}</p>
     <p>Roles: {{ keycloakAuthStore.getRoles }}</p>
+    <p>Expire: {{ keycloakAuthStore.getExpire }}</p>
+    <p>Iat: {{ keycloakAuthStore.getIat }}</p>
     <button class="btn btn-primary" @click="logout">logout</button>
     <hr class="my-3" />
     <button class="btn btn-secondary" @click="fetchWebapi">webapi</button>
     <p>{{ webapi }}</p>
+    <button class="btn btn-primary" @click="refreshAccessToken">Refresh</button>
+    <p>{{ refresh }}</p>
   </div>
 </template>
 
@@ -19,6 +23,7 @@
 import { useKeycloakAuthStore } from "~/store/keycloakAuthStore";
 const keycloakAuthStore = useKeycloakAuthStore();
 const webapi = ref("");
+const refresh = ref();
 
 definePageMeta({
   middleware: "keycloak-auth",
@@ -45,8 +50,8 @@ async function fetchWebapi() {
         }
       }
     );
-    const data = await response.json();
     if (response.ok) {
+      const data = await response.json();
       webapi.value = data;
       return true;
     } else {
@@ -57,5 +62,10 @@ async function fetchWebapi() {
     console.error(error);
     return false;
   }
+}
+
+async function refreshAccessToken() {
+  await keycloakAuthStore.RefreshAccessToken();
+  refresh.value = new Date();
 }
 </script>

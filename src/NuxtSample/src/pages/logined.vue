@@ -66,8 +66,8 @@ async function fetchWebapi() {
         }
       }
     );
-    const data = await response.json();
     if (response.ok) {
+      const data = await response.json();
       webapi.value = data;
       return true;
     } else {
