@@ -10,7 +10,7 @@ export default defineNuxtRouteMiddleware((to) => {
     return keycloakStore
       .login(location.origin + to.path)
       .then(() => {
-        if (!keycloakStore.getToken) {
+        if (keycloakStore.isAuthenticated) {
           return;
         }
       })

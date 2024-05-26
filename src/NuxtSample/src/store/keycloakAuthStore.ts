@@ -48,6 +48,7 @@ export const useKeycloakAuthStore = defineStore("auth", {
       try {
         await this.keycloak.init({
           onLoad: "check-sso",
+          silentCheckSsoFallback: false,
           silentCheckSsoRedirectUri: `${location.origin}/silent-check-sso.html`,
         });
         if (this.keycloak.authenticated) {

@@ -20,13 +20,13 @@
 import { useAuthStore } from "~/store/authStore"
 const authStore = useAuthStore();
 const accessToken = ref("");
-const roles = ref("");
+const roles = ref([""]);
 const name = ref("");
 const preferredUsername = ref("");
 const givenName = ref("");
 const familyName = ref("");
 const email = ref("");
-const details = ref("");
+const details = ref();
 const webapi = ref("");
 
 definePageMeta({

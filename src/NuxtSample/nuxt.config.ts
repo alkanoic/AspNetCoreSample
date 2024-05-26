@@ -29,7 +29,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      keycloakUrl: "http://localhost:8080",
+      keycloakUrl: "http://keycloak:8080",
       keycloakRealm: "Test",
       keycloakClientId: "spa-client",
       apiBaseUrl: process.env.API_BASE_URL || "https://localhost:7036",
