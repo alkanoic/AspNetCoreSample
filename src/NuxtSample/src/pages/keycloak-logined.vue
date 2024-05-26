@@ -6,6 +6,7 @@
     <p>LastName: {{ keycloakAuthStore.getLastName }}</p>
     <p>Email: {{ keycloakAuthStore.getEmail }}</p>
     <p>Token: {{ keycloakAuthStore.getToken }}</p>
+    <p>RefreshToken: {{ keycloakAuthStore.getRefreshToken }}</p>
     <p>Roles: {{ keycloakAuthStore.getRoles }}</p>
     <button class="btn btn-primary" @click="logout">logout</button>
   </div>

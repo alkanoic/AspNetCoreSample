@@ -10,6 +10,9 @@
     <p>Email: {{ email }}</p>
     <p>details: {{ details }}</p>
     <button class="btn btn-primary" @click="logout">logout</button>
+    <hr class="my-3" />
+    <button class="btn btn-secondary" @click="fetchWebapi">webapi</button>
+    <p>{{ webapi }}</p>
   </div>
 </template>
 
@@ -24,6 +27,7 @@ const givenName = ref("");
 const familyName = ref("");
 const email = ref("");
 const details = ref("");
+const webapi = ref("");
 
 definePageMeta({
   middleware: ["auth"],
@@ -43,5 +47,36 @@ onMounted(() => {
 function logout() {
   authStore.logout();
   navigateTo("/login");
+}
+
+async function fetchWebapi() {
+  webapi.value = "";
+  try {
+    const runtimeConfig = useRuntimeConfig();
+    const params = {
+      sample: "sample"
+    };
+    const response = await fetch(
+      `${runtimeConfig.public.apiBaseUrl}/api/auth/sample?` + new URLSearchParams(params),
+      {
+        method: "GET",
+        headers: {
+          "accept": "application/json",
+          "Authorization": `Bearer ${authStore.getAccessToken}`
+        }
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+      webapi.value = data;
+      return true;
+    } else {
+      console.log("webapi failed");
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
 }
 </script>

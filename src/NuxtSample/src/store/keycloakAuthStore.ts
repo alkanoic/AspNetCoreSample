@@ -8,6 +8,7 @@ interface KeycloakAuthState {
   lastName: string | null;
   email: string | null;
   token: string | null;
+  refreshToken: string | null;
   roles: string[] | null;
   keycloak: Keycloak | null;
 }
@@ -20,6 +21,7 @@ export const useKeycloakAuthStore = defineStore("auth", {
     lastName: null,
     email: null,
     token: null,
+    refreshToken: null,
     roles: null,
     keycloak: null,
   }),
@@ -30,6 +32,7 @@ export const useKeycloakAuthStore = defineStore("auth", {
     getFirstName: (state) => state.firstName,
     getEmail: (state) => state.email,
     getToken: (state) => state.token,
+    getRefreshToken: (state) => state.refreshToken,
     getRoles: (state) => state.roles,
   },
 
@@ -54,6 +57,7 @@ export const useKeycloakAuthStore = defineStore("auth", {
           this.firstName = profile.firstName ?? "";
           this.email = profile.email ?? "";
           this.token = this.keycloak.token!;
+          this.refreshToken = this.keycloak.refreshToken!;
           this.roles = this.keycloak.realmAccess?.roles || [];
         } else {
           await this.keycloak.login({
