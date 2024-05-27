@@ -1,15 +1,17 @@
 <template>
   <div>
     <label>logined</label>
-    <p>accessToken: {{ accessToken }}</p>
-    <p>refreshToken: {{ refreshToken }}</p>
-    <p>Roles: {{ roles }}</p>
-    <p>Name: {{ name }}</p>
-    <p>PreferredUsername: {{ preferredUsername }}</p>
-    <p>GivenName: {{ givenName }}</p>
-    <p>FamilyName: {{ familyName }}</p>
-    <p>Email: {{ email }}</p>
-    <p>details: {{ details }}</p>
+    <p>Name: {{ authStore.getName }}</p>
+    <p>PreferredUsername: {{ authStore.getPreferredUsername }}</p>
+    <p>GivenName: {{ authStore.getGivenName }}</p>
+    <p>FamilyName: {{ authStore.getFamilyName }}</p>
+    <p>Email: {{ authStore.getEmail }}</p>
+    <p>accessToken: {{ authStore.getAccessToken }}</p>
+    <p>refreshToken: {{ authStore.getRefreshToken }}</p>
+    <p>Roles: {{ authStore.getRoles }}</p>
+    <p>details: {{ authStore.getDetails }}</p>
+    <p>Expire: {{ authStore.getExpire }}</p>
+    <p>Iat: {{ authStore.getIat }}</p>
     <button class="btn btn-primary" @click="logout">logout</button>
     <hr class="my-3" />
     <button class="btn btn-secondary" @click="fetchWebapi">webapi</button>
@@ -22,32 +24,11 @@
 <script setup lang="ts">
 import { useAuthStore } from "~/store/authStore"
 const authStore = useAuthStore();
-const accessToken = ref("");
-const refreshToken = ref("");
-const roles = ref([""]);
-const name = ref("");
-const preferredUsername = ref("");
-const givenName = ref("");
-const familyName = ref("");
-const email = ref("");
-const details = ref();
 const webapi = ref("");
 const refresh = ref();
 
 definePageMeta({
   middleware: ["auth"],
-});
-
-onMounted(() => {
-  accessToken.value = authStore.getAccessToken;
-  refreshToken.value = authStore.getRefreshToken;
-  roles.value = authStore.getRoles;
-  name.value = authStore.getName;
-  preferredUsername.value = authStore.getPreferredUsername;
-  givenName.value = authStore.getGivenName;
-  familyName.value = authStore.getFamilyName;
-  email.value = authStore.getEmail;
-  details.value = authStore.getDetails;
 });
 
 function logout() {
@@ -87,7 +68,10 @@ async function fetchWebapi() {
 }
 
 async function refreshAccessToken() {
-  await authStore.refreshAccessToken();
+  if (!await authStore.refreshAccessToken()) {
+    refresh.value = "まだ有効期限内です"
+    return;
+  }
   refresh.value = new Date();
   accessToken.value = authStore.getAccessToken;
   refreshToken.value = authStore.getRefreshToken;

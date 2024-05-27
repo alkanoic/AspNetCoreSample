@@ -16,6 +16,14 @@ function getAccessTokenDecode(accessToken: string): KeycloakJwtPayload {
   return jwtDecode<KeycloakJwtPayload>(accessToken);
 }
 
+function calcJpTime(exp: number) {
+  // expをミリ秒に変換してDateオブジェクトを作成
+  const expDate = new Date(exp * 1000);
+  // 日本時間（JST）に変換
+  const options = { timeZone: "Asia/Tokyo", hour12: false };
+  return expDate.toLocaleString("ja-JP", options);
+}
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     accessToken: "",
@@ -35,6 +43,11 @@ export const useAuthStore = defineStore("auth", {
     getFamilyName: (state) =>
       getAccessTokenDecode(state.accessToken ?? "").family_name,
     getEmail: (state) => getAccessTokenDecode(state.accessToken ?? "").email,
+    getExpireNum: (state) => getAccessTokenDecode(state.accessToken ?? "").exp,
+    getExpire: (state) =>
+      calcJpTime(getAccessTokenDecode(state.accessToken ?? "").exp!),
+    getIat: (state) =>
+      calcJpTime(getAccessTokenDecode(state.accessToken ?? "").iat!),
     getDetails: (state) => getAccessTokenDecode(state.accessToken ?? ""),
   },
 
@@ -84,7 +97,8 @@ export const useAuthStore = defineStore("auth", {
       this.accessToken = "";
       this.refreshToken = "";
     },
-    async refreshAccessToken() {
+    async refreshAccessToken(): Promise<boolean> {
+      if (this.getExpireNum! >= new Date().getTime() / 1000) return false;
       try {
         const runtimeConfig = useRuntimeConfig();
         // ここでWebAPIに対してユーザー名とパスワードを送信し、アクセストークンを取得する
