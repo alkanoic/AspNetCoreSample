@@ -19,10 +19,12 @@ function getAccessTokenDecode(accessToken: string): KeycloakJwtPayload {
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     accessToken: "",
+    refreshToken: "",
   }),
   getters: {
     isAuthenticate: (state): boolean => (state.accessToken ? true : false),
     getAccessToken: (state): string => state.accessToken ?? "",
+    getRefreshToken: (state): string => state.refreshToken ?? "",
     getRoles: (state): string[] =>
       getAccessTokenDecode(state.accessToken ?? "").realm_access.roles,
     getName: (state) => getAccessTokenDecode(state.accessToken ?? "").name,
@@ -64,6 +66,7 @@ export const useAuthStore = defineStore("auth", {
           });
           cookie.value = data.access_token;
           this.accessToken = data.access_token;
+          this.refreshToken = data.refresh_token;
 
           return true;
         } else {
@@ -79,6 +82,45 @@ export const useAuthStore = defineStore("auth", {
       const cookie = useCookie("access_token");
       cookie.value = null;
       this.accessToken = "";
+      this.refreshToken = "";
+    },
+    async refreshAccessToken() {
+      try {
+        const runtimeConfig = useRuntimeConfig();
+        // ここでWebAPIに対してユーザー名とパスワードを送信し、アクセストークンを取得する
+        const response = await fetch(
+          `${runtimeConfig.public.apiBaseUrl}/api/auth/updatetoken`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              refreshToken: this.refreshToken,
+            }),
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          // アクセストークンをHTTPOnly Cookieに保存
+          const cookie = useCookie("access_token", {
+            path: "/",
+            sameSite: "strict",
+            maxAge: 3600, // 1時間
+          });
+          cookie.value = data.access_token;
+          this.accessToken = data.access_token;
+          this.refreshToken = data.refresh_token;
+
+          return true;
+        } else {
+          console.log("token update failed");
+          return false;
+        }
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
     },
   },
 });

@@ -2,6 +2,7 @@
   <div>
     <label>logined</label>
     <p>accessToken: {{ accessToken }}</p>
+    <p>refreshToken: {{ refreshToken }}</p>
     <p>Roles: {{ roles }}</p>
     <p>Name: {{ name }}</p>
     <p>PreferredUsername: {{ preferredUsername }}</p>
@@ -13,6 +14,8 @@
     <hr class="my-3" />
     <button class="btn btn-secondary" @click="fetchWebapi">webapi</button>
     <p>{{ webapi }}</p>
+    <button class="btn btn-primary" @click="refreshAccessToken">Refresh</button>
+    <p>{{ refresh }}</p>
   </div>
 </template>
 
@@ -20,6 +23,7 @@
 import { useAuthStore } from "~/store/authStore"
 const authStore = useAuthStore();
 const accessToken = ref("");
+const refreshToken = ref("");
 const roles = ref([""]);
 const name = ref("");
 const preferredUsername = ref("");
@@ -28,6 +32,7 @@ const familyName = ref("");
 const email = ref("");
 const details = ref();
 const webapi = ref("");
+const refresh = ref();
 
 definePageMeta({
   middleware: ["auth"],
@@ -35,6 +40,7 @@ definePageMeta({
 
 onMounted(() => {
   accessToken.value = authStore.getAccessToken;
+  refreshToken.value = authStore.getRefreshToken;
   roles.value = authStore.getRoles;
   name.value = authStore.getName;
   preferredUsername.value = authStore.getPreferredUsername;
@@ -78,5 +84,12 @@ async function fetchWebapi() {
     console.error(error);
     return false;
   }
+}
+
+async function refreshAccessToken() {
+  await authStore.refreshAccessToken();
+  refresh.value = new Date();
+  accessToken.value = authStore.getAccessToken;
+  refreshToken.value = authStore.getRefreshToken;
 }
 </script>
