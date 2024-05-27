@@ -25,6 +25,12 @@ public class AuthController : ControllerBase
         return await _tokenService.GetTokenAsync(request);
     }
 
+    [HttpPost("UpdateToken")]
+    public async ValueTask<TokenResponse> UpdateToken(UpdateTokenRequest request)
+    {
+        return await _tokenService.UpdateTokenAsync(request);
+    }
+
     [Authorize]
     [HttpGet("Sample")]
     public ValueTask<string> Sample(string sample)

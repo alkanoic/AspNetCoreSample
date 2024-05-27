@@ -40,4 +40,27 @@ public class TokenService : ITokenService
         if (json == null) throw new InvalidDataException("authenticate fail response");
         return json;
     }
+
+    public async ValueTask<TokenResponse> UpdateTokenAsync(UpdateTokenRequest updateTokenRequest)
+    {
+        var tokenEndpoint = _keycloakOptions.TokenEndpoint;
+        var parameters = new Dictionary<string, string>
+        {
+            ["grant_type"] = "refresh_token",
+            ["client_id"] = _keycloakOptions.ClientId,
+            ["client_secret"] = _keycloakOptions.ClientSecret,
+            ["refresh_token"] = updateTokenRequest.RefreshToken
+        };
+
+        var encodedContent = new FormUrlEncodedContent(parameters);
+        var response = await _httpClient.PostAsync(tokenEndpoint, encodedContent);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidDataException("authenticate fail response");
+        }
+        var content = await response.Content.ReadAsStringAsync();
+        var json = JsonSerializer.Deserialize<TokenResponse>(content);
+        if (json == null) throw new InvalidDataException("authenticate fail response");
+        return json;
+    }
 }
