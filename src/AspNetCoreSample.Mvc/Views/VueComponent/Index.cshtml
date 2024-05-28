@@ -1,0 +1,14 @@
+﻿@{
+  ViewData["Title"] = "Vue Component Page";
+}
+
+<div class="text-center">
+  <h1 class="display-4">Vue Component</h1>
+</div>
+
+<my-hello msg="Hello from ASP.NET Core MVC!"></my-hello>
+
+@section Scripts {
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="~/js/my-vue-webcomponent.umd.js" asp-append-version="true"></script>
+}
