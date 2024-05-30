@@ -16,7 +16,8 @@
             "serverReadyAction": {
                 "action": "debugWithChrome",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot"
+                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot",
+                "killOnServerStop": true
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
