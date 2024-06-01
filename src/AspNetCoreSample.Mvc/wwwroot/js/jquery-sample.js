@@ -1,4 +1,8 @@
+/// <reference path="../lib/jquery/dist/jquery.min.js" />
+/// <reference path="js-options.js" />
+
 $(document).on("click", ".sample-button", async function () {
+  console.log(jsOptions);
   try {
     const response = await fetch(`/jquery/SampleApi`, {
       method: "POST",

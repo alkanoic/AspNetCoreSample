@@ -66,6 +66,7 @@ var vapidOption = new AspNetCoreSample.Mvc.Options.VapidOption()
 builder.Services.AddSingleton(vapidOption);
 
 builder.Services.Configure<WebApiOption>(builder.Configuration.GetSection(WebApiOption.Position));
+builder.Services.Configure<JavaScriptOptions>(builder.Configuration.GetSection(nameof(JavaScriptOptions)));
 
 var app = builder.Build();
 
