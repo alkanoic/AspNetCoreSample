@@ -20,6 +20,13 @@ public class JQueryController : Controller
         return View();
     }
 
+    public async ValueTask<IActionResult> PartialViewExample()
+    {
+        await Task.Delay(1000);
+        var model = "これは部分ビューからのデータです";
+        return PartialView("_ExamplePartial", model);
+    }
+
     public SampleResponse SampleApi([FromBody] SampleRequest request)
     {
         return new SampleResponse() { Text = request.Text, Result = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture) };
