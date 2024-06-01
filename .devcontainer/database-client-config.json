@@ -1,0 +1,73 @@
+{
+  "database": {
+    "1717239184015": {
+      "host": "127.0.0.1",
+      "port": 3306,
+      "user": "root",
+      "password": "mysql",
+      "dbType": "MySQL",
+      "database": "sample",
+      "name": "mysql",
+      "advance": {
+        "hideSystemSchema": true,
+        "groupingTables": false
+      },
+      "treeFeatures": [],
+      "timezone": "+00:00",
+      "useConnectionString": false,
+      "usingSSH": false,
+      "useSocksProxy": false,
+      "useHTTPProxy": false,
+      "global": true,
+      "savePassword": "Forever",
+      "readonly": false,
+      "sort": 11,
+      "group": "A",
+      "useSSL": false,
+      "fs": {
+        "encoding": "utf8",
+        "showHidden": true
+      },
+      "httpAuth": {
+        "authType": "none"
+      },
+      "key": "1717239184015",
+      "connectionKey": "database.connections"
+    }
+  },
+  "nosql": {
+    "1717243027744": {
+      "host": "garnet",
+      "port": 6379,
+      "dbType": "Redis",
+      "database": "0",
+      "name": "garnet",
+      "advance": {
+        "hideSystemSchema": true,
+        "groupingTables": false
+      },
+      "treeFeatures": [],
+      "timezone": "+00:00",
+      "usingSSH": false,
+      "useSocksProxy": false,
+      "useHTTPProxy": false,
+      "global": true,
+      "savePassword": "Forever",
+      "readonly": false,
+      "sort": 11,
+      "group": "A",
+      "useSSL": false,
+      "fs": {
+        "encoding": "utf8",
+        "showHidden": true
+      },
+      "redis": {},
+      "httpAuth": {
+        "authType": "none"
+      },
+      "key": "1717243027744",
+      "connectionKey": "nosql.connections"
+    }
+  },
+  "$schema": "https://cdn.database-client.com/dbclient/schema.json"
+}

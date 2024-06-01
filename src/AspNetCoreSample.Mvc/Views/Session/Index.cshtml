@@ -1,0 +1,12 @@
+<ul>
+    <li>@ViewData["CacheTime"]</li>
+    <li>@ViewData["CurrentTime"]</li>
+</ul>
+
+@using (Html.BeginForm("Post", "Home", FormMethod.Post))
+{
+    <input type="text" name="id" />
+    <input type="submit" value="送信" />
+}
+
+<span>@ViewData["SessionData"]</span>
