@@ -11,24 +11,24 @@ public class SessionController : Controller
 {
     private readonly ILogger<SessionController> _logger;
 
-    // private readonly IDistributedCache _cache;
+    private readonly IDistributedCache _cache;
 
     public SessionController(ILogger<SessionController> logger,
                             IDistributedCache cache)
     {
         _logger = logger;
-        // _cache = cache;
+        _cache = cache;
     }
 
     public ActionResult Index()
     {
-        // string? value = _cache.GetString("CacheTime");
-        // if (value == null)
-        // {
-        //     value = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-        //     _cache.SetString("CacheTime", value);
-        // }
-        // ViewData["CacheTime"] = value;
+        string? value = _cache.GetString("CacheTime");
+        if (value == null)
+        {
+            value = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+            _cache.SetString("CacheTime", value);
+        }
+        ViewData["CacheTime"] = value;
         ViewData["CurrentTime"] = DateTime.Now.ToString(CultureInfo.InvariantCulture);
         return View();
     }

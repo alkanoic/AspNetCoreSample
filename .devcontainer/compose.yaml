@@ -84,13 +84,18 @@ services:
       - 1025
     environment:
       - TZ=Asia/Tokyo
-  garnet:
-    image: 'ghcr.io/microsoft/garnet'
-    container_name: garnet
-    ulimits:
-      memlock: -1
+  redis:
+    image: "redis:latest"
+    container_name: redis
     ports:
       - "6379:6379"
+  # garnet:
+  #   image: 'ghcr.io/microsoft/garnet'
+  #   container_name: garnet
+  #   ulimits:
+  #     memlock: -1
+  #   ports:
+  #     - "6379:6379"
   # mssql:
   #   build: ./docker/mssql/
   #   container_name: mssql
