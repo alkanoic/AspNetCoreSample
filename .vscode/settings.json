@@ -1,3 +1,7 @@
 {
-    "dotnet.defaultSolution": "AspNetCoreSample.sln"
+    "dotnet.defaultSolution": "AspNetCoreSample.sln",
+    "editor.formatOnSave": true,
+    "[vue]": {
+        "editor.defaultFormatter": "Vue.volar"
+    }
 }
