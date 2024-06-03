@@ -1,0 +1,4 @@
+const jsOptions = {
+  ApplicationRoot,
+  SampleValue,
+};

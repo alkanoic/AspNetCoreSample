@@ -1,0 +1,21 @@
+@model VueIndexViewModel
+@{
+    ViewData["Title"] = "Vue Page";
+}
+
+<div class="sample-div">
+    <input type="text" class="from-control sample-input" />
+    <button type="button" class="btn btn-primary sample-button">送信</button>
+    <label class="form-label sample-label"></label>
+</div>
+
+<button id="loadPartialView" class="btn btn-info" type="button">
+    部分ビューを読み込む
+    <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+        style="display: none"></span>
+</button>
+<div id="partialViewContainer"></div>
+
+@section Scripts {
+    <script src="~/js/jquery-sample.js" asp-append-version="true"></script>
+}
