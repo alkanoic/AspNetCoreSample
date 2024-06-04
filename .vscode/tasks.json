@@ -65,6 +65,30 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "magic-onion-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/MagicOnionSample/Server/MagicOnionSample.Server.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "magic-onion-client-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/MagicOnionSample/Client/MagicOnionSample.Client.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "apphost-build",
             "command": "dotnet",
             "type": "process",

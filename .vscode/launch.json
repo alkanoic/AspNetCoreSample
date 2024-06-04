@@ -125,6 +125,29 @@
             }
         },
         {
+            "name": "MagicOnion",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "magic-onion-build",
+            "program": "${workspaceFolder}/src/MagicOnionSample/Server/bin/Debug/net8.0/MagicOnionSample.Server.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/MagicOnionSample/Server",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        {
+            "name": "MagicOnion-Client",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "magic-onion-client-build",
+            "program": "${workspaceFolder}/src/MagicOnionSample/Client/bin/Debug/net8.0/MagicOnionSample.Client.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/MagicOnionSample/Client",
+            "stopAtEntry": false,
+        },
+        {
             "type": "msedge",
             "request": "launch",
             "name": "lit-component",
