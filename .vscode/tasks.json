@@ -89,6 +89,18 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "magic-onion-worker-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/MagicOnionSample/Worker/MagicOnionSample.Worker.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "apphost-build",
             "command": "dotnet",
             "type": "process",

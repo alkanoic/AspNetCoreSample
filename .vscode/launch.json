@@ -148,6 +148,16 @@
             "stopAtEntry": false,
         },
         {
+            "name": "MagicOnion-Worker",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "magic-onion-worker-build",
+            "program": "${workspaceFolder}/src/MagicOnionSample/Worker/bin/Debug/net8.0/MagicOnionSample.Worker.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/MagicOnionSample/Worker",
+            "stopAtEntry": false,
+        },
+        {
             "type": "msedge",
             "request": "launch",
             "name": "lit-component",
