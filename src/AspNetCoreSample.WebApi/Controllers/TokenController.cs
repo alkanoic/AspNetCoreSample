@@ -1,3 +1,4 @@
+using AspNetCoreSample.WebApi.Models;
 using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 using FluentValidation;
@@ -38,8 +39,8 @@ public class TokenController : ControllerBase
             var result = await _tokenRequestValidator.ValidateAsync(request);
             if (!result.IsValid)
             {
-                result.AddToModelState(ModelState);
-                return BadRequest(ModelState);
+                var errors = new WebApiFailResponse(result);
+                return BadRequest(errors);
             }
             return Ok(await _tokenService.AuthTokenAsync(request));
         }
@@ -58,8 +59,8 @@ public class TokenController : ControllerBase
             var result = await _updateTokenRequestValidator.ValidateAsync(request);
             if (!result.IsValid)
             {
-                result.AddToModelState(ModelState);
-                return BadRequest(ModelState);
+                var errors = new WebApiFailResponse(result);
+                return BadRequest(errors);
             }
             return Ok(await _tokenService.UpdateTokenAsync(request));
         }
@@ -78,8 +79,8 @@ public class TokenController : ControllerBase
             var result = await _revokeTokenRequestValidator.ValidateAsync(request);
             if (!result.IsValid)
             {
-                result.AddToModelState(ModelState);
-                return BadRequest(ModelState);
+                var errors = new WebApiFailResponse(result);
+                return BadRequest(errors);
             }
             await _tokenService.RevokeTokenAsync(request);
             return Ok();
