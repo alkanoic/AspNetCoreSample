@@ -10,7 +10,7 @@ namespace AspNetCoreSample.WebApi.Services.Keycloak.Token;
 public interface ITokenService
 {
     ValueTask<TokenResponse> AuthTokenAsync(TokenRequest tokenRequest);
-    ValueTask<TokenResponse> UpdateTokenAsync(UpdateTokenRequest updateTokenRequest);
+    ValueTask<TokenResponse> RefreshTokenAsync(UpdateTokenRequest updateTokenRequest);
     ValueTask RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest);
 }
 
@@ -52,7 +52,7 @@ public class TokenService : ITokenService
         return json;
     }
 
-    public async ValueTask<TokenResponse> UpdateTokenAsync(UpdateTokenRequest updateTokenRequest)
+    public async ValueTask<TokenResponse> RefreshTokenAsync(UpdateTokenRequest updateTokenRequest)
     {
         var parameters = new Dictionary<string, string>
         {

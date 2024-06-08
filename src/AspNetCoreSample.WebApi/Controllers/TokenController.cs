@@ -31,8 +31,8 @@ public class TokenController : ControllerBase
         _revokeTokenRequestValidator = revokeTokenRequestValidator;
     }
 
-    [HttpPost]
-    public async ValueTask<IActionResult> Token(TokenRequest request)
+    [HttpPost("Auth")]
+    public async ValueTask<IActionResult> Auth(TokenRequest request)
     {
         try
         {
@@ -51,8 +51,8 @@ public class TokenController : ControllerBase
         }
     }
 
-    [HttpPost("UpdateToken")]
-    public async ValueTask<IActionResult> UpdateToken(UpdateTokenRequest request)
+    [HttpPost("RefreshToken")]
+    public async ValueTask<IActionResult> RefreshToken(UpdateTokenRequest request)
     {
         try
         {
@@ -62,7 +62,7 @@ public class TokenController : ControllerBase
                 var errors = new WebApiFailResponse(result);
                 return BadRequest(errors);
             }
-            return Ok(await _tokenService.UpdateTokenAsync(request));
+            return Ok(await _tokenService.RefreshTokenAsync(request));
         }
         catch (Exception ex)
         {
