@@ -4,7 +4,7 @@ using System.Text;
 using AspNetCoreSample.WebApi.EfModels;
 using AspNetCoreSample.WebApi.Hubs;
 using AspNetCoreSample.WebApi.Options;
-using AspNetCoreSample.WebApi.Services.Token;
+using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 using FluentValidation;
 

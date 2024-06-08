@@ -5,11 +5,11 @@ using Microsoft.Extensions.Options;
 
 using System.Text.Json;
 
-namespace AspNetCoreSample.WebApi.Services.Token;
+namespace AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 public interface ITokenService
 {
-    ValueTask<TokenResponse> GetTokenAsync(TokenRequest tokenRequest);
+    ValueTask<TokenResponse> AuthTokenAsync(TokenRequest tokenRequest);
 
     ValueTask<TokenResponse> UpdateTokenAsync(UpdateTokenRequest updateTokenRequest);
 }
@@ -18,13 +18,18 @@ public class TokenService : ITokenService
 {
     private readonly HttpClient _httpClient;
     private readonly KeycloakOptions _keycloakOptions;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
     public TokenService(HttpClient httpClient, IOptionsSnapshot<KeycloakOptions> keycloakOptions)
     {
         _httpClient = httpClient;
         _keycloakOptions = keycloakOptions.Value;
+        _jsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+        };
     }
 
-    public async ValueTask<TokenResponse> GetTokenAsync(TokenRequest tokenRequest)
+    public async ValueTask<TokenResponse> AuthTokenAsync(TokenRequest tokenRequest)
     {
         var tokenEndpoint = _keycloakOptions.TokenEndpoint;
         var parameters = new Dictionary<string, string>
@@ -43,7 +48,7 @@ public class TokenService : ITokenService
             throw new InvalidDataException("authenticate fail response");
         }
         var content = await response.Content.ReadAsStringAsync();
-        var json = JsonSerializer.Deserialize<TokenResponse>(content);
+        var json = JsonSerializer.Deserialize<TokenResponse>(content, _jsonSerializerOptions);
         if (json == null) throw new InvalidDataException("authenticate fail response");
         return json;
     }

@@ -1,4 +1,4 @@
-using AspNetCoreSample.WebApi.Services.Token;
+using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -42,7 +42,7 @@ public class AuthController : ControllerBase
                 result.AddToModelState(ModelState);
                 return BadRequest(ModelState);
             }
-            return Ok(await _tokenService.GetTokenAsync(request));
+            return Ok(await _tokenService.AuthTokenAsync(request));
         }
         catch (Exception ex)
         {
