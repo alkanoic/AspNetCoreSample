@@ -1,6 +1,3 @@
-using System.Security.Claims;
-using System.Text;
-
 using AspNetCoreSample.WebApi.EfModels;
 using AspNetCoreSample.WebApi.Hubs;
 using AspNetCoreSample.WebApi.Options;
@@ -8,16 +5,10 @@ using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 using FluentValidation;
 
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
 
 using NSwag;
-using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +25,7 @@ builder.Services.AddDbContext<SampleContext>(
 
 builder.Services.AddHttpClient();
 
-var keycloakSection = builder.Configuration.GetSection(KeycloakOptions.Position);
+var keycloakSection = builder.Configuration.GetSection(nameof(KeycloakOptions));
 builder.Services.Configure<KeycloakOptions>(keycloakSection);
 var keycloakOptions = keycloakSection.Get<KeycloakOptions>()!;
 
@@ -96,9 +87,7 @@ builder.Services.AddCors(options => // Add this line
         builder.WithOrigins(corsSection.MvcUrl).AllowAnyHeader().AllowAnyHeader().AllowAnyMethod();
     });
 });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-// builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApiDocument(configure =>
 {
     configure.Title = "AspNetCoreSample WebApi";

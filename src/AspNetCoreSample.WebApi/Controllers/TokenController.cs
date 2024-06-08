@@ -31,6 +31,11 @@ public class TokenController : ControllerBase
         _revokeTokenRequestValidator = revokeTokenRequestValidator;
     }
 
+    /// <summary>
+    /// Keycloakによる認証を行う
+    /// </summary>
+    /// <param name="request">ユーザ名およびパスワード</param>
+    /// <returns>AccessTokenおよびRefreshTokenの取得</returns>
     [HttpPost("Auth")]
     public async ValueTask<IActionResult> Auth(TokenRequest request)
     {
@@ -51,6 +56,11 @@ public class TokenController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// RefreshTokenを使用してAccessTokenを更新する
+    /// </summary>
+    /// <param name="request">RefreshToken</param>
+    /// <returns>AccessTokenおよびRefreshTokenの取得</returns>
     [HttpPost("RefreshToken")]
     public async ValueTask<IActionResult> RefreshToken(UpdateTokenRequest request)
     {
@@ -71,6 +81,11 @@ public class TokenController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// RefreshTokenを無効化する
+    /// </summary>
+    /// <param name="request">RefreshToken</param>
+    /// <returns>なし</returns>
     [HttpPost("RevokeToken")]
     public async ValueTask<IActionResult> RevokeToken(RevokeTokenRequest request)
     {

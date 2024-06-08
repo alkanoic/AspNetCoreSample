@@ -36,8 +36,8 @@ public class TokenService : ITokenService
             ["grant_type"] = "password",
             ["client_id"] = _keycloakOptions.ClientId,
             ["client_secret"] = _keycloakOptions.ClientSecret,
-            ["username"] = tokenRequest.UserName!,
-            ["password"] = tokenRequest.Password!
+            ["username"] = tokenRequest.UserName,
+            ["password"] = tokenRequest.Password
         };
 
         var encodedContent = new FormUrlEncodedContent(parameters);
@@ -80,7 +80,7 @@ public class TokenService : ITokenService
         {
             ["client_id"] = _keycloakOptions.ClientId,
             ["client_secret"] = _keycloakOptions.ClientSecret,
-            ["token"] = revokeTokenRequest.RefreshToken // refresh_token
+            ["token"] = revokeTokenRequest.RefreshToken
         };
 
         var encodedContent = new FormUrlEncodedContent(parameters);
