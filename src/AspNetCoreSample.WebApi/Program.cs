@@ -1,6 +1,7 @@
 using AspNetCoreSample.WebApi.EfModels;
 using AspNetCoreSample.WebApi.Hubs;
 using AspNetCoreSample.WebApi.Options;
+using AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 using FluentValidation;
@@ -104,6 +105,7 @@ builder.Services.AddOpenApiDocument(configure =>
 });
 
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IKeycloakService, KeycloakService>();
 
 var app = builder.Build();
 

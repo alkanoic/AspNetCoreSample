@@ -47,9 +47,9 @@ public class TokenService : ITokenService
             throw new InvalidDataException("authenticate fail response");
         }
         var content = await response.Content.ReadAsStringAsync();
-        var json = JsonSerializer.Deserialize<TokenResponse>(content, _jsonSerializerOptions);
-        if (json == null) throw new InvalidDataException("authenticate fail response");
-        return json;
+        var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content, _jsonSerializerOptions);
+        if (tokenResponse == null) throw new InvalidDataException("authenticate fail response");
+        return tokenResponse;
     }
 
     public async ValueTask<TokenResponse> RefreshTokenAsync(UpdateTokenRequest updateTokenRequest)
@@ -69,9 +69,9 @@ public class TokenService : ITokenService
             throw new InvalidDataException("refresh token fail response");
         }
         var content = await response.Content.ReadAsStringAsync();
-        var json = JsonSerializer.Deserialize<TokenResponse>(content, _jsonSerializerOptions);
-        if (json == null) throw new InvalidDataException("refresh token fail response");
-        return json;
+        var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content, _jsonSerializerOptions);
+        if (tokenResponse == null) throw new InvalidDataException("refresh token fail response");
+        return tokenResponse;
     }
 
     public async ValueTask RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest)

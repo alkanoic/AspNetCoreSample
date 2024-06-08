@@ -10,4 +10,7 @@ public class KeycloakOptions
     public required string RevokeTokenEndpoint { get; set; }
     public required string AdminUserName { get; set; }
     public required string AdminPassword { get; set; }
+    public required string AdminTokenEndpoint { get; set; }
+    public required string AdminBaseAddress { get; set; }
+    public required string TargetRealmName { get; set; }
 }
