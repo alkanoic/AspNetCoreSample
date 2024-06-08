@@ -10,8 +10,8 @@ namespace AspNetCoreSample.WebApi.Services.Keycloak.Token;
 public interface ITokenService
 {
     ValueTask<TokenResponse> AuthTokenAsync(TokenRequest tokenRequest);
-
     ValueTask<TokenResponse> UpdateTokenAsync(UpdateTokenRequest updateTokenRequest);
+    ValueTask RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest);
 }
 
 public class TokenService : ITokenService
@@ -31,7 +31,6 @@ public class TokenService : ITokenService
 
     public async ValueTask<TokenResponse> AuthTokenAsync(TokenRequest tokenRequest)
     {
-        var tokenEndpoint = _keycloakOptions.TokenEndpoint;
         var parameters = new Dictionary<string, string>
         {
             ["grant_type"] = "password",
@@ -42,7 +41,7 @@ public class TokenService : ITokenService
         };
 
         var encodedContent = new FormUrlEncodedContent(parameters);
-        var response = await _httpClient.PostAsync(tokenEndpoint, encodedContent);
+        var response = await _httpClient.PostAsync(_keycloakOptions.TokenEndpoint, encodedContent);
         if (!response.IsSuccessStatusCode)
         {
             throw new InvalidDataException("authenticate fail response");
@@ -55,7 +54,6 @@ public class TokenService : ITokenService
 
     public async ValueTask<TokenResponse> UpdateTokenAsync(UpdateTokenRequest updateTokenRequest)
     {
-        var tokenEndpoint = _keycloakOptions.TokenEndpoint;
         var parameters = new Dictionary<string, string>
         {
             ["grant_type"] = "refresh_token",
@@ -65,7 +63,7 @@ public class TokenService : ITokenService
         };
 
         var encodedContent = new FormUrlEncodedContent(parameters);
-        var response = await _httpClient.PostAsync(tokenEndpoint, encodedContent);
+        var response = await _httpClient.PostAsync(_keycloakOptions.TokenEndpoint, encodedContent);
         if (!response.IsSuccessStatusCode)
         {
             throw new InvalidDataException("refresh token fail response");
@@ -74,5 +72,22 @@ public class TokenService : ITokenService
         var json = JsonSerializer.Deserialize<TokenResponse>(content, _jsonSerializerOptions);
         if (json == null) throw new InvalidDataException("refresh token fail response");
         return json;
+    }
+
+    public async ValueTask RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest)
+    {
+        var parameters = new Dictionary<string, string>
+        {
+            ["client_id"] = _keycloakOptions.ClientId,
+            ["client_secret"] = _keycloakOptions.ClientSecret,
+            ["token"] = revokeTokenRequest.RefreshToken // refresh_token
+        };
+
+        var encodedContent = new FormUrlEncodedContent(parameters);
+        var response = await _httpClient.PostAsync(_keycloakOptions.RevokeTokenEndpoint, encodedContent);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidDataException("revoke refresh token fail response");
+        }
     }
 }

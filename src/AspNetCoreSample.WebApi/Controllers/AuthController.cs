@@ -19,16 +19,19 @@ public class AuthController : ControllerBase
     private readonly ITokenService _tokenService;
     private readonly IValidator<TokenRequest> _tokenRequestValidator;
     private readonly IValidator<UpdateTokenRequest> _updateTokenRequestValidator;
+    private readonly IValidator<RevokeTokenRequest> _revokeTokenRequestValidator;
 
     public AuthController(ILogger<AuthController> logger,
         ITokenService tokenService,
         IValidator<TokenRequest> tokenRequestValidator,
-        IValidator<UpdateTokenRequest> updateTokenRequestValidator)
+        IValidator<UpdateTokenRequest> updateTokenRequestValidator,
+        IValidator<RevokeTokenRequest> revokeTokenRequestValidator)
     {
         _logger = logger;
         _tokenService = tokenService;
         _tokenRequestValidator = tokenRequestValidator;
         _updateTokenRequestValidator = updateTokenRequestValidator;
+        _revokeTokenRequestValidator = revokeTokenRequestValidator;
     }
 
     [HttpPost]
@@ -63,6 +66,27 @@ public class AuthController : ControllerBase
                 return BadRequest(ModelState);
             }
             return Ok(await _tokenService.UpdateTokenAsync(request));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("exception", ex.Message);
+            return BadRequest(ModelState);
+        }
+    }
+
+    [HttpPost("RevokeToken")]
+    public async ValueTask<IActionResult> RevokeToken(RevokeTokenRequest request)
+    {
+        try
+        {
+            var result = await _revokeTokenRequestValidator.ValidateAsync(request);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(ModelState);
+                return BadRequest(ModelState);
+            }
+            await _tokenService.RevokeTokenAsync(request);
+            return Ok();
         }
         catch (Exception ex)
         {
