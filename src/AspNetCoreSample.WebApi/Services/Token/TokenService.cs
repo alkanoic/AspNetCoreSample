@@ -7,6 +7,13 @@ using System.Text.Json;
 
 namespace AspNetCoreSample.WebApi.Services.Token;
 
+public interface ITokenService
+{
+    ValueTask<TokenResponse> GetTokenAsync(TokenRequest tokenRequest);
+
+    ValueTask<TokenResponse> UpdateTokenAsync(UpdateTokenRequest updateTokenRequest);
+}
+
 public class TokenService : ITokenService
 {
     private readonly HttpClient _httpClient;
@@ -56,11 +63,11 @@ public class TokenService : ITokenService
         var response = await _httpClient.PostAsync(tokenEndpoint, encodedContent);
         if (!response.IsSuccessStatusCode)
         {
-            throw new InvalidDataException("authenticate fail response");
+            throw new InvalidDataException("refresh token fail response");
         }
         var content = await response.Content.ReadAsStringAsync();
         var json = JsonSerializer.Deserialize<TokenResponse>(content);
-        if (json == null) throw new InvalidDataException("authenticate fail response");
+        if (json == null) throw new InvalidDataException("refresh token fail response");
         return json;
     }
 }

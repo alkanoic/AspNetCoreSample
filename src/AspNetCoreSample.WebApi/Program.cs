@@ -6,6 +6,8 @@ using AspNetCoreSample.WebApi.Hubs;
 using AspNetCoreSample.WebApi.Options;
 using AspNetCoreSample.WebApi.Services.Token;
 
+using FluentValidation;
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -68,6 +70,8 @@ builder.Services.AddAuthorization(options =>
         );
     });
 });
+
+builder.Services.AddValidatorsFromAssemblyContaining<TokenRequestValidator>();
 
 var corsSection = builder.Configuration.GetSection(CorsOptions.Position).Get<CorsOptions>()!;
 

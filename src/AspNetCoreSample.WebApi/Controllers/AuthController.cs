@@ -1,8 +1,13 @@
 using AspNetCoreSample.WebApi.Services.Token;
 
+using FluentValidation;
+using FluentValidation.AspNetCore;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace AspNetCoreSample.WebApi.Controllers;
 
@@ -12,23 +17,58 @@ public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
     private readonly ITokenService _tokenService;
+    private readonly IValidator<TokenRequest> _tokenRequestValidator;
+    private readonly IValidator<UpdateTokenRequest> _updateTokenRequestValidator;
 
-    public AuthController(ILogger<AuthController> logger, ITokenService tokenService)
+    public AuthController(ILogger<AuthController> logger,
+        ITokenService tokenService,
+        IValidator<TokenRequest> tokenRequestValidator,
+        IValidator<UpdateTokenRequest> updateTokenRequestValidator)
     {
         _logger = logger;
         _tokenService = tokenService;
+        _tokenRequestValidator = tokenRequestValidator;
+        _updateTokenRequestValidator = updateTokenRequestValidator;
     }
 
     [HttpPost]
-    public async ValueTask<TokenResponse> Token(TokenRequest request)
+    public async ValueTask<IActionResult> Token(TokenRequest request)
     {
-        return await _tokenService.GetTokenAsync(request);
+        try
+        {
+            var result = await _tokenRequestValidator.ValidateAsync(request);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(ModelState);
+                return BadRequest(ModelState);
+            }
+            return Ok(await _tokenService.GetTokenAsync(request));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("exception", ex.Message);
+            return BadRequest(ModelState);
+        }
     }
 
     [HttpPost("UpdateToken")]
-    public async ValueTask<TokenResponse> UpdateToken(UpdateTokenRequest request)
+    public async ValueTask<IActionResult> UpdateToken(UpdateTokenRequest request)
     {
-        return await _tokenService.UpdateTokenAsync(request);
+        try
+        {
+            var result = await _updateTokenRequestValidator.ValidateAsync(request);
+            if (!result.IsValid)
+            {
+                result.AddToModelState(ModelState);
+                return BadRequest(ModelState);
+            }
+            return Ok(await _tokenService.UpdateTokenAsync(request));
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("exception", ex.Message);
+            return BadRequest(ModelState);
+        }
     }
 
     [Authorize]
