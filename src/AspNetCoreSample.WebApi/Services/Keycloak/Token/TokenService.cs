@@ -71,7 +71,7 @@ public class TokenService : ITokenService
             throw new InvalidDataException("refresh token fail response");
         }
         var content = await response.Content.ReadAsStringAsync();
-        var json = JsonSerializer.Deserialize<TokenResponse>(content);
+        var json = JsonSerializer.Deserialize<TokenResponse>(content, _jsonSerializerOptions);
         if (json == null) throw new InvalidDataException("refresh token fail response");
         return json;
     }
