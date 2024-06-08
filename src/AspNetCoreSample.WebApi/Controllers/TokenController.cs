@@ -3,25 +3,21 @@ using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace AspNetCoreSample.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class TokenController : ControllerBase
 {
-    private readonly ILogger<AuthController> _logger;
+    private readonly ILogger<TokenController> _logger;
     private readonly ITokenService _tokenService;
     private readonly IValidator<TokenRequest> _tokenRequestValidator;
     private readonly IValidator<UpdateTokenRequest> _updateTokenRequestValidator;
     private readonly IValidator<RevokeTokenRequest> _revokeTokenRequestValidator;
 
-    public AuthController(ILogger<AuthController> logger,
+    public TokenController(ILogger<TokenController> logger,
         ITokenService tokenService,
         IValidator<TokenRequest> tokenRequestValidator,
         IValidator<UpdateTokenRequest> updateTokenRequestValidator,
@@ -93,26 +89,5 @@ public class AuthController : ControllerBase
             ModelState.AddModelError("exception", ex.Message);
             return BadRequest(ModelState);
         }
-    }
-
-    [Authorize]
-    [HttpGet("Sample")]
-    public ValueTask<string> Sample(string sample)
-    {
-        return ValueTask.FromResult(sample);
-    }
-
-    [Authorize(Policy = "User")]
-    [HttpGet("SampleUser")]
-    public ValueTask<string> SampleUser(string sample)
-    {
-        return ValueTask.FromResult(sample);
-    }
-
-    [Authorize(Policy = "Admin")]
-    [HttpGet("SampleAdmin")]
-    public ValueTask<string> SampleAdmin(string sample)
-    {
-        return ValueTask.FromResult(sample);
     }
 }
