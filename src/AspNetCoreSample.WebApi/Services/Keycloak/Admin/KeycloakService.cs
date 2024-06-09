@@ -19,6 +19,7 @@ public interface IKeycloakService
     ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
     ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest);
     ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest);
+    ValueTask<List<FetchRoleResponse>> FetchRolesAsync();
 }
 
 public class KeycloakService : IKeycloakService
@@ -154,5 +155,25 @@ public class KeycloakService : IKeycloakService
             var content = await response.Content.ReadAsStringAsync();
             throw new InvalidDataException($"delete user fail response detail:{content}");
         }
+    }
+
+    public async ValueTask<List<FetchRoleResponse>> FetchRolesAsync()
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/roles");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+        var response = await _httpClient.SendAsync(request);
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidDataException($"fetch roles fail response detail:{content}");
+        }
+        var result = JsonSerializer.Deserialize<List<FetchRoleResponse>>(content, _jsonSerializerOptions);
+        if (result is null)
+        {
+            throw new InvalidCastException("fetch roles fail no content");
+        }
+        return result;
     }
 }

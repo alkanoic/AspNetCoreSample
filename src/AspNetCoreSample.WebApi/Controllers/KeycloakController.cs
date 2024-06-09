@@ -59,6 +59,10 @@ public class KeycloakController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// ユーザー情報を取得
+    /// </summary>
+    /// <param name="input">ユーザー名</param>
     [HttpPost("FetchUser")]
     public async ValueTask<IActionResult> FetchUser(FetchUserInput input)
     {
@@ -172,5 +176,18 @@ public class KeycloakController : ControllerBase
             await _keyclaokService.DeleteUserAsync(request);
             return Ok();
         });
+    }
+
+    [HttpPost("FetchRoles")]
+    public async ValueTask<IActionResult> FetchRoles()
+    {
+        try
+        {
+            return Ok(await _keyclaokService.FetchRolesAsync());
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new WebApiFailResponse(ex));
+        }
     }
 }
