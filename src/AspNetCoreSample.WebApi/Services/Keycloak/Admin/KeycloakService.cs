@@ -13,6 +13,7 @@ namespace AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 
 public interface IKeycloakService
 {
+    ValueTask<FetchUserResponse> FetchUserAsync(FetchUserRequest fetchUserRequest);
     ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest);
     ValueTask UpdateUserAsync(string userId, UpdateUserRequest updateUserRequest);
     ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
@@ -58,6 +59,26 @@ public class KeycloakService : IKeycloakService
         var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content, _jsonTokenSerializerOptions);
         if (tokenResponse == null) throw new InvalidDataException("authenticate fail response");
         return tokenResponse;
+    }
+
+    public async ValueTask<FetchUserResponse> FetchUserAsync(FetchUserRequest fetchUserRequest)
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users?exact=true&username={fetchUserRequest.Username}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+        var response = await _httpClient.SendAsync(request);
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidDataException($"fetch user fail response detail:{content}");
+        }
+        var result = JsonSerializer.Deserialize<List<FetchUserResponse>>(content, _jsonSerializerOptions)?.FirstOrDefault();
+        if (result is null)
+        {
+            throw new InvalidDataException($"fetch user fail no content");
+        }
+        return result;
     }
 
     public async ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest)

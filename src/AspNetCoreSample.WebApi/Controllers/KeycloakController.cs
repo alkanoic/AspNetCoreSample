@@ -14,6 +14,7 @@ public class KeycloakController : ControllerBase
 {
     private readonly ILogger<KeycloakController> _logger;
     private readonly IKeycloakService _keyclaokService;
+    private readonly IValidator<FetchUserInput> _fetchUserInputValidator;
     private readonly IValidator<CreateUserInput> _createUserInputValidator;
     private readonly IValidator<UpdateUserInput> _updateUserInputValidator;
     private readonly IValidator<ChangePasswordInput> _changePasswordInputValidator;
@@ -22,6 +23,7 @@ public class KeycloakController : ControllerBase
 
     public KeycloakController(ILogger<KeycloakController> logger,
         IKeycloakService keycloakService,
+        IValidator<FetchUserInput> fetchUserInputValidator,
         IValidator<CreateUserInput> createUserInputValidator,
         IValidator<UpdateUserInput> updateUserInputValidator,
         IValidator<ChangePasswordInput> changePasswordInputValidator,
@@ -30,6 +32,7 @@ public class KeycloakController : ControllerBase
     {
         _logger = logger;
         _keyclaokService = keycloakService;
+        _fetchUserInputValidator = fetchUserInputValidator;
         _createUserInputValidator = createUserInputValidator;
         _updateUserInputValidator = updateUserInputValidator;
         _changePasswordInputValidator = changePasswordInputValidator;
@@ -54,6 +57,20 @@ public class KeycloakController : ControllerBase
         {
             return BadRequest(new WebApiFailResponse(ex));
         }
+    }
+
+    [HttpPost("FetchUser")]
+    public async ValueTask<IActionResult> FetchUser(FetchUserInput input)
+    {
+        return await CommonValidationResponse(input, _fetchUserInputValidator, async () =>
+        {
+            var request = new FetchUserRequest()
+            {
+                Username = input.Username,
+            };
+            var response = await _keyclaokService.FetchUserAsync(request);
+            return Ok(response);
+        });
     }
 
     /// <summary>
