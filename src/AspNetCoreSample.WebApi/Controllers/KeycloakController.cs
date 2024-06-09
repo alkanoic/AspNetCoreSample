@@ -1,4 +1,5 @@
 using AspNetCoreSample.WebApi.Models;
+using AspNetCoreSample.WebApi.Models.Keycloak;
 using AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 
 using FluentValidation;
@@ -14,14 +15,17 @@ public class KeycloakController : ControllerBase
     private readonly ILogger<KeycloakController> _logger;
     private readonly IKeycloakService _keyclaokService;
     private readonly IValidator<CreateUserInput> _createUserInputValidator;
+    private readonly IValidator<DeleteUserInput> _deleteUserInputValidator;
 
     public KeycloakController(ILogger<KeycloakController> logger,
         IKeycloakService keycloakService,
-        IValidator<CreateUserInput> createUserInputValidator)
+        IValidator<CreateUserInput> createUserInputValidator,
+        IValidator<DeleteUserInput> deleteUserInputValidator)
     {
         _logger = logger;
         _keyclaokService = keycloakService;
         _createUserInputValidator = createUserInputValidator;
+        _deleteUserInputValidator = deleteUserInputValidator;
     }
 
     /// <summary>
@@ -47,16 +51,10 @@ public class KeycloakController : ControllerBase
                 LastName = input.LastName,
                 Email = input.Email,
                 Enabled = true,
-                Credentials = new List<CreateUserRequest.Credential>{
-                    new() {
-                        Type = "password",
-                        Value = input.Password,
-                        Temporary = false
-                    }
-                }
+                Credentials = new List<CreateUserRequest.Credential> { new(input.Password) }
             };
-            await _keyclaokService.CreateUserAsync(request);
-            return Ok();
+            var response = await _keyclaokService.CreateUserAsync(request);
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -64,4 +62,32 @@ public class KeycloakController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// ユーザーを削除する
+    /// </summary>
+    /// <param name="input">ユーザー情報</param>
+    [HttpPost("DeleteUser")]
+    public async ValueTask<IActionResult> DeleteUser(DeleteUserInput input)
+    {
+        try
+        {
+            var result = await _deleteUserInputValidator.ValidateAsync(input);
+            if (!result.IsValid)
+            {
+                var errors = new WebApiFailResponse(result);
+                return BadRequest(errors);
+            }
+
+            var request = new DeleteUserRequest()
+            {
+                UserId = input.UserId,
+            };
+            await _keyclaokService.DeleteUserAsync(request);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new WebApiFailResponse(ex));
+        }
+    }
 }

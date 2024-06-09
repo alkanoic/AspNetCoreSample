@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace AspNetCoreSample.WebApi.Models;
+namespace AspNetCoreSample.WebApi.Models.Keycloak;
 
 public class CreateUserInput
 {

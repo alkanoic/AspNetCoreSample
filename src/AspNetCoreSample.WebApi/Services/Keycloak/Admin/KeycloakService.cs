@@ -13,7 +13,8 @@ namespace AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 
 public interface IKeycloakService
 {
-    ValueTask CreateUserAsync(CreateUserRequest createUserRequest);
+    ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest);
+    ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest);
 }
 
 public class KeycloakService : IKeycloakService
@@ -56,12 +57,28 @@ public class KeycloakService : IKeycloakService
         return tokenResponse;
     }
 
-    public async ValueTask CreateUserAsync(CreateUserRequest createUserRequest)
+    public async ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest)
     {
         var tokenResponse = await AdminAccessToken();
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
         request.Content = new StringContent(JsonSerializer.Serialize(createUserRequest, createUserRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
+
+        var response = await _httpClient.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            throw new InvalidDataException($"create user fail response detail:{content}");
+        }
+        var segments = response.Headers.Location?.LocalPath.Split('/');
+        return new CreateUserResponse() { Id = segments?[segments.Length - 1] ?? "" };
+    }
+
+    public async ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest)
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{deleteUserRequest.UserId}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
         if (!response.IsSuccessStatusCode)
