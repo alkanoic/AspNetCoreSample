@@ -37,6 +37,25 @@ public class KeycloakController : ControllerBase
         _deleteUserInputValidator = deleteUserInputValidator;
     }
 
+    private async ValueTask<IActionResult> CommonValidationResponse<T>(T input, IValidator<T> validator, Func<ValueTask<IActionResult>> func)
+    {
+        try
+        {
+            var result = await validator.ValidateAsync(input);
+            if (!result.IsValid)
+            {
+                var errors = new WebApiFailResponse(result);
+                return BadRequest(errors);
+            }
+
+            return await func();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new WebApiFailResponse(ex));
+        }
+    }
+
     /// <summary>
     /// ユーザーを作成する
     /// </summary>
@@ -44,15 +63,8 @@ public class KeycloakController : ControllerBase
     [HttpPost("CreateUser")]
     public async ValueTask<IActionResult> CreateUser(CreateUserInput input)
     {
-        try
+        return await CommonValidationResponse(input, _createUserInputValidator, async () =>
         {
-            var result = await _createUserInputValidator.ValidateAsync(input);
-            if (!result.IsValid)
-            {
-                var errors = new WebApiFailResponse(result);
-                return BadRequest(errors);
-            }
-
             var request = new CreateUserRequest()
             {
                 Username = input.Username,
@@ -64,11 +76,7 @@ public class KeycloakController : ControllerBase
             };
             var response = await _keyclaokService.CreateUserAsync(request);
             return Ok(response);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new WebApiFailResponse(ex));
-        }
+        });
     }
 
     /// <summary>
@@ -78,15 +86,8 @@ public class KeycloakController : ControllerBase
     [HttpPut("UpdateUser")]
     public async ValueTask<IActionResult> UpdateUser(UpdateUserInput input)
     {
-        try
+        return await CommonValidationResponse(input, _updateUserInputValidator, async () =>
         {
-            var result = await _updateUserInputValidator.ValidateAsync(input);
-            if (!result.IsValid)
-            {
-                var errors = new WebApiFailResponse(result);
-                return BadRequest(errors);
-            }
-
             var request = new UpdateUserRequest()
             {
                 FirstName = input.FirstName,
@@ -99,11 +100,7 @@ public class KeycloakController : ControllerBase
             }
             await _keyclaokService.UpdateUserAsync(input.UserId, request);
             return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new WebApiFailResponse(ex));
-        }
+        });
     }
 
     /// <summary>
@@ -113,15 +110,8 @@ public class KeycloakController : ControllerBase
     [HttpPut("ChangePassword")]
     public async ValueTask<IActionResult> ChangePassword(ChangePasswordInput input)
     {
-        try
+        return await CommonValidationResponse(input, _changePasswordInputValidator, async () =>
         {
-            var result = await _changePasswordInputValidator.ValidateAsync(input);
-            if (!result.IsValid)
-            {
-                var errors = new WebApiFailResponse(result);
-                return BadRequest(errors);
-            }
-
             var request = new ChangePasswordRequest()
             {
                 UserId = input.UserId,
@@ -129,11 +119,7 @@ public class KeycloakController : ControllerBase
             };
             await _keyclaokService.ChangePasswordAsync(request);
             return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new WebApiFailResponse(ex));
-        }
+        });
     }
 
     /// <summary>
@@ -142,26 +128,15 @@ public class KeycloakController : ControllerBase
     [HttpPut("ResetPasswordByEmail")]
     public async ValueTask<IActionResult> ResetPasswordByEmail(ResetPasswordByEmailInput input)
     {
-        try
+        return await CommonValidationResponse(input, _resetPasswordByEmailInputValidator, async () =>
         {
-            var result = await _resetPasswordByEmailInputValidator.ValidateAsync(input);
-            if (!result.IsValid)
-            {
-                var errors = new WebApiFailResponse(result);
-                return BadRequest(errors);
-            }
-
             var request = new ResetPasswordByEmailRequest()
             {
                 UserId = input.UserId,
             };
             await _keyclaokService.ResetPasswordByEmailAsync(request);
             return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new WebApiFailResponse(ex));
-        }
+        });
     }
 
     /// <summary>
@@ -171,25 +146,14 @@ public class KeycloakController : ControllerBase
     [HttpDelete("DeleteUser")]
     public async ValueTask<IActionResult> DeleteUser(DeleteUserInput input)
     {
-        try
+        return await CommonValidationResponse(input, _deleteUserInputValidator, async () =>
         {
-            var result = await _deleteUserInputValidator.ValidateAsync(input);
-            if (!result.IsValid)
-            {
-                var errors = new WebApiFailResponse(result);
-                return BadRequest(errors);
-            }
-
             var request = new DeleteUserRequest()
             {
                 UserId = input.UserId,
             };
             await _keyclaokService.DeleteUserAsync(request);
             return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new WebApiFailResponse(ex));
-        }
+        });
     }
 }
