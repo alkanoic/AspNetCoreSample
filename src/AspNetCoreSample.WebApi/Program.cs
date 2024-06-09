@@ -102,10 +102,13 @@ builder.Services.AddOpenApiDocument(configure =>
         Description = "Bearer {token}"
     });
 
-    configure.OperationProcessors.Add(new AcceptLanguageHeaderParameter());
     configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+    // OpenAPIでAccept-Languageを切り替える設定を追加
+    configure.OperationProcessors.Add(new AcceptLanguageHeaderParameter());
 });
 
+// Localizationを有効化
+// Query String、Cookie、Accept-Languageヘッダーで決める
 builder.Services.AddLocalization();
 
 builder.Services.AddTransient<ITokenService, TokenService>();
@@ -138,8 +141,7 @@ app.UseRequestLocalization(options =>
     options
         .AddSupportedCultures(supportedCultures)
         .AddSupportedUICultures(supportedCultures)
-        .SetDefaultCulture(supportedCultures[0])
-        ;
+        .SetDefaultCulture(supportedCultures[0]);
 });
 
 app.MapControllers();
