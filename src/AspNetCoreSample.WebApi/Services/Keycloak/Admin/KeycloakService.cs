@@ -14,6 +14,7 @@ namespace AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 public interface IKeycloakService
 {
     ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest);
+    ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
     ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest);
 }
 
@@ -74,6 +75,21 @@ public class KeycloakService : IKeycloakService
         return new CreateUserResponse() { Id = segments?[segments.Length - 1] ?? "" };
     }
 
+    public async ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest)
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{changePasswordRequest.UserId}/reset-password");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Content = new StringContent(JsonSerializer.Serialize(changePasswordRequest.Credential, changePasswordRequest.Credential.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
+
+        var response = await _httpClient.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            throw new InvalidDataException($"change password fail response detail:{content}");
+        }
+    }
+
     public async ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest)
     {
         var tokenResponse = await AdminAccessToken();
@@ -84,7 +100,7 @@ public class KeycloakService : IKeycloakService
         if (!response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
-            throw new InvalidDataException($"create user fail response detail:{content}");
+            throw new InvalidDataException($"delete user fail response detail:{content}");
         }
     }
 }

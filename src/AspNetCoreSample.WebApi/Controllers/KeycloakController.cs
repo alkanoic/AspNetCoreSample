@@ -15,16 +15,19 @@ public class KeycloakController : ControllerBase
     private readonly ILogger<KeycloakController> _logger;
     private readonly IKeycloakService _keyclaokService;
     private readonly IValidator<CreateUserInput> _createUserInputValidator;
+    private readonly IValidator<ChangePasswordInput> _changePasswordInputValidator;
     private readonly IValidator<DeleteUserInput> _deleteUserInputValidator;
 
     public KeycloakController(ILogger<KeycloakController> logger,
         IKeycloakService keycloakService,
         IValidator<CreateUserInput> createUserInputValidator,
+        IValidator<ChangePasswordInput> changePasswordInputValidator,
         IValidator<DeleteUserInput> deleteUserInputValidator)
     {
         _logger = logger;
         _keyclaokService = keycloakService;
         _createUserInputValidator = createUserInputValidator;
+        _changePasswordInputValidator = changePasswordInputValidator;
         _deleteUserInputValidator = deleteUserInputValidator;
     }
 
@@ -51,7 +54,7 @@ public class KeycloakController : ControllerBase
                 LastName = input.LastName,
                 Email = input.Email,
                 Enabled = true,
-                Credentials = new List<CreateUserRequest.Credential> { new(input.Password) }
+                Credentials = new List<Credential> { new(input.Password) }
             };
             var response = await _keyclaokService.CreateUserAsync(request);
             return Ok(response);
@@ -63,10 +66,40 @@ public class KeycloakController : ControllerBase
     }
 
     /// <summary>
+    /// ユーザーのパスワードを変更する
+    /// </summary>
+    /// <param name="input">パスワード情報</param>
+    [HttpPut("ChangePassword")]
+    public async ValueTask<IActionResult> ChangePassword(ChangePasswordInput input)
+    {
+        try
+        {
+            var result = await _changePasswordInputValidator.ValidateAsync(input);
+            if (!result.IsValid)
+            {
+                var errors = new WebApiFailResponse(result);
+                return BadRequest(errors);
+            }
+
+            var request = new ChangePasswordRequest()
+            {
+                UserId = input.UserId,
+                Credential = new Credential(input.Password)
+            };
+            await _keyclaokService.ChangePasswordAsync(request);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new WebApiFailResponse(ex));
+        }
+    }
+
+    /// <summary>
     /// ユーザーを削除する
     /// </summary>
     /// <param name="input">ユーザー情報</param>
-    [HttpPost("DeleteUser")]
+    [HttpDelete("DeleteUser")]
     public async ValueTask<IActionResult> DeleteUser(DeleteUserInput input)
     {
         try

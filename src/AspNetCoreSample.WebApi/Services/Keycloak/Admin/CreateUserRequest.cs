@@ -24,17 +24,4 @@ public class CreateUserRequest
     /// </summary>
     public required string Email { get; set; }
     public required List<Credential> Credentials { get; set; }
-    public class Credential
-    {
-        public string Type { get; set; }
-        public string Value { get; set; }
-        public bool Temporary { get; set; }
-
-        public Credential(string password)
-        {
-            Type = "password";
-            Value = password;
-            Temporary = false;
-        }
-    }
 }
