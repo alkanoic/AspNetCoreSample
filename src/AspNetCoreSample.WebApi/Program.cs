@@ -1,3 +1,4 @@
+using AspNetCoreSample.WebApi;
 using AspNetCoreSample.WebApi.EfModels;
 using AspNetCoreSample.WebApi.Hubs;
 using AspNetCoreSample.WebApi.Options;
@@ -101,8 +102,11 @@ builder.Services.AddOpenApiDocument(configure =>
         Description = "Bearer {token}"
     });
 
+    configure.OperationProcessors.Add(new AcceptLanguageHeaderParameter());
     configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
 });
+
+builder.Services.AddLocalization();
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IKeycloakService, KeycloakService>();
@@ -125,6 +129,18 @@ app.UseCors(); // Add this line
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRequestLocalization(options =>
+{
+    //サポートするカルチャの設定
+    string[] supportedCultures = ["ja", "en"];
+
+    options
+        .AddSupportedCultures(supportedCultures)
+        .AddSupportedUICultures(supportedCultures)
+        .SetDefaultCulture(supportedCultures[0])
+        ;
+});
 
 app.MapControllers();
 
