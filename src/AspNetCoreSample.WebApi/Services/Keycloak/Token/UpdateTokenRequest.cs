@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace AspNetCoreSample.WebApi.Services.Token;
+namespace AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 public class UpdateTokenRequest
 {
