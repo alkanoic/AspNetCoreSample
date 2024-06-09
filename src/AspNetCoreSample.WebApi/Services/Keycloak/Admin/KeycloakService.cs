@@ -14,6 +14,7 @@ namespace AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 public interface IKeycloakService
 {
     ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest);
+    ValueTask UpdateUserAsync(string userId, UpdateUserRequest updateUserRequest);
     ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
     ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest);
     ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest);
@@ -74,6 +75,21 @@ public class KeycloakService : IKeycloakService
         }
         var segments = response.Headers.Location?.LocalPath.Split('/');
         return new CreateUserResponse() { Id = segments?[segments.Length - 1] ?? "" };
+    }
+
+    public async ValueTask UpdateUserAsync(string userId, UpdateUserRequest updateUserRequest)
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Content = new StringContent(JsonSerializer.Serialize(updateUserRequest, updateUserRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
+
+        var response = await _httpClient.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            throw new InvalidDataException($"update user fail response detail:{content}");
+        }
     }
 
     public async ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest)
