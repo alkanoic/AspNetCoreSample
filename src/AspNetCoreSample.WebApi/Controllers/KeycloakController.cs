@@ -60,8 +60,7 @@ public class KeycloakController : ControllerBase
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError("exception", ex.Message);
-            return BadRequest(ModelState);
+            return BadRequest(new WebApiFailResponse(ex));
         }
     }
 

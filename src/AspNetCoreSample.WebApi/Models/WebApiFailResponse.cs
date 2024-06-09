@@ -5,6 +5,7 @@ namespace AspNetCoreSample.WebApi.Models;
 public class WebApiFailResponse
 {
     public bool Success { get; set; }
+    public string? ErrorMessage { get; set; }
     public List<ErrorModel> Errors { get; set; } = new List<ErrorModel>();
 
     public WebApiFailResponse() { }
@@ -19,6 +20,11 @@ public class WebApiFailResponse
                 ErrorMessage = a.ErrorMessage
             });
         }
+    }
+
+    public WebApiFailResponse(Exception ex)
+    {
+        ErrorMessage = ex.Message;
     }
 }
 

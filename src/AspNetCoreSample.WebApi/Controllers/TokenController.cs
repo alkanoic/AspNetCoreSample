@@ -51,8 +51,7 @@ public class TokenController : ControllerBase
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError("exception", ex.Message);
-            return BadRequest(ModelState);
+            return BadRequest(new WebApiFailResponse(ex));
         }
     }
 
@@ -76,8 +75,7 @@ public class TokenController : ControllerBase
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError("exception", ex.Message);
-            return BadRequest(ModelState);
+            return BadRequest(new WebApiFailResponse(ex));
         }
     }
 
@@ -102,8 +100,7 @@ public class TokenController : ControllerBase
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError("exception", ex.Message);
-            return BadRequest(ModelState);
+            return BadRequest(new WebApiFailResponse(ex));
         }
     }
 }
