@@ -15,6 +15,7 @@ public interface IKeycloakService
 {
     ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest);
     ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
+    ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest);
     ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest);
 }
 
@@ -87,6 +88,20 @@ public class KeycloakService : IKeycloakService
         {
             var content = await response.Content.ReadAsStringAsync();
             throw new InvalidDataException($"change password fail response detail:{content}");
+        }
+    }
+
+    public async ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest)
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{resetPasswordByEmailRequest.UserId}/reset-password-email");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+        var response = await _httpClient.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            throw new InvalidDataException($"reset password email fail response detail:{content}");
         }
     }
 

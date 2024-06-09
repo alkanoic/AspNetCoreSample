@@ -16,18 +16,21 @@ public class KeycloakController : ControllerBase
     private readonly IKeycloakService _keyclaokService;
     private readonly IValidator<CreateUserInput> _createUserInputValidator;
     private readonly IValidator<ChangePasswordInput> _changePasswordInputValidator;
+    private readonly IValidator<ResetPasswordByEmailInput> _resetPasswordByEmailInputValidator;
     private readonly IValidator<DeleteUserInput> _deleteUserInputValidator;
 
     public KeycloakController(ILogger<KeycloakController> logger,
         IKeycloakService keycloakService,
         IValidator<CreateUserInput> createUserInputValidator,
         IValidator<ChangePasswordInput> changePasswordInputValidator,
+        IValidator<ResetPasswordByEmailInput> resetPasswordByEmailInputValidator,
         IValidator<DeleteUserInput> deleteUserInputValidator)
     {
         _logger = logger;
         _keyclaokService = keycloakService;
         _createUserInputValidator = createUserInputValidator;
         _changePasswordInputValidator = changePasswordInputValidator;
+        _resetPasswordByEmailInputValidator = resetPasswordByEmailInputValidator;
         _deleteUserInputValidator = deleteUserInputValidator;
     }
 
@@ -87,6 +90,34 @@ public class KeycloakController : ControllerBase
                 Credential = new Credential(input.Password)
             };
             await _keyclaokService.ChangePasswordAsync(request);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new WebApiFailResponse(ex));
+        }
+    }
+
+    /// <summary>
+    /// ユーザーのパスワードをリセットするためのメールを送信
+    /// </summary>
+    [HttpPut("ResetPasswordByEmail")]
+    public async ValueTask<IActionResult> ResetPasswordByEmail(ResetPasswordByEmailInput input)
+    {
+        try
+        {
+            var result = await _resetPasswordByEmailInputValidator.ValidateAsync(input);
+            if (!result.IsValid)
+            {
+                var errors = new WebApiFailResponse(result);
+                return BadRequest(errors);
+            }
+
+            var request = new ResetPasswordByEmailRequest()
+            {
+                UserId = input.UserId,
+            };
+            await _keyclaokService.ResetPasswordByEmailAsync(request);
             return Ok();
         }
         catch (Exception ex)
