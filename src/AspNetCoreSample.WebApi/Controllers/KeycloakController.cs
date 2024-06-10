@@ -230,10 +230,15 @@ public class KeycloakController : ControllerBase
     {
         return await CommonValidationResponse(input, _addUserRoleMappingInputValidator, async () =>
         {
-            var request = new AddUserRoleMappingsRequest()
+            var request = new List<AddUserRoleMappingsRequest>();
+            foreach (var a in input.AddUserRoleMappingInputDetails)
             {
-                Id = input.RoleId
-            };
+                request.Add(new AddUserRoleMappingsRequest()
+                {
+                    Id = a.RoleId,
+                    Name = a.RoleName
+                });
+            }
             await _keyclaokService.AddUserRoleMappingAsync(input.UserId, request);
             return Ok();
         });
@@ -248,10 +253,15 @@ public class KeycloakController : ControllerBase
     {
         return await CommonValidationResponse(input, _deleteUserRoleMappingInputValidator, async () =>
         {
-            var request = new DeleteUserRoleMappingsRequest()
+            var request = new List<DeleteUserRoleMappingsRequest>();
+            foreach (var a in input.DeleteUserRoleMappingInputDetails)
             {
-                Id = input.RoleId
-            };
+                request.Add(new DeleteUserRoleMappingsRequest()
+                {
+                    Id = a.RoleId,
+                    Name = a.RoleName
+                });
+            }
             await _keyclaokService.DeleteUserRoleMappingAsync(input.UserId, request);
             return Ok();
         });

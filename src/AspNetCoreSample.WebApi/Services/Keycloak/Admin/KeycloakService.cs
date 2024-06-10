@@ -21,8 +21,8 @@ public interface IKeycloakService
     ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest);
     ValueTask<List<FetchRoleResponse>> FetchRolesAsync();
     ValueTask<List<FetchRoleResponse>> FetchUserRoleMappingsAsync(FetchUserRoleMappingsRequest fetchUserRoleMappingsRequest);
-    ValueTask AddUserRoleMappingAsync(string userId, AddUserRoleMappingsRequest addUserRoleMappingsRequest);
-    ValueTask DeleteUserRoleMappingAsync(string userId, DeleteUserRoleMappingsRequest deleteUserRoleMappingsRequest);
+    ValueTask AddUserRoleMappingAsync(string userId, List<AddUserRoleMappingsRequest> addUserRoleMappingsRequest);
+    ValueTask DeleteUserRoleMappingAsync(string userId, List<DeleteUserRoleMappingsRequest> deleteUserRoleMappingsRequest);
 }
 
 public class KeycloakService : IKeycloakService
@@ -200,7 +200,7 @@ public class KeycloakService : IKeycloakService
         return result;
     }
 
-    public async ValueTask AddUserRoleMappingAsync(string userId, AddUserRoleMappingsRequest addUserRoleMappingsRequest)
+    public async ValueTask AddUserRoleMappingAsync(string userId, List<AddUserRoleMappingsRequest> addUserRoleMappingsRequest)
     {
         var tokenResponse = await AdminAccessToken();
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/role-mappings/realm");
@@ -215,7 +215,7 @@ public class KeycloakService : IKeycloakService
         }
     }
 
-    public async ValueTask DeleteUserRoleMappingAsync(string userId, DeleteUserRoleMappingsRequest deleteUserRoleMappingsRequest)
+    public async ValueTask DeleteUserRoleMappingAsync(string userId, List<DeleteUserRoleMappingsRequest> deleteUserRoleMappingsRequest)
     {
         var tokenResponse = await AdminAccessToken();
         var request = new HttpRequestMessage(HttpMethod.Delete, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/role-mappings/realm");
