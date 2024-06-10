@@ -55,7 +55,8 @@ services:
     command:
       [
         start-dev, # 開発モードで起動 # start --optimized
-        --import-realm
+        --import-realm,
+        "--log-level=DEBUG"
       ]
     depends_on:
       - keycloak-mysql

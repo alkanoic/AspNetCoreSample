@@ -20,6 +20,9 @@ public class KeycloakController : ControllerBase
     private readonly IValidator<ChangePasswordInput> _changePasswordInputValidator;
     private readonly IValidator<ResetPasswordByEmailInput> _resetPasswordByEmailInputValidator;
     private readonly IValidator<DeleteUserInput> _deleteUserInputValidator;
+    private readonly IValidator<FetchUserRoleMappingsInput> _fetchUserRoleMappingsInputValidator;
+    private readonly IValidator<AddUserRoleMappingInput> _addUserRoleMappingInputValidator;
+    private readonly IValidator<DeleteUserRoleMappingInput> _deleteUserRoleMappingInputValidator;
 
     public KeycloakController(ILogger<KeycloakController> logger,
         IKeycloakService keycloakService,
@@ -28,7 +31,10 @@ public class KeycloakController : ControllerBase
         IValidator<UpdateUserInput> updateUserInputValidator,
         IValidator<ChangePasswordInput> changePasswordInputValidator,
         IValidator<ResetPasswordByEmailInput> resetPasswordByEmailInputValidator,
-        IValidator<DeleteUserInput> deleteUserInputValidator)
+        IValidator<DeleteUserInput> deleteUserInputValidator,
+        IValidator<FetchUserRoleMappingsInput> fetchUserRoleMappingsInputValidator,
+        IValidator<AddUserRoleMappingInput> addUserRoleMappingInputValidator,
+        IValidator<DeleteUserRoleMappingInput> deleteUserRoleMappingInputValidator)
     {
         _logger = logger;
         _keyclaokService = keycloakService;
@@ -38,6 +44,9 @@ public class KeycloakController : ControllerBase
         _changePasswordInputValidator = changePasswordInputValidator;
         _resetPasswordByEmailInputValidator = resetPasswordByEmailInputValidator;
         _deleteUserInputValidator = deleteUserInputValidator;
+        _fetchUserRoleMappingsInputValidator = fetchUserRoleMappingsInputValidator;
+        _addUserRoleMappingInputValidator = addUserRoleMappingInputValidator;
+        _deleteUserRoleMappingInputValidator = deleteUserRoleMappingInputValidator;
     }
 
     private async ValueTask<IActionResult> CommonValidationResponse<T>(T input, IValidator<T> validator, Func<ValueTask<IActionResult>> func)
@@ -59,6 +68,10 @@ public class KeycloakController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// ユーザー情報を取得
+    /// </summary>
+    /// <param name="input">ユーザー名</param>
     [HttpPost("FetchUser")]
     public async ValueTask<IActionResult> FetchUser(FetchUserInput input)
     {
@@ -170,6 +183,86 @@ public class KeycloakController : ControllerBase
                 UserId = input.UserId,
             };
             await _keyclaokService.DeleteUserAsync(request);
+            return Ok();
+        });
+    }
+
+    /// <summary>
+    /// Realmに登録されているロール一覧を取得
+    /// </summary>
+    [HttpPost("FetchRoles")]
+    public async ValueTask<IActionResult> FetchRoles()
+    {
+        try
+        {
+            return Ok(await _keyclaokService.FetchRolesAsync());
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new WebApiFailResponse(ex));
+        }
+    }
+
+    /// <summary>
+    /// ユーザーに登録されているロール一覧を取得
+    /// </summary>
+    /// <param name="input">ユーザー情報</param>
+    [HttpPost("FtechUserRoleMappings")]
+    public async ValueTask<IActionResult> FetchUserRoleMappings(FetchUserRoleMappingsInput input)
+    {
+        return await CommonValidationResponse(input, _fetchUserRoleMappingsInputValidator, async () =>
+        {
+            var request = new FetchUserRoleMappingsRequest()
+            {
+                UserId = input.UserId,
+            };
+            var result = await _keyclaokService.FetchUserRoleMappingsAsync(request);
+            return Ok(result);
+        });
+    }
+
+    /// <summary>
+    /// ユーザーにロールをアタッチする
+    /// </summary>
+    /// <param name="input">ユーザーとロール情報</param>
+    [HttpPost("AddUserRoleMapping")]
+    public async ValueTask<IActionResult> AddUserRoleMapping(AddUserRoleMappingInput input)
+    {
+        return await CommonValidationResponse(input, _addUserRoleMappingInputValidator, async () =>
+        {
+            var request = new List<AddUserRoleMappingsRequest>();
+            foreach (var a in input.AddUserRoleMappingInputDetails)
+            {
+                request.Add(new AddUserRoleMappingsRequest()
+                {
+                    Id = a.RoleId,
+                    Name = a.RoleName
+                });
+            }
+            await _keyclaokService.AddUserRoleMappingAsync(input.UserId, request);
+            return Ok();
+        });
+    }
+
+    /// <summary>
+    /// ユーザーからロールをデタッチする
+    /// </summary>
+    /// <param name="input">ユーザーとロール情報</param>
+    [HttpDelete("DeleteUserRoleMapping")]
+    public async ValueTask<IActionResult> DeleteUserRoleMapping(DeleteUserRoleMappingInput input)
+    {
+        return await CommonValidationResponse(input, _deleteUserRoleMappingInputValidator, async () =>
+        {
+            var request = new List<DeleteUserRoleMappingsRequest>();
+            foreach (var a in input.DeleteUserRoleMappingInputDetails)
+            {
+                request.Add(new DeleteUserRoleMappingsRequest()
+                {
+                    Id = a.RoleId,
+                    Name = a.RoleName
+                });
+            }
+            await _keyclaokService.DeleteUserRoleMappingAsync(input.UserId, request);
             return Ok();
         });
     }
