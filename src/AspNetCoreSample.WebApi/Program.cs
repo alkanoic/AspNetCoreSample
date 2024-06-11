@@ -2,6 +2,7 @@ using AspNetCoreSample.WebApi;
 using AspNetCoreSample.WebApi.EfModels;
 using AspNetCoreSample.WebApi.Hubs;
 using AspNetCoreSample.WebApi.Options;
+using AspNetCoreSample.WebApi.Resources;
 using AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
@@ -109,10 +110,11 @@ builder.Services.AddOpenApiDocument(configure =>
 
 // Localizationを有効化
 // Query String、Cookie、Accept-Languageヘッダーで決める
-builder.Services.AddLocalization();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IKeycloakService, KeycloakService>();
+builder.Services.AddSingleton<ISharedResource, SharedResource>();
 
 var app = builder.Build();
 

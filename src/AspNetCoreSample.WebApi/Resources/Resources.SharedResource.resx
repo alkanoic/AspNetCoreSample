@@ -1,0 +1,20 @@
+<root>
+  <data name="UserIdRequired" xml:space="preserve">
+    <value>日本語：UserId is required.</value>
+  </data>
+  <data name="UserIdLength" xml:space="preserve">
+    <value>日本語：UserId must be between 1 and 50 characters.</value>
+  </data>
+  <data name="RoleIdRequired" xml:space="preserve">
+    <value>日本語：RoleId is required.</value>
+  </data>
+  <data name="RoleIdLength" xml:space="preserve">
+    <value>日本語：RoleId must be between 1 and 50 characters.</value>
+  </data>
+  <data name="RoleNameRequired" xml:space="preserve">
+    <value>日本語：RoleName is required.</value>
+  </data>
+  <data name="RoleNameLength" xml:space="preserve">
+    <value>日本語：RoleName must be between 1 and 100 characters.</value>
+  </data>
+</root>
