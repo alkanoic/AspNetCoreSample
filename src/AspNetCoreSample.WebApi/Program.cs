@@ -49,6 +49,7 @@ builder.Services.AddAuthentication(options =>
     });
 builder.Services.AddAuthorization();
 
+builder.Services.Configure<PolicyOptions>(builder.Configuration.GetSection(nameof(PolicyOptions)));
 var policyCache = new ConcurrentDictionary<string, AuthorizationPolicy>();
 builder.Services.AddSingleton(policyCache);
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthorizationPolicyProvider>();

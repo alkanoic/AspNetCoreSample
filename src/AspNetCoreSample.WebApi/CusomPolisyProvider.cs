@@ -12,16 +12,23 @@ public class CustomAuthorizationPolicyProvider : IAuthorizationPolicyProvider
 {
     private readonly DefaultAuthorizationPolicyProvider _fallbackPolicyProvider;
     private readonly IServiceProvider _serviceProvider;
-    private readonly ConcurrentDictionary<string, AuthorizationPolicy> _policies = new ConcurrentDictionary<string, AuthorizationPolicy>();
+    private readonly ConcurrentDictionary<string, AuthorizationPolicy> _policies;
+    private readonly PolicyService _policyService;
 
-    public CustomAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options, IServiceProvider serviceProvider)
+    public CustomAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options,
+                                            IServiceProvider serviceProvider,
+                                            ConcurrentDictionary<string, AuthorizationPolicy> policies,
+                                            PolicyService policyService)
     {
         _fallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
         _serviceProvider = serviceProvider;
+        _policies = policies;
+        _policyService = policyService;
     }
 
     public async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
+        _policyService.RefreshPoliciesByTimeSpan();
         if (_policies.TryGetValue(policyName, out var policy))
         {
             return policy;
