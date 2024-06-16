@@ -38,6 +38,10 @@ public class PolicyService
     /// </summary>
     public void RefreshPoliciesByTimeSpan()
     {
+        if (_policyOptions.RefreshPolicyTimeSpan.TotalSeconds <= 1)
+        {
+            return;
+        }
         var diff = DateTime.UtcNow - _beforeRefreshDateTime;
         if (diff > _policyOptions.RefreshPolicyTimeSpan)
         {
