@@ -3,8 +3,8 @@ using FluentValidation;
 using FluentValidation.Results;
 using AspNetCoreSample.WebApi;
 using Microsoft.EntityFrameworkCore;
-using AspNetCoreSample.WebApi.EfModels;
 using AspNetCoreSample.WebApi.Validators;
+using AspNetCoreSample.DataModel.Models;
 
 namespace WebApiSample.Controllers;
 

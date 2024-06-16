@@ -231,7 +231,7 @@ public class KeycloakController : ControllerBase
         return await CommonValidationResponse(input, _addUserRoleMappingInputValidator, async () =>
         {
             var request = new List<AddUserRoleMappingsRequest>();
-            foreach (var a in input.AddUserRoleMappingInputDetails)
+            foreach (var a in input.AddUserRoleMappingInputDetails ?? new List<AddUserRoleMappingInputDetail>())
             {
                 request.Add(new AddUserRoleMappingsRequest()
                 {
@@ -254,7 +254,7 @@ public class KeycloakController : ControllerBase
         return await CommonValidationResponse(input, _deleteUserRoleMappingInputValidator, async () =>
         {
             var request = new List<DeleteUserRoleMappingsRequest>();
-            foreach (var a in input.DeleteUserRoleMappingInputDetails)
+            foreach (var a in input.DeleteUserRoleMappingInputDetails = new List<DeleteUserRoleMappingInputDetail>())
             {
                 request.Add(new DeleteUserRoleMappingsRequest()
                 {

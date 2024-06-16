@@ -73,3 +73,17 @@ CREATE TABLE child_table
     update_user VARCHAR(20) NOT NULL,
     CONSTRAINT child_table_fk FOREIGN KEY (parent_id) REFERENCES parent_table (id)
 );
+
+CREATE TABLE policies
+(
+    policy_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY(policy_name)
+);
+
+CREATE TABLE role_policies
+(
+    policy_name VARCHAR(255) NOT NULL,
+    role_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY(policy_name, role_name),
+    CONSTRAINT policies_fk FOREIGN KEY (policy_name) REFERENCES policies (policy_name)
+);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AspNetCoreSample.WebApi.EfModels;
+namespace AspNetCoreSample.DataModel.Models;
 
 public partial class Name
 {

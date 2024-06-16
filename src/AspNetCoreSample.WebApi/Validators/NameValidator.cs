@@ -1,5 +1,4 @@
-
-using AspNetCoreSample.WebApi.EfModels;
+using AspNetCoreSample.DataModel.Models;
 
 using FluentValidation;
 

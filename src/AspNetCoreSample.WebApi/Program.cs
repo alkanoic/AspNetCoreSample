@@ -1,5 +1,7 @@
+using System.Collections.Concurrent;
+
+using AspNetCoreSample.DataModel.Models;
 using AspNetCoreSample.WebApi;
-using AspNetCoreSample.WebApi.EfModels;
 using AspNetCoreSample.WebApi.Hubs;
 using AspNetCoreSample.WebApi.Options;
 using AspNetCoreSample.WebApi.Resources;
@@ -9,6 +11,7 @@ using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 using FluentValidation;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 using NSwag;
@@ -44,26 +47,12 @@ builder.Services.AddAuthentication(options =>
         options.Audience = keycloakOptions.Audience;
         options.RequireHttpsMetadata = false;
     });
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("User", policy =>
-    {
-        policy.RequireAssertion(context =>
-            context.User.HasClaim(c =>
-                c.Value == "user" || c.Value == "admin"
-            )
-        );
-    });
+builder.Services.AddAuthorization();
 
-    options.AddPolicy("Admin", policy =>
-    {
-        policy.RequireAssertion(context =>
-            context.User.HasClaim(c =>
-                c.Value == "admin"
-            )
-        );
-    });
-});
+var policyCache = new ConcurrentDictionary<string, AuthorizationPolicy>();
+builder.Services.AddSingleton(policyCache);
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthorizationPolicyProvider>();
+builder.Services.AddSingleton<PolicyService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<TokenRequestValidator>();
 
