@@ -68,6 +68,11 @@ public class KeycloakController : ControllerBase
         }
     }
 
+    private string GetAccessTokenByHeader()
+    {
+        return HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+    }
+
     /// <summary>
     /// ユーザー情報を取得
     /// </summary>
@@ -79,6 +84,7 @@ public class KeycloakController : ControllerBase
         {
             var request = new FetchUserRequest()
             {
+                AccessToken = GetAccessTokenByHeader(),
                 Username = input.Username,
             };
             var response = await _keyclaokService.FetchUserAsync(request);

@@ -67,9 +67,13 @@ public class KeycloakService : IKeycloakService
 
     public async ValueTask<FetchUserResponse> FetchUserAsync(FetchUserRequest fetchUserRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(fetchUserRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            fetchUserRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users?exact=true&username={fetchUserRequest.Username}");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchUserRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
         var content = await response.Content.ReadAsStringAsync();
