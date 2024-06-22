@@ -1,8 +1,5 @@
 using System.Data.Common;
 
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Networks;
-
 using MySqlConnector;
 
 using Testcontainers.MySql;
@@ -11,8 +8,6 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class DbFixture : IAsyncLifetime
 {
-    private readonly INetwork _network = new NetworkBuilder().Build();
-
     private readonly MySqlContainer _mySqlContainer;
 
     public DbFixture()
@@ -23,8 +18,6 @@ public sealed class DbFixture : IAsyncLifetime
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("LANG", "ja_JP.UTF-8")
-            .WithNetwork(_network)
-            .WithNetworkAliases(nameof(_mySqlContainer))
             .Build();
     }
 
