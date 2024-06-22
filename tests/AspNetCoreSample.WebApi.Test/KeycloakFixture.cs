@@ -11,24 +11,28 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class KeycloakFixture : IAsyncLifetime
 {
-    private readonly INetwork _network = new NetworkBuilder().Build();
-
-    private readonly KeycloakContainer _keycloakContainer;
+    private readonly IContainer _keycloakContainer;
+    private const int KeycloakPort = 8080;
+    private const int KeycloakHealthPort = 9000;
 
     public KeycloakFixture()
     {
-        _keycloakContainer = new KeycloakBuilder()
+        _keycloakContainer = new ContainerBuilder()
             .WithImage("quay.io/keycloak/keycloak:latest")
             .WithResourceMapping("Test-realm.json", "/opt/keycloak/data/import/")
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("LANG", "ja_JP.UTF-8")
-            .WithNetwork(_network)
-            .WithNetworkAliases(nameof(_keycloakContainer))
+            .WithEnvironment("KC_HEALTH_ENABLED", "true")
+            .WithPortBinding(KeycloakPort, true)
+            .WithPortBinding(KeycloakHealthPort, true)
+            .WithCommand("start-dev")
             .WithCommand("--import-realm")
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(request =>
+                request.ForPath("/health/ready").ForPort(KeycloakHealthPort)))
             .Build();
     }
 
-    public string BaseAddress => _keycloakContainer.GetBaseAddress();
+    public string BaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
 
     public Task InitializeAsync()
     {
@@ -38,13 +42,5 @@ public sealed class KeycloakFixture : IAsyncLifetime
     public Task DisposeAsync()
     {
         return Task.CompletedTask;
-    }
-
-    private sealed class MigrationCompleted : IWaitUntil
-    {
-        public Task<bool> UntilAsync(IContainer container)
-        {
-            return Task.FromResult(TestcontainersStates.Exited.Equals(container.State));
-        }
     }
 }

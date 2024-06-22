@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
 
-using AspNetCoreSample.WebApi.EfModels;
+using AspNetCoreSample.DataModel.Models;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +38,7 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<DbFixture>, IDispos
 
     [Fact]
     [Trait("Category", nameof(DbAccessWebApiSelectTest))]
-    public async Task Get_DbAccess_ReturnsThreeNames()
+    public async Task GetDbAccessReturnsThreeNames()
     {
         // Given
         const string path = "api/dbaccess";

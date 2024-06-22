@@ -10,16 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.6" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageReference Include="MySqlConnector" Version="2.3.7" />
-    <PackageReference Include="Testcontainers" Version="3.8.0" />
-    <PackageReference Include="Testcontainers.Keycloak" Version="3.8.0" />
-    <PackageReference Include="TestContainers.MySql" Version="3.8.0" />
-    <PackageReference Include="xunit" Version="2.5.3" />
-    <PackageReference Include="Xunit.Extensions.AssemblyFixture" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageReference Include="Testcontainers" Version="3.9.0" />
+    <PackageReference Include="Testcontainers.Keycloak" Version="3.9.0" />
+    <PackageReference Include="TestContainers.MySql" Version="3.9.0" />
+    <PackageReference Include="xunit" Version="2.8.1" />
+    <PackageReference Include="Xunit.Extensions.AssemblyFixture" Version="2.6.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="../testcontainer/migrate/*" LinkBase="migrate" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../testcontainer/migrate/*" LinkBase="migrate"
+      CopyToOutputDirectory="PreserveNewest" />
     <None Include="../testcontainer/my.cnf" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../testcontainer/Test-realm.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

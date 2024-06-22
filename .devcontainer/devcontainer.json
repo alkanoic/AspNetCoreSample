@@ -51,7 +51,8 @@
 				"formulahendry.auto-rename-tag",
 				"zxh404.vscode-proto3",
 				"Vue.volar",
-				"cweijan.vscode-database-client2"
+				"cweijan.vscode-database-client2",
+				"aliasadidev.nugetpackagemanagergui"
 			],
 			"settings": {
 				"editor.formatOnSave": true

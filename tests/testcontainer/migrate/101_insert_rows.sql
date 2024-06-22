@@ -28,3 +28,17 @@ INSERT INTO multi_table(
 (12, '003', 'table_name', 323, 323.45, SYSDATE(), 1, SYSDATE(), 'create_user3', SYSDATE(), 'update_user3'),
 (13, '003', 'table_name', 323, 323.45, SYSDATE(), 1, SYSDATE(), 'create_user3', SYSDATE(), 'update_user3'),
 (14, '003', 'table_name', 323, 323.45, SYSDATE(), 1, SYSDATE(), 'create_user3', SYSDATE(), 'update_user3');
+
+INSERT INTO policies(
+    policy_name
+)VALUES
+('Admin'),('User')
+;
+
+INSERT INTO role_policies(
+    policy_name, role_name
+)VALUES
+('Admin', 'admin'),
+('User', 'admin'),
+('User', 'user')
+;

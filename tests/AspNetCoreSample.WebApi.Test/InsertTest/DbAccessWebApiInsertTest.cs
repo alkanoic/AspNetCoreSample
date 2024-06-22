@@ -2,7 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-using AspNetCoreSample.WebApi.EfModels;
+using AspNetCoreSample.DataModel.Models;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +39,7 @@ public sealed class DbAccessWebApiInsertTest : IClassFixture<DbFixture>, IDispos
 
     [Fact]
     [Trait("Category", nameof(DbAccessWebApiInsertTest))]
-    public async Task Post_DbAccess_RegisterName()
+    public async Task PostDbAccessRegisterName()
     {
         // Given
         const string path = "api/dbaccess";
