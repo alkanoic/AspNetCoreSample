@@ -23,6 +23,12 @@ public interface IKeycloakService
     ValueTask<List<FetchRoleResponse>> FetchUserRoleMappingsAsync(FetchUserRoleMappingsRequest fetchUserRoleMappingsRequest);
     ValueTask AddUserRoleMappingAsync(string userId, List<AddUserRoleMappingsRequest> addUserRoleMappingsRequest);
     ValueTask DeleteUserRoleMappingAsync(string userId, List<DeleteUserRoleMappingsRequest> deleteUserRoleMappingsRequest);
+    ValueTask<List<KeycloakClientResponse>> FetchClientsAsync(FetchClientsRequest fetchClientsRequest);
+    ValueTask<KeycloakClientResponse> FetchClientAsync(FetchClientRequest fetchClientRequest);
+    ValueTask<List<FetchRoleResponse>> FetchClientRolesAsync(FetchClientRolesRequest fetchClientRolesRequest);
+    ValueTask<List<FetchRoleResponse>> FetchUserClientRolesAsync(FetchUserClientRolesRequest fetchUserClientRolesRequest);
+    ValueTask AddUserClientRoleMappingAsync(string userId, string clientUuid, List<AddUserRoleMappingsRequest> addUserClientRoleMappingRequest);
+    ValueTask DeleteUserClientRoleMappingAsync(string userId, string clientUuid, List<DeleteUserRoleMappingsRequest> deleteUserClientRoleMappingRequest);
 }
 
 public class KeycloakService : IKeycloakService
@@ -231,6 +237,119 @@ public class KeycloakService : IKeycloakService
         {
             var content = await response.Content.ReadAsStringAsync();
             throw new InvalidDataException($"delete user role mapping fail response detail:{content}");
+        }
+    }
+
+    public async ValueTask<List<KeycloakClientResponse>> FetchClientsAsync(FetchClientsRequest fetchClientsRequest)
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+        var response = await _httpClient.SendAsync(request);
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidDataException($"fetch clients fail response detail:{content}");
+        }
+        var results = JsonSerializer.Deserialize<List<KeycloakClientResponse>>(content, _jsonSerializerOptions);
+        if (results is null)
+        {
+            throw new InvalidCastException("fetch keycloak client fail no content");
+        }
+        return results;
+    }
+
+    public async ValueTask<KeycloakClientResponse> FetchClientAsync(FetchClientRequest fetchClientRequest)
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients?clientId={fetchClientRequest.ClientId}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+        var response = await _httpClient.SendAsync(request);
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidDataException($"fetch client fail response detail:{content}");
+        }
+        var results = JsonSerializer.Deserialize<List<KeycloakClientResponse>>(content, _jsonSerializerOptions);
+        if (results is null || results.Count == 0)
+        {
+            throw new InvalidCastException("fetch keycloak client fail no content");
+        }
+        return results.First();
+    }
+
+    public async ValueTask<List<FetchRoleResponse>> FetchClientRolesAsync(FetchClientRolesRequest fetchClientRolesRequest)
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients/{fetchClientRolesRequest.ClientUuid}/roles");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+        var response = await _httpClient.SendAsync(request);
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidDataException($"fetch client fail response detail:{content}");
+        }
+        var results = JsonSerializer.Deserialize<List<FetchRoleResponse>>(content, _jsonSerializerOptions);
+        if (results is null)
+        {
+            throw new InvalidCastException("fetch keycloak client fail no content");
+        }
+        return results;
+    }
+
+    public async ValueTask<List<FetchRoleResponse>> FetchUserClientRolesAsync(FetchUserClientRolesRequest fetchUserClientRolesRequest)
+    {
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{fetchUserClientRolesRequest.UserId}/role-mappings/clients/{fetchUserClientRolesRequest.ClientUuid}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+
+        var response = await _httpClient.SendAsync(request);
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidDataException($"fetch client fail response detail:{content}");
+        }
+        var results = JsonSerializer.Deserialize<List<FetchRoleResponse>>(content, _jsonSerializerOptions);
+        if (results is null)
+        {
+            throw new InvalidCastException("fetch keycloak client fail no content");
+        }
+        return results;
+        // GET /admin/realms/{realm}/users/{user-id}/role-mappings/clients/{client}
+    }
+
+    public async ValueTask AddUserClientRoleMappingAsync(string userId, string clientUuid, List<AddUserRoleMappingsRequest> addUserClientRoleMappingRequest)
+    {
+        // POST /admin/realms/{realm}/users/{user-id}/role-mappings/clients/{client}
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/role-mappings/clients/{clientUuid}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Content = new StringContent(JsonSerializer.Serialize(addUserClientRoleMappingRequest, addUserClientRoleMappingRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
+
+        var response = await _httpClient.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            throw new InvalidDataException($"add user role mapping fail response detail:{content}");
+        }
+    }
+
+    public async ValueTask DeleteUserClientRoleMappingAsync(string userId, string clientUuid, List<DeleteUserRoleMappingsRequest> deleteUserClientRoleMappingRequest)
+    {
+        // DELETE /admin/realms/{realm}/users/{user-id}/role-mappings/clients/{client}
+        var tokenResponse = await AdminAccessToken();
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/role-mappings/clients/{clientUuid}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Content = new StringContent(JsonSerializer.Serialize(deleteUserClientRoleMappingRequest, deleteUserClientRoleMappingRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
+
+        var response = await _httpClient.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            throw new InvalidDataException($"add user role mapping fail response detail:{content}");
         }
     }
 }
