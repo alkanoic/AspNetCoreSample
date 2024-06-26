@@ -4,7 +4,7 @@ import path from "path";
 
 export default defineConfig({
   build: {
-    outDir: "wwwroot",
+    outDir: "wwwroot/dist",
     sourcemap: process.env.NODE_ENV !== "production",
     target: "es2020",
     rollupOptions: {
@@ -12,17 +12,18 @@ export default defineConfig({
         fg
           .sync("{js,css}/*.{ts,js,scss}", {
             ignore: ["**/_*.{ts,js,scss}"],
-            cwd: "./src",
+            cwd: "./vite",
           })
           .map((file) => {
             const { dir, name } = path.parse(file);
-            return [`${dir}/${name}`, path.resolve("src", file)];
+            return [`${dir}/${name}`, path.resolve("vite", file)];
           })
       ),
       // 出力CSSファイル名はassetFileNamesで指定する。inputが.scssなら、[ext]には"css"が入る
       output: {
         format: "es",
         entryFileNames: "[name].js",
+        chunkFileNames: "assets/[name]-[hash].js",
         assetFileNames: "[name].[ext]",
       },
     },
