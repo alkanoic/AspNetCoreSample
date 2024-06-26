@@ -62,7 +62,23 @@
                 }
             },
             "task": "watchTaskName",
-            "program": "AspNetCoreSample.Mvc.exe"
+            "program": "AspNetCoreSample.Mvc.exe",
+            "serverReadyAction": {
+                "action": "debugWithChrome",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot"
+            },
+        },
+        {
+            "name": "Vite Watch",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/src/AspNetCoreSample.Mvc",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
         },
         {
             "name": "WebApi",
@@ -300,7 +316,8 @@
             "name": "Mvc-hotreload-and-WebApi",
             "configurations": [
                 "Mvc Watch Attach",
-                "WebApi"
+                "WebApi",
+                "Vite Watch"
             ]
         },
         {
