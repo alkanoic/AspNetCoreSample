@@ -1,0 +1,7 @@
+// Bootstrapのデフォルト変数をインポート
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+// 変数の上書き
+$body-bg: #f8f9fa;
+$primary: #007bff;
