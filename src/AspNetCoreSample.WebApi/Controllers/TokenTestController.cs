@@ -34,4 +34,16 @@ public class TokenTestController : ControllerBase
     {
         return ValueTask.FromResult(sample);
     }
+
+    [Authorize]
+    public ValueTask<SampleJsonRequest> SampleJson(SampleJsonRequest request)
+    {
+        return ValueTask.FromResult(request);
+    }
+
+    public class SampleJsonRequest
+    {
+        public required string Value1 { get; set; }
+        public required string Value2 { get; set; }
+    }
 }

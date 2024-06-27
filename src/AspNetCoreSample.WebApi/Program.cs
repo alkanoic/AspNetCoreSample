@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Text;
 
 using AspNetCoreSample.DataModel.Models;
 using AspNetCoreSample.WebApi;
@@ -13,6 +14,8 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -36,16 +39,31 @@ builder.Services.Configure<KeycloakOptions>(keycloakSection);
 var keycloakOptions = keycloakSection.Get<KeycloakOptions>()!;
 
 builder.Services.AddSignalR();
-
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     }).AddJwtBearer(options =>
     {
-        options.Authority = keycloakOptions.Authority;
-        options.Audience = keycloakOptions.Audience;
+        // options.Authority = keycloakOptions.Authority;
+        // options.Audience = keycloakOptions.Audience;
         options.RequireHttpsMetadata = false;
+        // options.ClaimsIssuer = keycloakOptions.Authority;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = keycloakOptions.Authority,
+            ValidAudience = keycloakOptions.Audience
+        };
+        // options.TokenValidationParameters = new TokenValidationParameters
+        // {
+        //     ValidateIssuer = false,
+        //     ValidateAudience = false,
+        //     ValidateLifetime = false,
+        //     ValidateIssuerSigningKey = false,
+        //     ValidIssuer = keycloakOptions.Authority,
+        //     ValidAudiences = new[] { "realm-management", "account" },
+        // };
     });
 builder.Services.AddAuthorization();
 
