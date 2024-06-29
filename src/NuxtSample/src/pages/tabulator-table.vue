@@ -1,32 +1,11 @@
 <template>
-  <div class="border-danger mb-2 rounded border p-2">
-    <div ref="tableElement"></div>
-
-    <div class="mt-2">
-      <button type="button" class="btn btn-success" @click="csvDownload('csv')">
-        CsvDownload
-      </button>
-      <button type="button" class="btn btn-success" @click="csvDownload('xlsx')">
-        XlsxDownload
-      </button>
-      <button type="button" class="btn btn-success" @click="csvDownload('json')">
-        JsonDownload
-      </button>
-    </div>
-    <DialogModal :is-open="showModal" :title="title" :message="message" @close="closeDialog"></DialogModal>
-  </div>
+  <TabulatorModal :data-name="dataName" :columns="columns" :row-data="state.list"></TabulatorModal>
 </template>
 
 <script setup lang="ts">
-import { TabulatorFull as Tabulator, type DownloadType } from "tabulator-tables";
-import DialogModal from "@/components/DialogModal.vue";
+import type { ColumnDefinition } from 'tabulator-tables';
 
-const tabulator = ref<Tabulator | null>(null);
-const tableElement = ref<HTMLElement | null>(null);
-const showModal = ref(false);
-const title = ref("");
-const message = ref("");
-
+const dataName = "sample";
 type TableDataRow = {
   id: number;
   value: number;
@@ -49,41 +28,10 @@ const state = reactive<State>({
   ],
 });
 
-const columns: any[] = [
-  { field: "id", title: "id", headerFilter: true, topCalc: "count" },
+const columns: ColumnDefinition[] = [
+  { field: "id", title: "id", headerFilter: true },
   { field: "value", title: "value", headerFilter: true },
   { field: "name", title: "name-column", headerFilter: true },
   { field: "date", title: "date-column", headerFilter: true },
 ];
-
-const csvDownload = (type: DownloadType) => {
-  if (tabulator.value === null) return;
-  tabulator.value.download(type, `sample.${type}`);
-};
-
-onMounted(() => {
-  if (tableElement.value === null) return;
-
-  tabulator.value = new Tabulator(tableElement.value, {
-    columns,
-    data: state.list,
-    reactiveData: true,
-    movableColumns: true,
-    selectableRange: true,
-    selectableRangeRows: true,
-    selectableRangeColumns: true,
-    clipboard: true,
-    clipboardCopyRowRange: "range",
-  });
-  tabulator.value.on("rowClick", function (e, row) {
-    const detail = row.getData();
-    showModal.value = true;
-    title.value = row.getIndex();
-    message.value = JSON.stringify(detail);
-  });
-});
-
-const closeDialog = () => {
-  showModal.value = false;
-};
 </script>
