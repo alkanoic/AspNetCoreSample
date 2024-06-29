@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   srcDir: "src", // componentsやpagesなどのディレクトリを置く場所を指定
   css: [
     "@/assets/css/main.css",
-    "tabulator-tables/dist/css/tabulator_simple.min.css",
+    "tabulator-tables/dist/css/tabulator_bootstrap5.min.css",
     "@fortawesome/fontawesome-svg-core/styles.css",
   ],
   postcss: {
