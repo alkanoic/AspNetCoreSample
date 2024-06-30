@@ -37,6 +37,9 @@
             <NuxtLink to="/tabulator" @click="closeDrawer">Tabulator</NuxtLink>
           </li>
           <li class="menu-item">
+            <NuxtLink to="/tabulator-table" @click="closeDrawer">TabulatorTable</NuxtLink>
+          </li>
+          <li class="menu-item">
             <NuxtLink to="/tantable" @click="closeDrawer">TanStackTable</NuxtLink>
           </li>
           <li class="menu-item">

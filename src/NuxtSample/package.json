@@ -37,6 +37,7 @@
     "daisyui": "^4.11.1",
     "jwt-decode": "^4.0.0",
     "keycloak-js": "^24.0.4",
+    "luxon": "^3.4.4",
     "pinia": "^2.1.7",
     "tabulator-tables": "^6.2.1",
     "vee-validate": "^4.12.8",
