@@ -50,7 +50,7 @@ public sealed class DbAccessWebApiAuthTest : IClassFixture<KeycloakFixture>, IDi
         const string path = "api/token/auth";
 
         // When
-        var content = new StringContent(JsonSerializer.Serialize(new { userName = "admin", password = "admin" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonSerializer.Serialize(new { userName = "user", password = "user" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
         var response = await _httpClient.PostAsync(path, content);
         var dbAccessStream = await response.Content.ReadAsStreamAsync();
         var token = await JsonSerializer.DeserializeAsync<TokenResponse>(dbAccessStream, JsonSerializerOptions);
@@ -66,7 +66,8 @@ public sealed class DbAccessWebApiAuthTest : IClassFixture<KeycloakFixture>, IDi
         // var test_response = await _httpClient.GetAsync("api/TokenTest/SampleAdmin?sample=asd");
 
         var request = new HttpRequestMessage(HttpMethod.Post, "api/TokenTest");
-        request.Headers.Add("Authorization", $"Bearer {token.AccessToken}");
+        // request.Headers.Add("Authorization", $"Bearer {token.AccessToken}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
         request.Content = new StringContent("""{"value1": "string", "value2": "string"}""", Encoding.UTF8, "application/json");
         var token_response = await _httpClient.SendAsync(request);
 
