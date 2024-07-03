@@ -24,4 +24,8 @@ public class CreateUserRequest
     /// </summary>
     public required string Email { get; set; }
     public required List<Credential> Credentials { get; set; }
+    /// <summary>
+    /// ユーザー属性
+    /// </summary>
+    public Dictionary<string, List<string>>? Attributes { get; set; }
 }

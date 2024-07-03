@@ -9,6 +9,10 @@ public class UpdateUserInput
     public string? LastName { get; set; }
     public string? Email { get; set; }
     public string? Password { get; set; }
+    /// <summary>
+    /// 更新時はすべて送信すること
+    /// </summary>
+    public Dictionary<string, List<string>>? Attributes { get; set; }
 }
 
 public class UpdateUserInputValidator : AbstractValidator<UpdateUserInput>

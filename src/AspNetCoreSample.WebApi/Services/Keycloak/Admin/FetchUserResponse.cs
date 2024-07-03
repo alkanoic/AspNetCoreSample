@@ -30,5 +30,5 @@ public class FetchUserResponse
     /// <summary>
     /// Attributes
     /// </summary>
-    public Dictionary<string, List<string>> Attributes { get; set; }
+    public Dictionary<string, List<string>>? Attributes { get; set; }
 }

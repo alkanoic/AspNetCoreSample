@@ -103,7 +103,8 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                 LastName = input.LastName,
                 Email = input.Email,
                 Enabled = true,
-                Credentials = new List<Credential> { new(input.Password) }
+                Credentials = new List<Credential> { new(input.Password) },
+                Attributes = input.Attributes
             };
             var response = await _keycloakService.CreateUserAsync(request);
             return Ok(response);
@@ -123,7 +124,8 @@ public class KeycloakController(ILogger<KeycloakController> logger,
             {
                 FirstName = input.FirstName,
                 LastName = input.LastName,
-                Email = input.Email
+                Email = input.Email,
+                Attributes = input.Attributes
             };
             if (!string.IsNullOrWhiteSpace(input.Password))
             {

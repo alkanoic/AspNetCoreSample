@@ -17,4 +17,8 @@ public class UpdateUserRequest
     /// </summary>
     public string? Email { get; set; }
     public List<Credential>? Credentials { get; set; }
+    /// <summary>
+    /// ユーザー属性：更新時はすべて送信すること
+    /// </summary>
+    public Dictionary<string, List<string>>? Attributes { get; set; }
 }
