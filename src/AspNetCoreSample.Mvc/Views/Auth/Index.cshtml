@@ -5,3 +5,21 @@
 <div class="text-center">
   <h1 class="display-4">Authenticated</h1>
 </div>
+
+<table>
+  <thead>
+    <tr>
+      <td>Type</td>
+      <td>Value</td>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (System.Security.Claims.Claim c in ViewBag.Claims)
+    {
+      <tr>
+        <td>@c.Type</td>
+        <td>@c.Value</td>
+      </tr>
+    }
+  </tbody>
+</table>

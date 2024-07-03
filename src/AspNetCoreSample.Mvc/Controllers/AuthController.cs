@@ -2,6 +2,7 @@ using System.Diagnostics;
 
 using AspNetCoreSample.Mvc.Models;
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ public class AuthController : Controller
 
     public IActionResult Index()
     {
+        ViewBag.Claims = HttpContext.User.Claims;
         return View();
     }
 }

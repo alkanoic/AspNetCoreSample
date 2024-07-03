@@ -27,4 +27,8 @@ public class FetchUserResponse
     /// メールアドレス
     /// </summary>
     public string? Email { get; set; }
+    /// <summary>
+    /// Attributes
+    /// </summary>
+    public Dictionary<string, List<string>> Attributes { get; set; }
 }
