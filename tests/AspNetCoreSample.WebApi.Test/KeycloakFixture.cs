@@ -20,6 +20,8 @@ public sealed class KeycloakFixture : IAsyncLifetime
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("LANG", "ja_JP.UTF-8")
             .WithEnvironment("KC_HEALTH_ENABLED", "true")
+            .WithEnvironment("KEYCLOAK_ADMIN", "admin")
+            .WithEnvironment("KEYCLOAK_ADMIN_PASSWORD", "passwd")
             .WithPortBinding(KeycloakPort, true)
             .WithPortBinding(KeycloakHealthPort, true)
             .WithCommand("start-dev")
