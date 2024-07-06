@@ -7,17 +7,17 @@
 </template>
 
 <script setup lang="ts">
-  const emit = defineEmits<{ (e: "clickEmit", value?: string): void }>();
+const emit = defineEmits<{ (e: "clickEmit", value?: string): void }>();
 
-  const handleClick = () => {
-    emit("clickEmit", "Child to Parent");
-  };
+const handleClick = () => {
+  emit("clickEmit", "Child to Parent");
+};
 
-  const props = defineProps({
-    parentProp: {
-      type: String,
-      default: "",
-    },
-  });
-  const parentData = ref(props.parentProp);
+const props = defineProps({
+  parentProp: {
+    type: String,
+    default: "",
+  },
+});
+const parentData = ref(props.parentProp);
 </script>

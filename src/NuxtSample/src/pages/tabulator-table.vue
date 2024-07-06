@@ -1,9 +1,9 @@
 <template>
-  <TabulatorModal :data-name="dataName" :columns="columns" :row-data="state.list"></TabulatorModal>
+  <TabulatorModal :data-name="dataName" :columns="columns" :row-data="state.list" />
 </template>
 
 <script setup lang="ts">
-import type { ColumnDefinition } from 'tabulator-tables';
+import type { ColumnDefinition } from "tabulator-tables";
 
 const dataName = "sample";
 type TableDataRow = {

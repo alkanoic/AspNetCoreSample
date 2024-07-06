@@ -12,8 +12,8 @@
       </button>
     </div>
     <p>件数：{{ count }}</p>
-    <div ref="tableElement"></div>
-    <DialogModal :is-open="showModal" :title="title" :message="message" @close="closeDialog"></DialogModal>
+    <div ref="tableElement" />
+    <DialogModal :is-open="showModal" :title="title" :message="message" @close="closeDialog" />
   </div>
 </template>
 

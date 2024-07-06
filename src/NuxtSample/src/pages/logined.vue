@@ -13,7 +13,7 @@
     <p>Expire: {{ authStore.getExpire }}</p>
     <p>Iat: {{ authStore.getIat }}</p>
     <button class="btn btn-primary" @click="logout">logout</button>
-    <hr class="my-3" />
+    <hr class="my-3">
     <button class="btn btn-secondary" @click="fetchWebapi">webapi</button>
     <p>{{ webapi }}</p>
     <button class="btn btn-primary" @click="refreshAccessToken">Refresh</button>
@@ -22,7 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "~/store/authStore"
+import { useAuthStore } from "~/store/authStore";
+
 const authStore = useAuthStore();
 const webapi = ref("");
 const refresh = ref();
@@ -41,27 +42,29 @@ async function fetchWebapi() {
   try {
     const runtimeConfig = useRuntimeConfig();
     const params = {
-      sample: "sample"
+      sample: "sample",
     };
     const response = await fetch(
       `${runtimeConfig.public.apiBaseUrl}/api/auth/sample?` + new URLSearchParams(params),
       {
         method: "GET",
         headers: {
-          "accept": "application/json",
-          "Authorization": `Bearer ${authStore.getAccessToken}`
-        }
-      }
+          accept: "application/json",
+          Authorization: `Bearer ${authStore.getAccessToken}`,
+        },
+      },
     );
     if (response.ok) {
       const data = await response.json();
       webapi.value = data;
       return true;
-    } else {
+    }
+    else {
       console.log("webapi failed");
       return false;
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error(error);
     return false;
   }
@@ -69,7 +72,7 @@ async function fetchWebapi() {
 
 async function refreshAccessToken() {
   if (!await authStore.refreshAccessToken()) {
-    refresh.value = "まだ有効期限内です"
+    refresh.value = "まだ有効期限内です";
     return;
   }
   refresh.value = new Date();

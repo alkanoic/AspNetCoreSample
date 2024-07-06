@@ -11,7 +11,7 @@
     <p>Expire: {{ keycloakAuthStore.getExpire }}</p>
     <p>Iat: {{ keycloakAuthStore.getIat }}</p>
     <button class="btn btn-primary" @click="logout">logout</button>
-    <hr class="my-3" />
+    <hr class="my-3">
     <button class="btn btn-secondary" @click="fetchWebapi">webapi</button>
     <p>{{ webapi }}</p>
     <button class="btn btn-primary" @click="refreshAccessToken">Refresh</button>
@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import { useKeycloakAuthStore } from "~/store/keycloakAuthStore";
+
 const keycloakAuthStore = useKeycloakAuthStore();
 const webapi = ref("");
 const refresh = ref();
@@ -38,27 +39,29 @@ async function fetchWebapi() {
   try {
     const runtimeConfig = useRuntimeConfig();
     const params = {
-      sample: "sample"
+      sample: "sample",
     };
     const response = await fetch(
       `${runtimeConfig.public.apiBaseUrl}/api/auth/sample?` + new URLSearchParams(params),
       {
         method: "GET",
         headers: {
-          "accept": "application/json",
-          "Authorization": `Bearer ${keycloakAuthStore.getToken}`
-        }
-      }
+          accept: "application/json",
+          Authorization: `Bearer ${keycloakAuthStore.getToken}`,
+        },
+      },
     );
     if (response.ok) {
       const data = await response.json();
       webapi.value = data;
       return true;
-    } else {
+    }
+    else {
       console.log("webapi failed");
       return false;
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error(error);
     return false;
   }

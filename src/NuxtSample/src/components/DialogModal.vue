@@ -5,7 +5,7 @@
       <pre class="textarea textarea-info">{{ message }}</pre>
     </div>
     <form method="dialog" class="modal-backdrop">
-      <button @click="closeModal"></button>
+      <button @click="closeModal" />
     </form>
   </dialog>
 </template>

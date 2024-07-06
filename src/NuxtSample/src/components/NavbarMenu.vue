@@ -14,17 +14,17 @@
       <div class="navbar-center">
         <NuxtLink class="btn btn-ghost text-xl normal-case" to="/">NuxtSample</NuxtLink>
       </div>
-      <div class="navbar-end"></div>
+      <div class="navbar-end" />
     </div>
     <div class="drawer-mobile drawer lg:drawer-open">
-      <input id="my-drawer" v-model="openedDrawer" type="checkbox" class="drawer-toggle" />
+      <input id="my-drawer" v-model="openedDrawer" type="checkbox" class="drawer-toggle">
       <div class="drawer-content">
         <div class="p-4">
-          <slot selected-fruit="selectedFruit" />
+          <slot />
         </div>
       </div>
       <div class="drawer-side">
-        <label for="my-drawer" class="drawer-overlay"></label>
+        <label for="my-drawer" class="drawer-overlay" />
         <ul class="min-h-full w-60 bg-gray-800 p-2">
           <li>
             <ul class="menu">
@@ -134,8 +134,8 @@ const fruitStore = useFruitStore();
 fruitStore.setDefaults();
 const fruits = fruitStore.fruits;
 const selectedFruit = ref();
-function handleChange(this: any, event: any) {
-  console.log('Selected fruit:', event.target.value);
+function handleChange(this: unknown, event: unknown) {
+  console.log("Selected fruit:", event.target.value);
   fruitStore.setSelectedFruit(event.target.value);
 }
 </script>

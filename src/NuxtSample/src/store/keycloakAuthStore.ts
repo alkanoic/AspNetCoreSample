@@ -92,10 +92,11 @@ export const useKeycloakAuthStore = defineStore("auth", {
       });
     },
     async RefreshAccessToken() {
-      if (this.keycloak?.isTokenExpired) {
-        await this.keycloak?.updateToken();
-        this.token = this.keycloak?.token!;
-        this.refreshToken = this.keycloak?.refreshToken!;
+      if (this.keycloak == null) return;
+      if (this.keycloak.isTokenExpired(0)) {
+        await this.keycloak.updateToken();
+        this.token = this.keycloak.token!;
+        this.refreshToken = this.keycloak.refreshToken!;
         const decode = jwtDecode(this.token);
         this.exp = calcJpTime(decode.exp!);
         this.iat = calcJpTime(decode.iat!);

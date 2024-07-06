@@ -1,7 +1,7 @@
 <template>
   <Story>
     <Variant title="Default">
-      <NavbarMenu></NavbarMenu>
+      <NavbarMenu />
     </Variant>
   </Story>
 </template>
