@@ -10,16 +10,16 @@
 </template>
 
 <script setup lang="ts">
-  const counter = ref(0);
-  const double = ref(0);
+const counter = ref(0);
+const double = ref(0);
 
-  function increment() {
-    counter.value += 1;
-    double.value += 2;
-  }
+function increment() {
+  counter.value += 1;
+  double.value += 2;
+}
 
-  function reset() {
-    counter.value = 0;
-    double.value = 0;
-  }
+function reset() {
+  counter.value = 0;
+  double.value = 0;
+}
 </script>

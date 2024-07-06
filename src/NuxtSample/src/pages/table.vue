@@ -13,12 +13,11 @@ const rows = [
 ];
 
 const fruitStore = useFruitStore();
-const { selectedFruit } = storeToRefs(fruitStore)
-watch(() => selectedFruit.value, handleValueChange)
-console.log(`page:${selectedFruit.value}`)
+const { selectedFruit } = storeToRefs(fruitStore);
+watch(() => selectedFruit.value, handleValueChange);
+console.log(`page:${selectedFruit.value}`);
 
 function handleValueChange(newValue: string, oldValue: string) {
   console.log(`new:${newValue} old:${oldValue}`);
 }
-
 </script>

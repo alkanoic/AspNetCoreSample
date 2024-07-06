@@ -1,7 +1,7 @@
 <template>
   <Story>
     <Variant title="Default">
-      <StopCard></StopCard>
+      <StopCard />
     </Variant>
   </Story>
 </template>

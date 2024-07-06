@@ -1,7 +1,7 @@
 <template>
   <Story>
     <Variant title="Default">
-      <ComParent></ComParent>
+      <ComParent />
     </Variant>
   </Story>
 </template>

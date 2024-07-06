@@ -1,3 +1,3 @@
 <template>
-    <p>Login User Access Denied</p>
+  <p>Login User Access Denied</p>
 </template>

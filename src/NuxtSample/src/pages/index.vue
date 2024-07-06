@@ -13,6 +13,7 @@
     <button class="btn btn-error">Button</button>
   </div>
 </template>
+
 <script setup lang="ts">
-  console.log("hello");
+console.log("hello");
 </script>

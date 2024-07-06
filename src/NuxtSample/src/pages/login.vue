@@ -9,13 +9,13 @@
             <label class="label">
               <span class="label-text">Username</span>
             </label>
-            <input v-model="username" type="text" placeholder="username" class="input input-bordered" required />
+            <input v-model="username" type="text" placeholder="username" class="input input-bordered" required>
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text">Password</span>
             </label>
-            <input v-model="password" type="password" placeholder="password" class="input input-bordered" required />
+            <input v-model="password" type="password" placeholder="password" class="input input-bordered" required>
           </div>
           <div class="form-control mt-6">
             <button class="btn btn-primary">Login</button>
@@ -27,7 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "~/store/authStore"
+import { useAuthStore } from "~/store/authStore";
+
 const authStore = useAuthStore();
 const username = ref("");
 const password = ref("");
@@ -45,7 +46,8 @@ async function login() {
   if (result) {
     const route = useRoute();
     navigateTo(route.query.redirectUri || "/logined");
-  } else {
+  }
+  else {
     error.value = "login failed: username or password is invalid";
     username.value = "";
     password.value = "";

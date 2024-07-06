@@ -7,12 +7,12 @@
 </template>
 
 <script setup lang="ts">
-  import Child from "./ComChild.vue";
+import Child from "./ComChild.vue";
 
-  const parentData = ref("input parent data");
-  const childData = ref("");
-  const click = (value?: string) => {
-    if (value === undefined || value === null) return;
-    childData.value = value;
-  };
+const parentData = ref("input parent data");
+const childData = ref("");
+const click = (value?: string) => {
+  if (value === undefined || value === null) return;
+  childData.value = value;
+};
 </script>
