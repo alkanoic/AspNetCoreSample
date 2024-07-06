@@ -30,58 +30,79 @@
             <ul class="menu">
               <label class="mb-4 text-xl text-white lg:hidden">NuxtSample</label>
               <li class="menu-item">
-                <NuxtLink to="/table" @click="closeDrawer">Table</NuxtLink>
+                <NuxtLink to="/table" :class="{ active: route.path == '/table' }" @click="closeDrawer">Table</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/tabledetail" @click="closeDrawer">TableDetail</NuxtLink>
+                <NuxtLink to="/tabledetail" :class="{ active: route.path == '/tabledetail' }" @click="closeDrawer">
+                  TableDetail
+                </NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/tabulator" @click="closeDrawer">Tabulator</NuxtLink>
+                <NuxtLink to="/tabulator" :class="{ active: route.path == '/tabulator' }" @click="closeDrawer">
+                  Tabulator</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/tabulator-table" @click="closeDrawer">TabulatorTable</NuxtLink>
+                <NuxtLink to="/tabulator-table" :class="{ active: route.path == '/tabulator-table' }"
+                  @click="closeDrawer">
+                  TabulatorTable</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/tantable" @click="closeDrawer">TanStackTable</NuxtLink>
+                <NuxtLink to="/tantable" :class="{ active: route.path == '/tantable' }" @click="closeDrawer">
+                  TanStackTable</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/ref-counter" @click="closeDrawer">RefCounter</NuxtLink>
+                <NuxtLink to="/ref-counter" :class="{ active: route.path == '/ref-counter' }" @click="closeDrawer">
+                  RefCounter</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/state-counter" @click="closeDrawer">StateCounter</NuxtLink>
+                <NuxtLink to="/state-counter" :class="{ active: route.path == '/state-counter' }" @click="closeDrawer">
+                  StateCounter</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/parent-child" @click="closeDrawer">ParentChild</NuxtLink>
+                <NuxtLink to="/parent-child" :class="{ active: route.path == '/parent-child' }" @click="closeDrawer">
+                  ParentChild</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/person" @click="closeDrawer">Person</NuxtLink>
+                <NuxtLink to="/person" :class="{ active: route.path == '/person' }" @click="closeDrawer">Person
+                </NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/qrod" @click="closeDrawer">QROD</NuxtLink>
+                <NuxtLink to="/qrod" :class="{ active: route.path == '/qrod' }" @click="closeDrawer">QROD
+                </NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/modal" @click="closeDrawer">Modal</NuxtLink>
+                <NuxtLink to="/modal" :class="{ active: route.path == '/modal' }" @click="closeDrawer">Modal
+                </NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/accordion" @click="closeDrawer">Accordion</NuxtLink>
+                <NuxtLink to="/accordion" :class="{ active: route.path == '/accordion' }" @click="closeDrawer">
+                  Accordion</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/validate" @click="closeDrawer">Validate</NuxtLink>
+                <NuxtLink to="/validate" :class="{ active: route.path == '/validate' }" @click="closeDrawer">Validate
+                </NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/login" @click="closeDrawer">Login</NuxtLink>
+                <NuxtLink to="/login" :class="{ active: route.path == '/login' }" @click="closeDrawer">Login
+                </NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/logined" @click="closeDrawer">Logined</NuxtLink>
+                <NuxtLink to="/logined" :class="{ active: route.path == '/logined' }" @click="closeDrawer">Logined
+                </NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/login-admin" @click="closeDrawer">LoginAdminPage</NuxtLink>
+                <NuxtLink to="/login-admin" :class="{ active: route.path == '/login-admin' }" @click="closeDrawer">
+                  LoginAdminPage</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/keycloak-logined" @click="closeDrawer">KeycloakLogined</NuxtLink>
+                <NuxtLink to="/keycloak-logined" :class="{ active: route.path == '/keycloak-logined' }"
+                  @click="closeDrawer">
+                  KeycloakLogined</NuxtLink>
               </li>
               <li class="menu-item">
-                <NuxtLink to="/keycloak-admin" @click="closeDrawer">KeycloakAdminPage</NuxtLink>
+                <NuxtLink to="/keycloak-admin" :class="{ active: route.path == '/keycloak-admin' }"
+                  @click="closeDrawer">
+                  KeycloakAdminPage</NuxtLink>
               </li>
             </ul>
           </li>
@@ -106,6 +127,8 @@ const openedDrawer = ref(false);
 const closeDrawer = () => {
   openedDrawer.value = false;
 };
+
+const route = useRoute();
 
 const fruitStore = useFruitStore();
 fruitStore.setDefaults();
