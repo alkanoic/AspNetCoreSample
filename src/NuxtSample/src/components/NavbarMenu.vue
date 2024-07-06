@@ -25,65 +25,69 @@
       </div>
       <div class="drawer-side">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <ul class="menu min-h-full w-60 bg-gray-800 p-4">
-          <label class="mb-4 text-xl text-white lg:hidden">NuxtSample</label>
-          <li class="menu-item">
-            <NuxtLink to="/table" @click="closeDrawer">Table</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/tabledetail" @click="closeDrawer">TableDetail</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/tabulator" @click="closeDrawer">Tabulator</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/tabulator-table" @click="closeDrawer">TabulatorTable</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/tantable" @click="closeDrawer">TanStackTable</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/ref-counter" @click="closeDrawer">RefCounter</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/state-counter" @click="closeDrawer">StateCounter</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/parent-child" @click="closeDrawer">ParentChild</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/person" @click="closeDrawer">Person</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/qrod" @click="closeDrawer">QROD</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/modal" @click="closeDrawer">Modal</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/accordion" @click="closeDrawer">Accordion</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/validate" @click="closeDrawer">Validate</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/login" @click="closeDrawer">Login</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/logined" @click="closeDrawer">Logined</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/login-admin" @click="closeDrawer">LoginAdminPage</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/keycloak-logined" @click="closeDrawer">KeycloakLogined</NuxtLink>
-          </li>
-          <li class="menu-item">
-            <NuxtLink to="/keycloak-admin" @click="closeDrawer">KeycloakAdminPage</NuxtLink>
-          </li>
+        <ul class="min-h-full w-60 bg-gray-800 p-2">
           <li>
-            <select id="fruit-select" v-model="selectedFruit"
-              class="select select-bordered block w-full max-w-xs bg-white text-black" @change="handleChange">
+            <ul class="menu">
+              <label class="mb-4 text-xl text-white lg:hidden">NuxtSample</label>
+              <li class="menu-item">
+                <NuxtLink to="/table" @click="closeDrawer">Table</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/tabledetail" @click="closeDrawer">TableDetail</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/tabulator" @click="closeDrawer">Tabulator</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/tabulator-table" @click="closeDrawer">TabulatorTable</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/tantable" @click="closeDrawer">TanStackTable</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/ref-counter" @click="closeDrawer">RefCounter</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/state-counter" @click="closeDrawer">StateCounter</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/parent-child" @click="closeDrawer">ParentChild</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/person" @click="closeDrawer">Person</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/qrod" @click="closeDrawer">QROD</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/modal" @click="closeDrawer">Modal</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/accordion" @click="closeDrawer">Accordion</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/validate" @click="closeDrawer">Validate</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/login" @click="closeDrawer">Login</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/logined" @click="closeDrawer">Logined</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/login-admin" @click="closeDrawer">LoginAdminPage</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/keycloak-logined" @click="closeDrawer">KeycloakLogined</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/keycloak-admin" @click="closeDrawer">KeycloakAdminPage</NuxtLink>
+              </li>
+            </ul>
+          </li>
+          <li class="px-2">
+            <select id="fruit-select" v-model="selectedFruit" class="select select-bordered w-full max-w-xs"
+              style=" transition-duration: 0s;" @change="handleChange">
               <option v-for="fruit in fruits" :key="fruit" :value="fruit">
                 {{ fruit }}
               </option>
