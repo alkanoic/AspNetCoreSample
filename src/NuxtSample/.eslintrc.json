@@ -21,6 +21,8 @@
     "vue/no-v-for-template-key": "off",
     "vue/max-attributes-per-line": "off",
     "vue/html-self-closing": "off",
-    "vue/singleline-html-element-content-newline": "off"
+    "vue/singleline-html-element-content-newline": "off",
+    "eslint-plugin-vue/first-attribute-linebreak": "off",
+    "eslint-plugin-vue/html-indent": "off"
   }
 }

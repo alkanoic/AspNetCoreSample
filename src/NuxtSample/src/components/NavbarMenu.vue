@@ -20,7 +20,7 @@
       <input id="my-drawer" v-model="openedDrawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content">
         <div class="p-4">
-          <slot />
+          <slot selected-fruit="selectedFruit" />
         </div>
       </div>
       <div class="drawer-side">
@@ -81,6 +81,14 @@
           <li class="menu-item">
             <NuxtLink to="/keycloak-admin" @click="closeDrawer">KeycloakAdminPage</NuxtLink>
           </li>
+          <li>
+            <select id="fruit-select" v-model="selectedFruit"
+              class="select select-bordered block w-full max-w-xs bg-white text-black" @change="handleChange">
+              <option v-for="fruit in fruits" :key="fruit" :value="fruit">
+                {{ fruit }}
+              </option>
+            </select>
+          </li>
         </ul>
       </div>
     </div>
@@ -88,10 +96,21 @@
 </template>
 
 <script setup lang="ts">
+import { useFruitStore } from "@/store/fruitStore";
+
 const openedDrawer = ref(false);
 const closeDrawer = () => {
   openedDrawer.value = false;
 };
+
+const fruitStore = useFruitStore();
+fruitStore.setDefaults();
+const fruits = fruitStore.fruits;
+const selectedFruit = ref();
+function handleChange(this: any, event: any) {
+  console.log('Selected fruit:', event.target.value);
+  fruitStore.setSelectedFruit(event.target.value);
+}
 </script>
 
 <style scoped lang="postcss">
