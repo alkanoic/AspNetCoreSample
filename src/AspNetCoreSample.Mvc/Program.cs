@@ -74,6 +74,18 @@ builder.Services.AddWebOptimizer(pipeline =>
     pipeline.MinifyCssFiles("css/**/*.css");
 });
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "SampleInstance";
+});
+
+builder.Services.AddSession(options =>
+{
+    // セッションの有効期限を設定
+    options.IdleTimeout = TimeSpan.FromSeconds(20);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -89,6 +101,7 @@ app.MapDefaultEndpoints();
 
 // app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 
 app.UseRouting();
 

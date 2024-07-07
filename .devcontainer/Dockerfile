@@ -53,3 +53,8 @@ RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSIO
 RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/mssqldef_linux_amd64.tar.gz && \
     tar xf mssqldef_linux_amd64.tar.gz -C /usr/local/bin/ && \
     rm mssqldef_linux_amd64.tar.gz
+
+RUN curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list && \
+    apt-get update && \
+    apt-get install -y redis
