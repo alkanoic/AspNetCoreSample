@@ -8,17 +8,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCoreSample.WebApi.Test;
 
+[Collection(nameof(VerifySettingsFixtures))]
 public sealed class DbAccessWebApiSelectTest : IClassFixture<DbFixture>, IDisposable
 {
     private readonly WebApplicationFactory<Program> _webApplicationFactory;
-
     private readonly IServiceScope _serviceScope;
-
     private readonly HttpClient _httpClient;
-
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+    private readonly VerifySettings _verifySettings;
 
-    public DbAccessWebApiSelectTest(DbFixture db)
+    public DbAccessWebApiSelectTest(DbFixture db, VerifySettingsFixture settingsFixture)
     {
         Environment.SetEnvironmentVariable("ASPNETCORE_URLS", "https://+");
         // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Path", "certificate.crt");
@@ -27,6 +26,7 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<DbFixture>, IDispos
         _webApplicationFactory = new WebApplicationFactory<Program>();
         _serviceScope = _webApplicationFactory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _httpClient = _webApplicationFactory.CreateClient();
+        _verifySettings = settingsFixture.VerifySettings;
     }
 
     public void Dispose()
@@ -50,11 +50,6 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<DbFixture>, IDispos
         var names = await JsonSerializer.DeserializeAsync<IList<Name>>(dbAccessStream, JsonSerializerOptions);
 
         // Then
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.NotNull(names);
-        Assert.Equal(3, names.Count);
-        Assert.Equal("太郎", names[0].Name1);
-        Assert.Equal("花子", names[1].Name1);
-        Assert.Equal("令和", names[2].Name1);
+        await Verify(names, _verifySettings);
     }
 }
