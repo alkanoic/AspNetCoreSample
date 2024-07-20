@@ -19,7 +19,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                                 IValidator<ChangePasswordInput> changePasswordInputValidator,
                                 IValidator<ChangePasswordByUsernameInput> changePasswordByUsernameInputValidator,
                                 IValidator<ResetPasswordByEmailInput> resetPasswordByEmailInputValidator,
+                                IValidator<ResetPasswordByEmailByUsernameInput> resetPasswordByEmailByUsernameInputValidator,
                                 IValidator<DeleteUserInput> deleteUserInputValidator,
+                                IValidator<DeleteUserByUsernameInput> deleteUserByUsernameInputValidator,
                                 IValidator<FetchUserRoleMappingsInput> fetchUserRoleMappingsInputValidator,
                                 IValidator<AddUserRoleMappingInput> addUserRoleMappingInputValidator,
                                 IValidator<DeleteUserRoleMappingInput> deleteUserRoleMappingInputValidator,
@@ -38,7 +40,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     private readonly IValidator<ChangePasswordInput> _changePasswordInputValidator = changePasswordInputValidator;
     private readonly IValidator<ChangePasswordByUsernameInput> _changePasswordByUsernameInputValidator = changePasswordByUsernameInputValidator;
     private readonly IValidator<ResetPasswordByEmailInput> _resetPasswordByEmailInputValidator = resetPasswordByEmailInputValidator;
+    private readonly IValidator<ResetPasswordByEmailByUsernameInput> _resetPasswordByEmailByUsernameInputValidator = resetPasswordByEmailByUsernameInputValidator;
     private readonly IValidator<DeleteUserInput> _deleteUserInputValidator = deleteUserInputValidator;
+    private readonly IValidator<DeleteUserByUsernameInput> _deleteUserByUsernameInputValidator = deleteUserByUsernameInputValidator;
     private readonly IValidator<FetchUserRoleMappingsInput> _fetchUserRoleMappingsInputValidator = fetchUserRoleMappingsInputValidator;
     private readonly IValidator<AddUserRoleMappingInput> _addUserRoleMappingInputValidator = addUserRoleMappingInputValidator;
     private readonly IValidator<DeleteUserRoleMappingInput> _deleteUserRoleMappingInputValidator = deleteUserRoleMappingInputValidator;
@@ -209,11 +213,22 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     {
         return await CommonValidationResponse(input, _resetPasswordByEmailInputValidator, async () =>
         {
-            var request = new ResetPasswordByEmailRequest()
-            {
-                UserId = input.UserId,
-            };
-            await _keycloakService.ResetPasswordByEmailAsync(request);
+            var request = new ResetPasswordByEmailRequest();
+            await _keycloakService.ResetPasswordByEmailAsync(input.UserId, request);
+            return Ok();
+        });
+    }
+
+    /// <summary>
+    /// ユーザー名でユーザーのパスワードをリセットするためのメールを送信
+    /// </summary>
+    [HttpPut("ResetPasswordByEmailByUsername")]
+    public async ValueTask<IActionResult> ResetPasswordByEmailByUsername(ResetPasswordByEmailByUsernameInput input)
+    {
+        return await CommonValidationResponse(input, _resetPasswordByEmailByUsernameInputValidator, async () =>
+        {
+            var request = new ResetPasswordByEmailRequest();
+            await _keycloakService.ResetPasswordByEmailByUsernameAsync(input.Username, request);
             return Ok();
         });
     }
@@ -227,11 +242,22 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     {
         return await CommonValidationResponse(input, _deleteUserInputValidator, async () =>
         {
-            var request = new DeleteUserRequest()
-            {
-                UserId = input.UserId,
-            };
-            await _keycloakService.DeleteUserAsync(request);
+            var request = new DeleteUserRequest();
+            await _keycloakService.DeleteUserAsync(input.UserId, request);
+            return Ok();
+        });
+    }
+
+    /// <summary>
+    /// ユーザー名でユーザーを削除する
+    /// </summary>
+    [HttpDelete("DeleteUserByUsername")]
+    public async ValueTask<IActionResult> DeleteUserByUsername(DeleteUserByUsernameInput input)
+    {
+        return await CommonValidationResponse(input, _deleteUserByUsernameInputValidator, async () =>
+        {
+            var request = new DeleteUserRequest();
+            await _keycloakService.DeleteUserByUsernameAsync(input.Username, request);
             return Ok();
         });
     }

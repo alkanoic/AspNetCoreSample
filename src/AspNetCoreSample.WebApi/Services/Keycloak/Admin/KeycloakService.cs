@@ -20,8 +20,10 @@ public interface IKeycloakService
     ValueTask UpdateUserByUsernameAsync(string username, UpdateUserRequest updateUserRequest);
     ValueTask ChangePasswordAsync(string userId, ChangePasswordRequest changePasswordRequest);
     ValueTask ChangePasswordByUsernameAsync(string username, ChangePasswordRequest changePasswordRequest);
-    ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest);
-    ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest);
+    ValueTask ResetPasswordByEmailAsync(string userId, ResetPasswordByEmailRequest resetPasswordByEmailRequest);
+    ValueTask ResetPasswordByEmailByUsernameAsync(string username, ResetPasswordByEmailRequest resetPasswordByEmailRequest);
+    ValueTask DeleteUserAsync(string userId, DeleteUserRequest deleteUserRequest);
+    ValueTask DeleteUserByUsernameAsync(string username, DeleteUserRequest deleteUserRequest);
     ValueTask<List<FetchRoleResponse>> FetchRolesAsync();
     ValueTask<List<FetchRoleResponse>> FetchUserRoleMappingsAsync(FetchUserRoleMappingsRequest fetchUserRoleMappingsRequest);
     ValueTask AddUserRoleMappingAsync(string userId, List<AddUserRoleMappingsRequest> addUserRoleMappingsRequest);
@@ -202,14 +204,14 @@ public class KeycloakService : IKeycloakService
         await ChangePasswordAsync(fetchUserResponse.Id, changePasswordRequest);
     }
 
-    public async ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest)
+    public async ValueTask ResetPasswordByEmailAsync(string userId, ResetPasswordByEmailRequest resetPasswordByEmailRequest)
     {
         if (string.IsNullOrEmpty(resetPasswordByEmailRequest.AccessToken))
         {
             var tokenResponse = await AdminAccessToken();
             resetPasswordByEmailRequest.AccessToken = tokenResponse.AccessToken;
         }
-        var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{resetPasswordByEmailRequest.UserId}/reset-password-email");
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/reset-password-email");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", resetPasswordByEmailRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
@@ -220,14 +222,25 @@ public class KeycloakService : IKeycloakService
         }
     }
 
-    public async ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest)
+    public async ValueTask ResetPasswordByEmailByUsernameAsync(string username, ResetPasswordByEmailRequest resetPasswordByEmailRequest)
+    {
+        if (string.IsNullOrEmpty(resetPasswordByEmailRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            resetPasswordByEmailRequest.AccessToken = tokenResponse.AccessToken;
+        }
+        var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { Username = username });
+        await ResetPasswordByEmailAsync(fetchUserResponse.Id, resetPasswordByEmailRequest);
+    }
+
+    public async ValueTask DeleteUserAsync(string userId, DeleteUserRequest deleteUserRequest)
     {
         if (string.IsNullOrEmpty(deleteUserRequest.AccessToken))
         {
             var tokenResponse = await AdminAccessToken();
             deleteUserRequest.AccessToken = tokenResponse.AccessToken;
         }
-        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{deleteUserRequest.UserId}");
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", deleteUserRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
@@ -236,6 +249,17 @@ public class KeycloakService : IKeycloakService
             var content = await response.Content.ReadAsStringAsync();
             throw new InvalidDataException($"delete user fail response detail:{content}");
         }
+    }
+
+    public async ValueTask DeleteUserByUsernameAsync(string username, DeleteUserRequest deleteUserRequest)
+    {
+        if (string.IsNullOrEmpty(deleteUserRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            deleteUserRequest.AccessToken = tokenResponse.AccessToken;
+        }
+        var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { Username = username });
+        await DeleteUserAsync(fetchUserResponse.Id, deleteUserRequest);
     }
 
     public async ValueTask<List<FetchRoleResponse>> FetchRolesAsync()
