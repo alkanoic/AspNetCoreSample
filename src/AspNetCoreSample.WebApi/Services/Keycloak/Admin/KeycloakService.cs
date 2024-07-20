@@ -18,7 +18,8 @@ public interface IKeycloakService
     ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest);
     ValueTask UpdateUserAsync(string userId, UpdateUserRequest updateUserRequest);
     ValueTask UpdateUserByUsernameAsync(string username, UpdateUserRequest updateUserRequest);
-    ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
+    ValueTask ChangePasswordAsync(string userId, ChangePasswordRequest changePasswordRequest);
+    ValueTask ChangePasswordByUsernameAsync(string username, ChangePasswordRequest changePasswordRequest);
     ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest);
     ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest);
     ValueTask<List<FetchRoleResponse>> FetchRolesAsync();
@@ -162,29 +163,20 @@ public class KeycloakService : IKeycloakService
             updateUserRequest.AccessToken = tokenResponse.AccessToken;
         }
         var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { Username = username, AccessToken = updateUserRequest.AccessToken });
-        var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{fetchUserResponse.Id}");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", updateUserRequest.AccessToken);
-        request.Content = new StringContent(JsonSerializer.Serialize(updateUserRequest, updateUserRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
-
-        var response = await _httpClient.SendAsync(request);
-        if (!response.IsSuccessStatusCode)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            throw new InvalidDataException($"update user fail response detail:{content}");
-        }
+        await UpdateUserAsync(fetchUserResponse.Id, updateUserRequest);
     }
 
     /// <summary>
     /// ユーザーのパスワード変更
     /// </summary>
-    public async ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest)
+    public async ValueTask ChangePasswordAsync(string userId, ChangePasswordRequest changePasswordRequest)
     {
         if (string.IsNullOrEmpty(changePasswordRequest.AccessToken))
         {
             var tokenResponse = await AdminAccessToken();
             changePasswordRequest.AccessToken = tokenResponse.AccessToken;
         }
-        var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{changePasswordRequest.UserId}/reset-password");
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/reset-password");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", changePasswordRequest.AccessToken);
         request.Content = new StringContent(JsonSerializer.Serialize(changePasswordRequest.Credential, changePasswordRequest.Credential.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
 
@@ -194,6 +186,20 @@ public class KeycloakService : IKeycloakService
             var content = await response.Content.ReadAsStringAsync();
             throw new InvalidDataException($"change password fail response detail:{content}");
         }
+    }
+
+    /// <summary>
+    /// ユーザー名でユーザーのパスワード変更
+    /// </summary>
+    public async ValueTask ChangePasswordByUsernameAsync(string username, ChangePasswordRequest changePasswordRequest)
+    {
+        if (string.IsNullOrEmpty(changePasswordRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            changePasswordRequest.AccessToken = tokenResponse.AccessToken;
+        }
+        var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { AccessToken = changePasswordRequest.AccessToken, Username = username });
+        await ChangePasswordAsync(fetchUserResponse.Id, changePasswordRequest);
     }
 
     public async ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest)

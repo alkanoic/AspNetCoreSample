@@ -17,6 +17,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                                 IValidator<UpdateUserInput> updateUserInputValidator,
                                 IValidator<UpdateUserByUsernameInput> updateUserByUsernameInputValidator,
                                 IValidator<ChangePasswordInput> changePasswordInputValidator,
+                                IValidator<ChangePasswordByUsernameInput> changePasswordByUsernameInputValidator,
                                 IValidator<ResetPasswordByEmailInput> resetPasswordByEmailInputValidator,
                                 IValidator<DeleteUserInput> deleteUserInputValidator,
                                 IValidator<FetchUserRoleMappingsInput> fetchUserRoleMappingsInputValidator,
@@ -35,6 +36,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     private readonly IValidator<UpdateUserInput> _updateUserInputValidator = updateUserInputValidator;
     private readonly IValidator<UpdateUserByUsernameInput> _updateUserByUsernameInputValidator = updateUserByUsernameInputValidator;
     private readonly IValidator<ChangePasswordInput> _changePasswordInputValidator = changePasswordInputValidator;
+    private readonly IValidator<ChangePasswordByUsernameInput> _changePasswordByUsernameInputValidator = changePasswordByUsernameInputValidator;
     private readonly IValidator<ResetPasswordByEmailInput> _resetPasswordByEmailInputValidator = resetPasswordByEmailInputValidator;
     private readonly IValidator<DeleteUserInput> _deleteUserInputValidator = deleteUserInputValidator;
     private readonly IValidator<FetchUserRoleMappingsInput> _fetchUserRoleMappingsInputValidator = fetchUserRoleMappingsInputValidator;
@@ -174,10 +176,27 @@ public class KeycloakController(ILogger<KeycloakController> logger,
         {
             var request = new ChangePasswordRequest()
             {
-                UserId = input.UserId,
                 Credential = new Credential(input.Password)
             };
-            await _keycloakService.ChangePasswordAsync(request);
+            await _keycloakService.ChangePasswordAsync(input.UserId, request);
+            return Ok();
+        });
+    }
+
+    /// <summary>
+    /// ユーザーのパスワードを変更する
+    /// </summary>
+    /// <param name="input">パスワード情報</param>
+    [HttpPut("ChangePasswordByUsername")]
+    public async ValueTask<IActionResult> ChangePasswordByUsername(ChangePasswordByUsernameInput input)
+    {
+        return await CommonValidationResponse(input, _changePasswordByUsernameInputValidator, async () =>
+        {
+            var request = new ChangePasswordRequest()
+            {
+                Credential = new Credential(input.Password)
+            };
+            await _keycloakService.ChangePasswordByUsernameAsync(input.Username, request);
             return Ok();
         });
     }
