@@ -1,7 +1,7 @@
 
 namespace AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 
-public class FetchUserRoleMappingsRequest
+public class FetchUserRoleMappingsRequest : BaseRequest
 {
     public required string UserId { get; set; }
 }

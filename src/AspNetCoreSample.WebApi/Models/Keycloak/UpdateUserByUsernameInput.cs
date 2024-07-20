@@ -1,12 +1,10 @@
-using AspNetCoreSample.WebApi.Services.Keycloak.Admin;
-
 using FluentValidation;
 
 namespace AspNetCoreSample.WebApi.Models.Keycloak;
 
-public class UpdateUserInput : BaseRequest
+public class UpdateUserByUsernameInput
 {
-    public required string UserId { get; set; }
+    public required string Username { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public string? Email { get; set; }
@@ -17,11 +15,11 @@ public class UpdateUserInput : BaseRequest
     public Dictionary<string, List<string>>? Attributes { get; set; }
 }
 
-public class UpdateUserInputValidator : AbstractValidator<UpdateUserInput>
+public class UpdateUsernameInputValidator : AbstractValidator<UpdateUserByUsernameInput>
 {
-    public UpdateUserInputValidator()
+    public UpdateUsernameInputValidator()
     {
-        RuleFor(x => x.UserId).NotEmpty();
+        RuleFor(x => x.Username).NotEmpty();
         When(x => !string.IsNullOrWhiteSpace(x.Password), () =>
         {
             RuleFor(x => x.Password).NotEmpty().MinimumLength(8);

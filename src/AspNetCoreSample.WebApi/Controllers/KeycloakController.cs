@@ -15,6 +15,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                                 IValidator<FetchUserInput> fetchUserInputValidator,
                                 IValidator<CreateUserInput> createUserInputValidator,
                                 IValidator<UpdateUserInput> updateUserInputValidator,
+                                IValidator<UpdateUserByUsernameInput> updateUserByUsernameInputValidator,
                                 IValidator<ChangePasswordInput> changePasswordInputValidator,
                                 IValidator<ResetPasswordByEmailInput> resetPasswordByEmailInputValidator,
                                 IValidator<DeleteUserInput> deleteUserInputValidator,
@@ -32,6 +33,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     private readonly IValidator<FetchUserInput> _fetchUserInputValidator = fetchUserInputValidator;
     private readonly IValidator<CreateUserInput> _createUserInputValidator = createUserInputValidator;
     private readonly IValidator<UpdateUserInput> _updateUserInputValidator = updateUserInputValidator;
+    private readonly IValidator<UpdateUserByUsernameInput> _updateUserByUsernameInputValidator = updateUserByUsernameInputValidator;
     private readonly IValidator<ChangePasswordInput> _changePasswordInputValidator = changePasswordInputValidator;
     private readonly IValidator<ResetPasswordByEmailInput> _resetPasswordByEmailInputValidator = resetPasswordByEmailInputValidator;
     private readonly IValidator<DeleteUserInput> _deleteUserInputValidator = deleteUserInputValidator;
@@ -132,6 +134,31 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                 request.Credentials = new List<Credential>() { new Credential(input.Password) };
             }
             await _keycloakService.UpdateUserAsync(input.UserId, request);
+            return Ok();
+        });
+    }
+
+    /// <summary>
+    /// ユーザー情報を更新する
+    /// ユーザー名で更新する
+    /// </summary>
+    [HttpPut("UpdateUserByUsername")]
+    public async ValueTask<IActionResult> UpdateUserByUsername(UpdateUserByUsernameInput input)
+    {
+        return await CommonValidationResponse(input, _updateUserByUsernameInputValidator, async () =>
+        {
+            var request = new UpdateUserRequest()
+            {
+                FirstName = input.FirstName,
+                LastName = input.LastName,
+                Email = input.Email,
+                Attributes = input.Attributes
+            };
+            if (!string.IsNullOrWhiteSpace(input.Password))
+            {
+                request.Credentials = new List<Credential>() { new Credential(input.Password) };
+            }
+            await _keycloakService.UpdateUserByUsernameAsync(input.Username, request);
             return Ok();
         });
     }

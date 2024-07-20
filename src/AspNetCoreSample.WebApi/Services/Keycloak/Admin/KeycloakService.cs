@@ -1,4 +1,5 @@
 
+using AspNetCoreSample.WebApi.Models.Keycloak;
 using AspNetCoreSample.WebApi.Options;
 using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
@@ -16,6 +17,7 @@ public interface IKeycloakService
     ValueTask<FetchUserResponse> FetchUserAsync(FetchUserRequest fetchUserRequest);
     ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest);
     ValueTask UpdateUserAsync(string userId, UpdateUserRequest updateUserRequest);
+    ValueTask UpdateUserByUsernameAsync(string username, UpdateUserRequest updateUserRequest);
     ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
     ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest);
     ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest);
@@ -49,6 +51,10 @@ public class KeycloakService : IKeycloakService
         };
     }
 
+    /// <summary>
+    /// Optionsのユーザー情報で代理アクセスする場合
+    /// 引数にAccessTokenが与えられた場合は使用しない
+    /// </summary>
     private async ValueTask<TokenResponse> AdminAccessToken()
     {
         var parameters = new Dictionary<string, string>
@@ -71,6 +77,10 @@ public class KeycloakService : IKeycloakService
         return tokenResponse;
     }
 
+    /// <summary>
+    /// ユーザー名からユーザー情報を取得する
+    /// ユーザー名は完全一致で取得
+    /// </summary>
     public async ValueTask<FetchUserResponse> FetchUserAsync(FetchUserRequest fetchUserRequest)
     {
         if (string.IsNullOrEmpty(fetchUserRequest.AccessToken))
@@ -95,11 +105,18 @@ public class KeycloakService : IKeycloakService
         return result;
     }
 
+    /// <summary>
+    /// ユーザーを作成する
+    /// </summary>
     public async ValueTask<CreateUserResponse> CreateUserAsync(CreateUserRequest createUserRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(createUserRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            createUserRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", createUserRequest.AccessToken);
         request.Content = new StringContent(JsonSerializer.Serialize(createUserRequest, createUserRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
 
         var response = await _httpClient.SendAsync(request);
@@ -112,11 +129,18 @@ public class KeycloakService : IKeycloakService
         return new CreateUserResponse() { Id = segments?[segments.Length - 1] ?? "" };
     }
 
+    /// <summary>
+    /// ユーザー情報を更新する
+    /// </summary>
     public async ValueTask UpdateUserAsync(string userId, UpdateUserRequest updateUserRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(updateUserRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            updateUserRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", updateUserRequest.AccessToken);
         request.Content = new StringContent(JsonSerializer.Serialize(updateUserRequest, updateUserRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
 
         var response = await _httpClient.SendAsync(request);
@@ -127,11 +151,41 @@ public class KeycloakService : IKeycloakService
         }
     }
 
+    /// <summary>
+    /// ユーザー名でユーザー情報を更新
+    /// </summary>
+    public async ValueTask UpdateUserByUsernameAsync(string username, UpdateUserRequest updateUserRequest)
+    {
+        if (string.IsNullOrEmpty(updateUserRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            updateUserRequest.AccessToken = tokenResponse.AccessToken;
+        }
+        var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { Username = username, AccessToken = updateUserRequest.AccessToken });
+        var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{fetchUserResponse.Id}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", updateUserRequest.AccessToken);
+        request.Content = new StringContent(JsonSerializer.Serialize(updateUserRequest, updateUserRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
+
+        var response = await _httpClient.SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            throw new InvalidDataException($"update user fail response detail:{content}");
+        }
+    }
+
+    /// <summary>
+    /// ユーザーのパスワード変更
+    /// </summary>
     public async ValueTask ChangePasswordAsync(ChangePasswordRequest changePasswordRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(changePasswordRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            changePasswordRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{changePasswordRequest.UserId}/reset-password");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", changePasswordRequest.AccessToken);
         request.Content = new StringContent(JsonSerializer.Serialize(changePasswordRequest.Credential, changePasswordRequest.Credential.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
 
         var response = await _httpClient.SendAsync(request);
@@ -144,9 +198,13 @@ public class KeycloakService : IKeycloakService
 
     public async ValueTask ResetPasswordByEmailAsync(ResetPasswordByEmailRequest resetPasswordByEmailRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(resetPasswordByEmailRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            resetPasswordByEmailRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{resetPasswordByEmailRequest.UserId}/reset-password-email");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", resetPasswordByEmailRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
         if (!response.IsSuccessStatusCode)
@@ -158,9 +216,13 @@ public class KeycloakService : IKeycloakService
 
     public async ValueTask DeleteUserAsync(DeleteUserRequest deleteUserRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(deleteUserRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            deleteUserRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Delete, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{deleteUserRequest.UserId}");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", deleteUserRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
         if (!response.IsSuccessStatusCode)
@@ -192,9 +254,13 @@ public class KeycloakService : IKeycloakService
 
     public async ValueTask<List<FetchRoleResponse>> FetchUserRoleMappingsAsync(FetchUserRoleMappingsRequest fetchUserRoleMappingsRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(fetchUserRoleMappingsRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            fetchUserRoleMappingsRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{fetchUserRoleMappingsRequest.UserId}/role-mappings/realm");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchUserRoleMappingsRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
         var content = await response.Content.ReadAsStringAsync();
@@ -242,9 +308,13 @@ public class KeycloakService : IKeycloakService
 
     public async ValueTask<List<KeycloakClientResponse>> FetchClientsAsync(FetchClientsRequest fetchClientsRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(fetchClientsRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            fetchClientsRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchClientsRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
         var content = await response.Content.ReadAsStringAsync();
@@ -262,9 +332,13 @@ public class KeycloakService : IKeycloakService
 
     public async ValueTask<KeycloakClientResponse> FetchClientAsync(FetchClientRequest fetchClientRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(fetchClientRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            fetchClientRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients?clientId={fetchClientRequest.ClientId}");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchClientRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
         var content = await response.Content.ReadAsStringAsync();
@@ -282,9 +356,13 @@ public class KeycloakService : IKeycloakService
 
     public async ValueTask<List<FetchRoleResponse>> FetchClientRolesAsync(FetchClientRolesRequest fetchClientRolesRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(fetchClientRolesRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            fetchClientRolesRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients/{fetchClientRolesRequest.ClientUuid}/roles");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchClientRolesRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
         var content = await response.Content.ReadAsStringAsync();
@@ -302,9 +380,13 @@ public class KeycloakService : IKeycloakService
 
     public async ValueTask<List<FetchRoleResponse>> FetchUserClientRolesAsync(FetchUserClientRolesRequest fetchUserClientRolesRequest)
     {
-        var tokenResponse = await AdminAccessToken();
+        if (string.IsNullOrEmpty(fetchUserClientRolesRequest.AccessToken))
+        {
+            var tokenResponse = await AdminAccessToken();
+            fetchUserClientRolesRequest.AccessToken = tokenResponse.AccessToken;
+        }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{fetchUserClientRolesRequest.UserId}/role-mappings/clients/{fetchUserClientRolesRequest.ClientUuid}");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchUserClientRolesRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
         var content = await response.Content.ReadAsStringAsync();

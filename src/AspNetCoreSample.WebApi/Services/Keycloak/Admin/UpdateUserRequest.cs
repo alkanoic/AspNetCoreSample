@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 
-public class UpdateUserRequest
+public class UpdateUserRequest : BaseRequest
 {
     /// <summary>
     /// 名前

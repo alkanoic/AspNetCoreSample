@@ -1,7 +1,7 @@
 
 namespace AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 
-public class CreateUserRequest
+public class CreateUserRequest : BaseRequest
 {
     /// <summary>
     /// ユーザー名：ログインに使用する
