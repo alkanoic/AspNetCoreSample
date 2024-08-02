@@ -100,5 +100,15 @@
             ],
             "problemMatcher": "$msCompile"
         },
+        {
+            "label": "sg-build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/SourceGeneratorSample.Ref/SourceGeneratorSample.Ref.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
     ]
 }

@@ -303,6 +303,19 @@
                 "/Views": "${workspaceFolder}/src/CodeGen.Result/Views"
             }
         },
+        {
+            "name": "SG-console",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "sg-build",
+            "program": "${workspaceFolder}/src/SourceGeneratorSample.Ref/bin/Debug/net8.0/SourceGeneratorSample.Ref.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/SourceGeneratorSample.Ref",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart",
+            "justMyCode": false
+        }
     ],
     "compounds": [
         {
