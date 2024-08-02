@@ -43,6 +43,13 @@
         "kiota"
       ],
       "rollForward": false
+    },
+    "cyclonedx": {
+      "version": "3.0.8",
+      "commands": [
+        "dotnet-CycloneDX"
+      ],
+      "rollForward": false
     }
   }
 }

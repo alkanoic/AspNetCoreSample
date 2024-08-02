@@ -60,6 +60,32 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>makeAggregateBom</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<projectType>library</projectType>
+					<includeBomSerialNumber>true</includeBomSerialNumber>
+					<includeCompileScope>true</includeCompileScope>
+					<includeProvidedScope>true</includeProvidedScope>
+					<includeRuntimeScope>true</includeRuntimeScope>
+					<includeSystemScope>true</includeSystemScope>
+					<includeTestScope>false</includeTestScope>
+					<includeLicenseText>false</includeLicenseText>
+					<outputReactorProjects>true</outputReactorProjects>
+					<outputFormat>json</outputFormat>
+					<outputName>SpringBoot.Report</outputName>
+					<outputDirectory>../../sbom/</outputDirectory>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

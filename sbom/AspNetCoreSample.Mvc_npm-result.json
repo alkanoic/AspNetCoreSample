@@ -1,0 +1,25 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2024-08-03T00:59:44.596986462+09:00",
+  "ArtifactName": "sbom/AspNetCoreSample.Mvc_npm.json",
+  "ArtifactType": "cyclonedx",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": "Node.js",
+      "Class": "lang-pkgs",
+      "Type": "node-pkg"
+    }
+  ]
+}

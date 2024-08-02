@@ -1,0 +1,3087 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.4.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "version": 1,
+  "serialNumber": "urn:uuid:942c024e-ba1c-4b5b-a5f3-f24a5663a86c",
+  "metadata": {
+    "timestamp": "2024-08-02T15:59:44.140Z",
+    "tools": [
+      {
+        "name": "npm",
+        "version": "10.7.0"
+      },
+      {
+        "vendor": "@cyclonedx",
+        "name": "cyclonedx-npm",
+        "version": "1.19.3",
+        "externalReferences": [
+          {
+            "url": "git+https://github.com/CycloneDX/cyclonedx-node-npm.git",
+            "type": "vcs",
+            "comment": "as detected from PackageJson property \"repository.url\""
+          },
+          {
+            "url": "https://github.com/CycloneDX/cyclonedx-node-npm#readme",
+            "type": "website",
+            "comment": "as detected from PackageJson property \"homepage\""
+          },
+          {
+            "url": "https://github.com/CycloneDX/cyclonedx-node-npm/issues",
+            "type": "issue-tracker",
+            "comment": "as detected from PackageJson property \"bugs.url\""
+          }
+        ]
+      },
+      {
+        "vendor": "@cyclonedx",
+        "name": "cyclonedx-library",
+        "version": "6.11.0",
+        "externalReferences": [
+          {
+            "url": "git+https://github.com/CycloneDX/cyclonedx-javascript-library.git",
+            "type": "vcs",
+            "comment": "as detected from PackageJson property \"repository.url\""
+          },
+          {
+            "url": "https://github.com/CycloneDX/cyclonedx-javascript-library#readme",
+            "type": "website",
+            "comment": "as detected from PackageJson property \"homepage\""
+          },
+          {
+            "url": "https://github.com/CycloneDX/cyclonedx-javascript-library/issues",
+            "type": "issue-tracker",
+            "comment": "as detected from PackageJson property \"bugs.url\""
+          }
+        ]
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "aspnetcoresample.mvc",
+      "version": "1.0.0",
+      "bom-ref": "aspnetcoresample.mvc@1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/aspnetcoresample.mvc@1.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": ""
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "signalr",
+      "group": "@microsoft",
+      "version": "8.0.0",
+      "bom-ref": "@microsoft/signalr@8.0.0",
+      "author": "Microsoft",
+      "description": "ASP.NET Core SignalR Client",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40microsoft/signalr@8.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/dotnet/aspnetcore.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/dotnet/aspnetcore/tree/main/src/SignalR#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/dotnet/aspnetcore/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@microsoft/signalr/-/signalr-8.0.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@microsoft/signalr"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "abort-controller",
+      "version": "3.0.0",
+      "bom-ref": "abort-controller@3.0.0",
+      "author": "Toru Nagashima",
+      "description": "An implementation of WHATWG AbortController interface.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/abort-controller@3.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mysticatea/abort-controller.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mysticatea/abort-controller#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mysticatea/abort-controller/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/abort-controller/-/abort-controller-3.0.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/abort-controller"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "event-target-shim",
+      "version": "5.0.1",
+      "bom-ref": "event-target-shim@5.0.1",
+      "author": "Toru Nagashima",
+      "description": "An implementation of WHATWG EventTarget interface.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/event-target-shim@5.0.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mysticatea/event-target-shim.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mysticatea/event-target-shim",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mysticatea/event-target-shim/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/event-target-shim"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "eventsource",
+      "version": "2.0.2",
+      "bom-ref": "eventsource@2.0.2",
+      "author": "Aslak Hellesøy",
+      "description": "W3C compliant EventSource client for Node.js and browser (polyfill)",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        },
+        {
+          "license": {
+            "id": "MIT",
+            "url": "http://github.com/EventSource/eventsource/raw/master/LICENSE"
+          }
+        }
+      ],
+      "purl": "pkg:npm/eventsource@2.0.2",
+      "externalReferences": [
+        {
+          "url": "git://github.com/EventSource/eventsource.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "http://github.com/EventSource/eventsource",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "http://github.com/EventSource/eventsource/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/eventsource/-/eventsource-2.0.2.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/eventsource"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fetch-cookie",
+      "version": "2.2.0",
+      "bom-ref": "fetch-cookie@2.2.0",
+      "author": "Val",
+      "description": "Decorator for a `fetch` function to support automatic cookies.",
+      "licenses": [
+        {
+          "license": {
+            "id": "Unlicense"
+          }
+        }
+      ],
+      "purl": "pkg:npm/fetch-cookie@2.2.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/valeriangalliat/fetch-cookie.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/valeriangalliat/fetch-cookie#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/valeriangalliat/fetch-cookie/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/fetch-cookie/-/fetch-cookie-2.2.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/fetch-cookie"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "set-cookie-parser",
+      "version": "2.6.0",
+      "bom-ref": "set-cookie-parser@2.6.0",
+      "author": "Nathan Friedly",
+      "description": "Parses set-cookie headers into objects",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/set-cookie-parser@2.6.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/nfriedly/set-cookie-parser.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/nfriedly/set-cookie-parser",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/nfriedly/set-cookie-parser/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/set-cookie-parser/-/set-cookie-parser-2.6.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/set-cookie-parser"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tough-cookie",
+      "version": "4.1.3",
+      "bom-ref": "tough-cookie@4.1.3",
+      "author": "Jeremy Stashewsky",
+      "description": "RFC6265 Cookies and Cookie Jar for node.js",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:npm/tough-cookie@4.1.3",
+      "externalReferences": [
+        {
+          "url": "git://github.com/salesforce/tough-cookie.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/salesforce/tough-cookie",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/salesforce/tough-cookie/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/tough-cookie/-/tough-cookie-4.1.3.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/tough-cookie"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "psl",
+      "version": "1.9.0",
+      "bom-ref": "psl@1.9.0",
+      "author": "Lupo Montero",
+      "description": "Domain name parser based on the Public Suffix List",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/psl@1.9.0",
+      "externalReferences": [
+        {
+          "url": "git+ssh://git@github.com/lupomontero/psl.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/lupomontero/psl#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/lupomontero/psl/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/psl/-/psl-1.9.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/psl"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "punycode",
+      "version": "2.3.1",
+      "bom-ref": "punycode@2.3.1",
+      "author": "Mathias Bynens",
+      "description": "A robust Punycode converter that fully complies to RFC 3492 and RFC 5891, and works on nearly all JavaScript platforms.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/punycode@2.3.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mathiasbynens/punycode.js.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://mths.be/punycode",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mathiasbynens/punycode.js/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/punycode"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "universalify",
+      "version": "0.2.0",
+      "bom-ref": "universalify@0.2.0",
+      "author": "Ryan Zimmerman",
+      "description": "Make a callback- or promise-based function support both promises and callbacks.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/universalify@0.2.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/RyanZim/universalify.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/RyanZim/universalify#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/RyanZim/universalify/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/universalify/-/universalify-0.2.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/universalify"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "url-parse",
+      "version": "1.5.10",
+      "bom-ref": "url-parse@1.5.10",
+      "author": "Arnout Kazemier",
+      "description": "Small footprint URL parser that works seamlessly across Node.js and browser environments",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/url-parse@1.5.10",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/unshiftio/url-parse.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/unshiftio/url-parse#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/unshiftio/url-parse/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/url-parse/-/url-parse-1.5.10.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/url-parse"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "querystringify",
+      "version": "2.2.0",
+      "bom-ref": "querystringify@2.2.0",
+      "author": "Arnout Kazemier",
+      "description": "Querystringify - Small, simple but powerful query string parser.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/querystringify@2.2.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/unshiftio/querystringify.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/unshiftio/querystringify",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/unshiftio/querystringify/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/querystringify/-/querystringify-2.2.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/querystringify"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "requires-port",
+      "version": "1.0.0",
+      "bom-ref": "requires-port@1.0.0",
+      "author": "Arnout Kazemier",
+      "description": "Check if a protocol requires a certain port number to be added to an URL.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/requires-port@1.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/unshiftio/requires-port.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/unshiftio/requires-port",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/unshiftio/requires-port/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/requires-port"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "node-fetch",
+      "version": "2.7.0",
+      "bom-ref": "node-fetch@2.7.0",
+      "author": "David Frank",
+      "description": "A light-weight module that brings window.fetch to node.js",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/node-fetch@2.7.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/bitinn/node-fetch.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/bitinn/node-fetch",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/bitinn/node-fetch/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/node-fetch"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "whatwg-url",
+      "version": "5.0.0",
+      "bom-ref": "whatwg-url@5.0.0",
+      "author": "Sebastian Mayr",
+      "description": "An implementation of the WHATWG URL Standard's URL API and parsing machinery",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/whatwg-url@5.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jsdom/whatwg-url.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jsdom/whatwg-url#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jsdom/whatwg-url/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/whatwg-url"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "tr46",
+      "version": "0.0.3",
+      "bom-ref": "tr46@0.0.3",
+      "author": "Sebastian Mayr",
+      "description": "An implementation of the Unicode TR46 spec",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/tr46@0.0.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/Sebmaster/tr46.js.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/Sebmaster/tr46.js#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/Sebmaster/tr46.js/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/tr46"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "webidl-conversions",
+      "version": "3.0.1",
+      "bom-ref": "webidl-conversions@3.0.1",
+      "author": "Domenic Denicola",
+      "description": "Implements the WebIDL algorithms for converting to and from JavaScript values",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:npm/webidl-conversions@3.0.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jsdom/webidl-conversions.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jsdom/webidl-conversions#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jsdom/webidl-conversions/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/webidl-conversions"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "ws",
+      "version": "7.5.10",
+      "bom-ref": "ws@7.5.10",
+      "author": "Einar Otto Stangvik",
+      "description": "Simple to use, blazing fast and thoroughly tested websocket client and server for Node.js",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/ws@7.5.10",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/websockets/ws.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/websockets/ws",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/websockets/ws/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/ws/-/ws-7.5.10.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/ws"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "jquery",
+      "group": "@types",
+      "version": "3.5.30",
+      "bom-ref": "@types/jquery@3.5.30",
+      "description": "TypeScript definitions for jquery",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40types/jquery@3.5.30#types/jquery",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/jquery",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jquery",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@types/jquery/-/jquery-3.5.30.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@types/jquery"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "sizzle",
+      "group": "@types",
+      "version": "2.3.8",
+      "bom-ref": "@types/sizzle@2.3.8",
+      "description": "TypeScript definitions for sizzle",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40types/sizzle@2.3.8#types/sizzle",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/sizzle",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/sizzle",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@types/sizzle/-/sizzle-2.3.8.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@types/sizzle"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "bootstrap",
+      "version": "5.3.2",
+      "bom-ref": "bootstrap@5.3.2",
+      "author": "The Bootstrap Authors",
+      "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/bootstrap@5.3.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/twbs/bootstrap.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://getbootstrap.com/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/twbs/bootstrap/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.2.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/bootstrap"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "core",
+      "group": "@popperjs",
+      "version": "2.11.8",
+      "bom-ref": "@popperjs/core@2.11.8",
+      "author": "Federico Zivolo",
+      "description": "Tooltip and Popover Positioning Engine",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40popperjs/core@2.11.8",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/popperjs/popper-core.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/popperjs/popper-core#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/popperjs/popper-core/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@popperjs/core"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fast-glob",
+      "version": "3.3.2",
+      "bom-ref": "fast-glob@3.3.2",
+      "author": "Denis Malinochkin",
+      "description": "It's a very fast and efficient glob library for Node.js",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/fast-glob@3.3.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mrmlnc/fast-glob.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mrmlnc/fast-glob#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mrmlnc/fast-glob/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/fast-glob/-/fast-glob-3.3.2.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/fast-glob"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fs.stat",
+      "group": "@nodelib",
+      "version": "2.0.5",
+      "bom-ref": "@nodelib/fs.stat@2.0.5",
+      "description": "Get the status of a file with some features",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40nodelib/fs.stat@2.0.5#master",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/nodelib/nodelib.git#master",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/nodelib/nodelib/tree/master#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/nodelib/nodelib/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@nodelib/fs.stat/-/fs.stat-2.0.5.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@nodelib/fs.stat"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fs.walk",
+      "group": "@nodelib",
+      "version": "1.2.8",
+      "bom-ref": "@nodelib/fs.walk@1.2.8",
+      "description": "A library for efficiently walking a directory recursively",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40nodelib/fs.walk@1.2.8#master",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/nodelib/nodelib.git#master",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/nodelib/nodelib/tree/master#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/nodelib/nodelib/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@nodelib/fs.walk/-/fs.walk-1.2.8.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@nodelib/fs.walk"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fs.scandir",
+      "group": "@nodelib",
+      "version": "2.1.5",
+      "bom-ref": "@nodelib/fs.scandir@2.1.5",
+      "description": "List files and directories inside the specified directory",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40nodelib/fs.scandir@2.1.5#master",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/nodelib/nodelib.git#master",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/nodelib/nodelib/tree/master#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/nodelib/nodelib/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@nodelib/fs.scandir"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "run-parallel",
+      "version": "1.2.0",
+      "bom-ref": "run-parallel@1.2.0",
+      "author": "Feross Aboukhadijeh",
+      "description": "Run an array of functions in parallel",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/run-parallel@1.2.0",
+      "externalReferences": [
+        {
+          "url": "git://github.com/feross/run-parallel.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/feross/run-parallel",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/feross/run-parallel/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/run-parallel/-/run-parallel-1.2.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/run-parallel"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "queue-microtask",
+      "version": "1.2.3",
+      "bom-ref": "queue-microtask@1.2.3",
+      "author": "Feross Aboukhadijeh",
+      "description": "fast, tiny `queueMicrotask` shim for modern engines",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/queue-microtask@1.2.3",
+      "externalReferences": [
+        {
+          "url": "git://github.com/feross/queue-microtask.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/feross/queue-microtask",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/feross/queue-microtask/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/queue-microtask"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fastq",
+      "version": "1.17.1",
+      "bom-ref": "fastq@1.17.1",
+      "author": "Matteo Collina",
+      "description": "Fast, in memory work queue",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/fastq@1.17.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mcollina/fastq.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mcollina/fastq#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mcollina/fastq/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/fastq/-/fastq-1.17.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/fastq"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "reusify",
+      "version": "1.0.4",
+      "bom-ref": "reusify@1.0.4",
+      "author": "Matteo Collina",
+      "description": "Reuse objects and functions with style",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/reusify@1.0.4",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mcollina/reusify.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mcollina/reusify#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mcollina/reusify/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/reusify/-/reusify-1.0.4.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/reusify"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "glob-parent",
+      "version": "5.1.2",
+      "bom-ref": "glob-parent@5.1.2",
+      "author": "Gulp Team",
+      "description": "Extract the non-magic parent path from a glob string.",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/glob-parent@5.1.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/gulpjs/glob-parent.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/gulpjs/glob-parent#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/gulpjs/glob-parent/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/glob-parent"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "is-glob",
+      "version": "4.0.3",
+      "bom-ref": "is-glob@4.0.3",
+      "author": "Jon Schlinkert",
+      "description": "Returns `true` if the given string looks like a glob pattern or an extglob pattern. This makes it easy to create code that only uses external modules like node-glob when necessary, resulting in much faster code execution and initialization time, and a better user experience.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/is-glob@4.0.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/micromatch/is-glob.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/micromatch/is-glob",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/micromatch/is-glob/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/is-glob"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "is-extglob",
+      "version": "2.1.1",
+      "bom-ref": "is-extglob@2.1.1",
+      "author": "Jon Schlinkert",
+      "description": "Returns true if a string has an extglob.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/is-extglob@2.1.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jonschlinkert/is-extglob.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/is-extglob",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/is-extglob/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/is-extglob/-/is-extglob-2.1.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/is-extglob"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "merge2",
+      "version": "1.4.1",
+      "bom-ref": "merge2@1.4.1",
+      "description": "Merge multiple streams into one stream in sequence or parallel.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/merge2@1.4.1",
+      "externalReferences": [
+        {
+          "url": "git+ssh://git@github.com/teambition/merge2.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/teambition/merge2",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/teambition/merge2/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/merge2"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "micromatch",
+      "version": "4.0.7",
+      "bom-ref": "micromatch@4.0.7",
+      "author": "Jon Schlinkert",
+      "description": "Glob matching for javascript/node.js. A replacement and faster alternative to minimatch and multimatch.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/micromatch@4.0.7",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/micromatch/micromatch.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/micromatch/micromatch",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/micromatch/micromatch/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/micromatch/-/micromatch-4.0.7.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/micromatch"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "braces",
+      "version": "3.0.3",
+      "bom-ref": "braces@3.0.3",
+      "author": "Jon Schlinkert",
+      "description": "Bash-like brace expansion, implemented in JavaScript. Safer than other brace expansion libs, with complete support for the Bash 4.3 braces specification, without sacrificing speed.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/braces@3.0.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/micromatch/braces.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/micromatch/braces",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/micromatch/braces/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/braces/-/braces-3.0.3.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/braces"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "fill-range",
+      "version": "7.1.1",
+      "bom-ref": "fill-range@7.1.1",
+      "author": "Jon Schlinkert",
+      "description": "Fill in a range of numbers or letters, optionally passing an increment or `step` to use, or create a regex-compatible range with `options.toRegex`",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/fill-range@7.1.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jonschlinkert/fill-range.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/fill-range",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/fill-range/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/fill-range/-/fill-range-7.1.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/fill-range"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "to-regex-range",
+      "version": "5.0.1",
+      "bom-ref": "to-regex-range@5.0.1",
+      "author": "Jon Schlinkert",
+      "description": "Pass two numbers, get a regex-compatible source string for matching ranges. Validated against more than 2.78 million test assertions.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/to-regex-range@5.0.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/micromatch/to-regex-range.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/micromatch/to-regex-range",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/micromatch/to-regex-range/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/to-regex-range/-/to-regex-range-5.0.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/to-regex-range"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "is-number",
+      "version": "7.0.0",
+      "bom-ref": "is-number@7.0.0",
+      "author": "Jon Schlinkert",
+      "description": "Returns true if a number or string value is a finite number. Useful for regex matches, parsing, user input, etc.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/is-number@7.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jonschlinkert/is-number.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/is-number",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/is-number/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/is-number"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "picomatch",
+      "version": "2.3.1",
+      "bom-ref": "picomatch@2.3.1",
+      "author": "Jon Schlinkert",
+      "description": "Blazing fast and accurate glob matcher written in JavaScript, with no dependencies and full support for standard and extended Bash glob features, including braces, extglobs, POSIX brackets, and regular expressions.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/picomatch@2.3.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/micromatch/picomatch.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/micromatch/picomatch",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/micromatch/picomatch/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/picomatch"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "html5-qrcode",
+      "version": "2.3.8",
+      "bom-ref": "html5-qrcode@2.3.8",
+      "author": "minhazav@gmail.com",
+      "description": "A cross platform HTML5 QR Code & bar code scanner",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "purl": "pkg:npm/html5-qrcode@2.3.8",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/mebjas/html5-qrcode.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/mebjas/html5-qrcode#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/mebjas/html5-qrcode/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/html5-qrcode/-/html5-qrcode-2.3.8.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/html5-qrcode"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "jquery",
+      "version": "3.7.1",
+      "bom-ref": "jquery@3.7.1",
+      "author": "OpenJS Foundation and other contributors",
+      "description": "JavaScript library for DOM operations",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/jquery@3.7.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jquery/jquery.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://jquery.com",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jquery/jquery/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/jquery/-/jquery-3.7.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/jquery"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "rollup",
+      "version": "4.18.0",
+      "bom-ref": "rollup@4.18.0",
+      "author": "Rich Harris",
+      "description": "Next-generation ES module bundler",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/rollup@4.18.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/rollup/rollup.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://rollupjs.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/rollup/rollup/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/rollup/-/rollup-4.18.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/rollup"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "rollup-linux-x64-gnu",
+      "group": "@rollup",
+      "version": "4.18.0",
+      "bom-ref": "@rollup/rollup-linux-x64-gnu@4.18.0",
+      "author": "Lukas Taegert-Atkinson",
+      "description": "Native bindings for Rollup",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.18.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/rollup/rollup.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://rollupjs.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/rollup/rollup/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.18.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@rollup/rollup-linux-x64-gnu"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "estree",
+      "group": "@types",
+      "version": "1.0.5",
+      "bom-ref": "@types/estree@1.0.5",
+      "description": "TypeScript definitions for estree",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40types/estree@1.0.5#types/estree",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/estree",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/estree",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@types/estree/-/estree-1.0.5.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@types/estree"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "sass",
+      "version": "1.77.6",
+      "bom-ref": "sass@1.77.6",
+      "author": "Natalie Weizenbaum",
+      "description": "A pure JavaScript implementation of Sass.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/sass@1.77.6",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sass/dart-sass.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sass/dart-sass",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sass/dart-sass/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/sass/-/sass-1.77.6.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/sass"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "chokidar",
+      "version": "3.6.0",
+      "bom-ref": "chokidar@3.6.0",
+      "author": "Paul Miller",
+      "description": "Minimal and efficient cross-platform file watching library",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/chokidar@3.6.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/paulmillr/chokidar.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/paulmillr/chokidar",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/paulmillr/chokidar/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/chokidar/-/chokidar-3.6.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/chokidar"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "anymatch",
+      "version": "3.1.3",
+      "bom-ref": "anymatch@3.1.3",
+      "author": "Elan Shanker",
+      "description": "Matches strings against configurable strings, globs, regular expressions, and/or functions",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/anymatch@3.1.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/micromatch/anymatch.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/micromatch/anymatch",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/micromatch/anymatch/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/anymatch/-/anymatch-3.1.3.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/anymatch"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "normalize-path",
+      "version": "3.0.0",
+      "bom-ref": "normalize-path@3.0.0",
+      "author": "Jon Schlinkert",
+      "description": "Normalize slashes in a file path to be posix/unix-like forward slashes. Also condenses repeat slashes to a single slash and removes and trailing slashes, unless disabled.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/normalize-path@3.0.0?vcs_url=git%2Bhttps%3A//github.com/jonschlinkert/normalize-path.git",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/jonschlinkert/normalize-path.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/normalize-path",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/jonschlinkert/normalize-path/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/normalize-path"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "is-binary-path",
+      "version": "2.1.0",
+      "bom-ref": "is-binary-path@2.1.0",
+      "author": "Sindre Sorhus",
+      "description": "Check if a file path is a binary file",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/is-binary-path@2.1.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/is-binary-path.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/is-binary-path#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/is-binary-path/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/is-binary-path/-/is-binary-path-2.1.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/is-binary-path"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "binary-extensions",
+      "version": "2.3.0",
+      "bom-ref": "binary-extensions@2.3.0",
+      "author": "Sindre Sorhus",
+      "description": "List of binary file extensions",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/binary-extensions@2.3.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/sindresorhus/binary-extensions.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/binary-extensions#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/sindresorhus/binary-extensions/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/binary-extensions/-/binary-extensions-2.3.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/binary-extensions"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "readdirp",
+      "version": "3.6.0",
+      "bom-ref": "readdirp@3.6.0",
+      "author": "Thorsten Lorenz",
+      "description": "Recursive version of fs.readdir with streaming API.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/readdirp@3.6.0",
+      "externalReferences": [
+        {
+          "url": "git://github.com/paulmillr/readdirp.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/paulmillr/readdirp",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/paulmillr/readdirp/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/readdirp/-/readdirp-3.6.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/readdirp"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "immutable",
+      "version": "4.3.6",
+      "bom-ref": "immutable@4.3.6",
+      "author": "Lee Byron",
+      "description": "Immutable Data Collections",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/immutable@4.3.6",
+      "externalReferences": [
+        {
+          "url": "git://github.com/immutable-js/immutable-js.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://immutable-js.com",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/immutable-js/immutable-js/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/immutable/-/immutable-4.3.6.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/immutable"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "source-map-js",
+      "version": "1.2.0",
+      "bom-ref": "source-map-js@1.2.0",
+      "author": "Valentin 7rulnik Semirulnik",
+      "description": "Generates and consumes source maps",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:npm/source-map-js@1.2.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/7rulnik/source-map-js.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/7rulnik/source-map-js",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/7rulnik/source-map-js/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.0.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/source-map-js"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "typescript",
+      "version": "5.5.2",
+      "bom-ref": "typescript@5.5.2",
+      "author": "Microsoft Corp.",
+      "description": "TypeScript is a language for application scale JavaScript development",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "purl": "pkg:npm/typescript@5.5.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/Microsoft/TypeScript.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://www.typescriptlang.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/Microsoft/TypeScript/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/typescript/-/typescript-5.5.2.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/typescript"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "vite",
+      "version": "5.3.1",
+      "bom-ref": "vite@5.3.1",
+      "author": "Evan You",
+      "description": "Native-ESM powered web dev build tool",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/vite@5.3.1#packages/vite",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/vitejs/vite.git#packages/vite",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://vitejs.dev",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/vitejs/vite/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/vite/-/vite-5.3.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/vite"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "esbuild",
+      "version": "0.21.5",
+      "bom-ref": "esbuild@0.21.5",
+      "description": "An extremely fast JavaScript and CSS bundler and minifier.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/esbuild@0.21.5",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/evanw/esbuild.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/evanw/esbuild#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/evanw/esbuild/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/esbuild/-/esbuild-0.21.5.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/esbuild"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "linux-x64",
+      "group": "@esbuild",
+      "version": "0.21.5",
+      "bom-ref": "@esbuild/linux-x64@0.21.5",
+      "description": "The Linux 64-bit binary for esbuild, a JavaScript bundler.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40esbuild/linux-x64@0.21.5",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/evanw/esbuild.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/evanw/esbuild#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/evanw/esbuild/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.21.5.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@esbuild/linux-x64"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "postcss",
+      "version": "8.4.38",
+      "bom-ref": "postcss@8.4.38",
+      "author": "Andrey Sitnik",
+      "description": "Tool for transforming styles with JS plugins",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/postcss@8.4.38",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/postcss/postcss.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://postcss.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/postcss/postcss/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/postcss/-/postcss-8.4.38.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/postcss"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "nanoid",
+      "version": "3.3.7",
+      "bom-ref": "nanoid@3.3.7",
+      "author": "Andrey Sitnik",
+      "description": "A tiny (116 bytes), secure URL-friendly unique string ID generator",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/nanoid@3.3.7",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/ai/nanoid.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/ai/nanoid#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/ai/nanoid/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.7.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/nanoid"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "picocolors",
+      "version": "1.0.1",
+      "bom-ref": "picocolors@1.0.1",
+      "author": "Alexey Raspopov",
+      "description": "The tiniest and the fastest library for terminal output formatting with ANSI colors",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/picocolors@1.0.1",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/alexeyraspopov/picocolors.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/alexeyraspopov/picocolors#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/alexeyraspopov/picocolors/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/picocolors/-/picocolors-1.0.1.tgz",
+          "type": "distribution",
+          "comment": "as detected from npm-ls property \"resolved\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/picocolors"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "aspnetcoresample.mvc@1.0.0",
+      "dependsOn": [
+        "@microsoft/signalr@8.0.0",
+        "@types/jquery@3.5.30",
+        "bootstrap@5.3.2",
+        "fast-glob@3.3.2",
+        "html5-qrcode@2.3.8",
+        "jquery@3.7.1",
+        "rollup@4.18.0",
+        "sass@1.77.6",
+        "typescript@5.5.2",
+        "vite@5.3.1"
+      ]
+    },
+    {
+      "ref": "@microsoft/signalr@8.0.0",
+      "dependsOn": [
+        "abort-controller@3.0.0",
+        "eventsource@2.0.2",
+        "fetch-cookie@2.2.0",
+        "node-fetch@2.7.0",
+        "ws@7.5.10"
+      ]
+    },
+    {
+      "ref": "abort-controller@3.0.0",
+      "dependsOn": [
+        "event-target-shim@5.0.1"
+      ]
+    },
+    {
+      "ref": "event-target-shim@5.0.1"
+    },
+    {
+      "ref": "eventsource@2.0.2"
+    },
+    {
+      "ref": "fetch-cookie@2.2.0",
+      "dependsOn": [
+        "set-cookie-parser@2.6.0",
+        "tough-cookie@4.1.3"
+      ]
+    },
+    {
+      "ref": "set-cookie-parser@2.6.0"
+    },
+    {
+      "ref": "tough-cookie@4.1.3",
+      "dependsOn": [
+        "psl@1.9.0",
+        "punycode@2.3.1",
+        "universalify@0.2.0",
+        "url-parse@1.5.10"
+      ]
+    },
+    {
+      "ref": "psl@1.9.0"
+    },
+    {
+      "ref": "punycode@2.3.1"
+    },
+    {
+      "ref": "universalify@0.2.0"
+    },
+    {
+      "ref": "url-parse@1.5.10",
+      "dependsOn": [
+        "querystringify@2.2.0",
+        "requires-port@1.0.0"
+      ]
+    },
+    {
+      "ref": "querystringify@2.2.0"
+    },
+    {
+      "ref": "requires-port@1.0.0"
+    },
+    {
+      "ref": "node-fetch@2.7.0",
+      "dependsOn": [
+        "whatwg-url@5.0.0"
+      ]
+    },
+    {
+      "ref": "whatwg-url@5.0.0",
+      "dependsOn": [
+        "tr46@0.0.3",
+        "webidl-conversions@3.0.1"
+      ]
+    },
+    {
+      "ref": "tr46@0.0.3"
+    },
+    {
+      "ref": "webidl-conversions@3.0.1"
+    },
+    {
+      "ref": "ws@7.5.10"
+    },
+    {
+      "ref": "@types/jquery@3.5.30",
+      "dependsOn": [
+        "@types/sizzle@2.3.8"
+      ]
+    },
+    {
+      "ref": "@types/sizzle@2.3.8"
+    },
+    {
+      "ref": "bootstrap@5.3.2",
+      "dependsOn": [
+        "@popperjs/core@2.11.8"
+      ]
+    },
+    {
+      "ref": "@popperjs/core@2.11.8"
+    },
+    {
+      "ref": "fast-glob@3.3.2",
+      "dependsOn": [
+        "@nodelib/fs.stat@2.0.5",
+        "@nodelib/fs.walk@1.2.8",
+        "glob-parent@5.1.2",
+        "merge2@1.4.1",
+        "micromatch@4.0.7"
+      ]
+    },
+    {
+      "ref": "@nodelib/fs.stat@2.0.5"
+    },
+    {
+      "ref": "@nodelib/fs.walk@1.2.8",
+      "dependsOn": [
+        "@nodelib/fs.scandir@2.1.5",
+        "fastq@1.17.1"
+      ]
+    },
+    {
+      "ref": "@nodelib/fs.scandir@2.1.5",
+      "dependsOn": [
+        "@nodelib/fs.stat@2.0.5",
+        "run-parallel@1.2.0"
+      ]
+    },
+    {
+      "ref": "run-parallel@1.2.0",
+      "dependsOn": [
+        "queue-microtask@1.2.3"
+      ]
+    },
+    {
+      "ref": "queue-microtask@1.2.3"
+    },
+    {
+      "ref": "fastq@1.17.1",
+      "dependsOn": [
+        "reusify@1.0.4"
+      ]
+    },
+    {
+      "ref": "reusify@1.0.4"
+    },
+    {
+      "ref": "glob-parent@5.1.2",
+      "dependsOn": [
+        "is-glob@4.0.3"
+      ]
+    },
+    {
+      "ref": "is-glob@4.0.3",
+      "dependsOn": [
+        "is-extglob@2.1.1"
+      ]
+    },
+    {
+      "ref": "is-extglob@2.1.1"
+    },
+    {
+      "ref": "merge2@1.4.1"
+    },
+    {
+      "ref": "micromatch@4.0.7",
+      "dependsOn": [
+        "braces@3.0.3",
+        "picomatch@2.3.1"
+      ]
+    },
+    {
+      "ref": "braces@3.0.3",
+      "dependsOn": [
+        "fill-range@7.1.1"
+      ]
+    },
+    {
+      "ref": "fill-range@7.1.1",
+      "dependsOn": [
+        "to-regex-range@5.0.1"
+      ]
+    },
+    {
+      "ref": "to-regex-range@5.0.1",
+      "dependsOn": [
+        "is-number@7.0.0"
+      ]
+    },
+    {
+      "ref": "is-number@7.0.0"
+    },
+    {
+      "ref": "picomatch@2.3.1"
+    },
+    {
+      "ref": "html5-qrcode@2.3.8"
+    },
+    {
+      "ref": "jquery@3.7.1"
+    },
+    {
+      "ref": "rollup@4.18.0",
+      "dependsOn": [
+        "@rollup/rollup-linux-x64-gnu@4.18.0",
+        "@types/estree@1.0.5"
+      ]
+    },
+    {
+      "ref": "@rollup/rollup-linux-x64-gnu@4.18.0"
+    },
+    {
+      "ref": "@types/estree@1.0.5"
+    },
+    {
+      "ref": "sass@1.77.6",
+      "dependsOn": [
+        "chokidar@3.6.0",
+        "immutable@4.3.6",
+        "source-map-js@1.2.0"
+      ]
+    },
+    {
+      "ref": "chokidar@3.6.0",
+      "dependsOn": [
+        "anymatch@3.1.3",
+        "braces@3.0.3",
+        "glob-parent@5.1.2",
+        "is-binary-path@2.1.0",
+        "is-glob@4.0.3",
+        "normalize-path@3.0.0",
+        "readdirp@3.6.0"
+      ]
+    },
+    {
+      "ref": "anymatch@3.1.3",
+      "dependsOn": [
+        "normalize-path@3.0.0",
+        "picomatch@2.3.1"
+      ]
+    },
+    {
+      "ref": "normalize-path@3.0.0"
+    },
+    {
+      "ref": "is-binary-path@2.1.0",
+      "dependsOn": [
+        "binary-extensions@2.3.0"
+      ]
+    },
+    {
+      "ref": "binary-extensions@2.3.0"
+    },
+    {
+      "ref": "readdirp@3.6.0",
+      "dependsOn": [
+        "picomatch@2.3.1"
+      ]
+    },
+    {
+      "ref": "immutable@4.3.6"
+    },
+    {
+      "ref": "source-map-js@1.2.0"
+    },
+    {
+      "ref": "typescript@5.5.2"
+    },
+    {
+      "ref": "vite@5.3.1",
+      "dependsOn": [
+        "esbuild@0.21.5",
+        "postcss@8.4.38",
+        "rollup@4.18.0",
+        "sass@1.77.6"
+      ]
+    },
+    {
+      "ref": "esbuild@0.21.5",
+      "dependsOn": [
+        "@esbuild/linux-x64@0.21.5"
+      ]
+    },
+    {
+      "ref": "@esbuild/linux-x64@0.21.5"
+    },
+    {
+      "ref": "postcss@8.4.38",
+      "dependsOn": [
+        "nanoid@3.3.7",
+        "picocolors@1.0.1",
+        "source-map-js@1.2.0"
+      ]
+    },
+    {
+      "ref": "nanoid@3.3.7"
+    },
+    {
+      "ref": "picocolors@1.0.1"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2024-08-03T00:59:44.963308531+09:00",
+  "ArtifactName": "sbom/SpringBoot.Report.json",
+  "ArtifactType": "cyclonedx",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": "Java",
+      "Class": "lang-pkgs",
+      "Type": "jar",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-34750",
+          "PkgID": "org.apache.tomcat.embed:tomcat-embed-core:10.1.19",
+          "PkgName": "org.apache.tomcat.embed:tomcat-embed-core",
+          "PkgIdentifier": {
+            "PURL": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@10.1.19?type=jar",
+            "UID": "a693a9298cd37ca8",
+            "BOMRef": "pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@10.1.19?type=jar"
+          },
+          "InstalledVersion": "10.1.19",
+          "FixedVersion": "11.0.0-M21, 10.1.25, 9.0.90",
+          "Status": "fixed",
+          "Layer": {},
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-34750",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory Maven",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
+          },
+          "Title": "tomcat: Improper Handling of Exceptional Conditions",
+          "Description": "Improper Handling of Exceptional Conditions, Uncontrolled Resource Consumption vulnerability in Apache Tomcat. When processing an HTTP/2 stream, Tomcat did not handle some cases of excessive HTTP headers correctly. This led to a miscounting of active HTTP/2 streams which in turn led to the use of an incorrect infinite timeout which allowed connections to remain open which should have been closed.\n\nThis issue affects Apache Tomcat: from 11.0.0-M1 through 11.0.0-M20, from 10.1.0-M1 through 10.1.24, from 9.0.0-M1 through 9.0.89.\n\nUsers are recommended to upgrade to version 11.0.0-M21, 10.1.25 or 9.0.90, which fixes the issue.\n\n",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-755"
+          ],
+          "VendorSeverity": {
+            "amazon": 3,
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2024-34750",
+            "https://github.com/apache/tomcat",
+            "https://github.com/apache/tomcat/commit/2344a4c0d03e307ba6b8ab6dc8b894cc8bac63f2",
+            "https://github.com/apache/tomcat/commit/2afae300c9ac9c0e516e2e9de580847d925365c3",
+            "https://github.com/apache/tomcat/commit/9fec9a82887853402833a80b584e3762c7423f5f",
+            "https://lists.apache.org/thread/4kqf0bc9gxymjc2x7v3p7dvplnl77y8l",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-34750",
+            "https://tomcat.apache.org/security-10.html",
+            "https://tomcat.apache.org/security-11.html",
+            "https://tomcat.apache.org/security-9.html",
+            "https://www.cve.org/CVERecord?id=CVE-2024-34750"
+          ],
+          "PublishedDate": "2024-07-03T20:15:04.083Z",
+          "LastModifiedDate": "2024-07-09T16:22:37.12Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-22262",
+          "PkgID": "org.springframework:spring-web:6.1.5",
+          "PkgName": "org.springframework:spring-web",
+          "PkgIdentifier": {
+            "PURL": "pkg:maven/org.springframework/spring-web@6.1.5?type=jar",
+            "UID": "f730c0e5a0564cc3",
+            "BOMRef": "pkg:maven/org.springframework/spring-web@6.1.5?type=jar"
+          },
+          "InstalledVersion": "6.1.5",
+          "FixedVersion": "5.3.34, 6.0.19, 6.1.6",
+          "Status": "fixed",
+          "Layer": {},
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-22262",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory Maven",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Amaven"
+          },
+          "Title": "springframework: URL Parsing with Host Validation",
+          "Description": "Applications that use UriComponentsBuilder to parse an externally provided URL (e.g. through a query parameter) AND perform validation checks on the host of the parsed URL may be vulnerable to a  open redirect https://cwe.mitre.org/data/definitions/601.html  attack or to a SSRF attack if the URL is used after passing validation checks.\n\nThis is the same as  CVE-2024-22259 https://spring.io/security/cve-2024-22259  and  CVE-2024-22243 https://spring.io/security/cve-2024-22243 , but with different input.\n\n",
+          "Severity": "HIGH",
+          "VendorSeverity": {
+            "ghsa": 3,
+            "redhat": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N",
+              "V3Score": 8.1
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N",
+              "V3Score": 8.1
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2024-22262",
+            "https://github.com/spring-projects/spring-framework",
+            "https://github.com/spring-projects/spring-framework/blob/main/spring-web/src/main/java/org/springframework/web/util/UriComponentsBuilder.java",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-22262",
+            "https://security.netapp.com/advisory/ntap-20240524-0003",
+            "https://security.netapp.com/advisory/ntap-20240524-0003/",
+            "https://spring.io/security/cve-2024-22262",
+            "https://www.cve.org/CVERecord?id=CVE-2024-22262"
+          ],
+          "PublishedDate": "2024-04-16T06:15:46.27Z",
+          "LastModifiedDate": "2024-06-10T18:15:25.94Z"
+        }
+      ]
+    }
+  ]
+}

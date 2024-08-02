@@ -17,6 +17,9 @@ RUN mkdir -p /etc/apt/keyrings && \
 # install dotnet workload aspire
 RUN dotnet workload install aspire
 
+# install cyclonedx for npm
+RUN npm install -g @cyclonedx/cyclonedx-npm
+
 # install trivy
 RUN apt-get install -y wget apt-transport-https gnupg lsb-release && \
     wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add - && \
