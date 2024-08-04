@@ -1,7 +1,7 @@
 ﻿# A5:ER FORMAT:18
 # A5:ER ENCODING:UTF8
 # A5:ER Mk-1 Copyright © 2007 m.matsubara
-# A5:SQL Mk-2 Version 2.19.1 Copyright © 1997 - 2024 m.matsubara
+# A5:SQL Mk-2 Version 2.19.2 Copyright © 1997 - 2024 m.matsubara
 #  https://a5m2.mmatsubara.com
 
 [Manager]
@@ -10,11 +10,11 @@ Author=
 MaxEntityRowShow=1000
 ReadOnlyRecommend=0
 Page=Main
-PageInfo="Main",2,"A3Landscape",$FFFFFF
+PageInfo="Main",7,"A3Landscape",$FFFFFF
 LogicalView=1
 DecodeDomain=0
 ViewModePageIndividually=1
-ViewMode=2
+ViewMode=7
 ViewFormat=0
 UseNondependenceDashLine=0
 FontName=Tahoma
@@ -27,12 +27,14 @@ FooterLeft=
 FooterCenter=
 FooterRight=
 ShowPageoutRelation=1
+RDBMSType=6
+RDBMSTypeName=MySQL
 DefaultPkName=%0:s_PKC
 DefaultPkIndexName=%0:s_PKI
 DefaultIndexName=%0:s_IX%1:d
 DefaultFkName=%0:s_FK%1:d
 SqlSeparator=0
-UpperCaseKeyword=0
+UpperCaseKeyword=1
 ShowTag=1
 ShowCommonAttributes=0
 BugFixEntityWidth=1
@@ -43,25 +45,26 @@ LName=child_table
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
+Page=MAIN
 Left=50
-Top=50
-Field="id","id","int auto_increment","NOT NULL",0,"","",$FFFFFFFF,""
-Field="parent_id","parent_id","int","NOT NULL",,"","",$FFFFFFFF,""
-Field="child_name","child_name","varchar(30)","NOT NULL",,"","",$FFFFFFFF,""
-Field="child_int","child_int","int",,,"","",$FFFFFFFF,""
-Field="child_decimal","child_decimal","decimal(10,2)",,,"","",$FFFFFFFF,""
-Field="child_date","child_date","date",,,"","",$FFFFFFFF,""
-Field="child_bit","child_bit","bit(1)",,,"","",$FFFFFFFF,""
-Field="create_at","create_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
-Field="create_user","create_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
-Field="update_at","update_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
-Field="update_user","update_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
+Top=500
+Field="子テーブルId","id","int auto_increment","NOT NULL",0,"","",$FFFFFFFF,""
+Field="親テーブルid","parent_id","int","NOT NULL",,"","",$FFFFFFFF,""
+Field="子テーブル要素名","child_name","varchar(30)","NOT NULL",,"","",$FFFFFFFF,""
+Field="子テーブルint型","child_int","int",,,"","",$FFFFFFFF,""
+Field="子テーブルdeimal型","child_decimal","decimal(10,2)",,,"","",$FFFFFFFF,""
+Field="子テーブルDate型","child_date","date",,,"","",$FFFFFFFF,""
+Field="子テーブルbit型","child_bit","bit(1)",,,"","",$FFFFFFFF,""
+Field="作成日時","create_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="作成ユーザー","create_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
+Field="更新日時","update_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="更新ユーザー","update_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
 Index=child_table_fk=0,parent_id
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-Position="Main",50,50
+ModifiedDateTime=20240804075518
+Position="MAIN",50,500
 ZOrder=-1
 
 [Entity]
@@ -70,15 +73,16 @@ LName=enum_sample
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=350
-Top=50
+Page=MAIN
+Left=100
+Top=150
 Field="id","id","int auto_increment","NOT NULL",0,"","",$FFFFFFFF,""
-Field="enum_column","enum_column","int","NOT NULL",,"","",$FFFFFFFF,""
+Field="Enum列","enum_column","int","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-Position="Main",350,50
+ModifiedDateTime=20240804075253
+Position="MAIN",100,150
 ZOrder=-2
 
 [Entity]
@@ -87,9 +91,9 @@ LName=マルチテーブル
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=650
-Top=50
+Page=MAIN
+Left=1400
+Top=550
 Field="マルチID","id","int","NOT NULL",0,"","",$FFFFFFFF,""
 Field="マルチStringId","charid","varchar(10)","NOT NULL",1,"","",$FFFFFFFF,""
 Field="名前","target_name","varchar(30)","NOT NULL",,"","",$FFFFFFFF,""
@@ -105,7 +109,7 @@ Index=idx_target_name=0,target_name
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-Position="Main",650,50
+Position="MAIN",1400,550
 ZOrder=-3
 
 [Entity]
@@ -114,15 +118,16 @@ LName=name
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=950
-Top=50
+Page=MAIN
+Left=800
+Top=250
 Field="id","id","int auto_increment","NOT NULL",0,"","",$FFFFFFFF,""
-Field="name","name","text","NOT NULL",,"","",$FFFFFFFF,""
+Field="名前列","name","text","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-Position="Main",950,50
+ModifiedDateTime=20240804075306
+Position="MAIN",800,250
 ZOrder=-4
 
 [Entity]
@@ -131,23 +136,24 @@ LName=parent_table
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=1250
-Top=50
-Field="id","id","int","NOT NULL",0,"","",$FFFFFFFF,""
-Field="target_name","target_name","varchar(30)","NOT NULL",,"","",$FFFFFFFF,""
-Field="target_int","target_int","int",,,"","",$FFFFFFFF,""
-Field="target_decimal","target_decimal","decimal(10,2)",,,"","",$FFFFFFFF,""
-Field="target_date","target_date","date",,,"","",$FFFFFFFF,""
-Field="target_bit","target_bit","bit(1)",,,"","",$FFFFFFFF,""
-Field="create_at","create_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
-Field="create_user","create_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
-Field="update_at","update_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
-Field="update_user","update_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
+Page=MAIN
+Left=700
+Top=550
+Field="親テーブルid","id","int","NOT NULL",0,"","",$FFFFFFFF,""
+Field="親テーブル要素名","target_name","varchar(30)","NOT NULL",,"","",$FFFFFFFF,""
+Field="親テーブルint型","target_int","int",,,"","",$FFFFFFFF,""
+Field="親テーブルdecimal型","target_decimal","decimal(10,2)",,,"","",$FFFFFFFF,""
+Field="親テーブルdate型","target_date","date",,,"","",$FFFFFFFF,""
+Field="親テーブルbit型","target_bit","bit(1)",,,"","",$FFFFFFFF,""
+Field="作成日時","create_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="作成ユーザー","create_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
+Field="更新日時","update_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="更新ユーザー","update_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-Position="Main",1250,50
+ModifiedDateTime=20240804075602
+Position="MAIN",700,550
 ZOrder=-5
 
 [Entity]
@@ -156,14 +162,15 @@ LName=policies
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=1550
-Top=50
-Field="policy_name","policy_name","varchar(255)","NOT NULL",0,"","",$FFFFFFFF,""
+Page=MAIN
+Left=1250
+Top=150
+Field="ポリシー名","policy_name","varchar(255)","NOT NULL",0,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-Position="Main",1550,50
+ModifiedDateTime=20240804075334
+Position="MAIN",1250,150
 ZOrder=-6
 
 [Entity]
@@ -172,16 +179,17 @@ LName=role_policies
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
+Page=MAIN
 Left=1850
 Top=50
-Field="role_name","role_name","varchar(255)","NOT NULL",0,"","",$FFFFFFFF,""
-Field="policy_name","policy_name","varchar(255)","NOT NULL",1,"","",$FFFFFFFF,""
+Field="ロール名","role_name","varchar(255)","NOT NULL",0,"","",$FFFFFFFF,""
+Field="ポリシー名","policy_name","varchar(255)","NOT NULL",1,"","",$FFFFFFFF,""
 Index=policies_fk=0,policy_name
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-Position="Main",1850,50
+ModifiedDateTime=20240804075344
+Position="MAIN",1850,50
 ZOrder=-7
 
 [Entity]
@@ -190,9 +198,9 @@ LName=sample_table
 Comment=
 TableInnerOption=
 TableOption=
-Page=Main
-Left=2150
-Top=50
+Page=MAIN
+Left=2050
+Top=500
 Field="id","id","int","NOT NULL",0,"","",$FFFFFFFF,""
 Field="target_name","target_name","varchar(30)","NOT NULL",,"","",$FFFFFFFF,""
 Field="target_int","target_int","int",,,"","",$FFFFFFFF,""
@@ -206,7 +214,7 @@ Field="update_user","update_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-Position="Main",2150,50
+Position="MAIN",2050,500
 ZOrder=-8
 
 [Relation]
@@ -218,14 +226,14 @@ Fields1=id
 Fields2=parent_id
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,4500,2000,6500,R,R,""
+Position="MAIN",0,4500,2000,6489,R,R,""
 Dependence=0
 Caption=
 PName=
 LineMode=0
 Bar1=450
 Bar2=200
-Bar3=650
+Bar3=649
 TermPos1=R
 TermPos2=R
 ZOrder=-9
@@ -239,14 +247,14 @@ Fields1=policy_name
 Fields2=policy_name
 Cardinarity1=
 Cardinarity2=
-Position="MAIN",0,3300,7500,4700,R,R,""
+Position="MAIN",0,3300,7500,5193,R,R,""
 Dependence=1
 Caption=
 PName=
 LineMode=0
 Bar1=330
 Bar2=750
-Bar3=470
+Bar3=519
 TermPos1=R
 TermPos2=R
 ZOrder=-10
