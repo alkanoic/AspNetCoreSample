@@ -1,0 +1,1245 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.4.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "version": 1,
+  "serialNumber": "urn:uuid:a6570400-0c2d-4597-9ea2-33a3fc935d4a",
+  "metadata": {
+    "timestamp": "2024-08-05T12:53:45.077Z",
+    "tools": [
+      {
+        "name": "npm",
+        "version": "10.8.1"
+      },
+      {
+        "vendor": "@cyclonedx",
+        "name": "cyclonedx-npm",
+        "version": "1.19.3",
+        "externalReferences": [
+          {
+            "url": "git+https://github.com/CycloneDX/cyclonedx-node-npm.git",
+            "type": "vcs",
+            "comment": "as detected from PackageJson property \"repository.url\""
+          },
+          {
+            "url": "https://github.com/CycloneDX/cyclonedx-node-npm#readme",
+            "type": "website",
+            "comment": "as detected from PackageJson property \"homepage\""
+          },
+          {
+            "url": "https://github.com/CycloneDX/cyclonedx-node-npm/issues",
+            "type": "issue-tracker",
+            "comment": "as detected from PackageJson property \"bugs.url\""
+          }
+        ]
+      },
+      {
+        "vendor": "@cyclonedx",
+        "name": "cyclonedx-library",
+        "version": "6.11.0",
+        "externalReferences": [
+          {
+            "url": "git+https://github.com/CycloneDX/cyclonedx-javascript-library.git",
+            "type": "vcs",
+            "comment": "as detected from PackageJson property \"repository.url\""
+          },
+          {
+            "url": "https://github.com/CycloneDX/cyclonedx-javascript-library#readme",
+            "type": "website",
+            "comment": "as detected from PackageJson property \"homepage\""
+          },
+          {
+            "url": "https://github.com/CycloneDX/cyclonedx-javascript-library/issues",
+            "type": "issue-tracker",
+            "comment": "as detected from PackageJson property \"bugs.url\""
+          }
+        ]
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "lit-component",
+      "version": "0.0.0",
+      "bom-ref": "lit-component@0.0.0",
+      "purl": "pkg:npm/lit-component@0.0.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": ""
+        },
+        {
+          "name": "cdx:npm:package:private",
+          "value": "true"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "bootstrap",
+      "group": "@types",
+      "version": "5.2.10",
+      "bom-ref": "@types/bootstrap@5.2.10",
+      "description": "TypeScript definitions for bootstrap",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40types/bootstrap@5.2.10#types/bootstrap",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/bootstrap",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/bootstrap",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@types/bootstrap/-/bootstrap-5.2.10.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "1765fe71deb9e75b5ea7432f559ea733cbfb5e018dfedc2974d0e3a92d5350ced814d12d4185a4f9d2809c7f93d60afa4200a818c3e5e3cef1c3ff615e8a1ada"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@types/bootstrap"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "core",
+      "group": "@popperjs",
+      "version": "2.11.8",
+      "bom-ref": "@popperjs/core@2.11.8",
+      "author": "Federico Zivolo",
+      "description": "Tooltip and Popover Positioning Engine",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40popperjs/core@2.11.8",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/popperjs/popper-core.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/popperjs/popper-core#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/popperjs/popper-core/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "3f5b2dd1a92c0ab9fdb06661a7c18c63006742c6ef016b19017e38a1734dbcb1c6a8039ca15c668d98a886cb7043b4aa2a76d1e3b6a474d8beba57960fcfa0e8"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@popperjs/core"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "bootstrap",
+      "version": "5.3.2",
+      "bom-ref": "bootstrap@5.3.2",
+      "author": "The Bootstrap Authors",
+      "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/bootstrap@5.3.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/twbs/bootstrap.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://getbootstrap.com/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/twbs/bootstrap/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "0f7da798d5a2407a3de012872e63ab76394bd39ab573ca316ed06985015bf59e6da3a7864430a6d1081e699e331411f37e0dbefaba9ad8992a09cc43cb4b07d2"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/bootstrap"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "lit",
+      "version": "3.1.0",
+      "bom-ref": "lit@3.1.0",
+      "author": "Google LLC",
+      "description": "A library for building fast, lightweight web components",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:npm/lit@3.1.0#packages/lit",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/lit/lit.git#packages/lit",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://lit.dev/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/lit/lit/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/lit/-/lit-3.1.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "af3a3f86652a5fcce639d6a60c07b275f8ec1976db76d005a8c866a1c9e1da3f5a0d8a9bbb47e35f282309ad13f7d39df5543fda2b70686ae3673fd910b565ef"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/lit"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "reactive-element",
+      "group": "@lit",
+      "version": "2.0.2",
+      "bom-ref": "@lit/reactive-element@2.0.2",
+      "author": "Google LLC",
+      "description": "A simple low level base class for creating fast, lightweight web components",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40lit/reactive-element@2.0.2#packages/reactive-element",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/lit/lit.git#packages/reactive-element",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://lit.dev/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/lit/lit/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@lit/reactive-element/-/reactive-element-2.0.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "4953b02c0594420dc98b57a0b4eb7552215ee33743a67587c9ce6a72d49c789e5722ed1473be98986a488d9831f582745ed756d099b9d3bb03be33aef879c1f3"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@lit/reactive-element"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "ssr-dom-shim",
+      "group": "@lit-labs",
+      "version": "1.1.2",
+      "bom-ref": "@lit-labs/ssr-dom-shim@1.1.2",
+      "author": "Google LLC",
+      "description": "DOM shim for Lit Server Side Rendering (SSR)",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40lit-labs/ssr-dom-shim@1.1.2#packages/labs/ssr-dom-shim",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/lit/lit.git#packages/labs/ssr-dom-shim",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://github.com/lit/lit/tree/main/packages/labs/ssr-dom-shim",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/lit/lit/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@lit-labs/ssr-dom-shim/-/ssr-dom-shim-1.1.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "8e7383fbff9d4ab7d35987d25c15e5a399797f4ab552e268ded91b30309803694a518abbf636b1aad184be7468874e3d9edd6f768d7ee394629e2a54e85198da"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@lit-labs/ssr-dom-shim"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "lit-element",
+      "version": "4.0.2",
+      "bom-ref": "lit-element@4.0.2",
+      "author": "Google LLC",
+      "description": "A simple base class for creating fast, lightweight web components",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:npm/lit-element@4.0.2#packages/lit-element",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/lit/lit.git#packages/lit-element",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://lit.dev/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/lit/lit/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/lit-element/-/lit-element-4.0.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "fd6e9641951ae55117c02ec7f6d6ed0cc752b3d6968a5dcebbc854eb3d9c38a59bb26fed5cf01cb28687544b6b0e8d3370e204e4617a420539e6d9462f636286"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/lit-element"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "lit-html",
+      "version": "3.1.0",
+      "bom-ref": "lit-html@3.1.0",
+      "author": "Google LLC",
+      "description": "HTML templates literals in JavaScript",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:npm/lit-html@3.1.0#packages/lit-html",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/lit/lit.git#packages/lit-html",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://lit.dev/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/lit/lit/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/lit-html/-/lit-html-3.1.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "170023ab788db1a3ba48e657108a5e44e9492d496b6f23249f88aebf87f8bb51f8d09c3cc24791fce5176541d4a2261a6c693c63863417fae0abe47832b38b98"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/lit-html"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "trusted-types",
+      "group": "@types",
+      "version": "2.0.7",
+      "bom-ref": "@types/trusted-types@2.0.7",
+      "description": "TypeScript definitions for trusted-types",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40types/trusted-types@2.0.7#types/trusted-types",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/DefinitelyTyped/DefinitelyTyped.git#types/trusted-types",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/trusted-types",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "49c68f767d5d41cce06e5d101537933a65471542eddfde17260390368c95859eabdaf2e730b25f04f779dd2079d93ff71b7e95235fe0d8c65a5f47300ee5ec7f"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@types/trusted-types"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "typescript",
+      "version": "5.3.3",
+      "bom-ref": "typescript@5.3.3",
+      "author": "Microsoft Corp.",
+      "description": "TypeScript is a language for application scale JavaScript development",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "purl": "pkg:npm/typescript@5.3.3",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/Microsoft/TypeScript.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://www.typescriptlang.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/Microsoft/TypeScript/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/typescript/-/typescript-5.3.3.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "a5759cadac4cd2ec404beb4dd001bf045d93caa9873b4d78674ef452c27ea45bd8b914aaf0a1fc0e65a99db5ded2910f0c75d957715c01b2648a3279a0d1275b"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/typescript"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "vite",
+      "version": "5.0.8",
+      "bom-ref": "vite@5.0.8",
+      "author": "Evan You",
+      "description": "Native-ESM powered web dev build tool",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/vite@5.0.8#packages/vite",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/vitejs/vite.git#packages/vite",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\" and \"repository.directory\""
+        },
+        {
+          "url": "https://vitejs.dev",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/vitejs/vite/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/vite/-/vite-5.0.8.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "8d83002ddf1a7aa477c92f719477743b34099dd4bd7c7e72955816741fa9c53c312ca74ed69802e4395bdfdf01531a5f681c5ae0cf684fb8f5839d3719a8f921"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/vite"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "esbuild",
+      "version": "0.19.9",
+      "bom-ref": "esbuild@0.19.9",
+      "description": "An extremely fast JavaScript and CSS bundler and minifier.",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/esbuild@0.19.9",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/evanw/esbuild.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/evanw/esbuild#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/evanw/esbuild/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/esbuild/-/esbuild-0.19.9.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "53d087b4a4b2f84a4fb0405afbf03680cb3f877ca5042d07d0a4aa220eeda73b477ab2e2ea7aeb72850902434210fba6c7cc89f81ca2738055c078116cdd1306"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/esbuild"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "linux-x64",
+      "group": "@esbuild",
+      "version": "0.19.9",
+      "bom-ref": "@esbuild/linux-x64@0.19.9",
+      "description": "The Linux 64-bit binary for esbuild, a JavaScript bundler.",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40esbuild/linux-x64@0.19.9",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/evanw/esbuild.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/evanw/esbuild#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/evanw/esbuild/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.19.9.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "2548e9cacb4614598dac41d09c8546f212b0bc0d83379a3b46a88ed42557f0437f17f8240a3914320567ea1cd2729c2726d97698f47a23d5d5d685bc93d3bed0"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@esbuild/linux-x64"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "postcss",
+      "version": "8.4.32",
+      "bom-ref": "postcss@8.4.32",
+      "author": "Andrey Sitnik",
+      "description": "Tool for transforming styles with JS plugins",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/postcss@8.4.32",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/postcss/postcss.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://postcss.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/postcss/postcss/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/postcss/-/postcss-8.4.32.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "0ff923e4936eea8a36108cbe5cbff6e891034e521b07c870f391bc4ad384e8bef845001554fe6b7a3eb0c4236ac8c6d1e1190f7eabdecd56cfc3cd4d81de8a73"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/postcss"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "nanoid",
+      "version": "3.3.7",
+      "bom-ref": "nanoid@3.3.7",
+      "author": "Andrey Sitnik",
+      "description": "A tiny (116 bytes), secure URL-friendly unique string ID generator",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/nanoid@3.3.7",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/ai/nanoid.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/ai/nanoid#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/ai/nanoid/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.7.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "792469a6370f21ab5120c0b553a52780ff1715ccfc31058641db75313050ecd6809af5c37ef3716ef595df1db2e8274451c8824ac0c70d065b858681f10128da"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/nanoid"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "picocolors",
+      "version": "1.0.0",
+      "bom-ref": "picocolors@1.0.0",
+      "author": "Alexey Raspopov",
+      "description": "The tiniest and the fastest library for terminal output formatting with ANSI colors",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "purl": "pkg:npm/picocolors@1.0.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/alexeyraspopov/picocolors.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/alexeyraspopov/picocolors#readme",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/alexeyraspopov/picocolors/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/picocolors/-/picocolors-1.0.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "d5fca0ae84cb947bbaeb38b6e95a130eff324609b415c71e72cb2da3e321b19d03fc3196dac9bc13c0235bb354e5555346de46c5b799e6a06e26bf87c8b6248d"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/picocolors"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "source-map-js",
+      "version": "1.0.2",
+      "bom-ref": "source-map-js@1.0.2",
+      "author": "Valentin 7rulnik Semirulnik",
+      "description": "Generates and consumes source maps",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:npm/source-map-js@1.0.2",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/7rulnik/source-map-js.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://github.com/7rulnik/source-map-js",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/7rulnik/source-map-js/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "4745ef549f56bac2e2a930848860a620208ca65702908c30475d663920fd091e6ef885d8762b1e784b970950234b9e33ab090b70f367994e0e789ead52b5a10f"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/source-map-js"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "rollup",
+      "version": "4.9.0",
+      "bom-ref": "rollup@4.9.0",
+      "author": "Rich Harris",
+      "description": "Next-generation ES module bundler",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/rollup@4.9.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/rollup/rollup.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://rollupjs.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/rollup/rollup/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/rollup/-/rollup-4.9.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "6d41d6ffd376d73eb8830f2cead3f873cf0fdfcd81abf2f9b990e8c07947c7ab3f416a632578af2006c4c3a2d9b61812be5122cd905f2c2e0e02f59eedaa05ec"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/rollup"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "rollup-linux-x64-gnu",
+      "group": "@rollup",
+      "version": "4.9.0",
+      "bom-ref": "@rollup/rollup-linux-x64-gnu@4.9.0",
+      "author": "Lukas Taegert-Atkinson",
+      "description": "Native bindings for Rollup",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.9.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/rollup/rollup.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://rollupjs.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/rollup/rollup/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.9.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "9baa644b0719643d8b0851d95ffcd6d9a2c8212cb358b53786b2cbcd028c235dbe38b13382bb93a2f031639b02649922a6495a66a3f2ff66c4101363a7e63bc6"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@rollup/rollup-linux-x64-gnu"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "name": "rollup-linux-x64-musl",
+      "group": "@rollup",
+      "version": "4.9.0",
+      "bom-ref": "@rollup/rollup-linux-x64-musl@4.9.0",
+      "author": "Lukas Taegert-Atkinson",
+      "description": "Native bindings for Rollup",
+      "scope": "optional",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-musl@4.9.0",
+      "externalReferences": [
+        {
+          "url": "git+https://github.com/rollup/rollup.git",
+          "type": "vcs",
+          "comment": "as detected from PackageJson property \"repository.url\""
+        },
+        {
+          "url": "https://rollupjs.org/",
+          "type": "website",
+          "comment": "as detected from PackageJson property \"homepage\""
+        },
+        {
+          "url": "https://github.com/rollup/rollup/issues",
+          "type": "issue-tracker",
+          "comment": "as detected from PackageJson property \"bugs.url\""
+        },
+        {
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.9.0.tgz",
+          "type": "distribution",
+          "hashes": [
+            {
+              "alg": "SHA-512",
+              "content": "545002d510d149b53788e17df17e3629a5627007ca7f49b43af22ef1d6e7aa14dedba2a1e989bd26b0ee973ec76e4efff7319ce35264574da0fa9dc18af39d02"
+            }
+          ],
+          "comment": "as detected from npm-ls property \"resolved\" and property \"integrity\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:npm:package:path",
+          "value": "node_modules/@rollup/rollup-linux-x64-musl"
+        },
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "lit-component@0.0.0",
+      "dependsOn": [
+        "@types/bootstrap@5.2.10",
+        "bootstrap@5.3.2",
+        "lit@3.1.0",
+        "typescript@5.3.3",
+        "vite@5.0.8"
+      ]
+    },
+    {
+      "ref": "@types/bootstrap@5.2.10",
+      "dependsOn": [
+        "@popperjs/core@2.11.8"
+      ]
+    },
+    {
+      "ref": "@popperjs/core@2.11.8"
+    },
+    {
+      "ref": "bootstrap@5.3.2",
+      "dependsOn": [
+        "@popperjs/core@2.11.8"
+      ]
+    },
+    {
+      "ref": "lit@3.1.0",
+      "dependsOn": [
+        "@lit/reactive-element@2.0.2",
+        "lit-element@4.0.2",
+        "lit-html@3.1.0"
+      ]
+    },
+    {
+      "ref": "@lit/reactive-element@2.0.2",
+      "dependsOn": [
+        "@lit-labs/ssr-dom-shim@1.1.2"
+      ]
+    },
+    {
+      "ref": "@lit-labs/ssr-dom-shim@1.1.2"
+    },
+    {
+      "ref": "lit-element@4.0.2",
+      "dependsOn": [
+        "@lit-labs/ssr-dom-shim@1.1.2",
+        "@lit/reactive-element@2.0.2",
+        "lit-html@3.1.0"
+      ]
+    },
+    {
+      "ref": "lit-html@3.1.0",
+      "dependsOn": [
+        "@types/trusted-types@2.0.7"
+      ]
+    },
+    {
+      "ref": "@types/trusted-types@2.0.7"
+    },
+    {
+      "ref": "typescript@5.3.3"
+    },
+    {
+      "ref": "vite@5.0.8",
+      "dependsOn": [
+        "esbuild@0.19.9",
+        "postcss@8.4.32",
+        "rollup@4.9.0"
+      ]
+    },
+    {
+      "ref": "esbuild@0.19.9",
+      "dependsOn": [
+        "@esbuild/linux-x64@0.19.9"
+      ]
+    },
+    {
+      "ref": "@esbuild/linux-x64@0.19.9"
+    },
+    {
+      "ref": "postcss@8.4.32",
+      "dependsOn": [
+        "nanoid@3.3.7",
+        "picocolors@1.0.0",
+        "source-map-js@1.0.2"
+      ]
+    },
+    {
+      "ref": "nanoid@3.3.7"
+    },
+    {
+      "ref": "picocolors@1.0.0"
+    },
+    {
+      "ref": "source-map-js@1.0.2"
+    },
+    {
+      "ref": "rollup@4.9.0",
+      "dependsOn": [
+        "@rollup/rollup-linux-x64-gnu@4.9.0",
+        "@rollup/rollup-linux-x64-musl@4.9.0"
+      ]
+    },
+    {
+      "ref": "@rollup/rollup-linux-x64-gnu@4.9.0"
+    },
+    {
+      "ref": "@rollup/rollup-linux-x64-musl@4.9.0"
+    }
+  ]
+}

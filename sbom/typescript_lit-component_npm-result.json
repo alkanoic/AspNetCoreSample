@@ -1,0 +1,140 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2024-08-05T21:53:46.061790992+09:00",
+  "ArtifactName": "sbom/typescript_lit-component_npm.json",
+  "ArtifactType": "cyclonedx",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": "Node.js",
+      "Class": "lang-pkgs",
+      "Type": "node-pkg",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-23331",
+          "PkgID": "vite@5.0.8",
+          "PkgName": "vite",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/vite@5.0.8#packages/vite",
+            "UID": "25b2448f6de1aebd",
+            "BOMRef": "vite@5.0.8"
+          },
+          "InstalledVersion": "5.0.8",
+          "FixedVersion": "2.9.17, 3.2.8, 4.5.2, 5.0.12",
+          "Status": "fixed",
+          "Layer": {},
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-23331",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Title": "Vite dev server option `server.fs.deny` can be bypassed when hosted on case-insensitive filesystem",
+          "Description": "Vite is a frontend tooling framework for javascript. The Vite dev server option `server.fs.deny` can be bypassed on case-insensitive file systems using case-augmented versions of filenames. Notably this affects servers hosted on Windows. This bypass is similar to CVE-2023-34092 -- with surface area reduced to hosts having case-insensitive filesystems. Since `picomatch` defaults to case-sensitive glob matching, but the file server doesn't discriminate; a blacklist bypass is possible. By requesting raw filesystem paths using augmented casing, the matcher derived from `config.server.fs.deny` fails to block access to sensitive files. This issue has been addressed in vite@5.0.12, vite@4.5.2, vite@3.2.8, and vite@2.9.17. Users are advised to upgrade. Users unable to upgrade should restrict access to dev servers.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-178",
+            "CWE-200",
+            "CWE-284"
+          ],
+          "VendorSeverity": {
+            "ghsa": 3,
+            "nvd": 3
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            },
+            "nvd": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://github.com/vitejs/vite",
+            "https://github.com/vitejs/vite/commit/0cd769c279724cf27934b1270fbdd45d68217691",
+            "https://github.com/vitejs/vite/commit/91641c4da0a011d4c5352e88fc68389d4e1289a5",
+            "https://github.com/vitejs/vite/commit/a26c87d20f9af306b5ce3ff1648be7fa5146c278",
+            "https://github.com/vitejs/vite/commit/eeec23bbc9d476c54a3a6d36e78455867185a7cb",
+            "https://github.com/vitejs/vite/security/advisories/GHSA-c24v-8rfc-w8vw",
+            "https://nvd.nist.gov/vuln/detail/CVE-2023-34092",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-23331",
+            "https://vitejs.dev/config/server-options.html#server-fs-deny"
+          ],
+          "PublishedDate": "2024-01-19T20:15:14.07Z",
+          "LastModifiedDate": "2024-01-29T15:31:57.737Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-31207",
+          "PkgID": "vite@5.0.8",
+          "PkgName": "vite",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/vite@5.0.8#packages/vite",
+            "UID": "25b2448f6de1aebd",
+            "BOMRef": "vite@5.0.8"
+          },
+          "InstalledVersion": "5.0.8",
+          "FixedVersion": "2.9.18, 3.2.10, 4.5.3, 5.0.13, 5.1.7, 5.2.6",
+          "Status": "fixed",
+          "Layer": {},
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-31207",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Title": "vitejs: \"server.fs.deny\" configuration does not deny requests that include patterns",
+          "Description": "Vite (French word for \"quick\", pronounced /vit/, like \"veet\") is a frontend build tooling to improve the frontend development experience.`server.fs.deny` does not deny requests for patterns with directories. This vulnerability has been patched in version(s) 5.2.6, 5.1.7, 5.0.13, 4.5.3, 3.2.10 and 2.9.18.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-200",
+            "CWE-284"
+          ],
+          "VendorSeverity": {
+            "ghsa": 2,
+            "redhat": 2
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 5.9
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 5.9
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2024-31207",
+            "https://github.com/vitejs/vite",
+            "https://github.com/vitejs/vite/commit/011bbca350e447d1b499d242804ce62738c12bc0",
+            "https://github.com/vitejs/vite/commit/5a056dd2fc80dbafed033062fe6aaf4717309f48",
+            "https://github.com/vitejs/vite/commit/89c7c645f09d16a38f146ef4a1528f218e844d67",
+            "https://github.com/vitejs/vite/commit/96a7f3a41ef2f9351c46f3ab12489bb4efa03cc9",
+            "https://github.com/vitejs/vite/commit/ba5269cca81de3f5fbb0f49d58a1c55688043258",
+            "https://github.com/vitejs/vite/commit/d2db33f7d4b96750b35370c70dd2c35ec3b9b649",
+            "https://github.com/vitejs/vite/security/advisories/GHSA-8jhw-289h-jh2g",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-31207",
+            "https://www.cve.org/CVERecord?id=CVE-2024-31207"
+          ],
+          "PublishedDate": "2024-04-04T16:15:09.333Z",
+          "LastModifiedDate": "2024-04-04T16:33:06.61Z"
+        }
+      ]
+    }
+  ]
+}
