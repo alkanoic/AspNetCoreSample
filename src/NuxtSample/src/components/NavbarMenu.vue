@@ -138,6 +138,11 @@
                         Validate
                       </NuxtLink>
                     </li>
+                    <li class="menu-item">
+                      <NuxtLink to="/textarea" :class="{ active: route.path == '/textarea' }" @click="closeDrawer">
+                        Textarea
+                      </NuxtLink>
+                    </li>
                   </ul>
                 </details>
               </li>
