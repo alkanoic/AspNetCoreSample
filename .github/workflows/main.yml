@@ -123,7 +123,7 @@ jobs:
         working-directory: src/SpringBoot.Reports
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: java-app
           path: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
