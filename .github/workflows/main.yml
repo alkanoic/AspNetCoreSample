@@ -129,7 +129,7 @@ jobs:
           path: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
 
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: java-app
           path: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
