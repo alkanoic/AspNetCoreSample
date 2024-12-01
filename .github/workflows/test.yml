@@ -1,0 +1,107 @@
+name: Build and test ASP.Net Core app
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  TESTS_DB_LOCATION: "tests/DbContainer.Test"
+  TESTS_WEBAPI_LOCATION: "tests/AspNetCoreSample.WebApi.Test"
+  TESTS_MVC_LOCATION: "tests/AspNetCoreSample.Mvc.Test"
+  TESTS_MVC_CONTAINER_LOCATION: "tests/AspNetCoreSample.Mvc.Container.Test"
+
+jobs:
+  dbcontainer_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      # DbContainer.Test
+      - name: DbContainer Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.TESTS_DB_LOCATION }}
+
+      - name: DbContainer Run tests
+        run: dotnet test --configuration Release --no-build
+        working-directory: ${{ env.TESTS_DB_LOCATION }}
+
+  webapi_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      # WebApi.Test
+      - name: WebApi Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
+
+      - name: WebApi Run tests
+        run: dotnet test --configuration Release --no-build
+        working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
+
+  mvc_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      # Mvc.Test
+      - name: Mvc Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
+      # Playwright install
+      - name: playwright install
+        run: pwsh bin/Release/net8.0/playwright.ps1 install --with-deps
+        working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
+      - name: Mvc Run tests
+        run: dotnet test --configuration Release --no-build
+        working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
+  mvc_container_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      # Mvc.Container.Test
+      - name: Mvc Container Build with dotnet
+        run: bash create_certificate.sh
+        working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
+
+      - name: Mvc Container Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
+
+      # Playwright install
+      - name: playwright install
+        run: pwsh bin/Release/net8.0/playwright.ps1 install --with-deps
+        working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
+
+      - name: Mvc Container Run tests
+        run: dotnet test --configuration Release --no-build
+        working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
