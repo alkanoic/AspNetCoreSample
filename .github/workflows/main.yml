@@ -51,6 +51,11 @@ jobs:
         run: dotnet test --configuration Release --no-build
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
 
+      # Playwright install
+      - name: playwright install
+        run: bash install-playwright.sh
+        working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
       # Mvc.Test
       - name: Mvc Build with dotnet
         run: dotnet build --configuration Release --framework net8.0
