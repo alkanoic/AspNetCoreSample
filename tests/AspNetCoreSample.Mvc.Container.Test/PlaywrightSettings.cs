@@ -10,4 +10,14 @@ public static class PlaywrightSettings
     {
         return new BrowserTypeLaunchOptions { Args = Args };
     }
+
+    public static BrowserNewContextOptions DefaultBrowserNewContextOptions()
+    {
+        return new BrowserNewContextOptions();
+    }
+
+    public static void SetDefaultBrowserContext(IBrowserContext context)
+    {
+        context.SetDefaultTimeout(60_000);
+    }
 }
