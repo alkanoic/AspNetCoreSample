@@ -67,6 +67,10 @@ jobs:
 
       # Mvc.Container.Test
       - name: Mvc Container Build with dotnet
+        run: bash create_certificate.sh
+        working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
+
+      - name: Mvc Container Build with dotnet
         run: dotnet build --configuration Release --framework net8.0
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
