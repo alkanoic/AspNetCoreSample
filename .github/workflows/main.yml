@@ -17,6 +17,20 @@ env:
   SPRING_AZURE_WEBAPP_PACKAGE_PATH: "src/SpringBoot.Reports/target" # アプリケーションが存在するフォルダ
 
 jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Run tests
+        run: dotnet test --configuration Release
+
   mvc:
     runs-on: ubuntu-latest
 
