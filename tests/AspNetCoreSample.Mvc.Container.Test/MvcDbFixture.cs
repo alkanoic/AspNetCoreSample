@@ -13,7 +13,7 @@ using Testcontainers.MySql;
 
 using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
-namespace AspNetCoreSample.Mvc.Test;
+namespace AspNetCoreSample.Mvc.Container.Test;
 
 public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
 {

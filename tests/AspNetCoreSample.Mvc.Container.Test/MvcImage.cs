@@ -4,7 +4,7 @@ using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Images;
 
-namespace AspNetCoreSample.Mvc.Test;
+namespace AspNetCoreSample.Mvc.Container.Test;
 
 public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
 {

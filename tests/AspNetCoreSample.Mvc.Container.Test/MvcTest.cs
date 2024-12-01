@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
 
-namespace AspNetCoreSample.Mvc.Test;
+namespace AspNetCoreSample.Mvc.Container.Test;
 
 public sealed class MvcTest : IClassFixture<MvcDbFixture>
 {
