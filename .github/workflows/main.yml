@@ -17,6 +17,9 @@ env:
   SPRING_AZURE_WEBAPP_PACKAGE_PATH: "src/SpringBoot.Reports/target" # アプリケーションが存在するフォルダ
 
   TESTS_DB_LOCATION: "tests/DbContainer.Test"
+  TESTS_WEBAPI_LOCATION: "tests/AspNetCoreSample.WebApi.Test"
+  TESTS_MVC_LOCATION: "tests/AspNetCoreSample.Mvc.Test"
+  TESTS_MVC_CONTAINER_LOCATION: "tests/AspNetCoreSample.Mvc.Container.Test"
 
 jobs:
   build-and-test:
@@ -30,13 +33,41 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Build with dotnet
+      # DbContainer.Test
+      - name: DbContainer Build with dotnet
         run: dotnet build --configuration Release --framework net8.0
         working-directory: ${{ env.TESTS_DB_LOCATION }}
 
-      - name: Run tests
+      - name: DbContainer Run tests
         run: dotnet test --configuration Release --no-build
         working-directory: ${{ env.TESTS_DB_LOCATION }}
+
+      # WebApi.Test
+      - name: WebApi Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
+
+      - name: WebApi Run tests
+        run: dotnet test --configuration Release --no-build
+        working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
+
+      # Mvc.Test
+      - name: Mvc Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
+      - name: Mvc Run tests
+        run: dotnet test --configuration Release --no-build
+        working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
+      # Mvc.Container.Test
+      - name: Mvc Container Build with dotnet
+        run: dotnet build --configuration Release --framework net8.0
+        working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
+
+      - name: Mvc Container Run tests
+        run: dotnet test --configuration Release --no-build
+        working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
   mvc:
     runs-on: ubuntu-latest
