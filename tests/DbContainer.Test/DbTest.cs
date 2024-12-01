@@ -1,6 +1,6 @@
 using System.Data.Common;
 
-namespace AspNetCoreSample.Mvc.Test;
+namespace DbContainer.Test;
 
 public sealed class DbTest : IClassFixture<DbFixture>, IDisposable
 {
@@ -18,7 +18,7 @@ public sealed class DbTest : IClassFixture<DbFixture>, IDisposable
     }
 
     [Fact]
-    public void UsersTableContainsJohnDoe()
+    public void NamesTableContainsName()
     {
         // Given
         using var command = _dbConnection.CreateCommand();
