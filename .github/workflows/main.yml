@@ -58,7 +58,7 @@ jobs:
 
       # Playwright install
       - name: playwright install
-        run: bash install-playwright.sh
+        run: pwsh bin/Release/net8.0/playwright.ps1 install --with-deps
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
       - name: Mvc Run tests
