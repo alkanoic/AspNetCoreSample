@@ -30,7 +30,11 @@ public sealed class MvcInProcessTest : IClassFixture<DbFixture>, IClassFixture<K
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
-        var page = await browser.NewPageAsync();
+        await using var context = await browser.NewContextAsync();
+        PlaywrightSettings.SetDefaultBrowserContext(context);
+
+        var page = await context.NewPageAsync();
+
         await page.GotoAsync($"{_factory.HostUrl}");
 
         await page.GetByRole(AriaRole.Link, new() { Name = "Auth" }).ClickAsync();
