@@ -14,7 +14,7 @@ public static class PlaywrightSettings
 
     public static BrowserNewContextOptions DefaultBrowserNewContextOptions()
     {
-        return new BrowserNewContextOptions();
+        return new BrowserNewContextOptions() { Locale = "ja-JP" };
     }
 
     public static void SetDefaultBrowserContext(IBrowserContext context)

@@ -30,17 +30,16 @@ public sealed class MvcInProcessTest : IClassFixture<DbFixture>, IClassFixture<K
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
-        await using var context = await browser.NewContextAsync();
+        await using var context = await browser.NewContextAsync(PlaywrightSettings.DefaultBrowserNewContextOptions());
         PlaywrightSettings.SetDefaultBrowserContext(context);
 
         var page = await context.NewPageAsync();
 
         await page.GotoAsync($"{_factory.HostUrl}");
-
         await page.GetByRole(AriaRole.Link, new() { Name = "Auth" }).ClickAsync();
-        await page.GetByLabel("Username or email").FillAsync("admin");
-        await page.GetByLabel("Password", new() { Exact = true }).FillAsync("admin");
-        await page.GetByRole(AriaRole.Button, new() { Name = "Sign In" }).ClickAsync();
+        await page.GetByLabel("ユーザー名またはメールアドレス").FillAsync("admin");
+        await page.GetByLabel("パスワード").FillAsync("admin");
+        await page.GetByRole(AriaRole.Button, new() { Name = "ログイン" }).ClickAsync();
 
         Assert.Contains("Auth Page", await page.TitleAsync());
 
