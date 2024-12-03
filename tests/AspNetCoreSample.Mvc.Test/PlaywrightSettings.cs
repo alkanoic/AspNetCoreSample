@@ -6,12 +6,9 @@ public static class PlaywrightSettings
 {
     private static readonly string[] Args = { "--ignore-certificate-errors" };
 
-    public static BrowserTypeLaunchOptions DefaultBrowserTypeLaunchOptions(float? slowMo = default)
+    public static BrowserTypeLaunchOptions DefaultBrowserTypeLaunchOptions(float? slowMo = default, bool headless = true)
     {
-        var options = new BrowserTypeLaunchOptions { Args = Args, SlowMo = slowMo };
-        return options;
-        // options.Headless = false;
-        // return options;
+        return new BrowserTypeLaunchOptions { Args = Args, SlowMo = slowMo, Headless = headless };
     }
 
     public static BrowserNewContextOptions DefaultBrowserNewContextOptions()
