@@ -16,7 +16,7 @@ public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
 
     private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
 
-    private readonly DockerImage _image = new DockerImage("localhost/testcontainers", "aspnetcoresample-mvc", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture));
+    private readonly DockerImage _image = new DockerImage($"localhost/testcontainers/aspnetcoresample-mvc-{DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(CultureInfo.InvariantCulture)}");
 
     private string _tempDockerPath = "";
 
@@ -57,11 +57,15 @@ public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
 
     public string Repository => _image.Repository;
 
-    public string Name => _image.Name;
+    public string Name => _image.FullName;
 
     public string Tag => _image.Tag;
 
     public string FullName => _image.FullName;
+
+    public string Registry => _image.Registry;
+
+    public string Digest => _image.Digest;
 
     public string GetHostname()
     {
@@ -73,5 +77,20 @@ public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
         var target = $"{source}.tmp";
         File.WriteAllText(target, File.ReadAllText(source).Replace("--platform=$BUILDPLATFORM", ""));
         return target;
+    }
+
+    public bool MatchLatestOrNightly()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool MatchVersion(Predicate<string> predicate)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool MatchVersion(Predicate<Version> predicate)
+    {
+        throw new NotImplementedException();
     }
 }

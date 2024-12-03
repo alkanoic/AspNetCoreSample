@@ -29,7 +29,7 @@ public sealed class MvcInProcessTest : IClassFixture<DbFixture>, IClassFixture<K
     public async Task GetIndexPlaywright()
     {
         using var playwright = await Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions(slowMo: 300));
+        await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions(slowMo: 500));
         await using var context = await browser.NewContextAsync(PlaywrightSettings.DefaultBrowserNewContextOptions());
         PlaywrightSettings.SetDefaultBrowserContext(context);
 

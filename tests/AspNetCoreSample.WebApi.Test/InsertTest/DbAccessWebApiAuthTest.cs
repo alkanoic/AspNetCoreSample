@@ -10,8 +10,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-using Xunit.Extensions.AssemblyFixture;
-
 namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class DbAccessWebApiAuthTest : IClassFixture<KeycloakFixture>, IClassFixture<DbFixture>, IDisposable
