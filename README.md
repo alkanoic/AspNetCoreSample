@@ -9,6 +9,12 @@ WEBSITE_RUN_FROM_PACKAGE=1
 DOTNET_VERSION=8.0
 ```
 
+# dotnet https
+
+```ps1
+dotnet dev-certs https -ep .aspnet/https/NetCoreWebAppOnWslDocker001.pfx -p PfxFilePassword
+```
+
 # KeycloakTest
 
 Keycloak.AuthServices.Authentication を使用する。
