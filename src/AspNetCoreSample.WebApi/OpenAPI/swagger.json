@@ -1,0 +1,2278 @@
+{
+  "x-generator": "NSwag v14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AspNetCoreSample WebApi",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/DbAccess": {
+      "get": {
+        "tags": [
+          "DbAccess"
+        ],
+        "operationId": "DbAccess_Get",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Name"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "DbAccess"
+        ],
+        "operationId": "DbAccess_Post",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "name",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Name"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Validation": {
+      "post": {
+        "tags": [
+          "Validation"
+        ],
+        "operationId": "Validation_Post",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InputData"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/QrCode": {
+      "post": {
+        "tags": [
+          "QrCode"
+        ],
+        "operationId": "QrCode_Post",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "model",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QrCodeRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/FetchUser": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザー情報を取得",
+        "operationId": "Keycloak_FetchUser",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "ユーザー名",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchUserInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/CreateUser": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーを作成する",
+        "operationId": "Keycloak_CreateUser",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "ユーザー情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/UpdateUser": {
+      "put": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザー情報を更新する",
+        "operationId": "Keycloak_UpdateUser",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "ユーザー情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/UpdateUserByUsername": {
+      "put": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザー情報を更新する\nユーザー名で更新する",
+        "operationId": "Keycloak_UpdateUserByUsername",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserByUsernameInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/ChangePassword": {
+      "put": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーのパスワードを変更する",
+        "operationId": "Keycloak_ChangePassword",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "パスワード情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/ChangePasswordByUsername": {
+      "put": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーのパスワードを変更する",
+        "operationId": "Keycloak_ChangePasswordByUsername",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "パスワード情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordByUsernameInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/ResetPasswordByEmail": {
+      "put": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーのパスワードをリセットするためのメールを送信",
+        "operationId": "Keycloak_ResetPasswordByEmail",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordByEmailInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/ResetPasswordByEmailByUsername": {
+      "put": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザー名でユーザーのパスワードをリセットするためのメールを送信",
+        "operationId": "Keycloak_ResetPasswordByEmailByUsername",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordByEmailByUsernameInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/DeleteUser": {
+      "delete": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーを削除する",
+        "operationId": "Keycloak_DeleteUser",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "ユーザー情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteUserInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/DeleteUserByUsername": {
+      "delete": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザー名でユーザーを削除する",
+        "operationId": "Keycloak_DeleteUserByUsername",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteUserByUsernameInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/FetchRoles": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "Realmに登録されているロール一覧を取得",
+        "operationId": "Keycloak_FetchRoles",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/FtechUserRoleMappings": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーに登録されているロール一覧を取得",
+        "operationId": "Keycloak_FetchUserRoleMappings",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "ユーザー情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchUserRoleMappingsInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/AddUserRoleMapping": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーにロールをアタッチする",
+        "operationId": "Keycloak_AddUserRoleMapping",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "ユーザーとロール情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUserRoleMappingInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/DeleteUserRoleMapping": {
+      "delete": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーからロールをデタッチする",
+        "operationId": "Keycloak_DeleteUserRoleMapping",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "ユーザーとロール情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteUserRoleMappingInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/FetchClients": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "Client一覧を取得する",
+        "operationId": "Keycloak_FetchClients",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/FetchClient": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ClientをClientIdで検索して取得する",
+        "operationId": "Keycloak_FetchClient",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchClientInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/FetchClientRoles": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "Client-Roleの一覧を取得する",
+        "operationId": "Keycloak_FetchClientRoles",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchClientRolesInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/FetchUserClientRoles": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーに紐づくClient-Roleを取得する",
+        "operationId": "Keycloak_FetchUserClientRoles",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchUserClientRolesInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/AddUserClientRoleMappings": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーにClient-Roleをアタッチする",
+        "operationId": "Keycloak_AddUserClientRoleMappings",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUserClientRoleMappingInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Keycloak/DeleteUserClientRoleMapping": {
+      "delete": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーからClient-Roleをデタッチする",
+        "operationId": "Keycloak_DeleteUserClientRoleMapping",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteUserClientRoleMappingInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Simple": {
+      "get": {
+        "tags": [
+          "Simple"
+        ],
+        "operationId": "Simple_Get",
+        "parameters": [
+          {
+            "name": "Input",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleOutput"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Simple"
+        ],
+        "operationId": "Simple_SavePost",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimpleInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Simple/Resource": {
+      "get": {
+        "tags": [
+          "Simple"
+        ],
+        "operationId": "Simple_Resource",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Token/Auth": {
+      "post": {
+        "tags": [
+          "Token"
+        ],
+        "summary": "Keycloakによる認証を行う",
+        "operationId": "Token_Auth",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "description": "ユーザ名およびパスワード",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "AccessTokenおよびRefreshTokenの取得",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Token/RefreshToken": {
+      "post": {
+        "tags": [
+          "Token"
+        ],
+        "summary": "RefreshTokenを使用してAccessTokenを更新する",
+        "operationId": "Token_RefreshToken",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "description": "RefreshToken",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTokenRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "AccessTokenおよびRefreshTokenの取得",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Token/RevokeToken": {
+      "post": {
+        "tags": [
+          "Token"
+        ],
+        "summary": "RefreshTokenを無効化する",
+        "operationId": "Token_RevokeToken",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "description": "RefreshToken",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeTokenRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "なし",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TokenTest/Sample": {
+      "get": {
+        "tags": [
+          "TokenTest"
+        ],
+        "operationId": "TokenTest_Sample",
+        "parameters": [
+          {
+            "name": "sample",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TokenTest/SampleUser": {
+      "get": {
+        "tags": [
+          "TokenTest"
+        ],
+        "operationId": "TokenTest_SampleUser",
+        "parameters": [
+          {
+            "name": "sample",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/TokenTest/SampleAdmin": {
+      "get": {
+        "tags": [
+          "TokenTest"
+        ],
+        "operationId": "TokenTest_SampleAdmin",
+        "parameters": [
+          {
+            "name": "sample",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/WeatherForecast": {
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "operationId": "WeatherForecast_Get",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "operationId": "WeatherForecast_SavePost",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeatherForecast"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherForecast"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Name": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name1": {
+            "type": "string"
+          }
+        }
+      },
+      "InputData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "stringValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "numberValue": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dateValue": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "QrCodeRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "qrCode": {
+            "type": "string"
+          }
+        }
+      },
+      "FetchUserInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateUserInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "UpdateUserInput": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseRequest"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "userId": {
+                "type": "string"
+              },
+              "firstName": {
+                "type": "string",
+                "nullable": true
+              },
+              "lastName": {
+                "type": "string",
+                "nullable": true
+              },
+              "email": {
+                "type": "string",
+                "nullable": true
+              },
+              "password": {
+                "type": "string",
+                "nullable": true
+              },
+              "attributes": {
+                "type": "object",
+                "description": "更新時はすべて送信すること",
+                "nullable": true,
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "BaseRequest": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "UpdateUserByUsernameInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "attributes": {
+            "type": "object",
+            "description": "更新時はすべて送信すること",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ChangePasswordInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "ChangePasswordByUsernameInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "ResetPasswordByEmailInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          }
+        }
+      },
+      "ResetPasswordByEmailByUsernameInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteUserInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteUserByUsernameInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "FetchUserRoleMappingsInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          }
+        }
+      },
+      "AddUserRoleMappingInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "addUserRoleMappingInputDetails": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AddUserRoleMappingInputDetail"
+            }
+          }
+        }
+      },
+      "AddUserRoleMappingInputDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "roleId": {
+            "type": "string"
+          },
+          "roleName": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteUserRoleMappingInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "deleteUserRoleMappingInputDetails": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/DeleteUserRoleMappingInputDetail"
+            }
+          }
+        }
+      },
+      "DeleteUserRoleMappingInputDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "roleId": {
+            "type": "string"
+          },
+          "roleName": {
+            "type": "string"
+          }
+        }
+      },
+      "FetchClientInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "clientId": {
+            "type": "string"
+          }
+        }
+      },
+      "FetchClientRolesInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "clientUuid": {
+            "type": "string"
+          }
+        }
+      },
+      "FetchUserClientRolesInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "clientUuid": {
+            "type": "string"
+          }
+        }
+      },
+      "AddUserClientRoleMappingInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "clientUuid": {
+            "type": "string"
+          },
+          "addUserRoleMappingInputDetails": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AddUserRoleMappingInputDetail"
+            }
+          }
+        }
+      },
+      "DeleteUserClientRoleMappingInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "clientUuid": {
+            "type": "string"
+          },
+          "deleteUserRoleMappingInputDetails": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/DeleteUserRoleMappingInputDetail"
+            }
+          }
+        }
+      },
+      "SimpleOutput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "output": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "SimpleInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "input": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "TokenRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateTokenRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "RevokeTokenRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "WeatherForecast": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "temperatureC": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperatureF": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "http",
+        "description": "Bearer {token}",
+        "in": "header",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "JWT": []
+    }
+  ]
+}
