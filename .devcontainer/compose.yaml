@@ -8,6 +8,7 @@ services:
     volumes:
       - ../..:/workspaces:cached
       - $USERPROFILE/.aspnet/https:/workspaces/.aspnet/https
+      - $HOME/.nuget/:/home/vscode/.nuget/
     network_mode: service:mysql
     command: sleep infinity
   mysql:
