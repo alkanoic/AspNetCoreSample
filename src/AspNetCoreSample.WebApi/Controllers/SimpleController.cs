@@ -1,3 +1,4 @@
+// using AspNetCoreSample.Util;
 using AspNetCoreSample.WebApi.Resources;
 
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,7 @@ public class SimpleController : ControllerBase
         _localizer = localizer;
     }
 
+    [Interceptor]
     [HttpGet(Name = "Simple")]
     public SimpleOutput Get([FromQuery] SimpleInput input)
     {
