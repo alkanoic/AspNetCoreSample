@@ -110,8 +110,8 @@
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "debugWithChrome",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-                // "pattern": "Login to the dashboard at\\s+(https?://\\S+)",
+                // "pattern": "\\bLogin to the dashboard at\\s+(https?://\\S+)",
+                "pattern": "Login to the dashboard at\\s+(https?://\\S+)",
                 "webRoot": "${workspaceFolder}/src/AspNetCoreSample.Mvc/wwwroot",
                 "killOnServerStop": true
             },
