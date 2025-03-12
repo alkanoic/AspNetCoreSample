@@ -8,6 +8,15 @@
       "MaintenanceDB": "postgres",
       "Username": "root",
       "SSLMode": "prefer"
+    },
+    "2": {
+      "Name": "keycloak",
+      "Group": "Servers",
+      "Host": "keycloak-postgresql",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "keycloak",
+      "SSLMode": "prefer"
     }
   }
 }

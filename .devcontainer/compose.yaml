@@ -9,29 +9,38 @@ services:
       - ../..:/workspaces:cached
       - $USERPROFILE/.aspnet/https:/workspaces/.aspnet/https
       - $HOME/.nuget/:/home/vscode/.nuget/
-    network_mode: service:mysql
+    network_mode: service:postgresql
     command: sleep infinity
-  mysql:
-    image: mysql:latest
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: mysql
-      MYSQL_DATABASE: sample
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: docker
-      TZ: 'Asia/Tokyo'
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes:
-      - ./docker/volumes/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./docker/volumes/mysql/initdb.d:/docker-entrypoint-initdb.d
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
     ports:
-      - 3306:3306
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - 5432:5432
+    volumes:
+      - ./docker/volumes/postgresql/initdb.d:/docker-entrypoint-initdb.d
+      # - ./docker/volumes/postgresql/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sample
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+      TZ: 'Asia/Tokyo'
+    restart: always
+  pgadmin4:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin4
+    ports:
+      - 8090:80
+    volumes:
+      - ./docker/volumes/pgadmin4/servers.json:/pgadmin4/servers.json
+      # - ./docker/volumes/pgadmin4/pgadmin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      TZ: 'Asia/Tokyo'
+    restart: always
+    depends_on:
+      - postgresql
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
@@ -42,10 +51,11 @@ services:
       - "8080:8080"
     restart: always
     environment:
-      KC_DB: mysql
+      KC_DB: postgres
       KC_DB_USERNAME: keycloak
-      KC_DB_PASSWORD: password
-      KC_DB_URL: jdbc:mysql://keycloak-mysql:3306/keycloak
+      KC_DB_PASSWORD: postgres
+      KC_DB_URL_HOST: keycloak-postgresql
+      KC_DB_URL_PORT: 5432
       KEYCLOAK_ADMIN: admin # 管理ユーザーIDを設定
       KEYCLOAK_ADMIN_PASSWORD: passwd # 管理ユーザーのパスワードを設定
       # KC_HOSTNAME: localhost:8080
@@ -60,22 +70,36 @@ services:
         "--log-level=DEBUG"
       ]
     depends_on:
-      - keycloak-mysql
+      - keycloak-postgresql
       - mailpit
-  keycloak-mysql:
-    image: mysql:latest
-    container_name: keycloak-mysql
-    hostname: keycloak-mysql
+  keycloak-postgresql:
+    image: postgres:latest
+    container_name: keycloak-postgresql
     ports:
-      - "33060:3306"
+      - 54320:5432
     expose:
-      - 3306
-    restart: always
+      - 5432
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: keycloak
-      MYSQL_USER: keycloak
-      MYSQL_PASSWORD: password
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: keycloak
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+      TZ: 'Asia/Tokyo'
+    restart: always
+  # keycloak-mysql:
+  #   image: mysql:latest
+  #   container_name: keycloak-mysql
+  #   hostname: keycloak-mysql
+  #   ports:
+  #     - "33060:3306"
+  #   expose:
+  #     - 3306
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: keycloak
+  #     MYSQL_USER: keycloak
+  #     MYSQL_PASSWORD: password
   nginx:
     image: nginx:latest
     container_name: keycloak-nginx
@@ -124,34 +148,24 @@ services:
   #     - ./docker/volumes/mssql/initdb.d:/entrypoint-initdb.d
   #   ports:
   #     - 1433:1433
-
-  # postgresql:
-  #   image: postgres:latest
-  #   container_name: postgresql
-  #   ports:
-  #     - 5432:5432
-  #   volumes:
-  #     - ./docker/volumes/postgresql/initdb.d:/docker-entrypoint-initdb.d
-  #     # - ./docker/volumes/postgresql/data:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_USER: root
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGRES_DB: sample
-  #     POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
-  #     TZ: 'Asia/Tokyo'
+  # mysql:
+  #   image: mysql:latest
+  #   container_name: mysql
   #   restart: always
-  # pgadmin4:
-  #   image: dpage/pgadmin4:latest
-  #   container_name: pgadmin4
-  #   ports:
-  #     - 8090:80
-  #   volumes:
-  #     - ./docker/volumes/pgadmin4/servers.json:/pgadmin4/servers.json
-  #     # - ./docker/volumes/pgadmin4/pgadmin:/var/lib/pgadmin
   #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: root@pgadmin.com
-  #     PGADMIN_DEFAULT_PASSWORD: postgres
+  #     MYSQL_ROOT_PASSWORD: mysql
+  #     MYSQL_DATABASE: sample
+  #     MYSQL_USER: docker
+  #     MYSQL_PASSWORD: docker
   #     TZ: 'Asia/Tokyo'
-  #   restart: always
-  #   depends_on:
-  #     - postgresql
+  #   command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  #   volumes:
+  #     - ./docker/volumes/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+  #     - ./docker/volumes/mysql/initdb.d:/docker-entrypoint-initdb.d
+  #   ports:
+  #     - 3306:3306
+  #   healthcheck:
+  #     test: [ "CMD", "mysqladmin", "ping" ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
