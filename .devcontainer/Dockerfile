@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/dotnet:8.0-jammy
+FROM mcr.microsoft.com/devcontainers/dotnet:9.0-noble
 
 RUN apt-get update && \
     apt-get install -y iputils-ping mysql-client curl wget ca-certificates gnupg
@@ -13,9 +13,6 @@ RUN mkdir -p /etc/apt/keyrings && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && \
     apt-get install -y nodejs
-
-# install dotnet workload aspire
-RUN dotnet workload install aspire
 
 # install cyclonedx for npm
 RUN npm install -g @cyclonedx/cyclonedx-npm
@@ -41,7 +38,7 @@ RUN wget https://github.com/fullstorydev/grpcurl/releases/download/v1.8.9/grpcur
     rm LICENSE
 
 # install mysqldef
-ARG SQLDEF_VERSION=v0.17.31
+ARG SQLDEF_VERSION=v1.0.1
 
 RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/mysqldef_linux_amd64.tar.gz && \
     tar xf mysqldef_linux_amd64.tar.gz -C /usr/local/bin/ && \
