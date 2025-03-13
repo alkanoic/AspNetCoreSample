@@ -1,47 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AspNetCoreSample.DataModel.Models;
+namespace AspNetCoreSample.Templates.Models;
 
 /// <summary>
-/// マルチテーブル
+/// child_table
 /// </summary>
-public partial class MultiTable
+public partial class ChildTable
 {
     /// <summary>
-    /// マルチID
+    /// 子テーブルId
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// マルチStringId
+    /// 親テーブルid
     /// </summary>
-    public string Charid { get; set; } = null!;
+    public int ParentId { get; set; }
 
     /// <summary>
-    /// 名前
+    /// 子テーブル要素名
     /// </summary>
-    public string TargetName { get; set; } = null!;
+    public string ChildName { get; set; } = null!;
 
     /// <summary>
-    /// int型
+    /// 子テーブルint型
     /// </summary>
-    public int? TargetInt { get; set; }
+    public int? ChildInt { get; set; }
 
     /// <summary>
-    /// decimal型
+    /// 子テーブルdeimal型
     /// </summary>
-    public decimal? TargetDecimal { get; set; }
+    public decimal? ChildDecimal { get; set; }
 
     /// <summary>
-    /// 日付型
+    /// 子テーブルDate型
     /// </summary>
-    public DateOnly? TargetDate { get; set; }
+    public DateOnly? ChildDate { get; set; }
 
     /// <summary>
-    /// Bit型
+    /// 子テーブルbit型
     /// </summary>
-    public bool? TargetBit { get; set; }
+    public bool? ChildBit { get; set; }
 
     /// <summary>
     /// 作成日時
@@ -62,4 +62,6 @@ public partial class MultiTable
     /// 更新ユーザー
     /// </summary>
     public string UpdateUser { get; set; } = null!;
+
+    public virtual ParentTable Parent { get; set; } = null!;
 }

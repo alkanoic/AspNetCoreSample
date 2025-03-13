@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Default") ?? "";
 builder.Services.AddDbContext<SampleContext>(
-    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options => options.UseNpgsql(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -1,47 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSample.Templates.Models;
 
-[Table("sample_table")]
+/// <summary>
+/// sample_table
+/// </summary>
 public partial class SampleTable
 {
-    [Key]
-    [Column("id")]
+    /// <summary>
+    /// id
+    /// </summary>
     public int Id { get; set; }
 
-    [Column("target_name")]
-    [StringLength(30)]
+    /// <summary>
+    /// target_name
+    /// </summary>
     public string TargetName { get; set; } = null!;
 
-    [Column("target_int")]
+    /// <summary>
+    /// target_int
+    /// </summary>
     public int? TargetInt { get; set; }
 
-    [Column("target_decimal")]
-    [Precision(10, 2)]
+    /// <summary>
+    /// target_decimal
+    /// </summary>
     public decimal? TargetDecimal { get; set; }
 
-    [Column("target_date")]
+    /// <summary>
+    /// target_date
+    /// </summary>
     public DateOnly? TargetDate { get; set; }
 
-    [Column("target_bit", TypeName = "bit(1)")]
-    public ulong? TargetBit { get; set; }
+    /// <summary>
+    /// target_bit
+    /// </summary>
+    public bool? TargetBit { get; set; }
 
-    [Column("create_at", TypeName = "datetime")]
+    /// <summary>
+    /// create_at
+    /// </summary>
     public DateTime CreateAt { get; set; }
 
-    [Column("create_user")]
-    [StringLength(20)]
+    /// <summary>
+    /// create_user
+    /// </summary>
     public string CreateUser { get; set; } = null!;
 
-    [Column("update_at", TypeName = "datetime")]
+    /// <summary>
+    /// update_at
+    /// </summary>
     public DateTime UpdateAt { get; set; }
 
-    [Column("update_user")]
-    [StringLength(20)]
+    /// <summary>
+    /// update_user
+    /// </summary>
     public string UpdateUser { get; set; } = null!;
 }

@@ -1,53 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSample.Templates.Models;
 
-[PrimaryKey("Id", "Charid")]
-[Table("multi_table")]
+/// <summary>
+/// マルチテーブル
+/// </summary>
 public partial class MultiTable
 {
-    [Key]
-    [Column("id")]
+    /// <summary>
+    /// マルチID
+    /// </summary>
     public int Id { get; set; }
 
-    [Key]
-    [Column("charid")]
-    [StringLength(10)]
+    /// <summary>
+    /// マルチStringId
+    /// </summary>
     public string Charid { get; set; } = null!;
 
-    [Column("target_name")]
-    [StringLength(30)]
+    /// <summary>
+    /// 名前
+    /// </summary>
     public string TargetName { get; set; } = null!;
 
-    [Column("target_int")]
+    /// <summary>
+    /// int型
+    /// </summary>
     public int? TargetInt { get; set; }
 
-    [Column("target_decimal")]
-    [Precision(10, 2)]
+    /// <summary>
+    /// decimal型
+    /// </summary>
     public decimal? TargetDecimal { get; set; }
 
-    [Column("target_date")]
+    /// <summary>
+    /// 日付型
+    /// </summary>
     public DateOnly? TargetDate { get; set; }
 
-    [Column("target_bit", TypeName = "bit(1)")]
-    public ulong? TargetBit { get; set; }
+    /// <summary>
+    /// Bit型
+    /// </summary>
+    public bool? TargetBit { get; set; }
 
-    [Column("create_at", TypeName = "datetime")]
+    /// <summary>
+    /// 作成日時
+    /// </summary>
     public DateTime CreateAt { get; set; }
 
-    [Column("create_user")]
-    [StringLength(20)]
+    /// <summary>
+    /// 作成ユーザー
+    /// </summary>
     public string CreateUser { get; set; } = null!;
 
-    [Column("update_at", TypeName = "datetime")]
+    /// <summary>
+    /// 更新日時
+    /// </summary>
     public DateTime UpdateAt { get; set; }
 
-    [Column("update_user")]
-    [StringLength(20)]
+    /// <summary>
+    /// 更新ユーザー
+    /// </summary>
     public string UpdateUser { get; set; } = null!;
 }

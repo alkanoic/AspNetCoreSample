@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using AspNetCoreSample.DataModel.Models;
 using AspNetCoreSample.Mvc.Models;
 
 using Microsoft.AspNetCore.Mvc;

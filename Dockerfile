@@ -1,5 +1,5 @@
 # https://hub.docker.com/_/microsoft-dotnet
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /source
 
 # copy csproj and restore as distinct layers
@@ -17,7 +17,7 @@ WORKDIR /source/src/AspNetCoreSample.Mvc
 RUN dotnet publish -c release -o /app --no-restore
 
 # final stage/image
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:8.0.0-alpine3.18
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:9.0-alpine
 WORKDIR /app
 COPY --from=build /app ./
 ENTRYPOINT ["dotnet", "AspNetCoreSample.Mvc.dll"]

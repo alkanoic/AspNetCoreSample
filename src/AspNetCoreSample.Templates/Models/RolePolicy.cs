@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AspNetCoreSample.DataModel.Models;
+namespace AspNetCoreSample.Templates.Models;
 
 /// <summary>
 /// role_policies

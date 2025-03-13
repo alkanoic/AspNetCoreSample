@@ -1,60 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AspNetCoreSample.DataModel.Models;
+namespace AspNetCoreSample.Templates.Models;
 
 /// <summary>
-/// sample_table
+/// parent_table
 /// </summary>
-public partial class SampleTable
+public partial class ParentTable
 {
     /// <summary>
-    /// id
+    /// 親テーブルid
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// target_name
+    /// 親テーブル要素名
     /// </summary>
     public string TargetName { get; set; } = null!;
 
     /// <summary>
-    /// target_int
+    /// 親テーブルint型
     /// </summary>
     public int? TargetInt { get; set; }
 
     /// <summary>
-    /// target_decimal
+    /// 親テーブルdecimal型
     /// </summary>
     public decimal? TargetDecimal { get; set; }
 
     /// <summary>
-    /// target_date
+    /// 親テーブルdate型
     /// </summary>
     public DateOnly? TargetDate { get; set; }
 
     /// <summary>
-    /// target_bit
+    /// 親テーブルbit型
     /// </summary>
     public bool? TargetBit { get; set; }
 
     /// <summary>
-    /// create_at
+    /// 作成日時
     /// </summary>
     public DateTime CreateAt { get; set; }
 
     /// <summary>
-    /// create_user
+    /// 作成ユーザー
     /// </summary>
     public string CreateUser { get; set; } = null!;
 
     /// <summary>
-    /// update_at
+    /// 更新日時
     /// </summary>
     public DateTime UpdateAt { get; set; }
 
     /// <summary>
-    /// update_user
+    /// 更新ユーザー
     /// </summary>
     public string UpdateUser { get; set; } = null!;
+
+    public virtual ICollection<ChildTable> ChildTables { get; set; } = new List<ChildTable>();
 }
