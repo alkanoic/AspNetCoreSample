@@ -1,4 +1,4 @@
-using AspNetCoreSample.Mvc;
+using AspNetCoreSample.DataModel.Models;
 using AspNetCoreSample.Mvc.Models;
 using AspNetCoreSample.Mvc.Options;
 
