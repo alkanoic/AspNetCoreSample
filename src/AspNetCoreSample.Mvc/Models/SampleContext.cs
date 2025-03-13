@@ -18,10 +18,6 @@ public partial class SampleContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .UseCollation("utf8mb4_unicode_ci")
-            .HasCharSet("utf8mb4");
-
         modelBuilder.Entity<EnumSample>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");

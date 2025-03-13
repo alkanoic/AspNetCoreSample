@@ -4,42 +4,37 @@ using System.Collections.Generic;
 namespace AspNetCoreSample.Templates.Models;
 
 /// <summary>
-/// マルチテーブル
+/// parent_table
 /// </summary>
-public partial class MultiTable
+public partial class ParentTable
 {
     /// <summary>
-    /// マルチID
+    /// 親テーブルid
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// マルチStringId
-    /// </summary>
-    public string Charid { get; set; } = null!;
-
-    /// <summary>
-    /// 名前
+    /// 親テーブル要素名
     /// </summary>
     public string TargetName { get; set; } = null!;
 
     /// <summary>
-    /// int型
+    /// 親テーブルint型
     /// </summary>
     public int? TargetInt { get; set; }
 
     /// <summary>
-    /// decimal型
+    /// 親テーブルdecimal型
     /// </summary>
     public decimal? TargetDecimal { get; set; }
 
     /// <summary>
-    /// 日付型
+    /// 親テーブルdate型
     /// </summary>
     public DateOnly? TargetDate { get; set; }
 
     /// <summary>
-    /// Bit型
+    /// 親テーブルbit型
     /// </summary>
     public bool? TargetBit { get; set; }
 
@@ -62,4 +57,6 @@ public partial class MultiTable
     /// 更新ユーザー
     /// </summary>
     public string UpdateUser { get; set; } = null!;
+
+    public virtual ICollection<ChildTable> ChildTables { get; set; } = new List<ChildTable>();
 }

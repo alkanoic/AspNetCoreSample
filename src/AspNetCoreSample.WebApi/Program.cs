@@ -27,7 +27,7 @@ builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("Default") ?? "";
 builder.Services.AddDbContext<SampleContext>(
-    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options => options.UseNpgsql(connectionString));
 
 builder.Services.AddHttpClient();
 

@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSample.Templates.Models;
 
-[Table("enum_sample")]
+/// <summary>
+/// enum_sample
+/// </summary>
 public partial class EnumSample
 {
-    [Key]
-    [Column("id")]
+    /// <summary>
+    /// id
+    /// </summary>
     public int Id { get; set; }
 
-    [Column("enum_column")]
+    /// <summary>
+    /// Enum列
+    /// </summary>
     public int EnumColumn { get; set; }
 }

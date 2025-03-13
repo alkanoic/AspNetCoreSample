@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSample.Templates.Models;
 
-[Table("name")]
+/// <summary>
+/// name
+/// </summary>
 public partial class Name
 {
-    [Key]
-    [Column("id")]
+    /// <summary>
+    /// id
+    /// </summary>
     public int Id { get; set; }
 
-    [Column("name", TypeName = "text")]
+    /// <summary>
+    /// 名前列
+    /// </summary>
     public string Name1 { get; set; } = null!;
 }
