@@ -6,6 +6,7 @@ WORKDIR /source
 COPY *.sln .
 COPY src/AspNetCoreSample.Mvc/AspNetCoreSample.Mvc.csproj ./src/AspNetCoreSample.Mvc/
 COPY src/AspNetCoreSample.ServiceDefaults/AspNetCoreSample.ServiceDefaults.csproj ./src/AspNetCoreSample.ServiceDefaults/
+COPY src/AspNetCoreSample.DataModel/AspNetCoreSample.DataModel.csproj ./src/AspNetCoreSample.DataModel/
 WORKDIR /source/src/AspNetCoreSample.Mvc
 RUN dotnet restore
 
@@ -13,6 +14,7 @@ RUN dotnet restore
 WORKDIR /source
 COPY src/AspNetCoreSample.Mvc/. ./src/AspNetCoreSample.Mvc/
 COPY src/AspNetCoreSample.ServiceDefaults/. ./src/AspNetCoreSample.ServiceDefaults/
+COPY src/AspNetCoreSample.DataModel/. ./src/AspNetCoreSample.DataModel/
 WORKDIR /source/src/AspNetCoreSample.Mvc
 RUN dotnet publish -c release -o /app --no-restore
 

@@ -32,7 +32,6 @@
   <ItemGroup>
     <None Include="../testcontainer/migrate/*" LinkBase="migrate"
       CopyToOutputDirectory="PreserveNewest" />
-    <None Include="../testcontainer/my.cnf" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../testcontainer/Test-realm.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

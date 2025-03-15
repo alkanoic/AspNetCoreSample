@@ -17,9 +17,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="Microsoft.Playwright" Version="1.50.0" />
-    <PackageReference Include="MySqlConnector" Version="2.4.0" />
+    <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="Testcontainers" Version="4.3.0" />
-    <PackageReference Include="TestContainers.MySql" Version="4.3.0" />
+    <PackageReference Include="Testcontainers.PostgreSql" Version="4.3.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="../testcontainer/migrate/*" LinkBase="migrate" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="../testcontainer/my.cnf" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../testcontainer/migrate/*" LinkBase="migrate"
+      CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
