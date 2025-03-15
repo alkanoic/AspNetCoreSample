@@ -22,7 +22,7 @@ jobs:
 
       # DbContainer.Test
       - name: DbContainer Build with dotnet
-        run: dotnet build --configuration Release --framework net8.0
+        run: dotnet build --configuration Release --framework net9.0
         working-directory: ${{ env.TESTS_DB_LOCATION }}
 
       - name: DbContainer Run tests
@@ -42,7 +42,7 @@ jobs:
 
       # WebApi.Test
       - name: WebApi Build with dotnet
-        run: dotnet build --configuration Release --framework net8.0
+        run: dotnet build --configuration Release --framework net9.0
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
 
       - name: WebApi Run tests
@@ -62,7 +62,7 @@ jobs:
 
       # Mvc.Test
       - name: Mvc Build with dotnet
-        run: dotnet build --configuration Release --framework net8.0
+        run: dotnet build --configuration Release --framework net9.0
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
       # Playwright install
@@ -91,7 +91,7 @@ jobs:
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
       - name: Mvc Container Build with dotnet
-        run: dotnet build --configuration Release --framework net8.0
+        run: dotnet build --configuration Release --framework net9.0
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
       # Playwright install

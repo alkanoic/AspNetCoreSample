@@ -37,12 +37,12 @@ jobs:
         working-directory: ${{ env.MVC_APP_LOCATION }}
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release --framework net8.0
+        run: dotnet build --configuration Release --framework net9.0
         working-directory: ${{ env.MVC_APP_LOCATION }}
 
       - name: Publish app for deployment
         run: |
-          dotnet publish -c Release -o published --framework net8.0
+          dotnet publish -c Release -o published --framework net9.0
         working-directory: ${{ env.MVC_APP_LOCATION }}
 
       - name: Deploy to Azure Web App
@@ -64,12 +64,12 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release --framework net8.0
+        run: dotnet build --configuration Release --framework net9.0
         working-directory: ${{ env.WEBAPI_APP_LOCATION }}
 
       - name: Publish app for deployment
         run: |
-          dotnet publish -c Release -o published --framework net8.0
+          dotnet publish -c Release -o published --framework net9.0
         working-directory: ${{ env.WEBAPI_APP_LOCATION }}
 
       - name: Deploy to Azure Web App
