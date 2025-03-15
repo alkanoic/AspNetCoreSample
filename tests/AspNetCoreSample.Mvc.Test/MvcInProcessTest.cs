@@ -38,7 +38,7 @@ public sealed class MvcInProcessTest : IClassFixture<DbFixture>, IClassFixture<K
         await page.GotoAsync($"{_factory.HostUrl}");
         await page.GetByRole(AriaRole.Link, new() { Name = "Auth" }).ClickAsync();
         await page.GetByLabel("ユーザー名またはメールアドレス").FillAsync("admin");
-        await page.GetByLabel("パスワード").FillAsync("admin");
+        await page.GetByRole(AriaRole.Textbox, new() { Name = "パスワード" }).FillAsync("admin");
         await Task.WhenAll([page.GetByRole(AriaRole.Button, new() { Name = "ログイン" }).ClickAsync(), page.WaitForURLAsync($"{_factory.HostUrl}/Auth")]);
 
         Assert.Contains("Auth Page", await page.TitleAsync());

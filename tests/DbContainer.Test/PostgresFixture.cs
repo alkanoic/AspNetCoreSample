@@ -1,9 +1,7 @@
 using System.Data.Common;
 
-using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
-using DotNet.Testcontainers.Networks;
 
 using Npgsql;
 
@@ -11,13 +9,13 @@ using Testcontainers.PostgreSql;
 
 using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
-namespace AspNetCoreSample.Mvc.Test;
+namespace DbContainer.Test;
 
-public sealed class DbFixture : IAsyncLifetime
+public sealed class PostgresFixture : IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgresqlContainer;
 
-    public DbFixture()
+    public PostgresFixture()
     {
         _postgresqlContainer = new PostgreSqlBuilder()
             .WithImage("postgres:latest")

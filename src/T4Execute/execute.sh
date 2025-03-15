@@ -1,7 +1,7 @@
 #!bin/bash
 
 targetDir=../AspNetCoreSample.Templates
-assemblyPath=${targetDir}/bin/Debug/net8.0/AspNetCoreSample.Templates.dll
+assemblyPath=${targetDir}/bin/Debug/net9.0/AspNetCoreSample.Templates.dll
 
 dotnet build
 dotnet run -- --ap $assemblyPath --op ./output.cs
