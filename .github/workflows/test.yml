@@ -18,7 +18,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
 
       # DbContainer.Test
       - name: DbContainer Build with dotnet
@@ -38,7 +38,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
 
       # WebApi.Test
       - name: WebApi Build with dotnet
@@ -58,7 +58,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
 
       # Mvc.Test
       - name: Mvc Build with dotnet
@@ -83,7 +83,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
 
       # Mvc.Container.Test
       - name: Mvc Container Build with dotnet

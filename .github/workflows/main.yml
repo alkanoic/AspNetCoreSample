@@ -26,7 +26,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
 
       - name: npm install
         run: npm ci
@@ -61,7 +61,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x
 
       - name: Build with dotnet
         run: dotnet build --configuration Release --framework net8.0
