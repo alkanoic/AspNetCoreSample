@@ -12,23 +12,16 @@ using Microsoft.Extensions.Logging;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class DbAccessWebApiAuthTest : IClassFixture<KeycloakFixture>, IClassFixture<DbFixture>, IDisposable
+public sealed class DbAccessWebApiAuthTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IClassFixture<DbFixture>, IDisposable
 {
     private readonly WebApplicationFactory<Program> _webApplicationFactory;
     private readonly IServiceScope _serviceScope;
     private readonly HttpClient _httpClient;
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
-    public DbAccessWebApiAuthTest(KeycloakFixture keycloak, DbFixture db)
+    public DbAccessWebApiAuthTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture)
     {
-        Environment.SetEnvironmentVariable("ASPNETCORE_URLS", "https://+");
-        // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Path", "certificate.crt");
-        // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Password", "password");
-        Environment.SetEnvironmentVariable("ConnectionStrings__Default", db.DbConnectionString);
-        Environment.SetEnvironmentVariable("KeycloakOptions__TokenEndpoint", $"{keycloak.BaseAddress}realms/Test/protocol/openid-connect/token");
-        Environment.SetEnvironmentVariable("KeycloakOptions__Authority", $"{keycloak.BaseAddress}realms/Test");
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
-        _webApplicationFactory = new WebApplicationFactory<Program>();
+        _webApplicationFactory = webApplicationFactoryFixture;
         _serviceScope = _webApplicationFactory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _httpClient = _webApplicationFactory.CreateClient();
     }

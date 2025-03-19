@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class DbAccessWebApiInsertTest : IClassFixture<DbFixture>, IDisposable
+public sealed class DbAccessWebApiInsertTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
 {
     private readonly WebApplicationFactory<Program> _webApplicationFactory;
 
@@ -19,13 +19,9 @@ public sealed class DbAccessWebApiInsertTest : IClassFixture<DbFixture>, IDispos
 
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
-    public DbAccessWebApiInsertTest(DbFixture db)
+    public DbAccessWebApiInsertTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture)
     {
-        Environment.SetEnvironmentVariable("ASPNETCORE_URLS", "https://+");
-        // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Path", "certificate.crt");
-        // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Password", "password");
-        Environment.SetEnvironmentVariable("ConnectionStrings__Default", db.DbConnectionString);
-        _webApplicationFactory = new WebApplicationFactory<Program>();
+        _webApplicationFactory = webApplicationFactoryFixture;
         _serviceScope = _webApplicationFactory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _httpClient = _webApplicationFactory.CreateClient();
     }

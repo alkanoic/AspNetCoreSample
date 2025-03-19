@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace AspNetCoreSample.WebApi.Test;
 
 [Collection(nameof(VerifySettingsFixtures))]
-public sealed class DbAccessWebApiSelectTest : IClassFixture<DbFixture>, IDisposable
+public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
 {
     private readonly WebApplicationFactory<Program> _webApplicationFactory;
     private readonly IServiceScope _serviceScope;
@@ -17,13 +17,9 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<DbFixture>, IDispos
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
     private readonly VerifySettings _verifySettings;
 
-    public DbAccessWebApiSelectTest(DbFixture db, VerifySettingsFixture settingsFixture)
+    public DbAccessWebApiSelectTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture, VerifySettingsFixture settingsFixture)
     {
-        Environment.SetEnvironmentVariable("ASPNETCORE_URLS", "https://+");
-        // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Path", "certificate.crt");
-        // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Password", "password");
-        Environment.SetEnvironmentVariable("ConnectionStrings__Default", db.DbConnectionString);
-        _webApplicationFactory = new WebApplicationFactory<Program>();
+        _webApplicationFactory = webApplicationFactoryFixture;
         _serviceScope = _webApplicationFactory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _httpClient = _webApplicationFactory.CreateClient();
         _verifySettings = settingsFixture.VerifySettings;
