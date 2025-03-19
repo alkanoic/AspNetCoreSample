@@ -52,9 +52,9 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
-        return Task.WhenAny(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
+        await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
     }
 
     Task IAsyncLifetime.DisposeAsync()
@@ -73,7 +73,12 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
         // 環境変数による設定の上書きはほかのテストに影響するため、InMemoryCollectionを使う
         builder.UseConfiguration(new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
             {
-                {"ConnectionStrings:Default", DbConnectionString}
+                {"ConnectionStrings:Default", DbConnectionString},
+                {"KeycloakOptions:Authority", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test").ToString()},
+                {"KeycloakOptions:TokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test/protocol/openid-connect/token").ToString()},
+                {"KeycloakOptions:RevokeTokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test/protocol/openid-connect/revoke").ToString()},
+                {"KeycloakOptions:AdminTokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/master/protocol/openid-connect/token").ToString()},
+                {"KeycloakOptions:AdminBaseAddress", KeycloakBaseAddress},
             }).Build());
         builder.UseUrls(HostUrl);
     }

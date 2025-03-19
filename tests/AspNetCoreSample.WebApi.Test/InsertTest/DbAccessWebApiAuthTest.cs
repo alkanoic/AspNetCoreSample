@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class DbAccessWebApiAuthTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IClassFixture<DbFixture>, IDisposable
+public sealed class DbAccessWebApiAuthTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
 {
     private readonly WebApplicationFactoryFixture<Program> _webApplicationFactoryFixture;
     private readonly IServiceScope _serviceScope;
