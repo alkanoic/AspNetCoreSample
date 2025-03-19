@@ -11,7 +11,7 @@ namespace AspNetCoreSample.WebApi.Test;
 [Collection(nameof(VerifySettingsFixtures))]
 public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
 {
-    private readonly WebApplicationFactory<Program> _webApplicationFactory;
+    private readonly WebApplicationFactoryFixture<Program> _webApplicationFactoryFixture;
     private readonly IServiceScope _serviceScope;
     private readonly HttpClient _httpClient;
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
@@ -19,9 +19,9 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFacto
 
     public DbAccessWebApiSelectTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture, VerifySettingsFixture settingsFixture)
     {
-        _webApplicationFactory = webApplicationFactoryFixture;
-        _serviceScope = _webApplicationFactory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        _httpClient = _webApplicationFactory.CreateClient();
+        _webApplicationFactoryFixture = webApplicationFactoryFixture;
+        _serviceScope = _webApplicationFactoryFixture.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        _httpClient = _webApplicationFactoryFixture.CreateClient();
         _verifySettings = settingsFixture.VerifySettings;
     }
 
@@ -29,7 +29,7 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFacto
     {
         _httpClient.Dispose();
         _serviceScope.Dispose();
-        _webApplicationFactory.Dispose();
+        _webApplicationFactoryFixture.Dispose();
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFacto
         const string path = "api/dbaccess";
 
         // When
-        var response = await _httpClient.GetAsync(path);
+        var response = await _httpClient.GetAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path));
         var dbAccessStream = await response.Content.ReadAsStreamAsync();
 
         var names = await JsonSerializer.DeserializeAsync<IList<Name>>(dbAccessStream, JsonSerializerOptions);

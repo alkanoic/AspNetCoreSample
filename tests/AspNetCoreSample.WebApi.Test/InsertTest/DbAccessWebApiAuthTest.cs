@@ -5,6 +5,7 @@ using System.Text.Json;
 
 using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,23 +15,23 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class DbAccessWebApiAuthTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IClassFixture<DbFixture>, IDisposable
 {
-    private readonly WebApplicationFactory<Program> _webApplicationFactory;
+    private readonly WebApplicationFactoryFixture<Program> _webApplicationFactoryFixture;
     private readonly IServiceScope _serviceScope;
     private readonly HttpClient _httpClient;
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
     public DbAccessWebApiAuthTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture)
     {
-        _webApplicationFactory = webApplicationFactoryFixture;
-        _serviceScope = _webApplicationFactory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        _httpClient = _webApplicationFactory.CreateClient();
+        _webApplicationFactoryFixture = webApplicationFactoryFixture;
+        _serviceScope = _webApplicationFactoryFixture.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        _httpClient = _webApplicationFactoryFixture.CreateClient();
     }
 
     public void Dispose()
     {
         _httpClient.Dispose();
         _serviceScope.Dispose();
-        _webApplicationFactory.Dispose();
+        _webApplicationFactoryFixture.Dispose();
     }
 
     [Fact]
@@ -42,7 +43,7 @@ public sealed class DbAccessWebApiAuthTest : IClassFixture<WebApplicationFactory
 
         // When
         var content = new StringContent(JsonSerializer.Serialize(new { userName = "admin", password = "admin" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(path, content);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content);
         var dbAccessStream = await response.Content.ReadAsStreamAsync();
         var tokenResponse = await JsonSerializer.DeserializeAsync<TokenResponse>(dbAccessStream, JsonSerializerOptions);
 
