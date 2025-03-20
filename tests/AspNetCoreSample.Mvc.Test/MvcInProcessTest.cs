@@ -1,26 +1,14 @@
-using System.Diagnostics;
-using System.Net;
-using System.Text.Json;
-
-using AspNetCoreSample.WebApi.Test;
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class MvcInProcessTest : IClassFixture<DbFixture>, IClassFixture<KeycloakFixture>, IClassFixture<WebApplicationFactoryFixture<Program>>
+public sealed class MvcInProcessTest : IClassFixture<WebApplicationFactoryFixture<Program>>
 {
     private readonly WebApplicationFactoryFixture<Program> _factory;
 
-    public MvcInProcessTest(DbFixture db, KeycloakFixture keycloak, WebApplicationFactoryFixture<Program> factory)
+    public MvcInProcessTest(WebApplicationFactoryFixture<Program> factory)
     {
         _factory = factory;
-        Environment.SetEnvironmentVariable("ConnectionStrings__Default", db.DbConnectionString);
-        Environment.SetEnvironmentVariable("KeycloakOptions__Authority", $"{keycloak.BaseAddress}auth/realms/Test");
-        Environment.SetEnvironmentVariable("KeycloakOptions__MetadataAddress", $"{keycloak.BaseAddress}realms/Test/.well-known/openid-configuration");
         factory.CreateDefaultClient();
     }
 
