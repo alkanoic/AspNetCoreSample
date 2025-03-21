@@ -5,9 +5,9 @@ using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
 
-using MySqlConnector;
+using Npgsql;
 
-using Testcontainers.MySql;
+using Testcontainers.PostgreSql;
 
 using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
@@ -15,30 +15,25 @@ namespace AspNetCoreSample.Mvc.Test;
 
 public sealed class DbFixture : IAsyncLifetime
 {
-    private readonly INetwork _network = new NetworkBuilder().Build();
-
-    private readonly MySqlContainer _mySqlContainer;
+    private readonly PostgreSqlContainer _postgresqlContainer;
 
     public DbFixture()
     {
-        _mySqlContainer = new MySqlBuilder()
-            .WithImage("mysql:latest")
-            .WithResourceMapping("my.cnf", "/etc/mysql/conf.d/my.cnf")
+        _postgresqlContainer = new PostgreSqlBuilder()
+            .WithImage("postgres:latest")
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
             .WithEnvironment("TZ", "Asia/Tokyo")
-            .WithEnvironment("LANG", "ja_JP.UTF-8")
-            .WithNetwork(_network)
-            .WithNetworkAliases(nameof(_mySqlContainer))
+            .WithEnvironment("POSTGRES_INITDB_ARGS", "--encoding=UTF-8")
             .Build();
     }
 
-    public string DbConnectionString => _mySqlContainer.GetConnectionString();
+    public string DbConnectionString => _postgresqlContainer.GetConnectionString();
 
-    public DbConnection DbConnection => new MySqlConnection(DbConnectionString);
+    public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
     public Task InitializeAsync()
     {
-        return _mySqlContainer.StartAsync();
+        return _postgresqlContainer.StartAsync();
     }
 
     public Task DisposeAsync()

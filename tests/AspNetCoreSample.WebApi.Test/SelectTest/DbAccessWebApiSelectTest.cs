@@ -9,23 +9,19 @@ using Microsoft.Extensions.DependencyInjection;
 namespace AspNetCoreSample.WebApi.Test;
 
 [Collection(nameof(VerifySettingsFixtures))]
-public sealed class DbAccessWebApiSelectTest : IClassFixture<DbFixture>, IDisposable
+public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
 {
-    private readonly WebApplicationFactory<Program> _webApplicationFactory;
+    private readonly WebApplicationFactoryFixture<Program> _webApplicationFactoryFixture;
     private readonly IServiceScope _serviceScope;
     private readonly HttpClient _httpClient;
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
     private readonly VerifySettings _verifySettings;
 
-    public DbAccessWebApiSelectTest(DbFixture db, VerifySettingsFixture settingsFixture)
+    public DbAccessWebApiSelectTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture, VerifySettingsFixture settingsFixture)
     {
-        Environment.SetEnvironmentVariable("ASPNETCORE_URLS", "https://+");
-        // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Path", "certificate.crt");
-        // Environment.SetEnvironmentVariable("ASPNETCORE_Kestrel__Certificates__Default__Password", "password");
-        Environment.SetEnvironmentVariable("ConnectionStrings__Default", db.DbConnectionString);
-        _webApplicationFactory = new WebApplicationFactory<Program>();
-        _serviceScope = _webApplicationFactory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        _httpClient = _webApplicationFactory.CreateClient();
+        _webApplicationFactoryFixture = webApplicationFactoryFixture;
+        _serviceScope = _webApplicationFactoryFixture.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        _httpClient = _webApplicationFactoryFixture.CreateClient();
         _verifySettings = settingsFixture.VerifySettings;
     }
 
@@ -33,7 +29,7 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<DbFixture>, IDispos
     {
         _httpClient.Dispose();
         _serviceScope.Dispose();
-        _webApplicationFactory.Dispose();
+        _webApplicationFactoryFixture.Dispose();
     }
 
     [Fact]
@@ -44,7 +40,7 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<DbFixture>, IDispos
         const string path = "api/dbaccess";
 
         // When
-        var response = await _httpClient.GetAsync(path);
+        var response = await _httpClient.GetAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path));
         var dbAccessStream = await response.Content.ReadAsStreamAsync();
 
         var names = await JsonSerializer.DeserializeAsync<IList<Name>>(dbAccessStream, JsonSerializerOptions);

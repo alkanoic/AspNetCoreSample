@@ -41,7 +41,7 @@ public partial class MultiTable
     /// <summary>
     /// Bit型
     /// </summary>
-    public ulong? TargetBit { get; set; }
+    public bool? TargetBit { get; set; }
 
     /// <summary>
     /// 作成日時

@@ -1,22 +1,14 @@
-using System.Diagnostics;
-using System.Net;
-using System.Text.Json;
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class MvcInProcessTest3 : IClassFixture<DbFixture>, IClassFixture<WebApplicationFactoryFixture<Program>>
+public sealed class MvcInProcessTest3 : IClassFixture<WebApplicationFactoryFixture<Program>>
 {
     private readonly WebApplicationFactoryFixture<Program> _factory;
 
-    public MvcInProcessTest3(DbFixture db, WebApplicationFactoryFixture<Program> factory)
+    public MvcInProcessTest3(WebApplicationFactoryFixture<Program> factory)
     {
         _factory = factory;
-        Environment.SetEnvironmentVariable("ConnectionStrings__Default", db.DbConnectionString);
         factory.CreateDefaultClient();
     }
 

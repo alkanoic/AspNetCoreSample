@@ -1,7 +1,7 @@
-﻿# A5:ER FORMAT:18
+﻿# A5:ER FORMAT:19
 # A5:ER ENCODING:UTF8
 # A5:ER Mk-1 Copyright © 2007 m.matsubara
-# A5:SQL Mk-2 Version 2.19.2 Copyright © 1997 - 2024 m.matsubara
+# A5:SQL Mk-2 Version 2.20.2 Copyright © 1997 - 2025 m.matsubara
 #  https://a5m2.mmatsubara.com
 
 [Manager]
@@ -27,8 +27,9 @@ FooterLeft=
 FooterCenter=
 FooterRight=
 ShowPageoutRelation=1
-RDBMSType=6
-RDBMSTypeName=MySQL
+RDBMSType=7
+RDBMSTypeName=PostgreSQL
+CreateFk=1
 DefaultPkName=%0:s_PKC
 DefaultPkIndexName=%0:s_PKI
 DefaultIndexName=%0:s_IX%1:d
@@ -48,22 +49,22 @@ TableOption=
 Page=MAIN
 Left=50
 Top=500
-Field="子テーブルId","id","int auto_increment","NOT NULL",0,"","",$FFFFFFFF,""
+Field="子テーブルId","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
 Field="親テーブルid","parent_id","int","NOT NULL",,"","",$FFFFFFFF,""
 Field="子テーブル要素名","child_name","varchar(30)","NOT NULL",,"","",$FFFFFFFF,""
 Field="子テーブルint型","child_int","int",,,"","",$FFFFFFFF,""
 Field="子テーブルdeimal型","child_decimal","decimal(10,2)",,,"","",$FFFFFFFF,""
 Field="子テーブルDate型","child_date","date",,,"","",$FFFFFFFF,""
-Field="子テーブルbit型","child_bit","bit(1)",,,"","",$FFFFFFFF,""
-Field="作成日時","create_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="子テーブルbit型","child_bit","boolean",,,"","",$FFFFFFFF,""
+Field="作成日時","create_at","timestamp","NOT NULL",,"","",$FFFFFFFF,""
 Field="作成ユーザー","create_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
-Field="更新日時","update_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="更新日時","update_at","timestamp","NOT NULL",,"","",$FFFFFFFF,""
 Field="更新ユーザー","update_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
 Index=child_table_fk=0,parent_id
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20240804075518
+ModifiedDateTime=20250313222829
 Position="MAIN",50,500
 ZOrder=-1
 
@@ -76,12 +77,12 @@ TableOption=
 Page=MAIN
 Left=100
 Top=150
-Field="id","id","int auto_increment","NOT NULL",0,"","",$FFFFFFFF,""
+Field="id","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
 Field="Enum列","enum_column","int","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20240804075253
+ModifiedDateTime=20250313221711
 Position="MAIN",100,150
 ZOrder=-2
 
@@ -100,15 +101,16 @@ Field="名前","target_name","varchar(30)","NOT NULL",,"","",$FFFFFFFF,""
 Field="int型","target_int","int",,,"","",$FFFFFFFF,""
 Field="decimal型","target_decimal","decimal(10,2)",,,"","",$FFFFFFFF,""
 Field="日付型","target_date","date",,,"","",$FFFFFFFF,""
-Field="Bit型","target_bit","bit(1)",,,"","",$FFFFFFFF,""
-Field="作成日時","create_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="Bit型","target_bit","boolean",,,"","",$FFFFFFFF,""
+Field="作成日時","create_at","timestamp","NOT NULL",,"","",$FFFFFFFF,""
 Field="作成ユーザー","create_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
-Field="更新日時","update_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="更新日時","update_at","timestamp","NOT NULL",,"","",$FFFFFFFF,""
 Field="更新ユーザー","update_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
 Index=idx_target_name=0,target_name
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
+ModifiedDateTime=20250313222841
 Position="MAIN",1400,550
 ZOrder=-3
 
@@ -121,12 +123,12 @@ TableOption=
 Page=MAIN
 Left=800
 Top=250
-Field="id","id","int auto_increment","NOT NULL",0,"","",$FFFFFFFF,""
+Field="id","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
 Field="名前列","name","text","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20240804075306
+ModifiedDateTime=20250313221722
 Position="MAIN",800,250
 ZOrder=-4
 
@@ -144,15 +146,15 @@ Field="親テーブル要素名","target_name","varchar(30)","NOT NULL",,"","",$
 Field="親テーブルint型","target_int","int",,,"","",$FFFFFFFF,""
 Field="親テーブルdecimal型","target_decimal","decimal(10,2)",,,"","",$FFFFFFFF,""
 Field="親テーブルdate型","target_date","date",,,"","",$FFFFFFFF,""
-Field="親テーブルbit型","target_bit","bit(1)",,,"","",$FFFFFFFF,""
-Field="作成日時","create_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="親テーブルbit型","target_bit","boolean",,,"","",$FFFFFFFF,""
+Field="作成日時","create_at","timestamp","NOT NULL",,"","",$FFFFFFFF,""
 Field="作成ユーザー","create_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
-Field="更新日時","update_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="更新日時","update_at","timestamp","NOT NULL",,"","",$FFFFFFFF,""
 Field="更新ユーザー","update_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20240804075602
+ModifiedDateTime=20250313222836
 Position="MAIN",700,550
 ZOrder=-5
 
@@ -206,14 +208,15 @@ Field="target_name","target_name","varchar(30)","NOT NULL",,"","",$FFFFFFFF,""
 Field="target_int","target_int","int",,,"","",$FFFFFFFF,""
 Field="target_decimal","target_decimal","decimal(10,2)",,,"","",$FFFFFFFF,""
 Field="target_date","target_date","date",,,"","",$FFFFFFFF,""
-Field="target_bit","target_bit","bit(1)",,,"","",$FFFFFFFF,""
-Field="create_at","create_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="target_bit","target_bit","boolean",,,"","",$FFFFFFFF,""
+Field="create_at","create_at","timestamp","NOT NULL",,"","",$FFFFFFFF,""
 Field="create_user","create_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
-Field="update_at","update_at","datetime","NOT NULL",,"","",$FFFFFFFF,""
+Field="update_at","update_at","timestamp","NOT NULL",,"","",$FFFFFFFF,""
 Field="update_user","update_user","varchar(20)","NOT NULL",,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
+ModifiedDateTime=20250313222847
 Position="MAIN",2050,500
 ZOrder=-8
 

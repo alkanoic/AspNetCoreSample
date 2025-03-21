@@ -3,9 +3,18 @@ using System.Collections.Generic;
 
 namespace AspNetCoreSample.DataModel.Models;
 
+/// <summary>
+/// enum_sample
+/// </summary>
 public partial class EnumSample
 {
+    /// <summary>
+    /// id
+    /// </summary>
     public int Id { get; set; }
 
+    /// <summary>
+    /// Enum列
+    /// </summary>
     public int EnumColumn { get; set; }
 }

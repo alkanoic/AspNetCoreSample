@@ -2,11 +2,11 @@ using System.Data.Common;
 
 namespace DbContainer.Test;
 
-public sealed class DbTest : IClassFixture<DbFixture>, IDisposable
+public sealed class PostgresTest : IClassFixture<PostgresFixture>, IDisposable
 {
     private readonly DbConnection _dbConnection;
 
-    public DbTest(DbFixture db)
+    public PostgresTest(PostgresFixture db)
     {
         _dbConnection = db.DbConnection;
         _dbConnection.Open();

@@ -7,9 +7,9 @@ using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
 using DotNet.Testcontainers.Networks;
 
-using MySqlConnector;
+using Npgsql;
 
-using Testcontainers.MySql;
+using Testcontainers.PostgreSql;
 
 using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
@@ -19,7 +19,7 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
 {
     private readonly INetwork _network;
 
-    private readonly MySqlContainer _mySqlContainer;
+    private readonly PostgreSqlContainer _postgresqlContainer;
 
     private static readonly X509Certificate Certificate = new X509Certificate2(MvcImage.CertificateFilePath, MvcImage.CertificatePassword);
 
@@ -35,14 +35,13 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
     {
         _network = new NetworkBuilder().Build();
 
-        _mySqlContainer = new MySqlBuilder()
-            .WithImage("mysql:latest")
-            .WithResourceMapping("my.cnf", "/etc/mysql/conf.d/my.cnf")
+        _postgresqlContainer = new PostgreSqlBuilder()
+            .WithImage("postgres:latest")
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
             .WithEnvironment("TZ", "Asia/Tokyo")
-            .WithEnvironment("LANG", "ja_JP.UTF-8")
+            .WithEnvironment("POSTGRES_INITDB_ARGS", "--encoding=UTF-8")
             .WithNetwork(_network)
-            .WithNetworkAliases(nameof(_mySqlContainer))
+            .WithNetworkAliases(nameof(_postgresqlContainer))
             .Build();
 
         _mvcContainer = new ContainerBuilder()
@@ -58,15 +57,15 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
             .Build();
     }
 
-    public const string DbConnectionString = $"Server={nameof(_mySqlContainer)};User={MySqlBuilder.DefaultUsername};Password={MySqlBuilder.DefaultPassword};Database={MySqlBuilder.DefaultDatabase}";
+    public const string DbConnectionString = $"Server={nameof(_postgresqlContainer)};Username={PostgreSqlBuilder.DefaultUsername};Password={PostgreSqlBuilder.DefaultPassword};Database={PostgreSqlBuilder.DefaultDatabase}";
 
-    public static DbConnection DbConnection => new MySqlConnection(DbConnectionString);
+    public static DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
     public async Task InitializeAsync()
     {
         await _mvcImage.InitializeAsync().ConfigureAwait(false);
         await _network.CreateAsync().ConfigureAwait(false);
-        await _mySqlContainer.StartAsync().ConfigureAwait(false);
+        await _postgresqlContainer.StartAsync().ConfigureAwait(false);
         await _mvcContainer.StartAsync().ConfigureAwait(false);
     }
 
@@ -78,7 +77,7 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
         // them after the test automatically.
         await _mvcImage.DisposeAsync().ConfigureAwait(false);
         await _mvcContainer.DisposeAsync().ConfigureAwait(false);
-        await _mySqlContainer.DisposeAsync().ConfigureAwait(false);
+        await _postgresqlContainer.DisposeAsync().ConfigureAwait(false);
         await _network.DisposeAsync().ConfigureAwait(false);
     }
 

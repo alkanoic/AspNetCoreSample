@@ -1,33 +1,32 @@
 using System.Data.Common;
 
-using MySqlConnector;
+using Npgsql;
 
-using Testcontainers.MySql;
+using Testcontainers.PostgreSql;
 
 namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class DbFixture : IAsyncLifetime
 {
-    private readonly MySqlContainer _mySqlContainer;
+    private readonly PostgreSqlContainer _postgresqlContainer;
 
     public DbFixture()
     {
-        _mySqlContainer = new MySqlBuilder()
-            .WithImage("mysql:latest")
-            .WithResourceMapping("my.cnf", "/etc/mysql/conf.d/my.cnf")
+        _postgresqlContainer = new PostgreSqlBuilder()
+            .WithImage("postgres:latest")
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
             .WithEnvironment("TZ", "Asia/Tokyo")
-            .WithEnvironment("LANG", "ja_JP.UTF-8")
+            .WithEnvironment("POSTGRES_INITDB_ARGS", "--encoding=UTF-8")
             .Build();
     }
 
-    public string DbConnectionString => _mySqlContainer.GetConnectionString();
+    public string DbConnectionString => _postgresqlContainer.GetConnectionString();
 
-    public DbConnection DbConnection => new MySqlConnection(DbConnectionString);
+    public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
     public Task InitializeAsync()
     {
-        return _mySqlContainer.StartAsync();
+        return _postgresqlContainer.StartAsync();
     }
 
     public Task DisposeAsync()

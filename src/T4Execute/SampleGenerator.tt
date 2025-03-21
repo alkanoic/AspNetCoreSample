@@ -6,7 +6,7 @@
 <#@ output extension=".cs" #>
 <#
     // var assembly = System.Reflection.Assembly.LoadFrom(targetPath);
-    //var assembly = System.Reflection.Assembly.LoadFrom("../AspNetCoreSample.Templates/bin/Debug/net8.0/AspNetCoreSample.Templates.dll");
+    //var assembly = System.Reflection.Assembly.LoadFrom("../AspNetCoreSample.Templates/bin/Debug/net9.0/AspNetCoreSample.Templates.dll");
     //var types = assembly.GetTypes();
 #>
 namespace Generated
