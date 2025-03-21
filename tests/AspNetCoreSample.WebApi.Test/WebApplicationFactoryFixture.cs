@@ -71,15 +71,12 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
         HostUrl = $"https://localhost:{AvailablePort.GetAvailablePort()}";
 
         // 環境変数による設定の上書きはほかのテストに影響するため、InMemoryCollectionを使う
-        builder.UseConfiguration(new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                {"ConnectionStrings:Default", DbConnectionString},
-                {"KeycloakOptions:Authority", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test").ToString()},
-                {"KeycloakOptions:TokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test/protocol/openid-connect/token").ToString()},
-                {"KeycloakOptions:RevokeTokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test/protocol/openid-connect/revoke").ToString()},
-                {"KeycloakOptions:AdminTokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/master/protocol/openid-connect/token").ToString()},
-                {"KeycloakOptions:AdminBaseAddress", KeycloakBaseAddress},
-            }).Build());
+        builder.UseSetting("ConnectionStrings:Default", DbConnectionString);
+        builder.UseSetting("KeycloakOptions:Authority", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test").ToString());
+        builder.UseSetting("KeycloakOptions:TokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test/protocol/openid-connect/token").ToString());
+        builder.UseSetting("KeycloakOptions:RevokeTokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test/protocol/openid-connect/revoke").ToString());
+        builder.UseSetting("KeycloakOptions:AdminTokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/master/protocol/openid-connect/token").ToString());
+        builder.UseSetting("KeycloakOptions:AdminBaseAddress", KeycloakBaseAddress);
         builder.UseUrls(HostUrl);
     }
 
