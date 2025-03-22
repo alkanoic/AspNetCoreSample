@@ -33,6 +33,7 @@ public class SimpleController : ControllerBase
         return new SimpleOutput { Output = input.Input };
     }
 
+    [Interceptor]
     [HttpPost]
     public SimpleOutput SavePost(SimpleInput input)
     {

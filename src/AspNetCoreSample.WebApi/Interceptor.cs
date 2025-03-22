@@ -1,9 +1,14 @@
 // Attribute should be "registered" by adding as module or assembly custom attribute
 using System.Reflection;
+using System.Xml;
+
+using AspNetCoreSample.WebApi;
 
 using MethodDecorator.Fody.Interfaces;
 
 [module: Interceptor]
+
+namespace AspNetCoreSample.WebApi;
 
 // Any attribute which provides OnEntry/OnExit/OnException with proper args
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor | AttributeTargets.Assembly | AttributeTargets.Module)]
@@ -13,21 +18,24 @@ public class InterceptorAttribute : Attribute, IMethodDecorator
     // for future usage in OnEntry/OnExit/OnException
     public void Init(object instance, MethodBase method, object[] args)
     {
-        Console.Write(string.Format("Init: {0} [{1}]", method.DeclaringType.FullName + "." + method.Name, args.Length));
+        var declaringType = method.DeclaringType?.FullName ?? "UnknownType";
+        var methodName = method.Name ?? "UnknownMethod";
+        var argsJson = System.Text.Json.JsonSerializer.Serialize(args);
+        Console.WriteLine($"Init: {declaringType}.{methodName} {argsJson}");
     }
 
     public void OnEntry()
     {
-        Console.Write("OnEntry");
+        Console.WriteLine("OnEntry");
     }
 
     public void OnExit()
     {
-        Console.Write("OnExit");
+        Console.WriteLine("OnExit");
     }
 
     public void OnException(Exception exception)
     {
-        Console.Write(string.Format("OnException: {0}: {1}", exception.GetType(), exception.Message));
+        Console.WriteLine($"OnException: {exception.GetType()}: {exception.Message}");
     }
 }
