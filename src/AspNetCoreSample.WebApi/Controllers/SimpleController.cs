@@ -26,7 +26,6 @@ public class SimpleController : ControllerBase
         _localizer = localizer;
     }
 
-    [Interceptor]
     [HttpGet(Name = "Simple")]
     public SimpleOutput Get([FromQuery] SimpleInput input)
     {
