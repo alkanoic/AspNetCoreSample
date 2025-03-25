@@ -1,4 +1,4 @@
-namespace AspNetCoreSample.WebApi;
+namespace AspNetCoreSample.WebApi.Logging;
 
 public static class ServiceProviderAccessor
 {
