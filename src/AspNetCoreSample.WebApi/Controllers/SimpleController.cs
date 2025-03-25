@@ -1,3 +1,5 @@
+// using AspNetCoreSample.Util;
+using AspNetCoreSample.WebApi.Logging;
 using AspNetCoreSample.WebApi.Resources;
 
 using Microsoft.AspNetCore.Mvc;
@@ -31,10 +33,18 @@ public class SimpleController : ControllerBase
         return new SimpleOutput { Output = input.Input };
     }
 
+    [Logging]
     [HttpPost]
     public SimpleOutput SavePost(SimpleInput input)
     {
         return new SimpleOutput { Output = input.Input };
+    }
+
+    [Logging]
+    [HttpPost("Exception")]
+    public SimpleOutput Exception(SimpleInput input)
+    {
+        throw new ArgumentException("Exception test");
     }
 
     [HttpGet("Resource")]

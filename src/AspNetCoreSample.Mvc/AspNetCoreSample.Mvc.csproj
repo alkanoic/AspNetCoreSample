@@ -10,7 +10,12 @@
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageReference Include="Fody" Version="6.9.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.433" />
+    <PackageReference Include="MethodDecorator.Fody" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,18 +24,20 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <PackageReference Include="NLog" Version="5.4.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="WebPush" Version="1.0.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNetCoreSample.ServiceDefaults\AspNetCoreSample.ServiceDefaults.csproj" />
+    <ProjectReference
+      Include="..\AspNetCoreSample.ServiceDefaults\AspNetCoreSample.ServiceDefaults.csproj" />
     <ProjectReference Include="..\AspNetCoreSample.DataModel\AspNetCoreSample.DataModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="certificate.crt" Visible="false">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Update="nlog.config" CopyToOutputDirectory="Always" />
+    <None Update="certificate.crt" Visible="false" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

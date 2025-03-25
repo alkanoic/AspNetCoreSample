@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using AspNetCoreSample.DataModel.Models;
+using AspNetCoreSample.Mvc.Logging;
 using AspNetCoreSample.Mvc.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,7 @@ namespace AspNetCoreSample.Mvc.Controllers
         }
 
         // GET: Name
+        [Logging]
         public async Task<IActionResult> Index()
         {
             return _context.Names != null ?
@@ -30,6 +32,7 @@ namespace AspNetCoreSample.Mvc.Controllers
         }
 
         // GET: Name/Details/5
+        [Logging]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Names == null)
@@ -48,6 +51,7 @@ namespace AspNetCoreSample.Mvc.Controllers
         }
 
         // GET: Name/Create
+        [Logging]
         public IActionResult Create()
         {
             return View();
@@ -58,6 +62,7 @@ namespace AspNetCoreSample.Mvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Logging]
         public async Task<IActionResult> Create([Bind("Id,Name1")] Name name)
         {
             if (ModelState.IsValid)
@@ -70,6 +75,7 @@ namespace AspNetCoreSample.Mvc.Controllers
         }
 
         // GET: Name/Edit/5
+        [Logging]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Names == null)
@@ -90,6 +96,7 @@ namespace AspNetCoreSample.Mvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Logging]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name1")] Name name)
         {
             if (id != name.Id)
@@ -121,6 +128,7 @@ namespace AspNetCoreSample.Mvc.Controllers
         }
 
         // GET: Name/Delete/5
+        [Logging]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Names == null)
@@ -141,6 +149,7 @@ namespace AspNetCoreSample.Mvc.Controllers
         // POST: Name/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Logging]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Names == null)
