@@ -3,7 +3,7 @@ using MethodDecorator.Fody.Interfaces;
 using System.Reflection;
 using System.Text.Json;
 
-namespace AspNetCoreSample.WebApi.Logging;
+namespace AspNetCoreSample.Mvc.Logging;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
 public class LoggingAttribute : Attribute, IMethodDecorator

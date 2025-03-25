@@ -1,4 +1,5 @@
 using AspNetCoreSample.DataModel.Models;
+using AspNetCoreSample.Mvc.Logging;
 using AspNetCoreSample.Mvc.Models;
 using AspNetCoreSample.Mvc.Options;
 
@@ -10,108 +11,137 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
+using NLog;
+using NLog.Web;
+
 using WebPush;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add service defaults & Aspire components.
-builder.AddServiceDefaults();
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-var connectionString = builder.Configuration.GetConnectionString("Default") ?? "";
-builder.Services.AddDbContext<SampleContext>(
-    options => options.UseNpgsql(connectionString));
-
-builder.Services.AddFluentValidationClientsideAdapters();
-
-builder.Services.AddValidatorsFromAssemblyContaining<FluentViewModel>();
-
-builder.Services.AddHttpClient();
-
-var keycloakOptions = builder.Configuration.GetSection(KeycloakOptions.Position).Get<KeycloakOptions>()!;
-builder.Services.AddAuthentication(options =>
+// NLogの設定を初期化
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+try
 {
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-}).AddCookie("Cookies")
-  .AddOpenIdConnect(options =>
-  {
-      options.Authority = keycloakOptions.Authority;
-      options.MetadataAddress = keycloakOptions.MetadataAddress;
-      options.ClientId = keycloakOptions.ClientId;
-      options.ClientSecret = keycloakOptions.ClientSecret;
-      options.Scope.Add("openid");
-      options.Scope.Add("profile");
-      options.ResponseType = OpenIdConnectResponseType.Code;
-      //   options.SaveTokens = true;
-      //   options.GetClaimsFromUserInfoEndpoint = true;
-      //   options.TokenValidationParameters = new TokenValidationParameters
-      //   {
-      //       NameClaimType = "name",
-      //       RoleClaimType = "role"
-      //   };
-      // 開発のためHttpを許可する
-      options.RequireHttpsMetadata = false;
-  });
-builder.Services.AddAuthorization();
+    logger.Log(NLog.LogLevel.Info, "Starting application");
 
-var vapidKeys = VapidHelper.GenerateVapidKeys();
-var vapidOption = new AspNetCoreSample.Mvc.Options.VapidOption()
-{
-    PublicKey = vapidKeys.PublicKey,
-    PrivateKey = vapidKeys.PrivateKey
-};
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton(vapidOption);
+    // NLogをロギングプロバイダーとして追加
+    // builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
 
-builder.Services.Configure<WebApiOption>(builder.Configuration.GetSection(WebApiOption.Position));
-builder.Services.Configure<JavaScriptOptions>(builder.Configuration.GetSection(nameof(JavaScriptOptions)));
+    // Add service defaults & Aspire components.
+    builder.AddServiceDefaults();
 
-builder.Services.AddWebOptimizer(pipeline =>
-{
-    pipeline.MinifyJsFiles("js/**/*.js");
-    pipeline.MinifyCssFiles("css/**/*.css");
-});
+    // Add services to the container.
+    builder.Services.AddControllersWithViews();
+    var connectionString = builder.Configuration.GetConnectionString("Default") ?? "";
+    builder.Services.AddDbContext<SampleContext>(
+        options => options.UseNpgsql(connectionString));
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-    options.InstanceName = "SampleInstance";
-});
+    builder.Services.AddFluentValidationClientsideAdapters();
 
-builder.Services.AddSession(options =>
-{
-    // セッションの有効期限を設定
-    options.IdleTimeout = TimeSpan.FromSeconds(20);
-});
+    builder.Services.AddValidatorsFromAssemblyContaining<FluentViewModel>();
 
-var app = builder.Build();
+    builder.Services.AddHttpClient();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-    app.UseWebOptimizer();
+    var keycloakOptions = builder.Configuration.GetSection(KeycloakOptions.Position).Get<KeycloakOptions>()!;
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    }).AddCookie("Cookies")
+      .AddOpenIdConnect(options =>
+      {
+          options.Authority = keycloakOptions.Authority;
+          options.MetadataAddress = keycloakOptions.MetadataAddress;
+          options.ClientId = keycloakOptions.ClientId;
+          options.ClientSecret = keycloakOptions.ClientSecret;
+          options.Scope.Add("openid");
+          options.Scope.Add("profile");
+          options.ResponseType = OpenIdConnectResponseType.Code;
+          //   options.SaveTokens = true;
+          //   options.GetClaimsFromUserInfoEndpoint = true;
+          //   options.TokenValidationParameters = new TokenValidationParameters
+          //   {
+          //       NameClaimType = "name",
+          //       RoleClaimType = "role"
+          //   };
+          // 開発のためHttpを許可する
+          options.RequireHttpsMetadata = false;
+      });
+    builder.Services.AddAuthorization();
+
+    var vapidKeys = VapidHelper.GenerateVapidKeys();
+    var vapidOption = new AspNetCoreSample.Mvc.Options.VapidOption()
+    {
+        PublicKey = vapidKeys.PublicKey,
+        PrivateKey = vapidKeys.PrivateKey
+    };
+
+    builder.Services.AddSingleton(vapidOption);
+
+    builder.Services.Configure<WebApiOption>(builder.Configuration.GetSection(WebApiOption.Position));
+    builder.Services.Configure<JavaScriptOptions>(builder.Configuration.GetSection(nameof(JavaScriptOptions)));
+
+    builder.Services.AddWebOptimizer(pipeline =>
+    {
+        pipeline.MinifyJsFiles("js/**/*.js");
+        pipeline.MinifyCssFiles("css/**/*.css");
+    });
+
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetConnectionString("Redis");
+        options.InstanceName = "SampleInstance";
+    });
+
+    builder.Services.AddSession(options =>
+    {
+        // セッションの有効期限を設定
+        options.IdleTimeout = TimeSpan.FromSeconds(20);
+    });
+
+    var app = builder.Build();
+
+    // DIコンテナへのアクセスを設定
+    ServiceProviderAccessor.Initialize(app.Services);
+
+    // Configure the HTTP request pipeline.
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+        app.UseWebOptimizer();
+    }
+
+    app.MapDefaultEndpoints();
+
+    // app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    app.UseSession();
+
+    app.UseRouting();
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.Run();
 }
-
-app.MapDefaultEndpoints();
-
-// app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseSession();
-
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
+catch (Exception ex)
+{
+    // NLogで例外をログに記録
+    logger.Error(ex, "Application stopped because of exception");
+    throw;
+}
+finally
+{
+    logger.Log(NLog.LogLevel.Info, "Shutdown application");
+    // NLogを適切にシャットダウン
+    LogManager.Shutdown();
+}
 
 public partial class Program { }
