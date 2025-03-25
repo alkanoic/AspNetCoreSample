@@ -3,7 +3,7 @@ using MethodDecorator.Fody.Interfaces;
 using System.Reflection;
 using System.Text.Json;
 
-namespace AspNetCoreSample.WebApi;
+namespace AspNetCoreSample.WebApi.Logging;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
 public class LoggingAttribute : Attribute, IMethodDecorator
@@ -20,35 +20,50 @@ public class LoggingAttribute : Attribute, IMethodDecorator
     private MethodBase? _method;
     private DateTime _startTime;
 
+    /// <summary>
+    /// 対象のメソッドの開始時のロギング
+    /// </summary>
     private static readonly Action<ILogger, Dictionary<string, object>, Exception?> _logMethodEntry =
         LoggerMessage.Define<Dictionary<string, object>>(
             LogLevel.Warning,
             new EventId(1, nameof(LoggingAttribute)),
             "{@LogData}");
 
+    /// <summary>
+    /// 対象のメソッドの終了時のロギング
+    /// </summary>
     private static readonly Action<ILogger, Dictionary<string, object>, Exception?> _logMethodExit =
         LoggerMessage.Define<Dictionary<string, object>>(
             LogLevel.Warning,
             new EventId(2, nameof(LoggingAttribute)),
             "{@LogData}");
 
+    /// <summary>
+    /// 対象のメソッドで例外が発生し、キャッチされなかった時のロギング
+    /// </summary>
     private static readonly Action<ILogger, Dictionary<string, object>, Exception?> _logMethodException =
         LoggerMessage.Define<Dictionary<string, object>>(
-            LogLevel.Error,
+            LogLevel.Critical,
             new EventId(3, nameof(LoggingAttribute)),
-            "{@LogData}");
+            "Critical Unhandled Exception for {@LogData}");
 
+    /// <summary>
+    /// メソッド開始時のロギングでExceptionが発生した時のロギング
+    /// </summary>
     private static readonly Action<ILogger, string, Exception?> _logMethodEntryError =
         LoggerMessage.Define<string>(
             LogLevel.Critical,
             new EventId(4, nameof(LoggingAttribute)),
-            "Critical logging method entry for {MethodName}");
+            "Critical logging method entry for {@MethodName}");
 
+    /// <summary>
+    /// メソッド終了時のロギングでExceptionが発生した時のロギング
+    /// </summary>
     private static readonly Action<ILogger, string, Exception?> _logMethodExitError =
         LoggerMessage.Define<string>(
             LogLevel.Critical,
             new EventId(5, nameof(LoggingAttribute)),
-            "Critical logging method exit for {MethodName}");
+            "Critical logging method exit for {@MethodName}");
 
     public void Init(object instance, MethodBase method, object[] args)
     {
@@ -91,8 +106,8 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                 var logData = new Dictionary<string, object>
                 {
                     ["EventType"] = "MethodEntry",
-                    ["MethodName"] = _methodName,
-                    ["Arguments"] = serializedArgs != null ? JsonSerializer.Deserialize<object>(serializedArgs) : "",
+                    ["MethodName"] = _methodName ?? "UnknownMethod",
+                    ["Arguments"] = parameterInfo,
                     ["Timestamp"] = _startTime
                 };
 
@@ -121,17 +136,17 @@ public class LoggingAttribute : Attribute, IMethodDecorator
         if (_logger != null)
         {
             // 構造化された例外ログデータを作成
+            var methodName = _methodName ?? "UnknownMethod";
             var logData = new Dictionary<string, object>
             {
                 ["EventType"] = "MethodException",
-                ["MethodName"] = _methodName,
+                ["MethodName"] = methodName,
                 ["ErrorMessage"] = exception.Message,
-                ["StackTrace"] = exception.StackTrace,
+                ["StackTrace"] = exception.StackTrace ?? string.Empty,
                 ["ExceptionType"] = exception.GetType().Name,
                 ["Timestamp"] = DateTime.UtcNow,
                 ["ExecutionTime"] = (DateTime.UtcNow - _startTime).TotalMilliseconds
             };
-
             _logMethodException(_logger, logData, exception);
         }
     }
@@ -149,18 +164,17 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                 var logData = new Dictionary<string, object>
                 {
                     ["EventType"] = "MethodExit",
-                    ["MethodName"] = _methodName,
-                    ["ReturnValue"] = JsonSerializer.Deserialize<object>(serializedReturnValue),
+                    ["MethodName"] = _methodName ?? "UnknownMethod",
+                    ["ReturnValue"] = returnValue,
                     ["Timestamp"] = DateTime.UtcNow,
                     ["ExecutionTime"] = executionTime
                 };
 
-                // 構造化ログを出力（NLogのJsonLayoutがこれを処理）
                 _logMethodExit(_logger, logData, null);
             }
             catch (Exception ex)
             {
-                _logMethodExitError(_logger, _methodName, ex);
+                _logMethodExitError(_logger, _methodName ?? "UnknownMethod", ex);
             }
         }
     }

@@ -21,7 +21,7 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 
 // NLogの設定を初期化
-var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 try
 {
     logger.Log(NLog.LogLevel.Info, "Starting application");

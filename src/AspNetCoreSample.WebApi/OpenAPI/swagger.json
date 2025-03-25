@@ -1370,6 +1370,58 @@
         }
       }
     },
+    "/api/Simple/Exception": {
+      "post": {
+        "tags": [
+          "Simple"
+        ],
+        "operationId": "Simple_Exception",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimpleInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Simple/Resource": {
       "get": {
         "tags": [
