@@ -1,5 +1,6 @@
 using MethodDecorator.Fody.Interfaces;
 
+using System.Collections;
 using System.Reflection;
 using System.Text.Json;
 
@@ -23,48 +24,6 @@ public class LoggingAttribute : Attribute, IMethodDecorator
     /// <summary>
     /// 対象のメソッドの開始時のロギング
     /// </summary>
-    private static readonly Action<ILogger, Dictionary<string, object>, Exception?> _logMethodEntry =
-        LoggerMessage.Define<Dictionary<string, object>>(
-            LogLevel.Warning,
-            new EventId(1, nameof(LoggingAttribute)),
-            "{@LogData}");
-
-    /// <summary>
-    /// 対象のメソッドの終了時のロギング
-    /// </summary>
-    private static readonly Action<ILogger, Dictionary<string, object>, Exception?> _logMethodExit =
-        LoggerMessage.Define<Dictionary<string, object>>(
-            LogLevel.Warning,
-            new EventId(2, nameof(LoggingAttribute)),
-            "{@LogData}");
-
-    /// <summary>
-    /// 対象のメソッドで例外が発生し、キャッチされなかった時のロギング
-    /// </summary>
-    private static readonly Action<ILogger, Dictionary<string, object>, Exception?> _logMethodException =
-        LoggerMessage.Define<Dictionary<string, object>>(
-            LogLevel.Critical,
-            new EventId(3, nameof(LoggingAttribute)),
-            "Critical Unhandled Exception for {@LogData}");
-
-    /// <summary>
-    /// メソッド開始時のロギングでExceptionが発生した時のロギング
-    /// </summary>
-    private static readonly Action<ILogger, string, Exception?> _logMethodEntryError =
-        LoggerMessage.Define<string>(
-            LogLevel.Critical,
-            new EventId(4, nameof(LoggingAttribute)),
-            "Critical logging method entry for {@MethodName}");
-
-    /// <summary>
-    /// メソッド終了時のロギングでExceptionが発生した時のロギング
-    /// </summary>
-    private static readonly Action<ILogger, string, Exception?> _logMethodExitError =
-        LoggerMessage.Define<string>(
-            LogLevel.Critical,
-            new EventId(5, nameof(LoggingAttribute)),
-            "Critical logging method exit for {@MethodName}");
-
     public void Init(object instance, MethodBase method, object[] args)
     {
         _startTime = DateTime.UtcNow;
@@ -87,37 +46,33 @@ public class LoggingAttribute : Attribute, IMethodDecorator
             }
         }
 
+        if (_logger == null) return;
+
         // メソッド開始時のログ
-        if (_logger != null)
+        try
         {
-            try
-            {
-                var parameters = method.GetParameters();
-                var parameterInfo = new Dictionary<string, object>();
-
-                for (int i = 0; i < parameters.Length && i < args.Length; i++)
-                {
-                    parameterInfo.Add(parameters[i].Name!, args[i]);
-                }
-
-                var serializedArgs = JsonSerializer.Serialize(parameterInfo, _jsonOptions);
-
-                // 構造化されたログデータを作成
-                var logData = new Dictionary<string, object>
-                {
-                    ["EventType"] = "MethodEntry",
-                    ["MethodName"] = _methodName ?? "UnknownMethod",
-                    ["Arguments"] = parameterInfo,
-                    ["Timestamp"] = _startTime
-                };
-
-                // 構造化ログを出力（NLogのJsonLayoutがこれを処理）
-                _logMethodEntry(_logger, logData, null);
-            }
-            catch (Exception ex)
-            {
-                _logMethodEntryError(_logger, _methodName, ex);
-            }
+            _logger.Log(LogLevel.Warning,
+                new EventId(1, nameof(LoggingAttribute)),
+                new MyLogEvent($"Method entry warning")
+                    .WithProperty("EventType", "MethodEntry")
+                    .WithProperty("MethodName", _methodName ?? "UnknownMethod")
+                    .WithProperty("Arguments", _args ?? Array.Empty<object>()),
+                null,
+                MyLogEvent.Formatter);
+        }
+        catch (Exception exception)
+        {
+            _logger.Log(LogLevel.Critical,
+                new EventId(4, nameof(LoggingAttribute)),
+                new MyLogEvent($"Critical logging method entry")
+                    .WithProperty("EventType", "MethodExit")
+                    .WithProperty("MethodName", _methodName ?? "UnknownMethod")
+                    .WithProperty("Arguments", _args ?? Array.Empty<object>())
+                    .WithProperty("ExceptionType", exception.GetType().Name)
+                    .WithProperty("ErrorMessage", exception.Message)
+                    .WithProperty("StackTrace", exception.StackTrace ?? string.Empty),
+                exception,
+                MyLogEvent.Formatter);
         }
     }
 
@@ -131,50 +86,106 @@ public class LoggingAttribute : Attribute, IMethodDecorator
         // OnException が呼ばれた後に OnExit が呼ばれるため、何もしない
     }
 
+    /// <summary>
+    /// メソッド内でExceptionが発生した時のロギング
+    /// </summary>
     public void OnException(Exception exception)
     {
-        if (_logger != null)
-        {
-            // 構造化された例外ログデータを作成
-            var methodName = _methodName ?? "UnknownMethod";
-            var logData = new Dictionary<string, object>
-            {
-                ["EventType"] = "MethodException",
-                ["MethodName"] = methodName,
-                ["ErrorMessage"] = exception.Message,
-                ["StackTrace"] = exception.StackTrace ?? string.Empty,
-                ["ExceptionType"] = exception.GetType().Name,
-                ["Timestamp"] = DateTime.UtcNow,
-                ["ExecutionTime"] = (DateTime.UtcNow - _startTime).TotalMilliseconds
-            };
-            _logMethodException(_logger, logData, exception);
-        }
+        if (_logger == null) return;
+
+        // 構造化された例外ログデータを作成
+        var methodName = _methodName ?? "UnknownMethod";
+        var executionTime = (DateTime.UtcNow - _startTime).TotalMilliseconds;
+        _logger.Log(LogLevel.Critical,
+            new EventId(3, nameof(LoggingAttribute)),
+            new MyLogEvent($"Critical Unhandled Exception")
+                .WithProperty("EventType", "MethodException")
+                .WithProperty("MethodName", methodName)
+                .WithProperty("Arguments", _args ?? Array.Empty<object>())
+                .WithProperty("ExecutionTime", executionTime)
+                .WithProperty("ExceptionType", exception.GetType().Name)
+                .WithProperty("ErrorMessage", exception.Message)
+                .WithProperty("StackTrace", exception.StackTrace ?? string.Empty),
+            exception,
+            MyLogEvent.Formatter);
     }
 
+    /// <summary>
+    /// 対象のメソッドの終了時のロギング
+    /// </summary>
     public void OnExit(object returnValue)
     {
-        if (_logger != null)
+        if (_logger == null) return;
+
+        // Mvcの場合、OnExceptionが呼び出されないため、returnValueで例外を判定する
+        var exceptionProperty = returnValue?.GetType().GetProperty("Exception");
+        if (exceptionProperty != null)
         {
-            try
+            var exception = exceptionProperty.GetValue(returnValue) as Exception;
+            if (exception != null)
             {
-                var executionTime = (DateTime.UtcNow - _startTime).TotalMilliseconds;
-
-                // 構造化された終了ログデータを作成
-                var logData = new Dictionary<string, object>
-                {
-                    ["EventType"] = "MethodExit",
-                    ["MethodName"] = _methodName ?? "UnknownMethod",
-                    ["ReturnValue"] = returnValue,
-                    ["Timestamp"] = DateTime.UtcNow,
-                    ["ExecutionTime"] = executionTime
-                };
-
-                _logMethodExit(_logger, logData, null);
-            }
-            catch (Exception ex)
-            {
-                _logMethodExitError(_logger, _methodName ?? "UnknownMethod", ex);
+                OnException(exception);
+                return;
             }
         }
+
+        try
+        {
+            var executionTime = (DateTime.UtcNow - _startTime).TotalMilliseconds;
+            _logger.Log(LogLevel.Warning,
+                new EventId(2, nameof(LoggingAttribute)),
+                new MyLogEvent($"Method exit warning")
+                    .WithProperty("EventType", "MethodExit")
+                    .WithProperty("MethodName", _methodName ?? "UnknownMethod")
+                    .WithProperty("Arguments", _args ?? Array.Empty<object>())
+                    .WithProperty("ReturnValue", returnValue)
+                    .WithProperty("ExecutionTime", executionTime),
+                null,
+                MyLogEvent.Formatter);
+        }
+        catch (Exception exception)
+        {
+            var executionTime = (DateTime.UtcNow - _startTime).TotalMilliseconds;
+            _logger.Log(LogLevel.Warning,
+                new EventId(2, nameof(LoggingAttribute)),
+                new MyLogEvent($"Critical logging method exit")
+                    .WithProperty("EventType", "MethodExit")
+                    .WithProperty("MethodName", _methodName ?? "UnknownMethod")
+                    .WithProperty("Arguments", _args ?? Array.Empty<object>())
+                    .WithProperty("ReturnValue", returnValue)
+                    .WithProperty("ExecutionTime", executionTime)
+                    .WithProperty("ExceptionType", exception.GetType().Name)
+                    .WithProperty("ErrorMessage", exception.Message)
+                    .WithProperty("StackTrace", exception.StackTrace ?? string.Empty),
+                exception,
+                MyLogEvent.Formatter);
+        }
     }
+}
+
+public class MyLogEvent : IEnumerable<KeyValuePair<string, object>>
+{
+    readonly List<KeyValuePair<string, object>> _properties = new List<KeyValuePair<string, object>>();
+
+    public string Message { get; }
+
+    public MyLogEvent(string message)
+    {
+        Message = message;
+    }
+
+    public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
+    {
+        return _properties.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
+
+    public MyLogEvent WithProperty(string name, object value)
+    {
+        _properties.Add(new KeyValuePair<string, object>(name, value));
+        return this;
+    }
+
+    public static Func<MyLogEvent, Exception?, string> Formatter { get; } = (l, e) => l.Message;
 }
