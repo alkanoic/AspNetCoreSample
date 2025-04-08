@@ -1,5 +1,6 @@
 using System.Diagnostics;
 
+using AspNetCoreSample.Mvc.Logging;
 using AspNetCoreSample.Mvc.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    [Logging]
     public IActionResult Index()
     {
         return View();

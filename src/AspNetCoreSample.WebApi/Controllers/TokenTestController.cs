@@ -1,3 +1,5 @@
+using AspNetCoreSample.WebApi.Logging;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +17,7 @@ public class TokenTestController : ControllerBase
     }
 
     [Authorize]
+    [Logging]
     [HttpGet("Sample")]
     public ValueTask<string> Sample(string sample)
     {
@@ -22,6 +25,7 @@ public class TokenTestController : ControllerBase
     }
 
     [Authorize(Policy = "User")]
+    [Logging]
     [HttpGet("SampleUser")]
     public ValueTask<string> SampleUser(string sample)
     {
@@ -29,6 +33,7 @@ public class TokenTestController : ControllerBase
     }
 
     [Authorize(Policy = "Admin")]
+    [Logging]
     [HttpGet("SampleAdmin")]
     public ValueTask<string> SampleAdmin(string sample)
     {

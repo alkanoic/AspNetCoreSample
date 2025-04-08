@@ -1,5 +1,6 @@
 using System.Diagnostics;
 
+using AspNetCoreSample.Mvc.Logging;
 using AspNetCoreSample.Mvc.Models;
 
 using Microsoft.AspNetCore.Authentication;
@@ -18,6 +19,7 @@ public class AuthController : Controller
         _logger = logger;
     }
 
+    [Logging(LogOnEndArgs = false, LogOnStartArgs = false)]
     public IActionResult Index()
     {
         ViewBag.Claims = HttpContext.User.Claims;

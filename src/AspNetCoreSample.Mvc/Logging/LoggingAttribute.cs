@@ -22,6 +22,16 @@ public class LoggingAttribute : Attribute, IMethodDecorator
     private DateTime _startTime;
 
     /// <summary>
+    /// メソッド開始時の引数ログを取得するかどうか
+    /// </summary>
+    public bool LogOnStartArgs { get; set; } = true;
+
+    /// <summary>
+    /// メソッド終了時の返却値ログを取得するかどうか
+    /// </summary>
+    public bool LogOnEndArgs { get; set; } = true;
+
+    /// <summary>
     /// 対象のメソッドの開始時のロギング
     /// </summary>
     public void Init(object instance, MethodBase method, object[] args)
@@ -56,8 +66,8 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                 new MyLogEvent($"Method entry warning")
                     .WithProperty("EventType", "MethodEntry")
                     .WithProperty("MethodName", _methodName ?? "UnknownMethod")
-                    .WithProperty("Arguments", _args ?? Array.Empty<object>()),
-                null,
+                    .WithProperty("Arguments", LogOnStartArgs ? _args ?? Array.Empty<object>() : "Off"),
+                    null,
                 MyLogEvent.Formatter);
         }
         catch (Exception exception)
@@ -83,7 +93,7 @@ public class LoggingAttribute : Attribute, IMethodDecorator
 
     public void OnExit()
     {
-        // OnException が呼ばれた後に OnExit が呼ばれるため、何もしない
+        // OnException が呼ばれた後に OnExit が呼び出されるため、何もしない
     }
 
     /// <summary>
@@ -138,7 +148,8 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                     .WithProperty("EventType", "MethodExit")
                     .WithProperty("MethodName", _methodName ?? "UnknownMethod")
                     .WithProperty("Arguments", _args ?? Array.Empty<object>())
-                    .WithProperty("ReturnValue", returnValue)
+                    .WithProperty("Arguments", LogOnStartArgs ? _args ?? Array.Empty<object>() : "Off")
+                    .WithProperty("ReturnValue", LogOnEndArgs ? returnValue ?? Array.Empty<object>() : "Off")
                     .WithProperty("ExecutionTime", executionTime),
                 null,
                 MyLogEvent.Formatter);
@@ -152,7 +163,7 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                     .WithProperty("EventType", "MethodExit")
                     .WithProperty("MethodName", _methodName ?? "UnknownMethod")
                     .WithProperty("Arguments", _args ?? Array.Empty<object>())
-                    .WithProperty("ReturnValue", returnValue)
+                    .WithProperty("ReturnValue", returnValue ?? Array.Empty<object>())
                     .WithProperty("ExecutionTime", executionTime)
                     .WithProperty("ExceptionType", exception.GetType().Name)
                     .WithProperty("ErrorMessage", exception.Message)

@@ -156,6 +156,30 @@ try
             .SetDefaultCulture(supportedCultures[0]);
     });
 
+    app.Use(async (context, next) =>
+    {
+        var userName = context.User?.Identity?.IsAuthenticated == true
+            ? context.User.FindFirst("preferred_username")?.Value ?? "Unknown"
+            : "Anonymous";
+
+        // IPアドレス取得（X-Forwarded-For 対応）
+        var ip = context.Connection.RemoteIpAddress?.ToString();
+
+        // プロキシ経由の場合、ヘッダーを見る（必要に応じて）
+        if (context.Request.Headers.TryGetValue("X-Forwarded-For", out Microsoft.Extensions.Primitives.StringValues value))
+        {
+            ip = value.FirstOrDefault();
+        }
+
+        using (ScopeContext.PushProperty("UserName", userName))
+        {
+            using (ScopeContext.PushProperty("Ip", ip))
+            {
+                await next.Invoke();
+            }
+        }
+    });
+
     app.MapControllers();
 
     app.MapHub<QrCodeHub>("/qrcodeHub");
