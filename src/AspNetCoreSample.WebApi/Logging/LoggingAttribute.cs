@@ -18,7 +18,6 @@ public class LoggingAttribute : Attribute, IMethodDecorator
     private ILogger? _logger;
     private string? _methodName;
     private object[]? _args;
-    private MethodBase? _method;
     private DateTime _startTime;
 
     /// <summary>
@@ -37,7 +36,6 @@ public class LoggingAttribute : Attribute, IMethodDecorator
     public void Init(object instance, MethodBase method, object[] args)
     {
         _startTime = DateTime.UtcNow;
-        _method = method;
         _methodName = $"{method.DeclaringType!.Name}.{method.Name}";
         _args = args;
 

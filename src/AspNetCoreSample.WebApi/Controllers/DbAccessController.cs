@@ -5,8 +5,9 @@ using AspNetCoreSample.WebApi;
 using Microsoft.EntityFrameworkCore;
 using AspNetCoreSample.WebApi.Validators;
 using AspNetCoreSample.DataModel.Models;
+using AspNetCoreSample.WebApi.Logging;
 
-namespace WebApiSample.Controllers;
+namespace AspNetCoreSample.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -18,11 +19,13 @@ public class DbAccessController : ControllerBase
         _sampleContext = sampleContext;
     }
 
-    public IEnumerable<Name> Get()
+    [Logging]
+    public async ValueTask<IEnumerable<Name>> Get()
     {
-        return _sampleContext.Names;
+        return await _sampleContext.Names.ToListAsync();
     }
 
+    [Logging]
     [HttpPost]
     public async ValueTask<IActionResult> Post([FromBody] Name name)
     {
@@ -39,7 +42,7 @@ public class DbAccessController : ControllerBase
             _sampleContext.Add(name);
             _sampleContext.Names.Add(name);
             await _sampleContext.SaveChangesAsync();
-            return Ok();
+            return Ok(100);
         }
         catch (Exception ex)
         {
