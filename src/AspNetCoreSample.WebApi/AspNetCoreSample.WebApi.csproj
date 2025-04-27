@@ -40,7 +40,6 @@
     <ProjectReference
       Include="..\AspNetCoreSample.ServiceDefaults\AspNetCoreSample.ServiceDefaults.csproj" />
     <ProjectReference Include="..\AspNetCoreSample.DataModel\AspNetCoreSample.DataModel.csproj" />
-    <ProjectReference Include="..\AspNetCoreSample.Util\AspNetCoreSample.Util.csproj" />
   </ItemGroup>
 
   <ItemGroup>
