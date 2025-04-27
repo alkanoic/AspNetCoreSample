@@ -20,7 +20,7 @@ public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
 
     private string _tempDockerPath = "";
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await _semaphoreSlim.WaitAsync()
           .ConfigureAwait(false);
@@ -45,9 +45,9 @@ public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
         }
     }
 
-    public Task DisposeAsync()
+    public ValueTask DisposeAsync()
     {
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     public void Dispose()

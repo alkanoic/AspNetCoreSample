@@ -21,7 +21,7 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
 
     private readonly PostgreSqlContainer _postgresqlContainer;
 
-    private static readonly X509Certificate Certificate = new X509Certificate2(MvcImage.CertificateFilePath, MvcImage.CertificatePassword);
+    private static readonly X509Certificate Certificate = X509CertificateLoader.LoadPkcs12FromFile(MvcImage.CertificateFilePath, MvcImage.CertificatePassword);
 
     private static readonly MvcImage _mvcImage = new MvcImage();
 
@@ -61,7 +61,7 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
 
     public static DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await _mvcImage.InitializeAsync().ConfigureAwait(false);
         await _network.CreateAsync().ConfigureAwait(false);
@@ -69,7 +69,7 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
         await _mvcContainer.StartAsync().ConfigureAwait(false);
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         // We do not need to manually dispose Docker resources. If resources depend on each
         // other, it is necessary to dispose them in the correct order. Testcontainers'
