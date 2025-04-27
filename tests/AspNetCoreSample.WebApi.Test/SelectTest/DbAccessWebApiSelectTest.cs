@@ -40,10 +40,10 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFacto
         const string path = "api/dbaccess";
 
         // When
-        var response = await _httpClient.GetAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path));
-        var dbAccessStream = await response.Content.ReadAsStreamAsync();
+        var response = await _httpClient.GetAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), TestContext.Current.CancellationToken);
+        var dbAccessStream = await response.Content.ReadAsStreamAsync(TestContext.Current.CancellationToken);
 
-        var names = await JsonSerializer.DeserializeAsync<IList<Name>>(dbAccessStream, JsonSerializerOptions);
+        var names = await JsonSerializer.DeserializeAsync<IList<Name>>(dbAccessStream, JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Then
         await Verify(names, _verifySettings);

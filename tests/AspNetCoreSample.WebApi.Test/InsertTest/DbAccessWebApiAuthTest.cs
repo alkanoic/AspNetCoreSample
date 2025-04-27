@@ -43,9 +43,9 @@ public sealed class DbAccessWebApiAuthTest : IClassFixture<WebApplicationFactory
 
         // When
         var content = new StringContent(JsonSerializer.Serialize(new { userName = "admin", password = "admin" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content);
-        var dbAccessStream = await response.Content.ReadAsStreamAsync();
-        var tokenResponse = await JsonSerializer.DeserializeAsync<TokenResponse>(dbAccessStream, JsonSerializerOptions);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
+        var dbAccessStream = await response.Content.ReadAsStreamAsync(TestContext.Current.CancellationToken);
+        var tokenResponse = await JsonSerializer.DeserializeAsync<TokenResponse>(dbAccessStream, JsonSerializerOptions, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -55,9 +55,9 @@ public sealed class DbAccessWebApiAuthTest : IClassFixture<WebApplicationFactory
 
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
-        var test_response = await _httpClient.GetAsync("api/TokenTest/SampleAdmin?sample=asd");
+        var test_response = await _httpClient.GetAsync("api/TokenTest/SampleAdmin?sample=asd", TestContext.Current.CancellationToken);
 
-        var stream = await test_response.Content.ReadAsStringAsync();
+        var stream = await test_response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, test_response.StatusCode);
         Assert.NotEmpty(stream);
     }

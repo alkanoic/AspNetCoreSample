@@ -29,14 +29,14 @@ public sealed class PostgresFixture : IAsyncLifetime
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public Task InitializeAsync()
+    ValueTask IAsyncLifetime.InitializeAsync()
     {
-        return _postgresqlContainer.StartAsync();
+        return new ValueTask(_postgresqlContainer.StartAsync());
     }
 
-    public Task DisposeAsync()
+    ValueTask IAsyncDisposable.DisposeAsync()
     {
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
     private sealed class MigrationCompleted : IWaitUntil

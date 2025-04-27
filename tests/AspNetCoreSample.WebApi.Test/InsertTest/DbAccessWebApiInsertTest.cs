@@ -42,7 +42,7 @@ public sealed class DbAccessWebApiInsertTest : IClassFixture<WebApplicationFacto
 
         // When
         var content = new StringContent(JsonSerializer.Serialize(new Name() { Id = 0, Name1 = "string" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
 
         // Then
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

@@ -24,13 +24,13 @@ public sealed class DbFixture : IAsyncLifetime
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public Task InitializeAsync()
+    async ValueTask IAsyncLifetime.InitializeAsync()
     {
-        return _postgresqlContainer.StartAsync();
+        await _postgresqlContainer.StartAsync();
     }
 
-    public Task DisposeAsync()
+    ValueTask IAsyncDisposable.DisposeAsync()
     {
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 }

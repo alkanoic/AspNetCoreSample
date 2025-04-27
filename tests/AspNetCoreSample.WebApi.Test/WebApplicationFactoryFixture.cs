@@ -52,14 +52,9 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public async Task InitializeAsync()
+    async ValueTask IAsyncLifetime.InitializeAsync()
     {
         await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
-    }
-
-    Task IAsyncLifetime.DisposeAsync()
-    {
-        return Task.CompletedTask;
     }
 
     public string KeycloakBaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();

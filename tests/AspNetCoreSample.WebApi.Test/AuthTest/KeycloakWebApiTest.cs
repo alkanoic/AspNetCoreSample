@@ -8,7 +8,7 @@ using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class KeycloakWebApiTest : IClassFixture<KeycloakFixture>, IDisposable
+public sealed class KeycloakWebApiTest : IClassFixture<KeycloakFixture>
 {
     private readonly KeycloakFixture _keycloakFixture;
     private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
@@ -21,11 +21,6 @@ public sealed class KeycloakWebApiTest : IClassFixture<KeycloakFixture>, IDispos
         {
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
         };
-    }
-
-    public async void Dispose()
-    {
-        await _keycloakFixture.DisposeAsync();
     }
 
     [Fact]
@@ -43,10 +38,10 @@ public sealed class KeycloakWebApiTest : IClassFixture<KeycloakFixture>, IDispos
         };
 
         var encodedContent = new FormUrlEncodedContent(parameters);
-        var response = await httpClient.PostAsync($"realms/master/protocol/openid-connect/token", encodedContent);
+        var response = await httpClient.PostAsync($"realms/master/protocol/openid-connect/token", encodedContent, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var content = await response.Content.ReadAsStringAsync();
+        var content = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content, _jsonTokenSerializerOptions);
 
         // Then
@@ -57,10 +52,10 @@ public sealed class KeycloakWebApiTest : IClassFixture<KeycloakFixture>, IDispos
         var fetchUserRequest = new HttpRequestMessage(HttpMethod.Get, $"{_keycloakFixture.BaseAddress}admin/realms/Test/users?exact=true&username=admin");
         fetchUserRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
 
-        var fetchUserResponse = await httpClient.SendAsync(fetchUserRequest);
+        var fetchUserResponse = await httpClient.SendAsync(fetchUserRequest, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, fetchUserResponse.StatusCode);
 
-        var fetchUserContent = await fetchUserResponse.Content.ReadAsStringAsync();
+        var fetchUserContent = await fetchUserResponse.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         var result = JsonSerializer.Deserialize<List<FetchUserResponse>>(fetchUserContent, _jsonSerializerOptions)?.FirstOrDefault();
         Assert.NotNull(result);
         Assert.NotEmpty(result.Id);
