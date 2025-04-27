@@ -9,12 +9,6 @@ namespace AspNetCoreSample.WebApi.Logging;
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
 public class LoggingAttribute : Attribute, IMethodDecorator
 {
-    private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
-    {
-        WriteIndented = false,
-        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-    };
-
     private ILogger? _logger;
     private string? _methodName;
     private object[]? _args;
