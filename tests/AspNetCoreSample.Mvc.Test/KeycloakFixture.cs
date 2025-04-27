@@ -33,13 +33,13 @@ public sealed class KeycloakFixture : IAsyncLifetime
 
     public string BaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
 
-    public Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
-        return _keycloakContainer.StartAsync();
+        await _keycloakContainer.StartAsync();
     }
 
-    public Task DisposeAsync()
+    public ValueTask DisposeAsync()
     {
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 }
