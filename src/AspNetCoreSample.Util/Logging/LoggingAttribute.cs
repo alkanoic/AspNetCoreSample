@@ -1,17 +1,19 @@
-using MethodDecorator.Fody.Interfaces;
+using MethodBoundaryAspect.Fody.Attributes;
 
 using System.Collections;
 using System.Reflection;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace AspNetCoreSample.WebApi.Logging;
+namespace AspNetCoreSample.Util.Logging;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
-public class LoggingAttribute : Attribute, IMethodDecorator
+public sealed class LoggingAttribute : OnMethodBoundaryAspect
 {
     private ILogger? _logger;
     private string? _methodName;
-    private object[]? _args;
+    private MethodExecutionArgs? _args;
     private DateTime _startTime;
 
     /// <summary>
@@ -27,24 +29,24 @@ public class LoggingAttribute : Attribute, IMethodDecorator
     /// <summary>
     /// 対象のメソッドの開始時のロギング
     /// </summary>
-    public void Init(object instance, MethodBase method, object[] args)
+    public override void OnEntry(MethodExecutionArgs arg)
     {
         _startTime = DateTime.UtcNow;
-        _methodName = $"{method.DeclaringType!.Name}.{method.Name}";
-        _args = args;
+        _methodName = $"{arg.Method.DeclaringType!.Name}.{arg.Method.Name}";
+        _args = arg;
 
         // ASP.NET Core のDIコンテナからILoggerを取得
         var serviceProvider = ServiceProviderAccessor.ServiceProvider;
         if (serviceProvider != null)
         {
             var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-            if (instance != null)
+            if (arg.Instance != null)
             {
-                _logger = loggerFactory?.CreateLogger(instance.GetType());
+                _logger = loggerFactory?.CreateLogger(arg.Instance.GetType());
             }
             else
             {
-                _logger = loggerFactory?.CreateLogger(method.DeclaringType);
+                _logger = loggerFactory?.CreateLogger(arg.Method.DeclaringType);
             }
         }
 
@@ -58,7 +60,7 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                 new MyLogEvent($"Method entry warning")
                     .WithProperty("EventType", "MethodEntry")
                     .WithProperty("MethodName", _methodName ?? "UnknownMethod")
-                    .WithProperty("Arguments", LogOnStartArgs ? _args ?? Array.Empty<object>() : "Off"),
+                    .WithProperty("Arguments", LogOnStartArgs ? _args?.Arguments ?? Array.Empty<object>() : "Off"),
                     null,
                 MyLogEvent.Formatter);
         }
@@ -69,7 +71,7 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                 new MyLogEvent($"Critical logging method entry")
                     .WithProperty("EventType", "MethodExit")
                     .WithProperty("MethodName", _methodName ?? "UnknownMethod")
-                    .WithProperty("Arguments", _args ?? Array.Empty<object>())
+                    .WithProperty("Arguments", _args?.Arguments ?? Array.Empty<object>())
                     .WithProperty("ExceptionType", exception.GetType().Name)
                     .WithProperty("ErrorMessage", exception.Message)
                     .WithProperty("StackTrace", exception.StackTrace ?? string.Empty),
@@ -78,20 +80,10 @@ public class LoggingAttribute : Attribute, IMethodDecorator
         }
     }
 
-    public void OnEntry()
-    {
-        // Init で既に処理済み
-    }
-
-    public void OnExit()
-    {
-        // OnException が呼ばれた後に OnExit が呼び出されるため、何もしない
-    }
-
     /// <summary>
     /// メソッド内でExceptionが発生した時のロギング
     /// </summary>
-    public void OnException(Exception exception)
+    public override void OnException(MethodExecutionArgs arg)
     {
         if (_logger == null) return;
 
@@ -103,30 +95,31 @@ public class LoggingAttribute : Attribute, IMethodDecorator
             new MyLogEvent($"Critical Unhandled Exception")
                 .WithProperty("EventType", "MethodException")
                 .WithProperty("MethodName", methodName)
-                .WithProperty("Arguments", _args ?? Array.Empty<object>())
+                .WithProperty("Arguments", _args?.Arguments ?? Array.Empty<object>())
                 .WithProperty("ExecutionTime", executionTime)
-                .WithProperty("ExceptionType", exception.GetType().Name)
-                .WithProperty("ErrorMessage", exception.Message)
-                .WithProperty("StackTrace", exception.StackTrace ?? string.Empty),
-            exception,
+                .WithProperty("ExceptionType", arg.Exception.GetType().Name)
+                .WithProperty("ErrorMessage", arg.Exception.Message)
+                .WithProperty("StackTrace", arg.Exception.StackTrace ?? string.Empty),
+            arg.Exception,
             MyLogEvent.Formatter);
     }
 
     /// <summary>
     /// 対象のメソッドの終了時のロギング
     /// </summary>
-    public void OnExit(object returnValue)
+    ///
+    public override void OnExit(MethodExecutionArgs arg)
     {
         if (_logger == null) return;
 
         // Mvcの場合、OnExceptionが呼び出されないため、returnValueで例外を判定する
-        var exceptionProperty = returnValue?.GetType().GetProperty("Exception");
+        var exceptionProperty = arg.ReturnValue?.GetType().GetProperty("Exception");
         if (exceptionProperty != null)
         {
-            var exception = exceptionProperty.GetValue(returnValue) as Exception;
+            var exception = exceptionProperty.GetValue(arg.ReturnValue) as Exception;
             if (exception != null)
             {
-                OnException(exception);
+                OnException(arg);
                 return;
             }
         }
@@ -139,9 +132,8 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                 new MyLogEvent($"Method exit warning")
                     .WithProperty("EventType", "MethodExit")
                     .WithProperty("MethodName", _methodName ?? "UnknownMethod")
-                    .WithProperty("Arguments", _args ?? Array.Empty<object>())
-                    .WithProperty("Arguments", LogOnStartArgs ? _args ?? Array.Empty<object>() : "Off")
-                    .WithProperty("ReturnValue", LogOnEndArgs ? returnValue ?? Array.Empty<object>() : "Off")
+                    .WithProperty("Arguments", LogOnStartArgs ? _args?.Arguments ?? Array.Empty<object>() : "Off")
+                    .WithProperty("ReturnValue", LogOnEndArgs ? arg.ReturnValue ?? Array.Empty<object>() : "Off")
                     .WithProperty("ExecutionTime", executionTime),
                 null,
                 MyLogEvent.Formatter);
@@ -154,8 +146,8 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                 new MyLogEvent($"Critical logging method exit")
                     .WithProperty("EventType", "MethodExit")
                     .WithProperty("MethodName", _methodName ?? "UnknownMethod")
-                    .WithProperty("Arguments", _args ?? Array.Empty<object>())
-                    .WithProperty("ReturnValue", returnValue ?? Array.Empty<object>())
+                    .WithProperty("Arguments", _args?.Arguments ?? Array.Empty<object>())
+                    .WithProperty("ReturnValue", arg.ReturnValue ?? Array.Empty<object>())
                     .WithProperty("ExecutionTime", executionTime)
                     .WithProperty("ExceptionType", exception.GetType().Name)
                     .WithProperty("ErrorMessage", exception.Message)

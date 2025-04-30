@@ -1,4 +1,4 @@
-using AspNetCoreSample.WebApi.Logging;
+using AspNetCoreSample.Util.Logging;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,4 @@
-namespace AspNetCoreSample.Mvc.Logging;
+namespace AspNetCoreSample.Util.Logging;
 
 public static class ServiceProviderAccessor
 {

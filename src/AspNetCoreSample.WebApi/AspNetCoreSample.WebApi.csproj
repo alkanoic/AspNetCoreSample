@@ -12,11 +12,7 @@
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
-    <PackageReference Include="Fody" Version="6.9.1">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="MethodDecorator.Fody" Version="1.1.1" />
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.150" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.3" />
@@ -32,14 +28,13 @@
   </ItemGroup>
 
   <Target Name="NSwag" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug'">
-    <Exec WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development"
-      Command="$(NSwagExe_Net90) run nswag.json /variables:Configuration=$(Configuration)" />
+    <Exec WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net90) run nswag.json /variables:Configuration=$(Configuration)" />
   </Target>
 
   <ItemGroup>
-    <ProjectReference
-      Include="..\AspNetCoreSample.ServiceDefaults\AspNetCoreSample.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\AspNetCoreSample.ServiceDefaults\AspNetCoreSample.ServiceDefaults.csproj" />
     <ProjectReference Include="..\AspNetCoreSample.DataModel\AspNetCoreSample.DataModel.csproj" />
+    <ProjectReference Include="..\AspNetCoreSample.Util\AspNetCoreSample.Util.csproj" />
   </ItemGroup>
 
   <ItemGroup>

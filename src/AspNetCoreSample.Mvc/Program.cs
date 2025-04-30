@@ -1,7 +1,7 @@
 using AspNetCoreSample.DataModel.Models;
-using AspNetCoreSample.Mvc.Logging;
 using AspNetCoreSample.Mvc.Models;
 using AspNetCoreSample.Mvc.Options;
+using AspNetCoreSample.Util.Logging;
 
 using FluentValidation;
 using FluentValidation.AspNetCore;

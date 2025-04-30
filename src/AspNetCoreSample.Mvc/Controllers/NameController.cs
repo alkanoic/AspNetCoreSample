@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using AspNetCoreSample.DataModel.Models;
-using AspNetCoreSample.Mvc.Logging;
 using AspNetCoreSample.Mvc.Models;
+using AspNetCoreSample.Util.Logging;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

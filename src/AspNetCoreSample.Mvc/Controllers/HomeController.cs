@@ -1,7 +1,7 @@
 using System.Diagnostics;
 
-using AspNetCoreSample.Mvc.Logging;
 using AspNetCoreSample.Mvc.Models;
+using AspNetCoreSample.Util.Logging;
 
 using Microsoft.AspNetCore.Mvc;
 

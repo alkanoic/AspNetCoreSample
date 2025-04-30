@@ -15,7 +15,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.433" />
-    <PackageReference Include="MethodDecorator.Fody" Version="1.1.1" />
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.150" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,9 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference
-      Include="..\AspNetCoreSample.ServiceDefaults\AspNetCoreSample.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\AspNetCoreSample.ServiceDefaults\AspNetCoreSample.ServiceDefaults.csproj" />
     <ProjectReference Include="..\AspNetCoreSample.DataModel\AspNetCoreSample.DataModel.csproj" />
+    <ProjectReference Include="..\AspNetCoreSample.Util\AspNetCoreSample.Util.csproj" />
   </ItemGroup>
 
   <ItemGroup>

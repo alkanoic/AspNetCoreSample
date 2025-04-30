@@ -1,5 +1,5 @@
 // using AspNetCoreSample.Util;
-using AspNetCoreSample.WebApi.Logging;
+using AspNetCoreSample.Util.Logging;
 using AspNetCoreSample.WebApi.Resources;
 
 using Microsoft.AspNetCore.Mvc;

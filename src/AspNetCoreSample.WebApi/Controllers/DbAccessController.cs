@@ -5,7 +5,7 @@ using AspNetCoreSample.WebApi;
 using Microsoft.EntityFrameworkCore;
 using AspNetCoreSample.WebApi.Validators;
 using AspNetCoreSample.DataModel.Models;
-using AspNetCoreSample.WebApi.Logging;
+using AspNetCoreSample.Util.Logging;
 
 namespace AspNetCoreSample.WebApi.Controllers;
 

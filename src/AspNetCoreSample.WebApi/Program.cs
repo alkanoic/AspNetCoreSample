@@ -1,9 +1,9 @@
 using System.Collections.Concurrent;
 
 using AspNetCoreSample.DataModel.Models;
+using AspNetCoreSample.Util.Logging;
 using AspNetCoreSample.WebApi;
 using AspNetCoreSample.WebApi.Hubs;
-using AspNetCoreSample.WebApi.Logging;
 using AspNetCoreSample.WebApi.Options;
 using AspNetCoreSample.WebApi.Resources;
 using AspNetCoreSample.WebApi.Services.Keycloak.Admin;
