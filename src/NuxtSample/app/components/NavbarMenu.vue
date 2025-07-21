@@ -184,6 +184,7 @@ function handleChange(this: unknown, event: unknown) {
 </script>
 
 <style scoped lang="postcss">
+@import "~/assets/css/main.css";
 @tailwind utilities;
 
 .menu-item {
