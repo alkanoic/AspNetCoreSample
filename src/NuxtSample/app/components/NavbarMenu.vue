@@ -177,9 +177,10 @@ const fruitStore = useFruitStore();
 fruitStore.setDefaults();
 const fruits = fruitStore.fruits;
 const selectedFruit = ref(0);
-function handleChange(this: unknown, event: unknown) {
-  console.log("Selected fruit:", event.target.value);
-  fruitStore.setSelectedFruit(event.target.value);
+function handleChange(this: unknown, event: Event) {
+  const target = event.target as HTMLSelectElement;
+  console.log("Selected fruit:", target.value);
+  fruitStore.setSelectedFruit(target.value);
 }
 </script>
 
