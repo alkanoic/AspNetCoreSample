@@ -2,23 +2,29 @@ using System.Data.Common;
 
 namespace DbContainer.Test;
 
-public sealed class PostgresTest : IClassFixture<PostgresFixture>, IDisposable
+public sealed class PostgresTest : IAsyncDisposable
 {
+    private readonly PostgresFixture _fixture;
     private readonly DbConnection _dbConnection;
 
-    public PostgresTest(PostgresFixture db)
+    public PostgresTest()
     {
-        _dbConnection = db.DbConnection;
+        _fixture = new PostgresFixture();
+        // initialize synchronously for simplicity
+        _fixture.InitializeAsync().GetAwaiter().GetResult();
+
+        _dbConnection = _fixture.DbConnection;
         _dbConnection.Open();
     }
 
-    public void Dispose()
+    public ValueTask DisposeAsync()
     {
         _dbConnection.Dispose();
+        return _fixture.DisposeAsync();
     }
 
-    [Fact]
-    public void NamesTableContainsName()
+    [Test]
+    public async Task NamesTableContainsName()
     {
         // Given
         using var command = _dbConnection.CreateCommand();
@@ -28,11 +34,11 @@ public sealed class PostgresTest : IClassFixture<PostgresFixture>, IDisposable
         using var dataReader = command.ExecuteReader();
 
         // Then
-        Assert.True(dataReader.Read());
-        Assert.Equal("太郎", dataReader.GetString(0));
-        Assert.True(dataReader.Read());
-        Assert.Equal("花子", dataReader.GetString(0));
-        Assert.True(dataReader.Read());
-        Assert.Equal("令和", dataReader.GetString(0));
+        await Assert.That(dataReader.Read()).IsTrue();
+        await Assert.That(dataReader.GetString(0)).IsEqualTo("太郎");
+        await Assert.That(dataReader.Read()).IsTrue();
+        await Assert.That(dataReader.GetString(0)).IsEqualTo("花子");
+        await Assert.That(dataReader.Read()).IsTrue();
+        await Assert.That(dataReader.GetString(0)).IsEqualTo("令和");
     }
 }

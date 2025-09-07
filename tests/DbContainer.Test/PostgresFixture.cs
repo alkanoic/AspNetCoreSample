@@ -11,7 +11,7 @@ using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
 namespace DbContainer.Test;
 
-public sealed class PostgresFixture : IAsyncLifetime
+public sealed class PostgresFixture
 {
     private readonly PostgreSqlContainer _postgresqlContainer;
 
@@ -29,15 +29,13 @@ public sealed class PostgresFixture : IAsyncLifetime
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    ValueTask IAsyncLifetime.InitializeAsync()
+    public async Task InitializeAsync()
     {
-        return new ValueTask(_postgresqlContainer.StartAsync());
+        await _postgresqlContainer.StartAsync();
     }
 
-    ValueTask IAsyncDisposable.DisposeAsync()
-    {
-        return ValueTask.CompletedTask;
-    }
+    public ValueTask DisposeAsync()
+        => new ValueTask(_postgresqlContainer.DisposeAsync().AsTask());
 
     private sealed class MigrationCompleted : IWaitUntil
     {
