@@ -6,12 +6,7 @@ public class VerifySettingsFixture
 
     public VerifySettingsFixture()
     {
-        VerifySettings = new VerifyTests.VerifySettings();
+        VerifySettings = new VerifySettings();
         VerifySettings.UseDirectory("snapshots");
     }
-}
-
-[CollectionDefinition(nameof(VerifySettingsFixtures))]
-public class VerifySettingsFixtures : ICollectionFixture<VerifySettingsFixture>
-{
 }

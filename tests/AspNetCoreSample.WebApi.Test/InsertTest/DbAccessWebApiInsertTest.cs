@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class DbAccessWebApiInsertTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
+public sealed class DbAccessWebApiInsertTest : IDisposable
 {
     private readonly WebApplicationFactoryFixture<Program> _webApplicationFactoryFixture;
 
@@ -19,9 +19,9 @@ public sealed class DbAccessWebApiInsertTest : IClassFixture<WebApplicationFacto
 
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
-    public DbAccessWebApiInsertTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture)
+    public DbAccessWebApiInsertTest()
     {
-        _webApplicationFactoryFixture = webApplicationFactoryFixture;
+        _webApplicationFactoryFixture = new WebApplicationFactoryFixture<Program>();
         _serviceScope = _webApplicationFactoryFixture.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _httpClient = _webApplicationFactoryFixture.CreateClient();
     }
@@ -33,8 +33,8 @@ public sealed class DbAccessWebApiInsertTest : IClassFixture<WebApplicationFacto
         _webApplicationFactoryFixture.Dispose();
     }
 
-    [Fact]
-    [Trait("Category", nameof(DbAccessWebApiInsertTest))]
+    [Test]
+    [Category(nameof(DbAccessWebApiInsertTest))]
     public async Task PostDbAccessRegisterName()
     {
         // Given
@@ -42,9 +42,9 @@ public sealed class DbAccessWebApiInsertTest : IClassFixture<WebApplicationFacto
 
         // When
         var content = new StringContent(JsonSerializer.Serialize(new Name() { Id = 0, Name1 = "string" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
 
         // Then
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.OK);
     }
 }

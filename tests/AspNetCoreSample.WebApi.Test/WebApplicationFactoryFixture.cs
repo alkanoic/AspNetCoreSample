@@ -15,7 +15,7 @@ using Testcontainers.PostgreSql;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<TEntryPoint>, IAsyncLifetime
+public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<TEntryPoint>
     where TEntryPoint : class
 {
 
@@ -46,16 +46,13 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
             .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(request =>
                 request.ForPath("/health/ready").ForPort(KeycloakBuilder.KeycloakHealthPort)))
             .Build();
+        
+        Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync()).GetAwaiter().GetResult();
     }
 
     public string DbConnectionString => _postgresqlContainer.GetConnectionString();
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
-
-    async ValueTask IAsyncLifetime.InitializeAsync()
-    {
-        await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
-    }
 
     public string KeycloakBaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
 
