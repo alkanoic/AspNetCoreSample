@@ -21,12 +21,8 @@ jobs:
           dotnet-version: 10.0.x
 
       # DbContainer.Test
-      - name: DbContainer Build with dotnet
-        run: dotnet build --configuration Release --framework net10.0
-        working-directory: ${{ env.TESTS_DB_LOCATION }}
-
       - name: DbContainer Run tests
-        run: dotnet test --configuration Release --no-build
+        run: dotnet run --configuration Release
         working-directory: ${{ env.TESTS_DB_LOCATION }}
 
   webapi_test:
@@ -41,12 +37,8 @@ jobs:
           dotnet-version: 10.0.x
 
       # WebApi.Test
-      - name: WebApi Build with dotnet
-        run: dotnet build --configuration Release --framework net10.0
-        working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
-
       - name: WebApi Run tests
-        run: dotnet test --configuration Release --no-build
+        run: dotnet run --configuration Release
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
 
   mvc_test:
@@ -62,7 +54,7 @@ jobs:
 
       # Mvc.Test
       - name: Mvc Build with dotnet
-        run: dotnet build --configuration Release --framework net10.0
+        run: dotnet build --configuration Release
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
       # Playwright install
@@ -71,7 +63,7 @@ jobs:
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
       - name: Mvc Run tests
-        run: dotnet test --configuration Release --no-build
+        run: dotnet test --configuration Release
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
   mvc_container_test:
@@ -86,12 +78,12 @@ jobs:
           dotnet-version: 10.0.x
 
       # Mvc.Container.Test
-      - name: Mvc Container Build with dotnet
+      - name: Mvc Container Create certificate
         run: bash create_certificate.sh
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
       - name: Mvc Container Build with dotnet
-        run: dotnet build --configuration Release --framework net10.0
+        run: dotnet build --configuration Release
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
       # Playwright install
@@ -100,5 +92,5 @@ jobs:
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
       - name: Mvc Container Run tests
-        run: dotnet test --configuration Release --no-build
+        run: dotnet test --configuration Release
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
