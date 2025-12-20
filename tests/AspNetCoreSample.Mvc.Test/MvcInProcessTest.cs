@@ -2,7 +2,8 @@ using Microsoft.Playwright;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class MvcInProcessTest : IClassFixture<WebApplicationFactoryFixture<Program>>
+[ClassDataSource<WebApplicationFactoryFixture<Program>>]
+public sealed class MvcInProcessTest
 {
     private readonly WebApplicationFactoryFixture<Program> _factory;
 
@@ -12,15 +13,23 @@ public sealed class MvcInProcessTest : IClassFixture<WebApplicationFactoryFixtur
         factory.CreateDefaultClient();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcInProcessTest))]
+    [Test]
+    [Category(nameof(MvcInProcessTest))]
     public async Task GetIndexPlaywright()
     {
         using var playwright = await Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
-        await using var context = await browser.NewContextAsync(PlaywrightSettings.DefaultBrowserNewContextOptions());
-        PlaywrightSettings.SetDefaultBrowserContext(context);
-
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = true,
+            Args = ["--ignore-certificate-errors"]
+        });
+        
+        await using var context = await browser.NewContextAsync(new BrowserNewContextOptions
+        {
+            Locale = "ja-JP"
+        });
+        
+        context.SetDefaultTimeout(60_000);
         var page = await context.NewPageAsync();
 
         await page.GotoAsync($"{_factory.HostUrl}");
@@ -29,9 +38,9 @@ public sealed class MvcInProcessTest : IClassFixture<WebApplicationFactoryFixtur
         await page.GetByRole(AriaRole.Textbox, new() { Name = "パスワード" }).FillAsync("admin");
         await Task.WhenAll([page.GetByRole(AriaRole.Button, new() { Name = "サインイン" }).ClickAsync(), page.WaitForURLAsync($"{_factory.HostUrl}/Auth")]);
 
-        Assert.Contains("Auth Page", await page.TitleAsync());
+        await Assert.That(await page.TitleAsync()).Contains("Auth Page");
 
         await page.GetByRole(AriaRole.Link, new() { Name = "Sample" }).ClickAsync();
-        Assert.Contains("AspNetCoreSample.Mvc", await page.TitleAsync());
+        await Assert.That(await page.TitleAsync()).Contains("AspNetCoreSample.Mvc");
     }
 }

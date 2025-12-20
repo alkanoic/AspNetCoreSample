@@ -15,53 +15,69 @@ using Testcontainers.PostgreSql;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<TEntryPoint>, IAsyncLifetime
+public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<TEntryPoint>
     where TEntryPoint : class
 {
     private readonly PostgreSqlContainer _postgresqlContainer;
-    private readonly IContainer _keycloakContainer;
+    private readonly KeycloakContainer _keycloakContainer;
+    private readonly SemaphoreSlim _initializationSemaphore = new(1, 1);
+    private bool _initialized = false;
 
     public WebApplicationFactoryFixture()
     {
+        var sessionId = Guid.NewGuid().ToString("N")[..8];
+        
         _postgresqlContainer = new PostgreSqlBuilder()
             .WithImage("postgres:latest")
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("POSTGRES_INITDB_ARGS", "--encoding=UTF-8")
+            .WithName($"postgres-test-{sessionId}")
             .Build();
 
-        _keycloakContainer = new ContainerBuilder()
-            .WithImage("quay.io/keycloak/keycloak:latest")
+        _keycloakContainer = new KeycloakBuilder()
             .WithResourceMapping("Test-realm.json", "/opt/keycloak/data/import/")
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("LANG", "ja_JP.UTF-8")
             .WithEnvironment("KC_HEALTH_ENABLED", "true")
             .WithEnvironment("KEYCLOAK_ADMIN", "admin")
             .WithEnvironment("KEYCLOAK_ADMIN_PASSWORD", "passwd")
-            .WithPortBinding(KeycloakBuilder.KeycloakPort, true)
-            .WithPortBinding(KeycloakBuilder.KeycloakHealthPort, true)
             .WithCommand("start-dev")
             .WithCommand("--import-realm")
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(request =>
-                request.ForPath("/health/ready").ForPort(KeycloakBuilder.KeycloakHealthPort)))
+            .WithName($"keycloak-test-{sessionId}")
             .Build();
+    }
+
+    private async Task InitializeAsync()
+    {
+        await _initializationSemaphore.WaitAsync();
+        try
+        {
+            if (!_initialized)
+            {
+                await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
+                _initialized = true;
+            }
+        }
+        finally
+        {
+            _initializationSemaphore.Release();
+        }
     }
 
     public string DbConnectionString => _postgresqlContainer.GetConnectionString();
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public async ValueTask InitializeAsync()
-    {
-        await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
-    }
-
-    public string KeycloakBaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
+    public string KeycloakBaseAddress => _keycloakContainer.GetBaseAddress();
 
     public string HostUrl { get; private set; } = "";
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        // コンテナの初期化を待つ
+        InitializeAsync().GetAwaiter().GetResult();
+        
         HostUrl = $"https://localhost:{AvailablePort.GetAvailablePort()}";
 
         // 環境変数による設定の上書きはほかのテストに影響するため、InMemoryCollectionを使う
@@ -79,8 +95,30 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
         var dummyHost = builder.Build();
 
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-        builder.Build().Start();
+        var host = builder.Build();
+        host.Start();
 
         return dummyHost;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            try
+            {
+                _keycloakContainer?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(30));
+            }
+            catch { }
+            
+            try
+            {
+                _postgresqlContainer?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(30));
+            }
+            catch { }
+            
+            _initializationSemaphore?.Dispose();
+        }
+        base.Dispose(disposing);
     }
 }

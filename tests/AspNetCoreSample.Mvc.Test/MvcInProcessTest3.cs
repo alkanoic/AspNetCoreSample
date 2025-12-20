@@ -2,7 +2,8 @@ using Microsoft.Playwright;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class MvcInProcessTest3 : IClassFixture<WebApplicationFactoryFixture<Program>>
+[ClassDataSource<WebApplicationFactoryFixture<Program>>]
+public sealed class MvcInProcessTest3
 {
     private readonly WebApplicationFactoryFixture<Program> _factory;
 
@@ -12,12 +13,17 @@ public sealed class MvcInProcessTest3 : IClassFixture<WebApplicationFactoryFixtu
         factory.CreateDefaultClient();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcInProcessTest3))]
+    [Test]
+    [Category(nameof(MvcInProcessTest3))]
     public async Task GetIndexPlaywright()
     {
         using var playwright = await Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = true,
+            Args = ["--ignore-certificate-errors"]
+        });
+        
         var page = await browser.NewPageAsync();
         await page.GotoAsync($"{_factory.HostUrl}/Name");
         await page.GetByRole(AriaRole.Link, new() { Name = "Edit" }).First.ClickAsync();
@@ -26,6 +32,6 @@ public sealed class MvcInProcessTest3 : IClassFixture<WebApplicationFactoryFixtu
         await page.GetByLabel("Name1").FillAsync("太郎123");
         await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
 
-        Assert.Contains("AspNetCoreSample.Mvc", await page.TitleAsync());
+        await Assert.That(await page.TitleAsync()).Contains("AspNetCoreSample.Mvc");
     }
 }

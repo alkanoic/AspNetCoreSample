@@ -13,7 +13,7 @@ using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class DbFixture : IAsyncLifetime
+public sealed class DbFixture
 {
     private readonly PostgreSqlContainer _postgresqlContainer;
 
@@ -25,20 +25,17 @@ public sealed class DbFixture : IAsyncLifetime
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("POSTGRES_INITDB_ARGS", "--encoding=UTF-8")
             .Build();
+        
+        Task.Run(async () => await InitializeAsync());
     }
 
     public string DbConnectionString => _postgresqlContainer.GetConnectionString();
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public async ValueTask InitializeAsync()
+    private async Task InitializeAsync()
     {
         await _postgresqlContainer.StartAsync();
-    }
-
-    public ValueTask DisposeAsync()
-    {
-        return ValueTask.CompletedTask;
     }
 
     private sealed class MigrationCompleted : IWaitUntil
