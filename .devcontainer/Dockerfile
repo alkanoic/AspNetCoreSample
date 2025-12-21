@@ -1,12 +1,21 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
 
 RUN apt-get update && \
-    apt-get install -y iputils-ping mysql-client curl wget ca-certificates gnupg
+    apt-get install -y iputils-ping mysql-client curl wget ca-certificates gnupg apt-transport-https software-properties-common
 
 # Install .NET 10
 COPY --from=mcr.microsoft.com/dotnet/sdk:10.0 /usr/share/dotnet /usr/share/dotnet
 # シンボリックリンク作成
 RUN ln -sf /usr/share/dotnet/dotnet /usr/bin/dotnet
+
+# Microsoft のリポジトリを追加し、公開鍵をインポートします。
+RUN wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb" && \
+    dpkg -i packages-microsoft-prod.deb && \
+    rm packages-microsoft-prod.deb
+
+# Powershell をインストール
+RUN apt-get update && \
+    apt-get install -y powershell
 
 # install azure cli
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash

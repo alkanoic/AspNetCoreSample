@@ -21,12 +21,12 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
     private readonly PostgreSqlContainer _postgresqlContainer;
     private readonly KeycloakContainer _keycloakContainer;
     private readonly SemaphoreSlim _initializationSemaphore = new(1, 1);
-    private bool _initialized = false;
+    private bool _initialized;
 
     public WebApplicationFactoryFixture()
     {
         var sessionId = Guid.NewGuid().ToString("N")[..8];
-        
+
         _postgresqlContainer = new PostgreSqlBuilder()
             .WithImage("postgres:latest")
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
@@ -35,15 +35,25 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
             .WithName($"postgres-test-{sessionId}")
             .Build();
 
+        // _keycloakContainer = new KeycloakBuilder()
+        //     .WithResourceMapping("Test-realm.json", "/opt/keycloak/data/import/")
+        //     .WithEnvironment("TZ", "Asia/Tokyo")
+        //     .WithEnvironment("LANG", "ja_JP.UTF-8")
+        //     .WithEnvironment("KC_HEALTH_ENABLED", "true")
+        //     .WithEnvironment("KEYCLOAK_ADMIN", "admin")
+        //     .WithEnvironment("KEYCLOAK_ADMIN_PASSWORD", "passwd")
+        //     .WithCommand("start-dev", "--import-realm")
+        //     .WithName($"keycloak-test-{sessionId}")
+        //     .Build();
+
         _keycloakContainer = new KeycloakBuilder()
+            .WithImage("quay.io/keycloak/keycloak:latest")
             .WithResourceMapping("Test-realm.json", "/opt/keycloak/data/import/")
-            .WithEnvironment("TZ", "Asia/Tokyo")
-            .WithEnvironment("LANG", "ja_JP.UTF-8")
-            .WithEnvironment("KC_HEALTH_ENABLED", "true")
-            .WithEnvironment("KEYCLOAK_ADMIN", "admin")
-            .WithEnvironment("KEYCLOAK_ADMIN_PASSWORD", "passwd")
-            .WithCommand("start-dev")
-            .WithCommand("--import-realm")
+            .WithUsername("admin")
+            .WithPassword("admin")
+            .WithRealm("Test-realm.json")
+            // .WithPortBinding(KeycloakPort, true)
+            // .WithCommand("start-dev", "--import-realm")
             .WithName($"keycloak-test-{sessionId}")
             .Build();
     }
@@ -77,7 +87,7 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
     {
         // コンテナの初期化を待つ
         InitializeAsync().GetAwaiter().GetResult();
-        
+
         HostUrl = $"https://localhost:{AvailablePort.GetAvailablePort()}";
 
         // 環境変数による設定の上書きはほかのテストに影響するため、InMemoryCollectionを使う
@@ -110,13 +120,13 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
                 _keycloakContainer?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(30));
             }
             catch { }
-            
+
             try
             {
                 _postgresqlContainer?.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(30));
             }
             catch { }
-            
+
             _initializationSemaphore?.Dispose();
         }
         base.Dispose(disposing);
