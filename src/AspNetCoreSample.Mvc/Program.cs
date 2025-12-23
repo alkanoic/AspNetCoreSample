@@ -88,11 +88,12 @@ try
         pipeline.MinifyCssFiles("css/**/*.css");
     });
 
-    builder.Services.AddStackExchangeRedisCache(options =>
-    {
-        options.Configuration = builder.Configuration.GetConnectionString("Redis");
-        options.InstanceName = "SampleInstance";
-    });
+    // Redisキャッシュの設定
+    // builder.Services.AddStackExchangeRedisCache(options =>
+    // {
+    //     options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    //     options.InstanceName = "SampleInstance";
+    // });
 
     builder.Services.AddSession(options =>
     {
