@@ -1,5 +1,3 @@
-using Microsoft.Playwright;
-
 namespace AspNetCoreSample.Mvc.Test;
 
 [ClassDataSource<WebApplicationFactoryFixture<Program>>]
@@ -23,7 +21,7 @@ public sealed class MvcInProcessTest2
             Headless = true,
             Args = ["--ignore-certificate-errors"]
         });
-        
+
         var page = await browser.NewPageAsync();
         await page.GotoAsync($"{_factory.HostUrl}");
 

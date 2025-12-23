@@ -1,5 +1,3 @@
-using Microsoft.Playwright;
-
 namespace AspNetCoreSample.Mvc.Test;
 
 [ClassDataSource<WebApplicationFactoryFixture<Program>>]
@@ -23,13 +21,13 @@ public sealed class MvcInProcessTest3
             Headless = true,
             Args = ["--ignore-certificate-errors", "--disable-web-security"]
         });
-        
+
         var context = await browser.NewContextAsync(new BrowserNewContextOptions
         {
             IgnoreHTTPSErrors = true
         });
         var page = await context.NewPageAsync();
-        
+
         await page.GotoAsync($"{_factory.HostUrl}/Name", new PageGotoOptions
         {
             WaitUntil = WaitUntilState.NetworkIdle,
