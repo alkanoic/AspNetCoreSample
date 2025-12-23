@@ -52,6 +52,8 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
             .WithUsername("admin")
             .WithPassword("admin")
             .WithRealm("Test-realm.json")
+            .WithEnvironment("LANG", "ja_JP.UTF-8")
+            .WithEnvironment("LC_ALL", "ja_JP.UTF-8")
             // .WithPortBinding(KeycloakPort, true)
             // .WithCommand("start-dev", "--import-realm")
             .WithName($"keycloak-test-{sessionId}")

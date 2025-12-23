@@ -21,11 +21,20 @@ public sealed class MvcInProcessTest3
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
         {
             Headless = true,
-            Args = ["--ignore-certificate-errors"]
+            Args = ["--ignore-certificate-errors", "--disable-web-security"]
         });
         
-        var page = await browser.NewPageAsync();
-        await page.GotoAsync($"{_factory.HostUrl}/Name");
+        var context = await browser.NewContextAsync(new BrowserNewContextOptions
+        {
+            IgnoreHTTPSErrors = true
+        });
+        var page = await context.NewPageAsync();
+        
+        await page.GotoAsync($"{_factory.HostUrl}/Name", new PageGotoOptions
+        {
+            WaitUntil = WaitUntilState.NetworkIdle,
+            Timeout = 30000
+        });
         await page.GetByRole(AriaRole.Link, new() { Name = "Edit" }).First.ClickAsync();
         await page.GetByLabel("Name1").ClickAsync();
         await page.GetByLabel("Name1").ClickAsync();
