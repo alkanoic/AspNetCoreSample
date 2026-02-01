@@ -48,12 +48,12 @@
 				"zbecknell.t4-support",
 				"redhat.vscode-xml",
 				"formulahendry.auto-rename-tag",
-				"zxh404.vscode-proto3",
 				"Vue.volar",
 				"cweijan.vscode-database-client2",
 				"aliasadidev.nugetpackagemanagergui",
 				"cweijan.vscode-database-client2",
-				"cweijan.vscode-redis-client"
+				"cweijan.vscode-redis-client",
+				"AmazonWebServices.amazon-q-vscode"
 			],
 			"settings": {
 				"editor.formatOnSave": true

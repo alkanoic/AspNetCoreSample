@@ -73,12 +73,17 @@
             "name": "Vite Watch",
             "type": "node",
             "request": "launch",
-            "cwd": "${workspaceFolder}/src/AspNetCoreSample.Mvc",
-            "runtimeExecutable": "npm",
+            "cwd": "${workspaceFolder}/src/NuxtSample",
+            "runtimeExecutable": "pnpm",
             "runtimeArgs": [
                 "run",
                 "dev"
             ],
+            "serverReadyAction": {
+                "action": "debugWithChrome",
+                "pattern": "\\bLocal:    \\s+(https?://\\S+)",
+                "webRoot": "${workspaceFolder}/src/NuxtSample"
+            }
         },
         {
             "name": "WebApi",

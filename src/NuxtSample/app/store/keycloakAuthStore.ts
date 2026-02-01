@@ -52,7 +52,8 @@ export const useKeycloakAuthStore = defineStore("auth", {
   },
   actions: {
     async login(redirectUri: string) {
-      const runtimeConfig = useRuntimeConfig();
+      if (import.meta.client) {
+        const runtimeConfig = useRuntimeConfig();
       this.keycloak = new Keycloak({
         url: runtimeConfig.public.keycloakUrl,
         realm: runtimeConfig.public.keycloakRealm,
@@ -60,9 +61,15 @@ export const useKeycloakAuthStore = defineStore("auth", {
       });
 
       try {
+        const runtimeConfig = useRuntimeConfig();
+        if (!runtimeConfig?.public) {
+          console.error('Runtime config not available');
+          return;
+        }
         await this.keycloak.init({
           onLoad: "check-sso",
           silentCheckSsoFallback: false,
+          checkLoginIframe: false,
           silentCheckSsoRedirectUri: `${location.origin}/silent-check-sso.html`,
         });
         if (this.keycloak.authenticated) {
@@ -84,6 +91,7 @@ export const useKeycloakAuthStore = defineStore("auth", {
         }
       } catch (error) {
         console.error("Authentication failed:", error);
+      }
       }
     },
     async Logout(redirectUri: string) {

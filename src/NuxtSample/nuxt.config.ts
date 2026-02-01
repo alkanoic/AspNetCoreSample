@@ -1,10 +1,10 @@
-import tailwindcss from "@tailwindcss/vite";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@pinia/nuxt", "@vee-validate/nuxt"],
+  // Nuxt modules
+  modules: ["@pinia/nuxt", "@vee-validate/nuxt", "@nuxt/ui"],
   ssr: false,
   css: [
-    "@/assets/css/main.css",
+    "~/assets/css/main.css",
     "tabulator-tables/dist/css/tabulator_bootstrap5.min.css",
     "@fortawesome/fontawesome-svg-core/styles.css",
   ],
@@ -17,14 +17,5 @@ export default defineNuxtConfig({
     },
   },
   build: { transpile: ["vue-qrcode-reader"] },
-  vite: { plugins: [tailwindcss()] },
   typescript: { tsConfig: { extends: "@tsconfig/strictest/tsconfig.json" } },
-  postcss: {
-    plugins: {
-      "@tailwindcss/postcss": {
-        exposeConfig: true,
-        configPath: "tailwind.config",
-      },
-    },
-  },
 });
