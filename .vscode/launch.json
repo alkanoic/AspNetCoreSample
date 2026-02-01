@@ -70,7 +70,7 @@
             },
         },
         {
-            "name": "Vite Watch",
+            "name": "Nuxt Watch",
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceFolder}/src/NuxtSample",
@@ -79,10 +79,11 @@
                 "run",
                 "dev"
             ],
+            "console": "integratedTerminal",
             "serverReadyAction": {
-                "action": "debugWithChrome",
-                "pattern": "\\bLocal:    \\s+(https?://\\S+)",
-                "webRoot": "${workspaceFolder}/src/NuxtSample"
+                "action": "openExternally",
+                "pattern": "Local:\\s+(http://localhost:\\d+)",
+                "uriFormat": "%s"
             }
         },
         {
