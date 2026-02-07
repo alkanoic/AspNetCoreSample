@@ -63,6 +63,8 @@ services:
       # KC_HTTPS_KEY_STORE_PASSWORD:
     volumes:
       - ./docker/volumes/keycloak/data/import:/opt/keycloak/data/import
+      - ./docker/volumes/keycloak/data/themes:/opt/keycloak/themes:ro
+      - ./docker/volumes/keycloak/providers:/opt/keycloak/providers:ro
     command:
       [
         start-dev, # 開発モードで起動 # start --optimized

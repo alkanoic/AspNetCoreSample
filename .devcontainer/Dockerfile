@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/devcontainers/dotnet:9.0-noble
 
 RUN apt-get update && \
-    apt-get install -y iputils-ping mysql-client curl wget ca-certificates gnupg
+    apt-get install -y iputils-ping mysql-client curl wget ca-certificates gnupg maven openjdk-11-jdk
 
 # install azure cli
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
