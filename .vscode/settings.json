@@ -8,6 +8,7 @@
         "*.resx": "xml"
     },
     "chat.tools.terminal.autoApprove": {
-        "docker compose": true
+        "docker compose": true,
+        "true": true
     }
 }
