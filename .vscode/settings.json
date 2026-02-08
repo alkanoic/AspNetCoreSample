@@ -6,5 +6,8 @@
     },
     "files.associations": {
         "*.resx": "xml"
+    },
+    "chat.tools.terminal.autoApprove": {
+        "docker compose": true
     }
 }

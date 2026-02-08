@@ -11,7 +11,9 @@ public class CompanyUsernameAuthenticator implements Authenticator {
             String company = (String) getFirst.invoke(form, "company");
             String username = (String) getFirst.invoke(form, "username");
             if (company != null && company.length() > 0 && username != null) {
-                String combined = company + username;
+                company = company.trim();
+                username = username.trim();
+                String combined = company + "-" + username;
                 java.lang.reflect.Method putSingle = form.getClass().getMethod("putSingle", Object.class, Object.class);
                 putSingle.invoke(form, "username", combined);
             }
