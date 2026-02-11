@@ -513,6 +513,12 @@
       "createdDate" : 1770560674409,
       "secretData" : "{\"value\":\"4I9CiiiNTlieCNu/5YNn6wHYSwKY/N4PnNo1DzIqUqY=\",\"salt\":\"ilkT2ead9bfycbSFnZCvbg==\",\"additionalParameters\":{}}",
       "credentialData" : "{\"hashIterations\":5,\"algorithm\":\"argon2\",\"additionalParameters\":{\"hashLength\":[\"32\"],\"memory\":[\"7168\"],\"type\":[\"id\"],\"version\":[\"1.3\"],\"parallelism\":[\"1\"]}}"
+    }, {
+      "id" : "211a2246-607b-44a1-bc9d-42f80709f354",
+      "type" : "email-authenticator",
+      "userLabel" : "test-user@example.com",
+      "createdDate" : 1770794005798,
+      "credentialData" : "{\"type\":\"email-authenticator\",\"version\":1}"
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
@@ -1489,7 +1495,7 @@
     "envelopeFrom" : "",
     "ssl" : "false"
   },
-  "loginTheme" : "",
+  "loginTheme" : "company-login",
   "accountTheme" : "",
   "adminTheme" : "",
   "emailTheme" : "base",
@@ -1534,7 +1540,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "oidc-usermodel-attribute-mapper", "oidc-address-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "saml-user-property-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "oidc-usermodel-attribute-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "saml-user-property-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper" ]
       }
     }, {
       "id" : "1251c4b9-7aef-429e-828d-a9a152f6abb7",
@@ -1543,7 +1549,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "oidc-address-mapper", "saml-user-attribute-mapper", "oidc-full-name-mapper", "saml-user-property-mapper", "saml-role-list-mapper", "oidc-usermodel-property-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "saml-user-property-mapper", "oidc-usermodel-property-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "oidc-address-mapper", "oidc-full-name-mapper" ]
       }
     }, {
       "id" : "93671542-5728-4170-98d4-999ff95ca83a",
@@ -1954,16 +1960,9 @@
     "topLevel" : false,
     "builtIn" : false,
     "authenticationExecutions" : [ {
-      "authenticator" : "auth-username-password-form",
-      "authenticatorFlow" : false,
-      "requirement" : "REQUIRED",
-      "priority" : 10,
-      "autheticatorFlow" : false,
-      "userSetupAllowed" : false
-    }, {
       "authenticator" : "company-username-authenticator",
       "authenticatorFlow" : false,
-      "requirement" : "DISABLED",
+      "requirement" : "REQUIRED",
       "priority" : 21,
       "autheticatorFlow" : false,
       "userSetupAllowed" : false
