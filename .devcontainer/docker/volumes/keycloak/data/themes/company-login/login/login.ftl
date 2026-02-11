@@ -1,31 +1,22 @@
-<#-- Custom login form with company code field -->
-<#-- Based on Keycloak base theme login.ftl -- modify names: company, username, password -->
-<!DOCTYPE html>
-<html>
-    <head>
-    <meta charset="UTF-8" />
-    <title>${msg('loginTitle')!"Sign in"}</title>
-  </head>
-  <body>
-    <div id="kc-login">
-      <h1>${msg('loginTitle')!"Sign in"}</h1>
-      <form id="kc-form-login" action="${url.loginAction}" method="post">
-        <div>
-          <label for="company">企業コード</label>
-          <input id="company" name="company" type="text" autofocus="autofocus" />
+<#import "template.ftl" as layout>
+<@layout.registrationLayout; section>
+    <#if section = "form">
+    <form id="kc-form-login" action="${url.loginAction}" method="post">
+        <div class="mb-3">
+            <label for="company" class="form-label">${msg('company')}</label>
+            <input id="company" name="company" type="text" class="form-control" autofocus="autofocus" />
         </div>
-        <div>
-          <label for="username">ユーザー名</label>
-          <input id="username" name="username" type="text" />
+        <div class="mb-3">
+            <label for="username" class="form-label">${msg('username')}</label>
+            <input id="username" name="username" type="text" class="form-control" />
         </div>
-        <div>
-          <label for="password">パスワード</label>
-          <input id="password" name="password" type="password" />
+        <div class="mb-3">
+            <label for="password" class="form-label">${msg('password')}</label>
+            <input id="password" name="password" type="password" class="form-control" />
         </div>
-        <div>
-          <input type="submit" value="${msg('doLogIn')!"Login"}" />
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">${msg('doLogIn')}</button>
         </div>
-      </form>
-    </div>
-  </body>
-</html>
+    </form>
+    </#if>
+</@layout.registrationLayout>
