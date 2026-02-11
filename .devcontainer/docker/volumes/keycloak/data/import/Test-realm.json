@@ -482,8 +482,14 @@
       "type" : "password",
       "userLabel" : "My password",
       "createdDate" : 1685620946895,
-      "secretData" : "{\"value\":\"0R0jVd0V04LLXOwvKWy5+N/yaBwYrldEMrZSlFiaMDg=\",\"salt\":\"fWHVvMpkXK4mn98VWIeGKA==\",\"additionalParameters\":{}}",
-      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+      "secretData" : "{\"value\":\"Lo4lDTLvTBmJOUgy4ie9t4HFihwE8vSo/CnmQGByu1s=\",\"salt\":\"flEPmWUiz6vjpV/D+19ERg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":5,\"algorithm\":\"argon2\",\"additionalParameters\":{\"hashLength\":[\"32\"],\"memory\":[\"7168\"],\"type\":[\"id\"],\"version\":[\"1.3\"],\"parallelism\":[\"1\"]}}"
+    }, {
+      "id" : "c25d4649-fb17-4fef-8094-2b0a24661cf2",
+      "type" : "email-authenticator",
+      "userLabel" : "test@alkanoic.com",
+      "createdDate" : 1770793199921,
+      "credentialData" : "{\"type\":\"email-authenticator\",\"version\":1}"
     } ],
     "disableableCredentialTypes" : [ ],
     "requiredActions" : [ ],
@@ -1483,7 +1489,7 @@
     "envelopeFrom" : "",
     "ssl" : "false"
   },
-  "loginTheme" : "company-login",
+  "loginTheme" : "",
   "accountTheme" : "",
   "adminTheme" : "",
   "emailTheme" : "base",
@@ -1528,7 +1534,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "saml-role-list-mapper", "saml-user-attribute-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "saml-user-property-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-property-mapper", "oidc-usermodel-attribute-mapper", "oidc-address-mapper", "oidc-full-name-mapper", "saml-user-attribute-mapper", "saml-user-property-mapper" ]
       }
     }, {
       "id" : "1251c4b9-7aef-429e-828d-a9a152f6abb7",
@@ -1537,7 +1543,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "saml-user-attribute-mapper", "oidc-full-name-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper", "saml-user-property-mapper" ]
+        "allowed-protocol-mapper-types" : [ "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "oidc-address-mapper", "saml-user-attribute-mapper", "oidc-full-name-mapper", "saml-user-property-mapper", "saml-role-list-mapper", "oidc-usermodel-property-mapper" ]
       }
     }, {
       "id" : "93671542-5728-4170-98d4-999ff95ca83a",
@@ -1893,27 +1899,27 @@
       "authenticator" : "auth-cookie",
       "authenticatorFlow" : false,
       "requirement" : "ALTERNATIVE",
-      "priority" : 10,
+      "priority" : 20,
       "autheticatorFlow" : false,
       "userSetupAllowed" : false
     }, {
       "authenticator" : "auth-spnego",
       "authenticatorFlow" : false,
       "requirement" : "DISABLED",
-      "priority" : 20,
+      "priority" : 25,
       "autheticatorFlow" : false,
       "userSetupAllowed" : false
     }, {
       "authenticator" : "identity-provider-redirector",
       "authenticatorFlow" : false,
       "requirement" : "ALTERNATIVE",
-      "priority" : 25,
+      "priority" : 30,
       "autheticatorFlow" : false,
       "userSetupAllowed" : false
     }, {
       "authenticatorFlow" : true,
       "requirement" : "ALTERNATIVE",
-      "priority" : 30,
+      "priority" : 31,
       "autheticatorFlow" : true,
       "flowAlias" : "company 2 of browser forms",
       "userSetupAllowed" : false
@@ -1948,16 +1954,30 @@
     "topLevel" : false,
     "builtIn" : false,
     "authenticationExecutions" : [ {
-      "authenticator" : "company-username-authenticator",
+      "authenticator" : "auth-username-password-form",
       "authenticatorFlow" : false,
       "requirement" : "REQUIRED",
       "priority" : 10,
       "autheticatorFlow" : false,
       "userSetupAllowed" : false
     }, {
+      "authenticator" : "company-username-authenticator",
+      "authenticatorFlow" : false,
+      "requirement" : "DISABLED",
+      "priority" : 21,
+      "autheticatorFlow" : false,
+      "userSetupAllowed" : false
+    }, {
+      "authenticator" : "email-authenticator",
+      "authenticatorFlow" : false,
+      "requirement" : "REQUIRED",
+      "priority" : 22,
+      "autheticatorFlow" : false,
+      "userSetupAllowed" : false
+    }, {
       "authenticatorFlow" : true,
       "requirement" : "CONDITIONAL",
-      "priority" : 21,
+      "priority" : 23,
       "autheticatorFlow" : true,
       "flowAlias" : "company 2 of browser Browser - Conditional OTP",
       "userSetupAllowed" : false
@@ -2248,6 +2268,14 @@
     "enabled" : true,
     "defaultAction" : false,
     "priority" : 1000,
+    "config" : { }
+  }, {
+    "alias" : "email-authenticator-setup",
+    "name" : "Set up Email Authenticator",
+    "providerId" : "email-authenticator-setup",
+    "enabled" : true,
+    "defaultAction" : false,
+    "priority" : 1001,
     "config" : { }
   } ],
   "browserFlow" : "company 2 of browser",
