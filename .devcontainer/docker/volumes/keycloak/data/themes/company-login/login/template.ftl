@@ -15,12 +15,11 @@
             <div class="col-md-6 col-lg-4">
                 <#if realm.internationalizationEnabled  && locale.supported?size gt 1>
                     <div id="kc-locale" style="position: absolute; top: 20px; right: 20px;">
-                        <div id="kc-locale-wrapper">
-                            <div class="btn-group">
-                                <#list locale.supported as l>
-                                    <a href="${l.url}" class="btn btn-sm btn-outline-secondary ${(locale.currentLanguageTag == l.languageTag)?then('active', '')}">${l.label}</a>
-                                </#list>
-                            </div>
+                        <div id="kc-locale-wrapper" class="btn-group">
+                            <!-- Current: ${locale.currentLanguageTag!"unknown"} -->
+                            <#list locale.supported as l>
+                                <a href="${l.url}" class="btn btn-sm btn-outline-secondary ${(locale.currentLanguageTag == l.languageTag)?then('active', '')}">${l.label}</a>
+                            </#list>
                         </div>
                     </div>
                 </#if>
