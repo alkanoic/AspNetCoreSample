@@ -15,10 +15,10 @@ using Microsoft.CodeAnalysis.MSBuild;
 // 設定
 // ============================================================
 var argList = args.ToList();
-string solutionPath = GetArg(argList, "--solution") ?? throw new Exception("--solution を指定してください");
+string solutionPath = GetArg(argList, "--solution") ?? throw new InvalidOperationException("--solution を指定してください");
 string apiKey       = GetArg(argList, "--apikey")   ?? Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY") ?? "";
 string outputDir    = GetArg(argList, "--output")   ?? Path.Combine(Path.GetDirectoryName(Path.GetFullPath(solutionPath))!, "form_analysis");
-int    maxDepth     = int.Parse(GetArg(argList, "--depth") ?? "10");
+int    maxDepth     = int.Parse(GetArg(argList, "--depth") ?? "10", System.Globalization.CultureInfo.InvariantCulture);
 bool   skipApi      = string.IsNullOrEmpty(apiKey);
 
 Directory.CreateDirectory(Path.Combine(outputDir, "expanded"));
@@ -111,8 +111,8 @@ foreach (var project in solution.Projects)
 
                 var sb      = new StringBuilder();
                 var visited = new HashSet<string>();
-                sb.AppendLine($"// === {formName}.{sym.Name} ===");
-                sb.AppendLine($"// ファイル: {filePath}");
+                sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"// === {formName}.{sym.Name} ===\n");
+                sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"// ファイル: {filePath}\n");
                 sb.AppendLine();
                 ExpandMethod(method, model, project.AssemblyName, sb, visited, 0, maxDepth, "");
 
@@ -152,12 +152,12 @@ foreach (var form in formResults)
     if (skipApi)
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"# {form.FormName} - 展開済みイベントコード");
-        sb.AppendLine($"> API未設定のため機能分析はスキップされました。`--apikey` を指定して再実行してください。");
+        sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"# {form.FormName} - 展開済みイベントコード\n");
+        sb.Append("> API未設定のため機能分析はスキップされました。`--apikey` を指定して再実行してください。\n");
         sb.AppendLine();
         foreach (var ev in form.Events)
         {
-            sb.AppendLine($"## {ev.EventName}");
+            sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"## {ev.EventName}\n");
             sb.AppendLine("```csharp");
             sb.AppendLine(ev.ExpandedCode);
             sb.AppendLine("```");
@@ -235,8 +235,8 @@ void ExpandMethod(
             anyExpanded = true;
             visited.Add(calleeId);
 
-            sb.AppendLine($"{indent}// ▼ {callee.ContainingType.Name}.{callee.Name}() をインライン展開");
-            sb.AppendLine($"{indent}{{");
+            sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"{indent}// ▼ {callee.ContainingType.Name}.{callee.Name}() をインライン展開\n");
+            sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"{indent}{{\n");
 
             if (callee.Parameters.Length > 0)
             {
@@ -247,14 +247,14 @@ void ExpandMethod(
                         : p.HasExplicitDefaultValue ? p.ExplicitDefaultValue?.ToString() ?? "null" : "?";
                     return $"{p.Name} = {argText}";
                 });
-                sb.AppendLine($"{indent}    // 引数: {string.Join(", ", paramArgs)}");
+                sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"{indent}    // 引数: {string.Join(", ", paramArgs)}\n");
             }
 
             ExpandMethod(calleeEntry.syntax, calleeEntry.model, projectAssembly,
                 sb, visited, depth + 1, maxDepth, indent + "    ");
 
             visited.Remove(calleeId);
-            sb.AppendLine($"{indent}}} // ▲ {callee.Name}()");
+            sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"{indent}}} // ▲ {callee.Name}()\n");
         }
 
         if (!anyExpanded)
@@ -317,11 +317,11 @@ string BuildAnalysisPrompt(FormAnalysisResult form)
     sb.AppendLine("3. ## データ操作（DB/ファイル/API等への操作を抽出して列挙）");
     sb.AppendLine("4. ## 注意点・特記事項（エラー処理、権限制御、バリデーション等があれば）");
     sb.AppendLine();
-    sb.AppendLine($"# 画面名: {form.FormName}");
+    sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"# 画面名: {form.FormName}\n");
     sb.AppendLine();
     foreach (var ev in form.Events)
     {
-        sb.AppendLine($"## イベント: {ev.EventName}");
+        sb.Append(System.Globalization.CultureInfo.InvariantCulture, $"## イベント: {ev.EventName}\n");
         sb.AppendLine("```csharp");
         var lines     = ev.ExpandedCode.Split('\n');
         var truncated = lines.Length > 200;
@@ -352,7 +352,7 @@ async Task<string> CallClaudeApi(string apiKey, string prompt)
     var respBody = await response.Content.ReadAsStringAsync();
 
     if (!response.IsSuccessStatusCode)
-        throw new Exception($"API Error {response.StatusCode}: {respBody}");
+        throw new InvalidOperationException($"API Error {response.StatusCode}: {respBody}");
 
     using var doc = JsonDocument.Parse(respBody);
     return doc.RootElement
@@ -364,14 +364,14 @@ async Task<string> CallClaudeApi(string apiKey, string prompt)
 // ============================================================
 // データクラス
 // ============================================================
-record FormAnalysisResult
+sealed record FormAnalysisResult
 {
     public string FormName { get; init; } = "";
     public string FilePath { get; init; } = "";
     public List<EventExpansion> Events { get; init; } = new();
 }
 
-record EventExpansion
+sealed record EventExpansion
 {
     public string EventName    { get; init; } = "";
     public string ExpandedFile { get; init; } = "";
