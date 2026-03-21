@@ -81,6 +81,8 @@ try
 
     builder.Services.Configure<WebApiOption>(builder.Configuration.GetSection(WebApiOption.Position));
     builder.Services.Configure<JavaScriptOptions>(builder.Configuration.GetSection(nameof(JavaScriptOptions)));
+    builder.Services.Configure<AzureOpenAIOptions>(builder.Configuration.GetSection(AzureOpenAIOptions.Position));
+    builder.Services.Configure<AzureAISearchOptions>(builder.Configuration.GetSection(AzureAISearchOptions.Position));
 
     builder.Services.AddWebOptimizer(pipeline =>
     {

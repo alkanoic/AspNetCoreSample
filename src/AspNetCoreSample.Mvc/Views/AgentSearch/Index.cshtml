@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Agentic Search";
+}
+
+<h2>Agentic Search</h2>
+<p class="text-muted">Azure OpenAI + Semantic Kernel によるエージェント検索</p>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="input-group mb-3">
+            <input type="text" id="query-input" class="form-control" placeholder="質問を入力してください..." />
+            <button class="btn btn-primary" id="search-btn">検索</button>
+        </div>
+        <div id="result-area" class="d-none">
+            <div class="card">
+                <div class="card-header">回答</div>
+                <div class="card-body">
+                    <div id="loading" class="d-none">
+                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                        処理中...
+                    </div>
+                    <p id="answer-text" class="card-text" style="white-space: pre-wrap;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.getElementById('search-btn').addEventListener('click', async () => {
+        const query = document.getElementById('query-input').value.trim();
+        if (!query) return;
+
+        const resultArea = document.getElementById('result-area');
+        const loading = document.getElementById('loading');
+        const answerText = document.getElementById('answer-text');
+
+        resultArea.classList.remove('d-none');
+        loading.classList.remove('d-none');
+        answerText.textContent = '';
+        document.getElementById('search-btn').disabled = true;
+
+        try {
+            const res = await fetch('/AgentSearch/Search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query })
+            });
+            const data = await res.json();
+            answerText.textContent = data.answer;
+        } catch (e) {
+            answerText.textContent = 'エラーが発生しました: ' + e.message;
+        } finally {
+            loading.classList.add('d-none');
+            document.getElementById('search-btn').disabled = false;
+        }
+    });
+
+    document.getElementById('query-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('search-btn').click();
+    });
+</script>
+}
