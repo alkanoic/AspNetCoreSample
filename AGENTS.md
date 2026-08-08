@@ -26,7 +26,7 @@
 | `src/SpringBoot.Reports/` | Java（JasperReports） |
 | `tests/` | xunit、Testcontainers、Playwright（C#） |
 | `e2e/` | Node 版 Playwright E2E（develop/production）、Prisma、Allure |
-| `.github/workflows/` | Azure デプロイ（main.yml）とテスト（test.yml） |
+| `.github/workflows/` | Azure デプロイ（main.yml でテスト成功時のみデプロイ） |
 | `.devcontainer/`, `keycloak/`, `localstack/`, `sbom/` | 開発環境・Keycloak 設定・Lambda 局所テスト・CycloneDX SBOM |
 | `.agents/skills/`, `skills-lock.json` | Agent Skills（自製 + 公式を混在）。`.agents/skills/` は Claude/Cursor/Codex/opencode 共通の汎用フォルダ、`skills-lock.json` で公式スキルのバージョン管理 |
 
@@ -123,6 +123,5 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 
 ## CI / Azure
 
-- `main.yml`：push で Mvc（npm ci + vite publish）+ WebApi を `Release/net10.0` で publish → Azure Web Apps へデプロイ。Nuxt（pnpm install + generate）は SWA、Spring (Java) もデプロイ。
-- `test.yml`：全てのテストプロジェクトを CI で実行（コンテナ系は Testcontainers、Docker が必要）。
+- `main.yml`：push で全テストプロジェクトを CI 実行（コンテナ系は Testcontainers、Docker が必要）。main ブランチでテスト成功時のみ、Mvc（npm ci + vite publish）+ WebApi を `Release/net10.0` で publish → Azure Web Apps へデプロイ。Nuxt（pnpm install + generate）は SWA、Spring (Java) もデプロイ。
 - アプリ設定の前提：`WEBSITE_RUN_FROM_PACKAGE=1`、`DOTNET_VERSION=10.0`。
