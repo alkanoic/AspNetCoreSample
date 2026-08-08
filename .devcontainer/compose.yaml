@@ -1,3 +1,5 @@
+name: aspnetcoresample
+
 services:
   devcontainer:
     build:
@@ -9,8 +11,19 @@ services:
       - ../..:/workspaces:cached
       - $USERPROFILE/.aspnet/https:/workspaces/.aspnet/https
       - $HOME/.nuget/:/home/vscode/.nuget/
+      # opencode: セッション / 認証 / 設定 / バイナリをコンテナ再構築後も保持
+      - opencode-data:/home/vscode/.local/share/opencode
+      - opencode-config:/home/vscode/.config/opencode
+      - opencode-cache:/home/vscode/.cache/opencode
+      - opencode-bin:/home/vscode/.opencode
+    # 開発コンテナは postgresql とネットワークネームスペースを共有し、
+    # localhost:5432 で接続できるようにする
     network_mode: service:postgresql
     command: sleep infinity
+    depends_on:
+      - postgresql
+      - redis
+
   postgresql:
     image: postgres:latest
     container_name: postgresql
@@ -25,7 +38,13 @@ services:
       POSTGRES_DB: sample
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
       TZ: 'Asia/Tokyo'
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'root', '-d', 'sample']
+      interval: 5s
+      timeout: 5s
+      retries: 10
     restart: always
+
   pgadmin4:
     image: dpage/pgadmin4:latest
     container_name: pgadmin4
@@ -41,6 +60,7 @@ services:
     restart: always
     depends_on:
       - postgresql
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
@@ -72,6 +92,13 @@ services:
     depends_on:
       - keycloak-postgresql
       - mailpit
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 10
+
   keycloak-postgresql:
     image: postgres:latest
     container_name: keycloak-postgresql
@@ -85,7 +112,13 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
       TZ: 'Asia/Tokyo'
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'keycloak', '-d', 'keycloak']
+      interval: 5s
+      timeout: 5s
+      retries: 10
     restart: always
+
   # keycloak-mysql:
   #   image: mysql:latest
   #   container_name: keycloak-mysql
@@ -124,6 +157,11 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
   # garnet:
   #   image: 'ghcr.io/microsoft/garnet'
   #   container_name: garnet
@@ -169,3 +207,9 @@ services:
   #     interval: 10s
   #     timeout: 5s
   #     retries: 5
+
+volumes:
+  opencode-data:
+  opencode-config:
+  opencode-cache:
+  opencode-bin:
