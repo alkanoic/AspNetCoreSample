@@ -51,5 +51,5 @@ npm run generate   # static 生成
 
 ## CI の フロント工程（main.yml）
 
-- Mvc: `npm ci` → `npm run publish` → `dotnet build -c Release -f net9.0` → publish。
+- Mvc: `npm ci` → `npm run publish` → `dotnet build -c Release -f net10.0` → publish。
 - Nuxt: `npm --prefix src/NuxtSample ci` → `npm run generate` → SWA デプロイ。

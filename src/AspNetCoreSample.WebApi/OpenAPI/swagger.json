@@ -1,5 +1,5 @@
 {
-  "x-generator": "NSwag v14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
     "title": "AspNetCoreSample WebApi",
@@ -1904,6 +1904,9 @@
       "QrCodeRequest": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "qrCode"
+        ],
         "properties": {
           "qrCode": {
             "type": "string"
@@ -1926,6 +1929,9 @@
       "FetchUserInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "username"
+        ],
         "properties": {
           "username": {
             "type": "string"
@@ -1935,6 +1941,13 @@
       "CreateUserInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "username",
+          "firstName",
+          "lastName",
+          "email",
+          "password"
+        ],
         "properties": {
           "username": {
             "type": "string"
@@ -1971,6 +1984,9 @@
           {
             "type": "object",
             "additionalProperties": false,
+            "required": [
+              "userId"
+            ],
             "properties": {
               "userId": {
                 "type": "string"
@@ -2013,6 +2029,9 @@
       "UpdateUserByUsernameInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "username"
+        ],
         "properties": {
           "username": {
             "type": "string"
@@ -2049,6 +2068,10 @@
       "ChangePasswordInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userId",
+          "password"
+        ],
         "properties": {
           "userId": {
             "type": "string"
@@ -2061,6 +2084,10 @@
       "ChangePasswordByUsernameInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "username",
+          "password"
+        ],
         "properties": {
           "username": {
             "type": "string"
@@ -2073,6 +2100,9 @@
       "ResetPasswordByEmailInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userId"
+        ],
         "properties": {
           "userId": {
             "type": "string"
@@ -2082,6 +2112,9 @@
       "ResetPasswordByEmailByUsernameInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "username"
+        ],
         "properties": {
           "username": {
             "type": "string"
@@ -2091,6 +2124,9 @@
       "DeleteUserInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userId"
+        ],
         "properties": {
           "userId": {
             "type": "string"
@@ -2100,6 +2136,9 @@
       "DeleteUserByUsernameInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "username"
+        ],
         "properties": {
           "username": {
             "type": "string"
@@ -2109,6 +2148,9 @@
       "FetchUserRoleMappingsInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userId"
+        ],
         "properties": {
           "userId": {
             "type": "string"
@@ -2118,6 +2160,9 @@
       "AddUserRoleMappingInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userId"
+        ],
         "properties": {
           "userId": {
             "type": "string"
@@ -2134,6 +2179,10 @@
       "AddUserRoleMappingInputDetail": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "roleId",
+          "roleName"
+        ],
         "properties": {
           "roleId": {
             "type": "string"
@@ -2146,6 +2195,9 @@
       "DeleteUserRoleMappingInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userId"
+        ],
         "properties": {
           "userId": {
             "type": "string"
@@ -2162,6 +2214,10 @@
       "DeleteUserRoleMappingInputDetail": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "roleId",
+          "roleName"
+        ],
         "properties": {
           "roleId": {
             "type": "string"
@@ -2174,6 +2230,9 @@
       "FetchClientInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "clientId"
+        ],
         "properties": {
           "clientId": {
             "type": "string"
@@ -2183,6 +2242,9 @@
       "FetchClientRolesInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "clientUuid"
+        ],
         "properties": {
           "clientUuid": {
             "type": "string"
@@ -2192,6 +2254,10 @@
       "FetchUserClientRolesInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userId",
+          "clientUuid"
+        ],
         "properties": {
           "userId": {
             "type": "string"
@@ -2204,6 +2270,10 @@
       "AddUserClientRoleMappingInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userId",
+          "clientUuid"
+        ],
         "properties": {
           "userId": {
             "type": "string"
@@ -2223,6 +2293,10 @@
       "DeleteUserClientRoleMappingInput": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userId",
+          "clientUuid"
+        ],
         "properties": {
           "userId": {
             "type": "string"
@@ -2262,6 +2336,10 @@
       "TokenRequest": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "userName",
+          "password"
+        ],
         "properties": {
           "userName": {
             "type": "string"
@@ -2274,6 +2352,9 @@
       "UpdateTokenRequest": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "refreshToken"
+        ],
         "properties": {
           "refreshToken": {
             "type": "string"
@@ -2283,6 +2364,9 @@
       "RevokeTokenRequest": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "refreshToken"
+        ],
         "properties": {
           "refreshToken": {
             "type": "string"

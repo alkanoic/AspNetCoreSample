@@ -5,7 +5,7 @@
 
 ## 概要
 
-- .NET 9（net9.0）ベース。`Directory.Build.props` で Roslynator + latest-Recommended アナライザー有効。
+- .NET 10（net10.0）ベース。`Directory.Build.props` で Roslynator + latest-Recommended アナライザー有効。
 - 本番アプリは **Mvc**（画面）と **WebApi**（REST）の 2 本立て。Azure Web Apps にデプロイ。
 - Aspire（AppHost / ServiceDefaults）でローカルオーケストレーション可。
 - devcontainer 内で MySQL / PostgreSQL / MSSQL / Redis / Keycloak / nginx / pgadmin4 を docker compose 起動して開発する。
@@ -123,6 +123,6 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 
 ## CI / Azure
 
-- `main.yml`：push で Mvc（npm ci + vite publish）+ WebApi を `Release/net9.0` で publish → Azure Web Apps へデプロイ。Nuxt は SWA、Spring (Java) もデプロイ。
+- `main.yml`：push で Mvc（npm ci + vite publish）+ WebApi を `Release/net10.0` で publish → Azure Web Apps へデプロイ。Nuxt は SWA、Spring (Java) もデプロイ。
 - `test.yml`：全てのテストプロジェクトを CI で実行（コンテナ系は Testcontainers、Docker が必要）。
-- アプリ設定の前提：`WEBSITE_RUN_FROM_PACKAGE=1`、`DOTNET_VERSION=9.0`。
+- アプリ設定の前提：`WEBSITE_RUN_FROM_PACKAGE=1`、`DOTNET_VERSION=10.0`。

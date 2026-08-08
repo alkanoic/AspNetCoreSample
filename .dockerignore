@@ -51,3 +51,9 @@ node_modules/
 
 # Azure Artifacts
 **/paket-files/
+
+# Nuxt の dist は絶対パスのシンボリックリンク（壊れている環境があるため Docker ビルドから除外）
+src/NuxtSample/dist
+
+# devbox（絶対パスのシンボリックリンクを含むため Docker ビルドから除外）
+.devbox/

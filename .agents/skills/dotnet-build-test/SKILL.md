@@ -25,10 +25,10 @@ dotnet format                    # editorconfig 準拠。差分確認のみな�
 | ------------ | ---- | ---- |
 | `tests/DbContainer.Test` | `dotnet test tests/DbContainer.Test` | Docker（Postgres コンテナ） |
 | `tests/AspNetCoreSample.WebApi.Test` | `dotnet test tests/AspNetCoreSample.WebApi.Test` | Docker（Testcontainers で **Postgres + Keycloak** 起動） |
-| `tests/AspNetCoreSample.Mvc.Test` | `dotnet test tests/AspNetCoreSample.Mvc.Test` | Playwright（`pwsh bin/Release/net9.0/playwright.ps1 install --with-deps` 実行済み） |
+| `tests/AspNetCoreSample.Mvc.Test` | `dotnet test tests/AspNetCoreSample.Mvc.Test` | Playwright（`pwsh bin/Release/net10.0/playwright.ps1 install --with-deps` 実行済み） |
 | `tests/AspNetCoreSample.Mvc.Container.Test` | `dotnet test tests/AspNetCoreSample.Mvc.Container.Test` | Docker ビルド + 証明書（`bash create_certificate.sh`）+ Playwright |
 
-CI 相当の全実行は `test.yml` の各ジョブを参照（`dotnet build -c Release -f net9.0` → `playwright install` → `dotnet test --no-build`）。
+CI 相当の全実行は `test.yml` の各ジョブを参照（`dotnet build -c Release -f net10.0` → `playwright install` → `dotnet test --no-build`）。
 
 ## xunit v3 の規約
 
@@ -53,7 +53,7 @@ CI 相当の全実行は `test.yml` の各ジョブを参照（`dotnet build -c 
 - `Microsoft.Playwright` を使用したブラウザ検証。実行前に：
   ```bash
   dotnet build
-  pwsh bin/Release/net9.0/playwright.ps1 install --with-deps
+  pwsh bin/Release/net10.0/playwright.ps1 install --with-deps
   ```
 - `PlaywrightSettings.cs`（BaseUrl 等）を参照。
 
