@@ -125,4 +125,4 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 
 - `main.yml`：push で Mvc（npm ci + vite publish）+ WebApi を `Release/net10.0` で publish → Azure Web Apps へデプロイ。Nuxt は SWA、Spring (Java) もデプロイ。
 - `test.yml`：全てのテストプロジェクトを CI で実行（コンテナ系は Testcontainers、Docker が必要）。
-- アプリ設定の前提：`WEBSITE_RUN_FROM_PACKAGE=1`、`DOTNET_VERSION=9.0`。
+- アプリ設定の前提：`WEBSITE_RUN_FROM_PACKAGE=1`、`DOTNET_VERSION=10.0`。
