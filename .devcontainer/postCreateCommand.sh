@@ -39,6 +39,12 @@ fi
 # SBOM 生成物 (export-cyclonedx.sh で使用)
 npm install -g @cyclonedx/cyclonedx-npm || echo "cyclonedx-npm skipped"
 
+# Agent Skills (skills-lock.json から復元 / npm install 相当)
+# コミットされている .agents/skills/ と skills-lock.json から公式スキルを再インストールする。
+if [ -f skills-lock.json ]; then
+    (npx -y skills@latest experimental_install) || echo "skills (experimental_install) skipped"
+fi
+
 # フロント側 (Mvc/vite) の依存関係を非同期で準備
 if [ -f src/AspNetCoreSample.Mvc/package.json ]; then
     (cd src/AspNetCoreSample.Mvc && npm ci) || echo "npm ci (Mvc) skipped"
