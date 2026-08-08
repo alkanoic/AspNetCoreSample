@@ -52,38 +52,46 @@ export const useKeycloakAuthStore = defineStore("auth", {
   },
   actions: {
     async login(redirectUri: string) {
-      const runtimeConfig = useRuntimeConfig();
-      this.keycloak = new Keycloak({
-        url: runtimeConfig.public.keycloakUrl,
-        realm: runtimeConfig.public.keycloakRealm,
-        clientId: runtimeConfig.public.keycloakClientId,
-      });
-
-      try {
-        await this.keycloak.init({
-          onLoad: "check-sso",
-          silentCheckSsoFallback: false,
-          silentCheckSsoRedirectUri: `${location.origin}/silent-check-sso.html`,
+      if (import.meta.client) {
+        const runtimeConfig = useRuntimeConfig();
+        this.keycloak = new Keycloak({
+          url: runtimeConfig.public.keycloakUrl,
+          realm: runtimeConfig.public.keycloakRealm,
+          clientId: runtimeConfig.public.keycloakClientId,
         });
-        if (this.keycloak.authenticated) {
-          const profile = await this.keycloak.loadUserProfile();
-          this.username = profile.username ?? "";
-          this.lastName = profile.lastName ?? "";
-          this.firstName = profile.firstName ?? "";
-          this.email = profile.email ?? "";
-          this.token = this.keycloak.token!;
-          this.refreshToken = this.keycloak.refreshToken!;
-          this.roles = this.keycloak.realmAccess?.roles || [];
-          const decode = jwtDecode(this.token);
-          this.exp = calcJpTime(decode.exp!);
-          this.iat = calcJpTime(decode.iat!);
-        } else {
-          await this.keycloak.login({
-            redirectUri: redirectUri,
+
+        try {
+          const runtimeConfig = useRuntimeConfig();
+          if (!runtimeConfig?.public) {
+            console.error("Runtime config not available");
+            return;
+          }
+          await this.keycloak.init({
+            onLoad: "check-sso",
+            silentCheckSsoFallback: false,
+            checkLoginIframe: false,
+            silentCheckSsoRedirectUri: `${location.origin}/silent-check-sso.html`,
           });
+          if (this.keycloak.authenticated) {
+            const profile = await this.keycloak.loadUserProfile();
+            this.username = profile.username ?? "";
+            this.lastName = profile.lastName ?? "";
+            this.firstName = profile.firstName ?? "";
+            this.email = profile.email ?? "";
+            this.token = this.keycloak.token!;
+            this.refreshToken = this.keycloak.refreshToken!;
+            this.roles = this.keycloak.realmAccess?.roles || [];
+            const decode = jwtDecode(this.token);
+            this.exp = calcJpTime(decode.exp!);
+            this.iat = calcJpTime(decode.iat!);
+          } else {
+            await this.keycloak.login({
+              redirectUri: redirectUri,
+            });
+          }
+        } catch (error) {
+          console.error("Authentication failed:", error);
         }
-      } catch (error) {
-        console.error("Authentication failed:", error);
       }
     },
     async Logout(redirectUri: string) {

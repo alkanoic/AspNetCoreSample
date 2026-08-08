@@ -88,13 +88,18 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v3
         with:
-          node-version: "18.x"
+          node-version: "20.x"
+
+      - name: enable pnpm
+        run: corepack enable pnpm
 
       - name: install modules
-        run: npm --prefix src/NuxtSample ci
+        working-directory: src/NuxtSample
+        run: pnpm install --frozen-lockfile
 
       - name: generate nuxt
-        run: npm --prefix src/NuxtSample run generate
+        working-directory: src/NuxtSample
+        run: pnpm run generate
 
       - name: Build And Deploy To Azure
         id: builddeploy

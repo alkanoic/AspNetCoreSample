@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(item, index) in items" :key="index" class="collapse collapse-arrow bg-base-200"
+    <div v-for="(item, index) in items" :key="index" class="collapse-arrow bg-base-200 collapse"
       :class="{ 'mt-2': index >= 1 }">
       <input type="checkbox">
       <div class="collapse-title text-xl font-medium">

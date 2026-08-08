@@ -7,7 +7,7 @@
 
     <div class="p-2">
       <div class="flex justify-between">
-        <h5 class="mb-2 text-sm font-bold leading-tight text-neutral-800">
+        <h5 class="mb-2 text-sm leading-tight font-bold text-neutral-800">
           Location Name
         </h5>
       </div>

@@ -70,15 +70,21 @@
             },
         },
         {
-            "name": "Vite Watch",
+            "name": "Nuxt Watch",
             "type": "node",
             "request": "launch",
-            "cwd": "${workspaceFolder}/src/AspNetCoreSample.Mvc",
-            "runtimeExecutable": "npm",
+            "cwd": "${workspaceFolder}/src/NuxtSample",
+            "runtimeExecutable": "pnpm",
             "runtimeArgs": [
                 "run",
                 "dev"
             ],
+            "console": "integratedTerminal",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "Local:\\s+(http://localhost:\\d+)",
+                "uriFormat": "%s"
+            }
         },
         {
             "name": "WebApi",

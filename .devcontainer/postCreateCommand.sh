@@ -39,6 +39,14 @@ fi
 # SBOM 生成物 (export-cyclonedx.sh で使用)
 npm install -g @cyclonedx/cyclonedx-npm || echo "cyclonedx-npm skipped"
 
+# Nuxt (NuxtSample) は pnpm で依存を管理しているため、グローバルに導入する
+npm install -g pnpm || echo "pnpm skipped"
+
+# Nuxt (NuxtSample) のローカル環境設定 (.env) を .env.example から初期化する
+if [ -f "src/NuxtSample/.env.example" ] && [ ! -f "src/NuxtSample/.env" ]; then
+    cp "src/NuxtSample/.env.example" "src/NuxtSample/.env"
+fi
+
 # Agent Skills (skills-lock.json から復元 / npm install 相当)
 # コミットされている .agents/skills/ と skills-lock.json から公式スキルを再インストールする。
 if [ -f skills-lock.json ]; then
