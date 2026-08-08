@@ -22,7 +22,7 @@
 | `src/AspNetCoreSample.DataModel/` | EF Core モデル（PostgreSQL 向け `SampleContext`） |
 | `src/AspNetCoreSample.Templates/` | ライブラリ保持（scaffold 用参照先） |
 | `src/CodeGen/`, `CodeGen.Result/`, `CodeGen.Result.Kiota/`, `T4Execute/`, `T4Design/` | コード生成（CLI / 生成物の配置検証 / T4） |
-| `src/NuxtSample/`, `src/typescript/` | Nuxt 3、lit/vue-webcomponent/openapi-typescript/quicktype |
+| `src/NuxtSample/`, `src/typescript/` | Nuxt 4（pnpm 使用）、lit/vue-webcomponent/openapi-typescript/quicktype |
 | `src/SpringBoot.Reports/` | Java（JasperReports） |
 | `tests/` | xunit、Testcontainers、Playwright（C#） |
 | `e2e/` | Node 版 Playwright E2E（develop/production）、Prisma、Allure |
@@ -123,6 +123,6 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 
 ## CI / Azure
 
-- `main.yml`：push で Mvc（npm ci + vite publish）+ WebApi を `Release/net10.0` で publish → Azure Web Apps へデプロイ。Nuxt は SWA、Spring (Java) もデプロイ。
+- `main.yml`：push で Mvc（npm ci + vite publish）+ WebApi を `Release/net10.0` で publish → Azure Web Apps へデプロイ。Nuxt（pnpm install + generate）は SWA、Spring (Java) もデプロイ。
 - `test.yml`：全てのテストプロジェクトを CI で実行（コンテナ系は Testcontainers、Docker が必要）。
 - アプリ設定の前提：`WEBSITE_RUN_FROM_PACKAGE=1`、`DOTNET_VERSION=10.0`。

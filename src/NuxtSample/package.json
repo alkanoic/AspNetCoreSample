@@ -7,8 +7,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
+    "lint": "eslint ./app",
+    "lint:fix": "eslint ./app --fix",
     "updates": "npx npm-check-updates -u"
   },
   "devDependencies": {
