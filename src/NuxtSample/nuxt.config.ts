@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: "2026-08-08",
   // Nuxt modules
   modules: ["@pinia/nuxt", "@vee-validate/nuxt", "@nuxt/ui"],
   ssr: false,
