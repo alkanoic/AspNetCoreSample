@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/deepseek-v4-flash-free",
+  "provider": {
+    "ollama-cloud": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama Cloud",
+      "env": [
+        "OLLAMA_API_KEY"
+      ],
+      "options": {
+        "baseURL": "https://ollama.com/v1"
+      },
+      "models": {
+        "gpt-oss:20b": {
+          "name": "GPT-OSS 20B"
+        },
+        "gpt-oss:120b": {
+          "name": "GPT-OSS 120B"
+        },
+        "qwen3-coder:480b": {
+          "name": "Qwen3 Coder 480B"
+        }
+      }
+    }
+  }
+}

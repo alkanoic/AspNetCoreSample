@@ -1,65 +1,68 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
 {
-	"name": "C#",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	// "image": "mcr.microsoft.com/devcontainers/dotnet:1-6.0",
-	// "dockerFile": "Dockerfile",
-	"dockerComposeFile": "compose.yaml",
-	"shutdownAction": "stopCompose",
-	"service": "devcontainer",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	"features": {
-		// "ghcr.io/devcontainers/features/git:1": {},
-		// "ghcr.io/devcontainers-contrib/features/curl-apt-get:1": {},
-		// "ghcr.io/devcontainers-contrib/features/wget-apt-get:1": {},
-		// "ghcr.io/devcontainers-contrib/features/mysql-homebrew:1": {},
-		// "ghcr.io/devcontainers/features/azure-cli:1": {},
-		// "ghcr.io/devcontainers/features/node:1": {},
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
-	},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [
-		7036
-	],
-	// "portsAttributes": {
-	//		"5001": {
-	//			"protocol": "https"
-	//		}
-	// }
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": ".devcontainer/postCreateCommand.sh",
-	// Configure tool-specific properties.
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"MS-CEINTL.vscode-language-pack-ja",
-				"ms-dotnettools.csharp",
-				"formulahendry.dotnet-test-explorer",
-				"kreativ-software.csharpextensions",
-				"Trottero.dotnetwatchattach",
-				"ms-playwright.playwright",
-				"k--kato.docomment",
-				"mhutchie.git-graph",
-				"esbenp.prettier-vscode",
-				"yoavbls.pretty-ts-errors",
-				"Prisma.prisma",
-				"dbaeumer.vscode-eslint",
-				"zbecknell.t4-support",
-				"redhat.vscode-xml",
-				"formulahendry.auto-rename-tag",
-				"Vue.volar",
-				"cweijan.vscode-database-client2",
-				"aliasadidev.nugetpackagemanagergui",
-				"cweijan.vscode-database-client2",
-				"cweijan.vscode-redis-client",
-				"AmazonWebServices.amazon-q-vscode"
-			],
-			"settings": {
-				"editor.formatOnSave": true
-			}
-		}
-	}
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+  "name": "AspNetCoreSample",
+  "dockerComposeFile": "compose.yaml",
+  "shutdownAction": "stopCompose",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "remoteUser": "vscode",
+  "containerEnv": {
+    "OLLAMA_API_KEY": "${localEnv:OLLAMA_API_KEY}"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "installMaven": true
+    },
+    "ghcr.io/schlich/devcontainer-features/playwright:0": {
+      "browsers": ""
+    }
+  },
+  "forwardPorts": [
+    5074,
+    5182,
+    5167,
+    7036,
+    7079,
+    7189,
+    5173
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "MS-CEINTL.vscode-language-pack-ja",
+        "ms-dotnettools.csharp",
+        "formulahendry.dotnet-test-explorer",
+        "kreativ-software.csharpextensions",
+        "Trottero.dotnetwatchattach",
+        "ms-playwright.playwright",
+        "k--kato.docomment",
+        "mhutchie.git-graph",
+        "esbenp.prettier-vscode",
+        "yoavbls.pretty-ts-errors",
+        "Prisma.prisma",
+        "dbaeumer.vscode-eslint",
+        "zbecknell.t4-support",
+        "redhat.vscode-xml",
+        "formulahendry.auto-rename-tag",
+        "Vue.volar",
+        "cweijan.vscode-database-client2",
+        "cweijan.vscode-redis-client",
+        "aliasadidev.nugetpackagemanagergui",
+        "vscjava.vscode-java-pack",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "postCreateCommand": ".devcontainer/postCreateCommand.sh",
+  "postStartCommand": ".devcontainer/postStartCommand.sh"
 }
