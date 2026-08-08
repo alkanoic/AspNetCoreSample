@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: "2026-08-08",
   // Nuxt modules
   modules: ["@pinia/nuxt", "@vee-validate/nuxt", "@nuxt/ui"],
   ssr: false,
@@ -11,12 +10,13 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      keycloakUrl: "http://keycloak:8080",
+      keycloakUrl: process.env.NUXT_PUBLIC_KEYCLOAK_URL || "http://keycloak:8080",
       keycloakRealm: "Test",
       keycloakClientId: "spa-client",
       apiBaseUrl: process.env.API_BASE_URL || "https://localhost:7036",
     },
   },
   build: { transpile: ["vue-qrcode-reader"] },
+  compatibilityDate: "2026-08-08",
   typescript: { tsConfig: { extends: "@tsconfig/strictest/tsconfig.json" } },
 });
