@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen">
     <!-- Mobile menu button -->
-    <div v-if="!openedDrawer" class="lg:hidden fixed top-4 left-4 z-50">
+    <div v-if="!openedDrawer" class="fixed top-4 left-4 z-50 lg:hidden">
       <UButton
         icon="i-heroicons-bars-3"
         variant="solid"
@@ -10,29 +10,29 @@
         @click="openedDrawer = !openedDrawer"
       />
     </div>
-    
+
     <!-- Header -->
-    <div class="lg:hidden fixed top-0 left-0 right-0 bg-gray-800 text-white p-4 z-40">
+    <div class="fixed top-0 right-0 left-0 z-40 bg-gray-800 p-4 text-white lg:hidden">
       <div class="text-center">
         <NuxtLink to="/" class="text-xl font-bold">NuxtSample</NuxtLink>
       </div>
     </div>
 
     <!-- Overlay for mobile -->
-    <div 
-      v-if="openedDrawer" 
-      class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30" 
+    <div
+      v-if="openedDrawer"
+      class="fixed inset-0 z-30 bg-black/50 lg:hidden"
       @click="openedDrawer = false"
     />
 
     <!-- Sidebar -->
     <div :class="[
-      'fixed lg:static inset-y-0 left-0 z-40 w-60 bg-gray-800 transform transition-transform duration-300 ease-in-out',
-      openedDrawer ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      'fixed inset-y-0 left-0 z-40 w-60 bg-gray-800 transition-transform duration-300 ease-in-out lg:static',
+      openedDrawer ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
     ]">
-      <div class="flex flex-col h-full p-4">
+      <div class="flex h-full flex-col p-4">
         <!-- Mobile close button -->
-        <div class="lg:hidden flex justify-between items-center mb-4">
+        <div class="mb-4 flex items-center justify-between lg:hidden">
           <NuxtLink to="/" class="text-xl font-bold text-white">NuxtSample</NuxtLink>
           <UButton
             icon="i-heroicons-x-mark"
@@ -42,24 +42,24 @@
             @click="closeDrawer"
           />
         </div>
-        
-        <div class="hidden lg:block mb-6">
+
+        <div class="mb-6 hidden lg:block">
           <NuxtLink to="/" class="text-xl font-bold text-white">NuxtSample</NuxtLink>
         </div>
-        
+
         <nav class="flex-1 space-y-2">
           <div v-for="section in menuItems" :key="section.label" class="space-y-1">
-            <div class="text-white font-medium px-3 py-2">{{ section.label }}</div>
+            <div class="px-3 py-2 font-medium text-white">{{ section.label }}</div>
             <div class="space-y-1 pl-2">
               <NuxtLink
                 v-for="link in section.links"
                 :key="link.to"
                 :to="link.to"
                 :class="[
-                  'block px-3 py-2 rounded-md text-sm transition-colors',
-                  route.path === link.to 
-                    ? 'bg-gray-700 text-white' 
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                  'block rounded-md px-3 py-2 text-sm transition-colors',
+                  route.path === link.to
+                    ? 'bg-gray-700 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                 ]"
                 @click="closeDrawer"
               >
@@ -68,7 +68,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="mt-4">
           <USelect
             v-model="selectedFruit"
@@ -85,7 +85,7 @@
       <div :class="[
         'h-full overflow-auto',
         'pt-16 lg:pt-0',
-        'p-4'
+        'p-4',
       ]">
         <slot />
       </div>
@@ -108,7 +108,7 @@ fruitStore.setDefaults();
 const fruits = fruitStore.fruits;
 const selectedFruit = ref(0);
 
-const fruitOptions = computed(() => 
+const fruitOptions = computed(() =>
   fruits.map(fruit => ({ label: fruit, value: fruit }))
 );
 
@@ -119,49 +119,47 @@ function handleChange(value: string) {
 
 const menuItems = [
   {
-    label: 'Tables',
+    label: "Tables",
     defaultOpen: true,
     links: [
-      { label: 'Table', to: '/table' },
-      { label: 'TableDetail', to: '/tabledetail' },
-      { label: 'Tabulator', to: '/tabulator' },
-      { label: 'TabulatorTable', to: '/tabulator-table' },
-      { label: 'TanStackTable', to: '/tantable' }
+      { label: "Table", to: "/table" },
+      { label: "TableDetail", to: "/tabledetail" },
+      { label: "Tabulator", to: "/tabulator" },
+      { label: "TabulatorTable", to: "/tabulator-table" },
+      { label: "TanStackTable", to: "/tantable" }
     ]
   },
   {
-    label: 'Counters',
+    label: "Counters",
     defaultOpen: true,
     links: [
-      { label: 'RefCounter', to: '/ref-counter' },
-      { label: 'StateCounter', to: '/state-counter' }
+      { label: "RefCounter", to: "/ref-counter" },
+      { label: "StateCounter", to: "/state-counter" }
     ]
   },
   {
-    label: 'Auth',
+    label: "Auth",
     defaultOpen: true,
     links: [
-      { label: 'Login', to: '/login' },
-      { label: 'Logined', to: '/logined' },
-      { label: 'LoginAdminPage', to: '/login-admin' },
-      { label: 'KeycloakLogined', to: '/keycloak-logined' },
-      { label: 'KeycloakAdminPage', to: '/keycloak-admin' }
+      { label: "Login", to: "/login" },
+      { label: "Logined", to: "/logined" },
+      { label: "LoginAdminPage", to: "/login-admin" },
+      { label: "KeycloakLogined", to: "/keycloak-logined" },
+      { label: "KeycloakAdminPage", to: "/keycloak-admin" }
     ]
   },
   {
-    label: 'Others',
+    label: "Others",
     defaultOpen: false,
     links: [
-      { label: 'ParentChild', to: '/parent-child' },
-      { label: 'Person', to: '/person' },
-      { label: 'QROD', to: '/qrod' },
-      { label: 'Modal', to: '/modal' },
-      { label: 'Accordion', to: '/accordion' },
-      { label: 'Validate', to: '/validate' },
-      { label: 'Textarea', to: '/textarea' }
+      { label: "ParentChild", to: "/parent-child" },
+      { label: "Person", to: "/person" },
+      { label: "QROD", to: "/qrod" },
+      { label: "Modal", to: "/modal" },
+      { label: "Accordion", to: "/accordion" },
+      { label: "Validate", to: "/validate" },
+      { label: "Textarea", to: "/textarea" }
     ]
   }
 ];
 </script>
-
-

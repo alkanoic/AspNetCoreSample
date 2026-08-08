@@ -1,6 +1,6 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-base-200">
-    <div class="card w-96 bg-base-100 shadow-xl">
+  <div class="bg-base-200 flex min-h-screen items-center justify-center">
+    <div class="card bg-base-100 w-96 shadow-xl">
       <div class="card-body">
         <h2 class="card-title">Login</h2>
         <p class="text text-error">{{ error }}</p>
