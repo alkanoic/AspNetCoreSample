@@ -1,60 +1,54 @@
-FROM mcr.microsoft.com/devcontainers/dotnet:9.0-noble
+# syntax=docker/dockerfile:1
+# # 開発コンテナ (マルチサービス: ASP.NET Core + Nuxt + Spring Boot + dbs)
+ARG VARIANT="9.0-noble"
+FROM mcr.microsoft.com/devcontainers/dotnet:${VARIANT}
 
-RUN apt-get update && \
-    apt-get install -y iputils-ping mysql-client curl wget ca-certificates gnupg
+ARG TARGETARCH
 
-# install azure cli
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# 基本 CLI と DB クライアント
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        gnupg \
+        iputils-ping \
+        mysql-client \
+        postgresql-client \
+        protobuf-compiler \
+        wget \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# install node.js
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    NODE_MAJOR=20 && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && \
-    apt-get install -y nodejs
+# trivy (vulnerability scanner) - signed 方式でインストール
+RUN wget -q -O - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /usr/share/keyrings/trivy.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" \
+        > /etc/apt/sources.list.d/trivy.list \
+    && apt-get update \
+    && apt-get install -y trivy
 
-# install cyclonedx for npm
-RUN npm install -g @cyclonedx/cyclonedx-npm
+# protoc-gen-grpc-web (マルチアーキ)
+RUN GRPC_WEB_ARCH="$(case "${TARGETARCH:-amd64}" in arm64) echo aarch64;; *) echo x86_64;; esac)" \
+    && wget -q "https://github.com/grpc/grpc-web/releases/download/1.5.0/protoc-gen-grpc-web-1.5.0-linux-${GRPC_WEB_ARCH}" \
+    && mv "protoc-gen-grpc-web-1.5.0-linux-${GRPC_WEB_ARCH}" /usr/local/bin/protoc-gen-grpc-web \
+    && chmod +x /usr/local/bin/protoc-gen-grpc-web
 
-# install trivy
-RUN apt-get install -y wget apt-transport-https gnupg lsb-release && \
-    wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add - && \
-    echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list && \
-    apt-get update && \
-    apt-get install -y trivy
+# grpcurl (マルチアーキ対応)
+RUN GRPCURL_ARCH="$(case "${TARGETARCH:-amd64}" in arm64) echo arm64;; *) echo x86_64;; esac)" \
+    && wget -q "https://github.com/fullstorydev/grpcurl/releases/download/v1.8.9/grpcurl_1.8.9_linux_${GRPCURL_ARCH}.tar.gz" \
+    && tar -xzf "grpcurl_1.8.9_linux_${GRPCURL_ARCH}.tar.gz" -C /usr/local/bin grpcurl \
+    && rm "grpcurl_1.8.9_linux_${GRPCURL_ARCH}.tar.gz"
 
-# install protoc
-RUN apt-get install -y protobuf-compiler && \
-    wget https://github.com/grpc/grpc-web/releases/download/1.5.0/protoc-gen-grpc-web-1.5.0-linux-x86_64 && \
-    mv ./protoc-gen-grpc-web-1.5.0-linux-x86_64 /usr/local/bin/protoc-gen-grpc-web && \
-    chmod +x /usr/local/bin/protoc-gen-grpc-web
+# sqldef (psqldef)
+ARG SQLDEF_VERSION="v1.0.1"
+RUN PSQLDEF_ARCH="$(case "${TARGETARCH:-amd64}" in arm64) echo arm64;; *) echo amd64;; esac)" \
+    && wget -q "https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/psqldef_linux_${PSQLDEF_ARCH}.tar.gz" \
+    && tar -xzf "psqldef_linux_${PSQLDEF_ARCH}.tar.gz" -C /usr/local/bin \
+    && rm "psqldef_linux_${PSQLDEF_ARCH}.tar.gz"
 
-RUN wget https://github.com/fullstorydev/grpcurl/releases/download/v1.8.9/grpcurl_1.8.9_linux_x86_64.tar.gz && \
-    tar -xzf grpcurl_1.8.9_linux_x86_64.tar.gz && \
-    sudo mv grpcurl /usr/local/bin/grpcurl && \
-    chmod +x /usr/local/bin/grpcurl && \
-    rm grpcurl_1.8.9_linux_x86_64.tar.gz && \
-    rm LICENSE
+# mysqldef / mssqldef (必要な場合にコメントを外す)
+# RUN curl -fsSOL "https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/mysqldef_linux_${PSQLDEF_ARCH}.tar.gz" \
+#     && tar -xzf "mysqldef_linux_${PSQLDEF_ARCH}.tar.gz" -C /usr/local/bin \
+#     && rm "mysqldef_linux_${PSQLDEF_ARCH}.tar.gz"
+# RUN curl -fsSOL "https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/mssqldef_linux_${PSQLDEF_ARCH}.tar.gz" \
+#     && tar -xzf "mssqldef_linux_${PSQLDEF_ARCH}.tar.gz" -C /usr/local/bin \
+#     && rm "mssqldef_linux_${PSQLDEF_ARCH}.tar.gz"
 
-# install mysqldef
-ARG SQLDEF_VERSION=v1.0.1
-
-# RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/mysqldef_linux_amd64.tar.gz && \
-#     tar xf mysqldef_linux_amd64.tar.gz -C /usr/local/bin/ && \
-#     rm mysqldef_linux_amd64.tar.gz
-
-# install psqldef
-RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/psqldef_linux_amd64.tar.gz && \
-    tar xf psqldef_linux_amd64.tar.gz -C /usr/local/bin/ && \
-    rm psqldef_linux_amd64.tar.gz
-
-# install mssqldef
-# RUN curl -OL https://github.com/k0kubun/sqldef/releases/download/${SQLDEF_VERSION}/mssqldef_linux_amd64.tar.gz && \
-#     tar xf mssqldef_linux_amd64.tar.gz -C /usr/local/bin/ && \
-#     rm mssqldef_linux_amd64.tar.gz
-
-RUN curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list && \
-    apt-get update && \
-    apt-get install -y redis
+# Node / Java / Azure CLI / Playwright は devcontainer.json の features で導入
