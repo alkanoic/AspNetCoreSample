@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # # 開発コンテナ (マルチサービス: ASP.NET Core + Nuxt + Spring Boot + dbs)
-ARG VARIANT="9.0-noble"
+ARG VARIANT="10.0-noble"
 FROM mcr.microsoft.com/devcontainers/dotnet:${VARIANT}
 
 ARG TARGETARCH

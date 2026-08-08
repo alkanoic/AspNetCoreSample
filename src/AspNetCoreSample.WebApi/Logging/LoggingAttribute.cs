@@ -64,6 +64,8 @@ public class LoggingAttribute : Attribute, IMethodDecorator
         }
         catch (Exception exception)
         {
+            if (!_logger.IsEnabled(LogLevel.Critical)) return;
+
             _logger.Log(LogLevel.Critical,
                 new EventId(4, nameof(LoggingAttribute)),
                 new MyLogEvent($"Critical logging method entry")
@@ -93,7 +95,7 @@ public class LoggingAttribute : Attribute, IMethodDecorator
     /// </summary>
     public void OnException(Exception exception)
     {
-        if (_logger == null) return;
+        if (_logger == null || !_logger.IsEnabled(LogLevel.Critical)) return;
 
         // 構造化された例外ログデータを作成
         var methodName = _methodName ?? "UnknownMethod";
