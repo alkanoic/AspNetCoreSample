@@ -4,7 +4,7 @@ namespace AspNetCoreSample.Mvc.Test;
 
 public static class PlaywrightSettings
 {
-    private static readonly string[] Args = { "--ignore-certificate-errors" };
+    private static readonly string[] Args = { "--ignore-certificate-errors", "--no-sandbox" };
 
     public static BrowserTypeLaunchOptions DefaultBrowserTypeLaunchOptions(float? slowMo = default, bool headless = true)
     {

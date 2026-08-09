@@ -54,12 +54,12 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public async ValueTask InitializeAsync()
+    async ValueTask IAsyncLifetime.InitializeAsync()
     {
         await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
     }
 
-    public async ValueTask DisposeAsync()
+    public new async ValueTask DisposeAsync()
     {
         await _keycloakContainer.DisposeAsync();
         await _postgresqlContainer.DisposeAsync();
