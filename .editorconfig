@@ -378,3 +378,7 @@ generated_code = true
 # NSwag 自動生成の OpenAPI 定義ファイル
 [src/AspNetCoreSample.WebApi/OpenAPI/swagger.json]
 generated_code = true
+
+# CA1848: LoggerMessage デリゲート使用のパフォーマンス提案（既存コードとの一貫性のため抑制）
+[*.cs]
+dotnet_diagnostic.CA1848.severity = none
