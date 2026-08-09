@@ -1,7 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
+using AspNetCoreSample.WebApi;
+
 using FluentValidation;
 using FluentValidation.Results;
-using AspNetCoreSample.WebApi;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApiSample.Controllers;
 

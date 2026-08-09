@@ -26,7 +26,7 @@
 | `src/SpringBoot.Reports/` | Java（JasperReports） |
 | `tests/` | xunit、Testcontainers、Playwright（C#） |
 | `e2e/` | Node 版 Playwright E2E（develop/production）、Prisma、Allure |
-| `.github/workflows/` | Azure デプロイ（main.yml）とテスト（test.yml） |
+| `.github/workflows/` | Azure デプロイ（main.yml でテスト成功時のみデプロイ） |
 | `.devcontainer/`, `keycloak/`, `localstack/`, `sbom/` | 開発環境・Keycloak 設定・Lambda 局所テスト・CycloneDX SBOM |
 | `.agents/skills/`, `skills-lock.json` | Agent Skills（自製 + 公式を混在）。`.agents/skills/` は Claude/Cursor/Codex/opencode 共通の汎用フォルダ、`skills-lock.json` で公式スキルのバージョン管理 |
 
@@ -40,6 +40,23 @@ dotnet format                # フォーマットチェック・適用（editorc
 
 - ソリューションに含まれるのは Web 系 + 生成系 + 一部テストのみ。`src/AspNetCoreSample.Mvc.Container.Test`、`src/CodeGen.Result.Kiota/`、`src/localstack/`、`src/SpringBoot.Reports/`、`e2e/` はソリューション外。
 - Git フック等により push/commit でフルテストが走る（CI 参照）。
+
+## Lint（整形・静的検査）
+
+コミット時は `.githooks/pre-commit` が自動実行される（`git config core.hooksPath .githooks`。devcontainer の postCreate で設定済み）。ツール毎にステージ済みの変更を検知して実行し、失敗すればコミットをブロックする。
+
+| ツール | 検知条件 / 対象 | 備考 |
+| ------ | ---------------- | ---- |
+| `dotnet format --verify-no-changes` | `*.cs` / `.csproj` 等の変更時、ソリューション全体の editorconfig 準拠を検証 | 整形済みリポジトリ前提のため軽量 |
+| `actionlint` | `.github/workflows/*.yml` の変更時 | GitHub Actions の構文検証 |
+| `prettier --check`（NuxtSample） | `src/NuxtSample/` 配下の変更時、`app/**` を検証 | フロント相当 |
+| `markdownlint-cli2` | 変更された `*.md` | 設定は `.markdownlint.json` |
+| `textlint` | 変更された日本語を含む `*.md` | 設定は `.textlintrc.json`（preset-ja-technical-writing） |
+| `bash -n` | 変更された `*.sh` | シェル構文 |
+
+- ツールが未インストールの場合はスキップされる（コミットは阻害しない）。正規のゲートは CI（`main.yml` の `lint` ジョブ）+ 必要なら `git commit --no-verify` も可能。ただし CI で必ずチェックされる。
+- textlint は日本語文字を含む `*.md` のみ対象（英語文書やライセンスファイルは対象外）。
+- 個別に手動で回す場合: `bash .githooks/pre-commit`（ステージ済み前提）。textlint のみ手動実行する場合: `npx --yes -p textlint@14 -p textlint-rule-preset-ja-technical-writing@12 textlint --config .textlintrc.json <file>`。
 
 ## テスト
 
@@ -81,7 +98,7 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 
 ## 監理・フォーマット・規約
 
-- **Analizers strict**：`Directory.Build.props` で `EnableNETAnalyzers` + `AnalysisLevel=latest-Recommended`、Roslynator。編集後 `dotnet build` で警告を潰すこと。
+- **Analyzers strict**：`Directory.Build.props` で `EnableNETAnalyzers` + `AnalysisLevel=latest-Recommended`、Roslynator。編集後 `dotnet build` で警告を潰すこと。
 - **`.editorconfig`**：コードスタイル定義。コメントは日本語前提（既存の日本語コメントを維持）。
 - **ログ**：NLog（`Web.AspnetCore` / `Host` で `UseNLog`、Fody の `LoggingAttribute` でメソッドログ）。
 - **検証**：`FluentValidation` で `AddValidatorsFromAssemblyContaining` + クライアント側アダプタ。
@@ -104,7 +121,7 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 - コミット時は `git diff` / `git status` で対象を確認し、意図しないファイルを含めないこと。生成物（SBOM・playwright-report・CodeGen 生成物）等は `--no-verify` でない限りフックに注意する。
 
 ## 生成物の扱い
-- `src/CodeGen/Outputs/**`, `src/CodeGen.Result/**`, `src/CodeGen.Result.Kiota/**` はテスト生成です。テンプレート変更時は再生成して `Outputs` をビルド可能に保つ。
+- `src/CodeGen/Outputs/**`, `src/CodeGen.Result/**`, `src/CodeGen.Result.Kiota/**` はテスト生成である。テンプレート変更時は再生成して `Outputs` をビルド可能に保つこと。
 - 自動生成・生成テンプレート・SBOM・playwright-report は手で編集しない。
 
 ## エージェントスキル（opencode 用）
@@ -123,6 +140,5 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 
 ## CI / Azure
 
-- `main.yml`：push で Mvc（npm ci + vite publish）+ WebApi を `Release/net10.0` で publish → Azure Web Apps へデプロイ。Nuxt（pnpm install + generate）は SWA、Spring (Java) もデプロイ。
-- `test.yml`：全てのテストプロジェクトを CI で実行（コンテナ系は Testcontainers、Docker が必要）。
+- `main.yml`：push で全テストプロジェクトを CI 実行（コンテナ系は Testcontainers、Docker が必要）。main ブランチでテスト成功時のみ、Mvc（npm ci + vite publish）+ WebApi を `Release/net10.0` で publish → Azure Web Apps へデプロイ。Nuxt（pnpm install + generate）は SWA、Spring (Java) もデプロイ。
 - アプリ設定の前提：`WEBSITE_RUN_FROM_PACKAGE=1`、`DOTNET_VERSION=10.0`。

@@ -1,8 +1,8 @@
-using MethodDecorator.Fody.Interfaces;
-
 using System.Collections;
 using System.Reflection;
 using System.Text.Json;
+
+using MethodDecorator.Fody.Interfaces;
 
 namespace AspNetCoreSample.WebApi.Logging;
 

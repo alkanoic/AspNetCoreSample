@@ -5,6 +5,7 @@ description: AGENTS.md のコミット規約（Conventional Commits / 日本語�
 現在の変更を Conventional Commits 形式で日本語のコミットメッセージとしてコミットしてください。
 
 手順:
+0. まず `/review` と同じ手順で現在の変更をレビューする。`git status` / `git diff`（`git diff --staged` があれば）を確認し、バグ・意図しない変更・不要ファイルなどを洗い出して報告する。指摘事項がある場合は修正してから次へ進む。
 1. `git status` と `git diff`（および `git diff --staged` があれば）を確認し、何が変更されたかを把握する。
 2. 意図しないファイル（SBOM・playwright-report・CodeGen 生成物などのアーティファクト、シークレット）が含まれていないか確認する。
 3. AGENTS.md の「コミット規約（Conventional Commits / 日本語）」に従い、type / scope / 要約を選定する。要約は動詞で「〜する」まで書き、英語にしない。

@@ -1,4 +1,5 @@
 namespace AspNetCoreSample.Mvc.Models;
+
 public class PushRegisterViewModel
 {
 

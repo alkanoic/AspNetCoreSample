@@ -36,11 +36,20 @@ if [ -x /home/vscode/.opencode/bin/opencode ] && ! command -v opencode >/dev/nul
     fi
 fi
 
+# Git hooks (pre-commit lint) を有効化する
+if [ -d .githooks ]; then
+    chmod +x .githooks/pre-commit 2>/dev/null || true
+    git config core.hooksPath .githooks
+fi
+
 # SBOM 生成物 (export-cyclonedx.sh で使用)
 npm install -g @cyclonedx/cyclonedx-npm || echo "cyclonedx-npm skipped"
 
 # Nuxt (NuxtSample) は pnpm で依存を管理しているため、グローバルに導入する
 npm install -g pnpm || echo "pnpm skipped"
+
+# 日本語 Markdown レビュー (textlint / preset-ja-technical-writing) を pre-commit で実行するため
+npm install -g textlint@14 textlint-rule-preset-ja-technical-writing@12 || echo "textlint skipped"
 
 # Nuxt (NuxtSample) のローカル環境設定 (.env) を .env.example から初期化する
 if [ -f "src/NuxtSample/.env.example" ] && [ ! -f "src/NuxtSample/.env" ]; then

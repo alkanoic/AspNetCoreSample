@@ -1,9 +1,9 @@
 
+using System.Text.Json;
+
 using AspNetCoreSample.WebApi.Options;
 
 using Microsoft.Extensions.Options;
-
-using System.Text.Json;
 
 namespace AspNetCoreSample.WebApi.Services.Keycloak.Token;
 

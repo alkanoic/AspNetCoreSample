@@ -18,7 +18,10 @@
             <td>{{ person.job }}</td>
             <td>{{ person.favoriteColor }}</td>
             <td>
-              <button class="btn btn-primary btn-sm" @click="toggleDetails(index)">
+              <button
+                class="btn btn-primary btn-sm"
+                @click="toggleDetails(index)"
+              >
                 Details
               </button>
             </td>
@@ -35,25 +38,25 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+  import { ref } from "vue";
 
-const people = ref([
-  {
-    name: "Cy Ganderton",
-    job: "Quality Control Specialist",
-    favoriteColor: "Blue",
-  },
-  {
-    name: "Hart Hagerty",
-    job: "Desktop Support Technician",
-    favoriteColor: "Purple",
-  },
-  { name: "Brice Swyre", job: "Tax Accountant", favoriteColor: "Red" },
-]);
+  const people = ref([
+    {
+      name: "Cy Ganderton",
+      job: "Quality Control Specialist",
+      favoriteColor: "Blue",
+    },
+    {
+      name: "Hart Hagerty",
+      job: "Desktop Support Technician",
+      favoriteColor: "Purple",
+    },
+    { name: "Brice Swyre", job: "Tax Accountant", favoriteColor: "Red" },
+  ]);
 
-const showDetails = ref([]);
+  const showDetails = ref([]);
 
-const toggleDetails = (index) => {
-  showDetails.value[index] = !showDetails.value[index];
-};
+  const toggleDetails = (index) => {
+    showDetails.value[index] = !showDetails.value[index];
+  };
 </script>

@@ -28,7 +28,7 @@ dotnet format                    # editorconfig 準拠。差分確認のみな�
 | `tests/AspNetCoreSample.Mvc.Test` | `dotnet test tests/AspNetCoreSample.Mvc.Test` | Playwright（`pwsh bin/Release/net10.0/playwright.ps1 install --with-deps` 実行済み） |
 | `tests/AspNetCoreSample.Mvc.Container.Test` | `dotnet test tests/AspNetCoreSample.Mvc.Container.Test` | Docker ビルド + 証明書（`bash create_certificate.sh`）+ Playwright |
 
-CI 相当の全実行は `test.yml` の各ジョブを参照（`dotnet build -c Release -f net10.0` → `playwright install` → `dotnet test --no-build`）。
+CI 相当の全実行は `main.yml` の各テストジョブ（`dbcontainer_test` / `webapi_test` / `mvc_test` / `mvc_container_test`）を参照（`dotnet build -c Release -f net10.0` → `playwright install` → `dotnet test --no-build`）。
 
 ## xunit v3 の規約
 

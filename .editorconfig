@@ -361,3 +361,16 @@ dotnet_naming_style.s_camelcase.required_prefix = s_
 dotnet_naming_style.s_camelcase.required_suffix =
 dotnet_naming_style.s_camelcase.word_separator =
 dotnet_naming_style.s_camelcase.capitalization = camel_case
+
+# ------------------------------------------------------------
+# EF Core スキャフォールドの自動生成コード（dotnet ef dbcontext scaffold）
+# 手を入れないため、アナライザ・フォーマッタの対象から除外する
+# ------------------------------------------------------------
+[src/AspNetCoreSample.DataModel/Models/*.cs]
+generated_code = true
+
+[src/AspNetCoreSample.Templates/Models/*.cs]
+generated_code = true
+
+[src/CodeGen.Result/Models/*.cs]
+generated_code = true
