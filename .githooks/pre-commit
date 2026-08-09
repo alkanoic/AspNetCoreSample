@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# AspNetCoreSample 共通の pre-commit lint フック。
+# 方針:
+# - cron/staged のみ対象とし、ワークツリー全体は対象にしない。
+# - ツールが見つからない場合はその項目を SKIP してコミットを阻害しない
+#   （スキップ時は常に警告を出し、CI（main.yml の lint ジョブ）が正規のゲートとなる）。
+# - dotnet format は editorconfig 準拠の全体検証（整形済みリポジトリなので軽量）。
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+# ステージ済みファイルの一覧（追加/変更/リネーム）
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -z "$STAGED" ]; then
+  exit 0
+fi
+
+failures=0
+
+echo "== git pre-commit lint =="
+
+# ------------------------------------------------------------
+# 1. .NET: dotnet format --verify-no-changes
+#    対象検知: *.cs / *.csproj / *.sln がステージされているか
+# ------------------------------------------------------------
+if printf '%s\n' "$STAGED" | grep -qE '(\.cs$|\.csproj$|\.vb$|\.sln$)'; then
+  echo "-- dotnet format --verify-no-changes"
+  if command -v dotnet >/dev/null 2>&1; then
+    if ! dotnet format AspNetCoreSample.sln --verify-no-changes --no-restore >/tmp/dotnet-format.log 2>&1; then
+      echo "ERROR dotnet format: 設定差分有り。dotnet format で整形してください。詳細:"
+      tail -20 /tmp/dotnet-format.log >&2
+      failures=$((failures + 1))
+    fi
+  else
+    echo "   SKIP: dotnet not found"
+  fi
+fi
+
+# ------------------------------------------------------------
+# 2. GitHub Actions: actionlint
+#    対象は .github/workflows/*.yml の変更があること
+# ------------------------------------------------------------
+if printf '%s\n' "$STAGED" | grep -qE '^\.github/workflows/[^/]+\.ya?ml$'; then
+  echo "actionlint (GitHub Actions)"
+  if command -v actionlint >/dev/null 2>&1; then
+    if ! actionlint -shellcheck= -pyflakes= .github/workflows/*.yml >/tmp/actionlint.log 2>&1; then
+      echo "   actionlint error:" >&2
+      tail -30 /tmp/actionlint.log >&2
+      failures=$((failures + 1))
+    fi
+  else
+    echo "   SKIP: actionlint not found. 'dart run' 'npx actionlint' または CI (main.yml) 参照"
+  fi
+fi
+
+# ------------------------------------------------------------
+# 3. Nuxt : src/NuxtSample 配下の変更は prettier チェック
+# ------------------------------------------------------------
+if printf '%s\n' "$STAGED" | grep -q '^src/NuxtSample/'; then
+  echo "prettier (NuxtSample)"
+  if [ -x src/NuxtSample/node_modules/.bin/prettier ]; then
+    cd src/NuxtSample
+    if ! pnpm exec prettier --check "app/**/*.{ts,vue,css}" >/tmp/prettier.log 2>&1; then
+      echo "chk prettier error:" >&2
+      tail -30 /tmp/prettier.log >&2
+      cd "$ROOT"
+      failures=$((failures + 1))
+    fi
+    cd "$ROOT"
+  else
+    echo "   SKIP: src/NuxtSample/node_modules not installed"
+  fi
+fi
+
+# ------------------------------------------------------------
+# 4. Markdown: 変更がある場合 markdownlint-cli2（あれば）
+# ------------------------------------------------------------
+MD_FILES=$(printf '%s\n' "$STAGED" | grep '\.md$' || true)
+if [ -n "$MD_FILES" ]; then
+  echo "markdownlint"
+  if command -v markdownlint-cli2 >/dev/null 2>&1; then
+    mapfile -t MD_LIST <<<"$MD_FILES"
+    if ! markdownlint-cli2 "${MD_LIST[@]}" >/tmp/markdownlint.log 2>&1; then
+      echo "   markdownlint error:" >&2
+      tail -40 /tmp/markdownlint.log >&2
+      failures=$((failures + 1))
+    fi
+  else
+    echo "   SKIP: markdownlint-cli2 not found"
+  fi
+fi
+
+# ------------------------------------------------------------
+# 4.5 cspell: テキスト系のスペルチェック（あれば）
+# ------------------------------------------------------------
+if command -v cspell >/dev/null 2>&1; then
+  CANDIDATE=$(printf '%s\n' "$STAGED" | grep -E '\.(cs|md|ts|vue|json)$' || true)
+  if [ -n "$CANDIDATE" ]; then
+    echo "cspell"
+    mapfile -t CANDIDATE < <(printf '%s\n' "$CANDIDATE")
+    if ! cspell lint --no-progress --gitignore "${CANDIDATE[@]}" >/tmp/cspell.log 2>&1; then
+      echo "   cspell error:" >&2
+      tail -40 /tmp/cspell.log >&2
+      failures=$((failures + 1))
+    fi
+  fi
+else
+  echo "cspell: SKIP (not found)"
+fi
+
+# ------------------------------------------------------------
+# 5. Shellスクリプト: sh/bash 構文チェック
+# ------------------------------------------------------------
+if printf '%s\n' "$STAGED" | grep -qE '\.sh$'; then
+  for sh in $(printf '%s\n' "$STAGED" | grep -E '\.sh$' || true); do
+    echo "bash -n $sh"
+    if ! bash -n "$sh"; then
+      failures=$((failures + 1))
+    fi
+  done
+fi
+
+if [ "$failures" -gt 0 ]; then
+  echo "pre-commit lint failed ($failures problem(s))."
+  echo "  -- --no-verify を付けるとバイパスできますが、CI の lint job で必ずチェックされます。"
+  exit 1
+fi
+
+echo "pre-commit lint passed."

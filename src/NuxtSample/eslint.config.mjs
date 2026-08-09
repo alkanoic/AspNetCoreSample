@@ -3,11 +3,7 @@ import tailwindcss from "eslint-plugin-tailwindcss";
 
 export default createConfigForNuxt({
   features: {
-    stylistic: {
-      indent: 2,
-      semi: true,
-      quotes: "double",
-    },
+    stylistic: false,
     typescript: {
       strict: true,
     },
@@ -28,14 +24,15 @@ export default createConfigForNuxt({
     },
   })
   .overrideRules({
-    "@stylistic/arrow-parens": "off",
-    "@stylistic/brace-style": "off",
-    "@stylistic/comma-dangle": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "vue/first-attribute-linebreak": "off",
-    "vue/html-closing-bracket-newline": "off",
-    "vue/html-indent": "off",
-    "vue/max-attributes-per-line": "off",
+    "vue/html-self-closing": [
+      "warn",
+      {
+        html: {
+          void: "any",
+        },
+      },
+    ],
     "vue/multi-word-component-names": "off",
     "vue/singleline-html-element-content-newline": "off",
   });

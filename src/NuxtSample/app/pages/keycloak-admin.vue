@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  middleware: ["keycloak-auth", "keycloak-role"],
-});
+  definePageMeta({
+    middleware: ["keycloak-auth", "keycloak-role"],
+  });
 </script>

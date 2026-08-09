@@ -1,8 +1,12 @@
 <template>
   <div>
-    <div v-for="(item, index) in items" :key="index" class="collapse-arrow bg-base-200 collapse"
-      :class="{ 'mt-2': index >= 1 }">
-      <input type="checkbox">
+    <div
+      v-for="(item, index) in items"
+      :key="index"
+      class="collapse-arrow bg-base-200 collapse"
+      :class="{ 'mt-2': index >= 1 }"
+    >
+      <input type="checkbox" />
       <div class="collapse-title text-xl font-medium">
         Click to open this one and close others
       </div>
@@ -14,9 +18,9 @@
 </template>
 
 <script setup lang="ts">
-const items = ref([
-  { content: "hello1" },
-  { content: "hello2" },
-  { content: "hello3" },
-]);
+  const items = ref([
+    { content: "hello1" },
+    { content: "hello2" },
+    { content: "hello3" },
+  ]);
 </script>

@@ -1,3 +1,3 @@
 <template>
-    <p>Keycloak Access Denied</p>
+  <p>Keycloak Access Denied</p>
 </template>

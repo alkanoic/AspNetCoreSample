@@ -11,25 +11,25 @@
 </template>
 
 <script setup>
-defineProps({
-  isOpen: {
-    type: Boolean,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  message: {
-    type: String,
-    required: false,
-    default: "",
-  },
-});
+  defineProps({
+    isOpen: {
+      type: Boolean,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    message: {
+      type: String,
+      required: false,
+      default: "",
+    },
+  });
 
-const emit = defineEmits(["close"]);
-const closeModal = () => {
-  emit("close");
-};
+  const emit = defineEmits(["close"]);
+  const closeModal = () => {
+    emit("close");
+  };
 </script>

@@ -36,6 +36,12 @@ if [ -x /home/vscode/.opencode/bin/opencode ] && ! command -v opencode >/dev/nul
     fi
 fi
 
+# Git hooks (pre-commit lint) を有効化する
+if [ -d .githooks ]; then
+    chmod +x .githooks/pre-commit 2>/dev/null || true
+    git config core.hooksPath .githooks
+fi
+
 # SBOM 生成物 (export-cyclonedx.sh で使用)
 npm install -g @cyclonedx/cyclonedx-npm || echo "cyclonedx-npm skipped"
 

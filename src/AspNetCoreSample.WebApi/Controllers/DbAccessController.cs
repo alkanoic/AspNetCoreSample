@@ -1,11 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
+using AspNetCoreSample.DataModel.Models;
+using AspNetCoreSample.WebApi;
+using AspNetCoreSample.WebApi.Logging;
+using AspNetCoreSample.WebApi.Validators;
+
 using FluentValidation;
 using FluentValidation.Results;
-using AspNetCoreSample.WebApi;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AspNetCoreSample.WebApi.Validators;
-using AspNetCoreSample.DataModel.Models;
-using AspNetCoreSample.WebApi.Logging;
 
 namespace AspNetCoreSample.WebApi.Controllers;
 

@@ -41,6 +41,22 @@ dotnet format                # フォーマットチェック・適用（editorc
 - ソリューションに含まれるのは Web 系 + 生成系 + 一部テストのみ。`src/AspNetCoreSample.Mvc.Container.Test`、`src/CodeGen.Result.Kiota/`、`src/localstack/`、`src/SpringBoot.Reports/`、`e2e/` はソリューション外。
 - Git フック等により push/commit でフルテストが走る（CI 参照）。
 
+## Lint（整形・静的検査）
+
+コミット時は `.githooks/pre-commit` が自動実行される（`git config core.hooksPath .githooks`。devcontainer の postCreate で設定済み）。ツール毎にステージ済みの変更を検知して実行し、失敗すればコミットをブロックする。
+
+| ツール | 検知条件 / 対象 | 備考 |
+| ------ | ---------------- | ---- |
+| `dotnet format --verify-no-changes` | `*.cs` / `.csproj` 等の変更時、ソリューション全体の editorconfig 準拠を検証 | 整形済みリポジトリ前提のため軽量 |
+| `actionlint` | `.github/workflows/*.yml` の変更時 | GitHub Actions の構文検証 |
+| `prettier --check`（NuxtSample） | `src/NuxtSample/` 配下の変更時、`app/**` を検証 | フロント相当 |
+| `markdownlint-cli2` | 変更された `*.md` | 設定は `.markdownlint.json` |
+| `cspell` | 変更されたテキスト系 | 設定は `.cspell.json` |
+| `bash -n` | 変更された `*.sh` | シェル構文 |
+
+- ツールが未インストールの場合はスキップされる（コミットは阻害しない）。正規のゲートは CI（`main.yml` の `lint` ジョブ）+ 必要なら `git commit --no-verify` も可能。ただし CI で必ずチェックされる。
+- 個別に手動で回す場合: `bash .githooks/pre-commit`（ステージ済み前提）
+
 ## テスト
 
 ```bash
@@ -81,7 +97,7 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 
 ## 監理・フォーマット・規約
 
-- **Analizers strict**：`Directory.Build.props` で `EnableNETAnalyzers` + `AnalysisLevel=latest-Recommended`、Roslynator。編集後 `dotnet build` で警告を潰すこと。
+- **Analyzers strict**：`Directory.Build.props` で `EnableNETAnalyzers` + `AnalysisLevel=latest-Recommended`、Roslynator。編集後 `dotnet build` で警告を潰すこと。
 - **`.editorconfig`**：コードスタイル定義。コメントは日本語前提（既存の日本語コメントを維持）。
 - **ログ**：NLog（`Web.AspnetCore` / `Host` で `UseNLog`、Fody の `LoggingAttribute` でメソッドログ）。
 - **検証**：`FluentValidation` で `AddValidatorsFromAssemblyContaining` + クライアント側アダプタ。

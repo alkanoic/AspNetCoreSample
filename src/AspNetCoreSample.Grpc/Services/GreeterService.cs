@@ -1,5 +1,6 @@
-using Grpc.Core;
 using AspNetCoreSample.Grpc;
+
+using Grpc.Core;
 
 namespace AspNetCoreSample.Grpc.Services;
 

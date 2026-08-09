@@ -12,7 +12,9 @@
     </div>
 
     <!-- Header -->
-    <div class="fixed top-0 right-0 left-0 z-40 bg-gray-800 p-4 text-white lg:hidden">
+    <div
+      class="fixed top-0 right-0 left-0 z-40 bg-gray-800 p-4 text-white lg:hidden"
+    >
       <div class="text-center">
         <NuxtLink to="/" class="text-xl font-bold">NuxtSample</NuxtLink>
       </div>
@@ -26,14 +28,18 @@
     />
 
     <!-- Sidebar -->
-    <div :class="[
-      'fixed inset-y-0 left-0 z-40 w-60 bg-gray-800 transition-transform duration-300 ease-in-out lg:static',
-      openedDrawer ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
-    ]">
+    <div
+      :class="[
+        'fixed inset-y-0 left-0 z-40 w-60 bg-gray-800 transition-transform duration-300 ease-in-out lg:static',
+        openedDrawer ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+      ]"
+    >
       <div class="flex h-full flex-col p-4">
         <!-- Mobile close button -->
         <div class="mb-4 flex items-center justify-between lg:hidden">
-          <NuxtLink to="/" class="text-xl font-bold text-white">NuxtSample</NuxtLink>
+          <NuxtLink to="/" class="text-xl font-bold text-white"
+            >NuxtSample</NuxtLink
+          >
           <UButton
             icon="i-heroicons-x-mark"
             variant="ghost"
@@ -44,12 +50,20 @@
         </div>
 
         <div class="mb-6 hidden lg:block">
-          <NuxtLink to="/" class="text-xl font-bold text-white">NuxtSample</NuxtLink>
+          <NuxtLink to="/" class="text-xl font-bold text-white"
+            >NuxtSample</NuxtLink
+          >
         </div>
 
         <nav class="flex-1 space-y-2">
-          <div v-for="section in menuItems" :key="section.label" class="space-y-1">
-            <div class="px-3 py-2 font-medium text-white">{{ section.label }}</div>
+          <div
+            v-for="section in menuItems"
+            :key="section.label"
+            class="space-y-1"
+          >
+            <div class="px-3 py-2 font-medium text-white">
+              {{ section.label }}
+            </div>
             <div class="space-y-1 pl-2">
               <NuxtLink
                 v-for="link in section.links"
@@ -82,11 +96,7 @@
 
     <!-- Main content -->
     <div class="flex-1 lg:ml-0">
-      <div :class="[
-        'h-full overflow-auto',
-        'pt-16 lg:pt-0',
-        'p-4',
-      ]">
+      <div :class="['h-full overflow-auto', 'pt-16 lg:pt-0', 'p-4']">
         <slot />
       </div>
     </div>
@@ -94,72 +104,72 @@
 </template>
 
 <script setup lang="ts">
-import { useFruitStore } from "@/store/fruitStore";
+  import { useFruitStore } from "@/store/fruitStore";
 
-const openedDrawer = ref(false);
-const closeDrawer = () => {
-  openedDrawer.value = false;
-};
+  const openedDrawer = ref(false);
+  const closeDrawer = () => {
+    openedDrawer.value = false;
+  };
 
-const route = useRoute();
+  const route = useRoute();
 
-const fruitStore = useFruitStore();
-fruitStore.setDefaults();
-const fruits = fruitStore.fruits;
-const selectedFruit = ref(0);
+  const fruitStore = useFruitStore();
+  fruitStore.setDefaults();
+  const fruits = fruitStore.fruits;
+  const selectedFruit = ref(0);
 
-const fruitOptions = computed(() =>
-  fruits.map(fruit => ({ label: fruit, value: fruit }))
-);
+  const fruitOptions = computed(() =>
+    fruits.map((fruit) => ({ label: fruit, value: fruit }))
+  );
 
-function handleChange(value: string) {
-  console.log("Selected fruit:", value);
-  fruitStore.setSelectedFruit(value);
-}
-
-const menuItems = [
-  {
-    label: "Tables",
-    defaultOpen: true,
-    links: [
-      { label: "Table", to: "/table" },
-      { label: "TableDetail", to: "/tabledetail" },
-      { label: "Tabulator", to: "/tabulator" },
-      { label: "TabulatorTable", to: "/tabulator-table" },
-      { label: "TanStackTable", to: "/tantable" }
-    ]
-  },
-  {
-    label: "Counters",
-    defaultOpen: true,
-    links: [
-      { label: "RefCounter", to: "/ref-counter" },
-      { label: "StateCounter", to: "/state-counter" }
-    ]
-  },
-  {
-    label: "Auth",
-    defaultOpen: true,
-    links: [
-      { label: "Login", to: "/login" },
-      { label: "Logined", to: "/logined" },
-      { label: "LoginAdminPage", to: "/login-admin" },
-      { label: "KeycloakLogined", to: "/keycloak-logined" },
-      { label: "KeycloakAdminPage", to: "/keycloak-admin" }
-    ]
-  },
-  {
-    label: "Others",
-    defaultOpen: false,
-    links: [
-      { label: "ParentChild", to: "/parent-child" },
-      { label: "Person", to: "/person" },
-      { label: "QROD", to: "/qrod" },
-      { label: "Modal", to: "/modal" },
-      { label: "Accordion", to: "/accordion" },
-      { label: "Validate", to: "/validate" },
-      { label: "Textarea", to: "/textarea" }
-    ]
+  function handleChange(value: string) {
+    console.log("Selected fruit:", value);
+    fruitStore.setSelectedFruit(value);
   }
-];
+
+  const menuItems = [
+    {
+      label: "Tables",
+      defaultOpen: true,
+      links: [
+        { label: "Table", to: "/table" },
+        { label: "TableDetail", to: "/tabledetail" },
+        { label: "Tabulator", to: "/tabulator" },
+        { label: "TabulatorTable", to: "/tabulator-table" },
+        { label: "TanStackTable", to: "/tantable" },
+      ],
+    },
+    {
+      label: "Counters",
+      defaultOpen: true,
+      links: [
+        { label: "RefCounter", to: "/ref-counter" },
+        { label: "StateCounter", to: "/state-counter" },
+      ],
+    },
+    {
+      label: "Auth",
+      defaultOpen: true,
+      links: [
+        { label: "Login", to: "/login" },
+        { label: "Logined", to: "/logined" },
+        { label: "LoginAdminPage", to: "/login-admin" },
+        { label: "KeycloakLogined", to: "/keycloak-logined" },
+        { label: "KeycloakAdminPage", to: "/keycloak-admin" },
+      ],
+    },
+    {
+      label: "Others",
+      defaultOpen: false,
+      links: [
+        { label: "ParentChild", to: "/parent-child" },
+        { label: "Person", to: "/person" },
+        { label: "QROD", to: "/qrod" },
+        { label: "Modal", to: "/modal" },
+        { label: "Accordion", to: "/accordion" },
+        { label: "Validate", to: "/validate" },
+        { label: "Textarea", to: "/textarea" },
+      ],
+    },
+  ];
 </script>

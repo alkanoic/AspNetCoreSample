@@ -18,6 +18,80 @@ env:
   TESTS_MVC_CONTAINER_LOCATION: "tests/AspNetCoreSample.Mvc.Container.Test"
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22.x"
+
+      - name: Enable pnpm
+        run: corepack enable pnpm
+
+      - name: Install NuxtSample dependencies
+        working-directory: src/NuxtSample
+        run: pnpm install --frozen-lockfile
+
+      - name: Restore dotnet tools and solution
+        run: |
+          dotnet tool restore
+          dotnet restore AspNetCoreSample.sln
+
+      - name: dotnet format check
+        run: dotnet format AspNetCoreSample.sln --verify-no-changes
+
+      - name: Nuxt prettier check
+        working-directory: src/NuxtSample
+        run: pnpm exec prettier --check "app/**/*.{ts,vue,css}"
+
+      - name: Nuxt eslint check
+        working-directory: src/NuxtSample
+        run: pnpm run lint
+
+      - name: Setup actionlint
+        uses: docker://rhysd/actionlint:latest
+        with:
+          args: -shellcheck= -pyflakes= .github/workflows/main.yml
+
+      - name: markdownlint check (changed files)
+        run: |
+          BASE="${{ github.event.before }}"
+          if [[ "$BASE" =~ ^0+$ || -z "$BASE" ]]; then
+            BASE="$(git rev-parse HEAD~1 2>/dev/null || echo HEAD)"
+          fi
+          CHANGED="$(git diff --name-only "${BASE:-HEAD~1}" HEAD 2>/dev/null | grep '\.md$' || true)"
+          if [ -n "$CHANGED" ]; then
+            readarray -t MD_LIST <<<"$CHANGED"
+            npx --yes markdownlint-cli2 --config .markdownlint.json "${MD_LIST[@]}"
+          else
+            echo "no changed markdown files"
+          fi
+
+      - name: cspell check (changed files)
+        run: |
+          BASE="${{ github.event.before }}"
+          if [[ "$BASE" =~ ^0+$ || -z "$BASE" ]]; then
+            BASE="$(git rev-parse HEAD~1 2>/dev/null || echo HEAD)"
+          fi
+          CHANGED="$(git diff --name-only "${BASE:-HEAD~1}" HEAD 2>/dev/null | grep -E '\.(cs|md|ts|vue|json)$' || true)"
+          if [ -n "$CHANGED" ]; then
+            readarray -t SPELL_LIST <<<"$CHANGED"
+            npx --yes cspell lint --no-progress "${SPELL_LIST[@]}"
+          else
+            echo "no changed text files"
+          fi
+
   dbcontainer_test:
     runs-on: ubuntu-latest
 

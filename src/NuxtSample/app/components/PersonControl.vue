@@ -8,23 +8,23 @@
 </template>
 
 <script setup lang="ts">
-export interface PersonProps {
-  Name: string;
-  Age: int;
-}
+  export interface PersonProps {
+    Name: string;
+    Age: int;
+  }
 
-const props = defineProps({
-  person: {
-    type: Object as PersonProps,
-    required: true,
-  },
-});
+  const props = defineProps({
+    person: {
+      type: Object as PersonProps,
+      required: true,
+    },
+  });
 
-const emit = defineEmits<{
-  (event: "personClick", person: PersonProps): void;
-}>();
+  const emit = defineEmits<{
+    (event: "personClick", person: PersonProps): void;
+  }>();
 
-const personClick = (): void => {
-  emit("personClick", props.person);
-};
+  const personClick = (): void => {
+    emit("personClick", props.person);
+  };
 </script>

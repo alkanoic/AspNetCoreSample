@@ -8,10 +8,10 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  people: {
-    type: Array as PersonProps,
-    required: true,
-  },
-});
+  const props = defineProps({
+    people: {
+      type: Array as PersonProps,
+      required: true,
+    },
+  });
 </script>
