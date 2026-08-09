@@ -331,3 +331,43 @@ jobs:
           app-name: ${{ env.SPRING_AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.SPRING_AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.SPRING_AZURE_WEBAPP_PACKAGE_PATH }}
+
+  docs:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test]
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install MkDocs dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build MkDocs site
+        run: mkdocs build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

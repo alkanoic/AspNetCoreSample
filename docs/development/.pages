@@ -1,0 +1,6 @@
+nav:
+  - setup.md
+  - build-run.md
+  - testing.md
+  - ci-cd.md
+  - deployment.md

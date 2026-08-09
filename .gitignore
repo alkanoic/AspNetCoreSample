@@ -403,3 +403,9 @@ allure-results
 playwright-report*
 test-results*
 certificate.crt
+
+# MkDocs build output
+site/
+
+# Python virtual environment
+.venv/
