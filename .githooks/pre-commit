@@ -93,21 +93,25 @@ if [ -n "$MD_FILES" ]; then
 fi
 
 # ------------------------------------------------------------
-# 4.5 cspell: テキスト系のスペルチェック（あれば）
+# 4.5 textlint: 日本語を含む Markdown の文章チェック（あれば）
 # ------------------------------------------------------------
-if command -v cspell >/dev/null 2>&1; then
-  CANDIDATE=$(printf '%s\n' "$STAGED" | grep -E '\.(cs|md|ts|vue|json)$' || true)
-  if [ -n "$CANDIDATE" ]; then
-    echo "cspell"
-    mapfile -t CANDIDATE < <(printf '%s\n' "$CANDIDATE")
-    if ! cspell lint --no-progress --gitignore "${CANDIDATE[@]}" >/tmp/cspell.log 2>&1; then
-      echo "   cspell error:" >&2
-      tail -40 /tmp/cspell.log >&2
+JA_MD=$(printf '%s\n' "$STAGED" | grep '\.md$' | while IFS= read -r f; do
+  if grep -qE '[ぁ-んァ-ヶ一-龠]' "$f" 2>/dev/null; then
+    printf '%s\n' "$f"
+  fi
+done)
+if [ -n "$JA_MD" ]; then
+  echo "textlint (日本語 Markdown)"
+  if command -v textlint >/dev/null 2>&1; then
+    mapfile -t TL_LIST <<<"$JA_MD"
+    if ! textlint --config .textlintrc.json "${TL_LIST[@]}" >/tmp/textlint.log 2>&1; then
+      echo "   textlint error:" >&2
+      tail -40 /tmp/textlint.log >&2
       failures=$((failures + 1))
     fi
+  else
+    echo "   SKIP: textlint not found"
   fi
-else
-  echo "cspell: SKIP (not found)"
 fi
 
 # ------------------------------------------------------------

@@ -51,11 +51,12 @@ dotnet format                # フォーマットチェック・適用（editorc
 | `actionlint` | `.github/workflows/*.yml` の変更時 | GitHub Actions の構文検証 |
 | `prettier --check`（NuxtSample） | `src/NuxtSample/` 配下の変更時、`app/**` を検証 | フロント相当 |
 | `markdownlint-cli2` | 変更された `*.md` | 設定は `.markdownlint.json` |
-| `cspell` | 変更されたテキスト系 | 設定は `.cspell.json` |
+| `textlint` | 変更された日本語を含む `*.md` | 設定は `.textlintrc.json`（preset-ja-technical-writing） |
 | `bash -n` | 変更された `*.sh` | シェル構文 |
 
 - ツールが未インストールの場合はスキップされる（コミットは阻害しない）。正規のゲートは CI（`main.yml` の `lint` ジョブ）+ 必要なら `git commit --no-verify` も可能。ただし CI で必ずチェックされる。
-- 個別に手動で回す場合: `bash .githooks/pre-commit`（ステージ済み前提）
+- textlint は日本語文字を含む `*.md` のみ対象（英語文書やライセンスファイルは対象外）。
+- 個別に手動で回す場合: `bash .githooks/pre-commit`（ステージ済み前提）。textlint のみ手動実行する場合: `npx --yes -p textlint@14 -p textlint-rule-preset-ja-technical-writing@12 textlint --config .textlintrc.json <file>`。
 
 ## テスト
 
@@ -120,7 +121,7 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 - コミット時は `git diff` / `git status` で対象を確認し、意図しないファイルを含めないこと。生成物（SBOM・playwright-report・CodeGen 生成物）等は `--no-verify` でない限りフックに注意する。
 
 ## 生成物の扱い
-- `src/CodeGen/Outputs/**`, `src/CodeGen.Result/**`, `src/CodeGen.Result.Kiota/**` はテスト生成です。テンプレート変更時は再生成して `Outputs` をビルド可能に保つ。
+- `src/CodeGen/Outputs/**`, `src/CodeGen.Result/**`, `src/CodeGen.Result.Kiota/**` はテスト生成である。テンプレート変更時は再生成して `Outputs` をビルド可能に保つこと。
 - 自動生成・生成テンプレート・SBOM・playwright-report は手で編集しない。
 
 ## エージェントスキル（opencode 用）

@@ -78,18 +78,27 @@ jobs:
             echo "no changed markdown files"
           fi
 
-      - name: cspell check (changed files)
+      - name: textlint check (changed Japanese markdown)
         run: |
           BASE="${{ github.event.before }}"
           if [[ "$BASE" =~ ^0+$ || -z "$BASE" ]]; then
             BASE="$(git rev-parse HEAD~1 2>/dev/null || echo HEAD)"
           fi
-          CHANGED="$(git diff --name-only "${BASE:-HEAD~1}" HEAD 2>/dev/null | grep -E '\.(cs|md|ts|vue|json)$' || true)"
+          CHANGED="$(git diff --name-only "${BASE:-HEAD~1}" HEAD 2>/dev/null | grep '\.md$' || true)"
           if [ -n "$CHANGED" ]; then
-            readarray -t SPELL_LIST <<<"$CHANGED"
-            npx --yes cspell lint --no-progress "${SPELL_LIST[@]}"
+            JA_MD="$(printf '%s\n' "$CHANGED" | while IFS= read -r f; do
+              if grep -qE '[ぁ-んァ-ヶ一-龠]' "$f" 2>/dev/null; then
+                printf '%s\n' "$f"
+              fi
+            done)"
+            if [ -n "$JA_MD" ]; then
+              readarray -t TL_LIST <<<"$JA_MD"
+              npx --yes -p textlint@14 -p textlint-rule-preset-ja-technical-writing@12 textlint --config .textlintrc.json "${TL_LIST[@]}"
+            else
+              echo "no changed Japanese markdown files"
+            fi
           else
-            echo "no changed text files"
+            echo "no changed markdown files"
           fi
 
   dbcontainer_test:

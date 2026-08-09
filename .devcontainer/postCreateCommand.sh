@@ -48,6 +48,9 @@ npm install -g @cyclonedx/cyclonedx-npm || echo "cyclonedx-npm skipped"
 # Nuxt (NuxtSample) は pnpm で依存を管理しているため、グローバルに導入する
 npm install -g pnpm || echo "pnpm skipped"
 
+# 日本語 Markdown レビュー (textlint / preset-ja-technical-writing) を pre-commit で実行するため
+npm install -g textlint@14 textlint-rule-preset-ja-technical-writing@12 || echo "textlint skipped"
+
 # Nuxt (NuxtSample) のローカル環境設定 (.env) を .env.example から初期化する
 if [ -f "src/NuxtSample/.env.example" ] && [ ! -f "src/NuxtSample/.env" ]; then
     cp "src/NuxtSample/.env.example" "src/NuxtSample/.env"
