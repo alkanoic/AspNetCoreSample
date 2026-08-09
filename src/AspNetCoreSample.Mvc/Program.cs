@@ -86,10 +86,7 @@ try
           //       RoleClaimType = "role"
           //   };
           // 開発のためHttpを許可する
-          if (builder.Environment.IsDevelopment())
-          {
-              options.RequireHttpsMetadata = false;
-          }
+          options.RequireHttpsMetadata = false;
       });
     builder.Services.AddAuthorization();
 

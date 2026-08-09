@@ -59,11 +59,7 @@ try
         {
             options.Authority = keycloakOptions.Authority;
             options.Audience = keycloakOptions.Audience;
-            if (builder.Environment.IsDevelopment())
-            {
-                // 開発のためHttpを許可する
-                options.RequireHttpsMetadata = false;
-            }
+            options.RequireHttpsMetadata = false;
         });
     builder.Services.AddAuthorization();
 

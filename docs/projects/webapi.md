@@ -37,11 +37,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.Authority = keycloakOptions.Authority;
     options.Audience = keycloakOptions.Audience;
-    if (builder.Environment.IsDevelopment())
-    {
-        // ローカル（Keycloak が http://keycloak）でのみ HTTPS メタデータ検証をスキップする
-        options.RequireHttpsMetadata = false;
-    }
+    options.RequireHttpsMetadata = false;
 });
 ```
 
