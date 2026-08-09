@@ -1279,7 +1279,7 @@
         "operationId": "Simple_Get",
         "parameters": [
           {
-            "name": "Input",
+            "name": "input",
             "in": "query",
             "schema": {
               "type": "string",
@@ -1922,7 +1922,8 @@
             "format": "int32"
           },
           "name1": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
