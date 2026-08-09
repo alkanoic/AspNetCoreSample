@@ -5,7 +5,10 @@ using DotNet.Testcontainers.Containers;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 using Npgsql;
@@ -72,6 +75,13 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
                 {"KeycloakOptions:MetadataAddress", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test/.well-known/openid-configuration").ToString()},
             }).Build());
         builder.UseUrls(HostUrl);
+
+        builder.ConfigureServices(services =>
+        {
+            services.RemoveAll<IDistributedCache>();
+            services.AddDistributedMemoryCache();
+            services.AddRazorComponents().AddInteractiveServerComponents();
+        });
     }
 
     protected override IHost CreateHost(IHostBuilder builder)

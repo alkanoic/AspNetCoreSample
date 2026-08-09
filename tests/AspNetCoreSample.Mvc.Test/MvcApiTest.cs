@@ -68,7 +68,7 @@ public sealed class MvcApiTest : IClassFixture<WebApplicationFactoryFixture<Prog
     [Trait("Category", nameof(MvcApiTest))]
     public async Task GetHtmxApiFetchReturnsJson()
     {
-        var response = await _httpClient.GetAsync($"{_factory.HostUrl}/HtmxApi?request=test", TestContext.Current.CancellationToken);
+        var response = await _httpClient.GetAsync($"{_factory.HostUrl}/HtmxApi/Fetch?request=test", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Contains("application/json", response.Content.Headers.ContentType?.ToString());
 
@@ -83,7 +83,7 @@ public sealed class MvcApiTest : IClassFixture<WebApplicationFactoryFixture<Prog
     public async Task PostHtmxApiFetchReturnsJson()
     {
         var content = new StringContent(JsonSerializer.Serialize(new { request = "hello" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync($"{_factory.HostUrl}/HtmxApi", content, TestContext.Current.CancellationToken);
+        var response = await _httpClient.PostAsync($"{_factory.HostUrl}/HtmxApi/FetchPost", content, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var stream = await response.Content.ReadAsStreamAsync(TestContext.Current.CancellationToken);

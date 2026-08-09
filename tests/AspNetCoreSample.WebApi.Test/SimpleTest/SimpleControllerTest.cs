@@ -28,7 +28,7 @@ public sealed class SimpleControllerTest : IClassFixture<WebApplicationFactoryFi
     [Trait("Category", nameof(SimpleControllerTest))]
     public async Task GetSimpleReturnsOutput()
     {
-        const string path = "api/Simple?input=hello";
+        const string path = "api/Simple?Input=hello";
 
         var response = await _httpClient.GetAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

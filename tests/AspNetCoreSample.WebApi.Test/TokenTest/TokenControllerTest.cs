@@ -71,7 +71,7 @@ public sealed class TokenControllerTest : IClassFixture<WebApplicationFactoryFix
     {
         const string path = "api/Token/RevokeToken";
 
-        var content = new StringContent(JsonSerializer.Serialize(new { refreshToken = "invalid-refresh-token" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
+        var content = new StringContent(JsonSerializer.Serialize(new { refreshToken = "" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
         var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
