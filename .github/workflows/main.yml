@@ -16,6 +16,8 @@ env:
   TESTS_WEBAPI_LOCATION: "tests/AspNetCoreSample.WebApi.Test"
   TESTS_MVC_LOCATION: "tests/AspNetCoreSample.Mvc.Test"
   TESTS_MVC_CONTAINER_LOCATION: "tests/AspNetCoreSample.Mvc.Container.Test"
+  TESTS_GRPC_LOCATION: "tests/AspNetCoreSample.Grpc.Test"
+  TESTS_DATAMODEL_LOCATION: "tests/AspNetCoreSample.DataModel.Test"
 
 jobs:
   lint:
@@ -112,14 +114,21 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      # DbContainer.Test
       - name: DbContainer Build with dotnet
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_DB_LOCATION }}
 
-      - name: DbContainer Run tests
+      - name: DbContainer Run tests with coverage
         run: dotnet test --configuration Release --no-build
         working-directory: ${{ env.TESTS_DB_LOCATION }}
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: coverage-dbcontainer
+          path: ${{ env.TESTS_DB_LOCATION }}/TestResults/coverage.cobertura.xml
+          retention-days: 1
 
   webapi_test:
     runs-on: ubuntu-latest
@@ -132,14 +141,21 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      # WebApi.Test
       - name: WebApi Build with dotnet
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
 
-      - name: WebApi Run tests
+      - name: WebApi Run tests with coverage
         run: dotnet test --configuration Release --no-build
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: coverage-webapi
+          path: ${{ env.TESTS_WEBAPI_LOCATION }}/TestResults/coverage.cobertura.xml
+          retention-days: 1
 
   mvc_test:
     runs-on: ubuntu-latest
@@ -152,19 +168,25 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      # Mvc.Test
       - name: Mvc Build with dotnet
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
-      # Playwright install
       - name: playwright install
         run: pwsh bin/Release/net10.0/playwright.ps1 install --with-deps
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
-      - name: Mvc Run tests
+      - name: Mvc Run tests with coverage
         run: dotnet test --configuration Release --no-build
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: coverage-mvc
+          path: ${{ env.TESTS_MVC_LOCATION }}/TestResults/coverage.cobertura.xml
+          retention-days: 1
 
   mvc_container_test:
     runs-on: ubuntu-latest
@@ -177,7 +199,6 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      # Mvc.Container.Test
       - name: Mvc Container create certificate
         run: bash create_certificate.sh
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
@@ -186,19 +207,124 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
-      # Playwright install
       - name: playwright install
         run: pwsh bin/Release/net10.0/playwright.ps1 install --with-deps
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
-      - name: Mvc Container Run tests
+      - name: Mvc Container Run tests with coverage
         run: dotnet test --configuration Release --no-build
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: coverage-mvc-container
+          path: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}/TestResults/coverage.cobertura.xml
+          retention-days: 1
+
+  grpc_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Grpc Build with dotnet
+        run: dotnet build --configuration Release --framework net10.0
+        working-directory: ${{ env.TESTS_GRPC_LOCATION }}
+
+      - name: Grpc Run tests with coverage
+        run: dotnet test --configuration Release --no-build
+        working-directory: ${{ env.TESTS_GRPC_LOCATION }}
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: coverage-grpc
+          path: ${{ env.TESTS_GRPC_LOCATION }}/TestResults/coverage.cobertura.xml
+          retention-days: 1
+
+  datamodel_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: DataModel Build with dotnet
+        run: dotnet build --configuration Release --framework net10.0
+        working-directory: ${{ env.TESTS_DATAMODEL_LOCATION }}
+
+      - name: DataModel Run tests with coverage
+        run: dotnet test --configuration Release --no-build
+        working-directory: ${{ env.TESTS_DATAMODEL_LOCATION }}
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: coverage-datamodel
+          path: ${{ env.TESTS_DATAMODEL_LOCATION }}/TestResults/coverage.cobertura.xml
+          retention-days: 1
+
+  coverage_report:
+    runs-on: ubuntu-latest
+    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
+    if: always()
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Download all coverage artifacts
+        uses: actions/download-artifact@v7
+        continue-on-error: true
+        with:
+          pattern: coverage-*
+          path: coverage-artifacts
+
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.6.0
+
+      - name: Generate coverage report
+        run: |
+          mkdir -p coveragereport
+          reportgenerator \
+            -reports:"coverage-artifacts/**/coverage.cobertura.xml" \
+            -targetdir:"coveragereport" \
+            -reporttypes:MarkdownSummaryGithub\;Html
+
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-report
+          path: coveragereport
+          retention-days: 30
+
+      - name: Add coverage summary to job
+        run: |
+          if [ -f coveragereport/SummaryGithub.md ]; then
+            cat coveragereport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+          fi
 
   mvc:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
 
     steps:
       - uses: actions/checkout@v5
@@ -235,7 +361,7 @@ jobs:
   webapi:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
 
     steps:
       - uses: actions/checkout@v5
@@ -264,7 +390,7 @@ jobs:
   nuxt:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
 
     steps:
       - uses: actions/checkout@v5
@@ -297,7 +423,7 @@ jobs:
   spring:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
 
     steps:
       - uses: actions/checkout@v5
@@ -335,7 +461,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
 
     permissions:
       contents: read
