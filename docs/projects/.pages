@@ -1,0 +1,7 @@
+nav:
+  - mvc.md
+  - webapi.md
+  - grpc.md
+  - datamodel.md
+  - frontend.md
+  - codegen.md

@@ -289,6 +289,26 @@
             "console": "internalConsole"
         },
         {
+            "name": "MkDocs",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "${workspaceFolder}/.venv/bin/python3",
+            "runtimeArgs": [
+                "-m",
+                "mkdocs",
+                "serve",
+                "-a",
+                "localhost:8000"
+            ],
+            "console": "integratedTerminal",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "Serving on\\s+(http://\\S+)",
+                "uriFormat": "%s"
+            }
+        },
+        {
             "name": "CodeGen Result",
             "type": "coreclr",
             "request": "launch",
