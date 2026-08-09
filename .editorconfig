@@ -374,3 +374,7 @@ generated_code = true
 
 [src/CodeGen.Result/Models/*.cs]
 generated_code = true
+
+# NSwag 自動生成の OpenAPI 定義ファイル
+[src/AspNetCoreSample.WebApi/OpenAPI/swagger.json]
+generated_code = true

@@ -95,7 +95,7 @@ fi
 # ------------------------------------------------------------
 # 4.5 textlint: 日本語を含む Markdown の文章チェック（あれば）
 # ------------------------------------------------------------
-JA_MD=$(printf '%s\n' "$STAGED" | grep '\.md$' | while IFS= read -r f; do
+JA_MD=$(printf '%s\n' "$STAGED" | { grep '\.md$' || true; } | while IFS= read -r f; do
   if grep -qE '[ぁ-んァ-ヶ一-龠]' "$f" 2>/dev/null; then
     printf '%s\n' "$f"
   fi
