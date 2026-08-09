@@ -4,13 +4,6 @@
         <AnalysisLevel>latest-Recommended</AnalysisLevel>
     </PropertyGroup>
 
-    <PropertyGroup Condition="$(IsTestProject) == 'true'">
-        <CollectCoverage>true</CollectCoverage>
-        <CoverletOutputFormat>cobertura</CoverletOutputFormat>
-        <CoverletOutput>$(MSBuildProjectDirectory)/TestResults/coverage.cobertura.xml</CoverletOutput>
-        <ExcludeByAttribute>GeneratedCodeAttribute</ExcludeByAttribute>
-    </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="Roslynator.Analyzers" Version="4.7.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
