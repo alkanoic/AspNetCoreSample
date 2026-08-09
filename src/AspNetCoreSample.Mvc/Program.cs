@@ -62,7 +62,8 @@ try
             return handler;
         });
 
-    var keycloakOptions = builder.Configuration.GetSection(KeycloakOptions.Position).Get<KeycloakOptions>()!;
+    var keycloakOptions = builder.Configuration.GetSection(KeycloakOptions.Position).Get<KeycloakOptions>()
+                          ?? new KeycloakOptions();
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

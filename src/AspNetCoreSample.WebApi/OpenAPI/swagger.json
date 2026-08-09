@@ -6,59 +6,6 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/Validation": {
-      "post": {
-        "tags": [
-          "Validation"
-        ],
-        "operationId": "Validation_Post",
-        "parameters": [
-          {
-            "name": "Accept-Language",
-            "in": "header",
-            "required": true,
-            "description": "Language preference for the response.",
-            "schema": {
-              "type": "string",
-              "items": {
-                "type": "string"
-              },
-              "enum": [
-                "ja-JP",
-                "en-US"
-              ]
-            },
-            "default": "ja-JP",
-            "nullable": true
-          }
-        ],
-        "requestBody": {
-          "x-name": "data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/InputData"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/QrCode": {
       "post": {
         "tags": [
@@ -1887,6 +1834,59 @@
         ]
       }
     },
+    "/api/Validation": {
+      "post": {
+        "tags": [
+          "Validation"
+        ],
+        "operationId": "Validation_Post",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InputData"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/WeatherForecast": {
       "get": {
         "tags": [
@@ -1983,24 +1983,6 @@
   },
   "components": {
     "schemas": {
-      "InputData": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "stringValue": {
-            "type": "string",
-            "nullable": true
-          },
-          "numberValue": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "dateValue": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "QrCodeRequest": {
         "type": "object",
         "additionalProperties": false,
@@ -2471,6 +2453,24 @@
         "properties": {
           "refreshToken": {
             "type": "string"
+          }
+        }
+      },
+      "InputData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "stringValue": {
+            "type": "string",
+            "nullable": true
+          },
+          "numberValue": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dateValue": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
