@@ -409,3 +409,7 @@ site/
 
 # Python virtual environment
 .venv/
+
+# Serena (semantic code analysis MCP) - version project.yml only
+.serena/*
+!.serena/project.yml

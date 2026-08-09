@@ -8,7 +8,8 @@
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "remoteUser": "vscode",
   "containerEnv": {
-    "OLLAMA_API_KEY": "${localEnv:OLLAMA_API_KEY}"
+    "OLLAMA_API_KEY": "${localEnv:OLLAMA_API_KEY}",
+    "GITHUB_PERSONAL_ACCESS_TOKEN": "${localEnv:GITHUB_PERSONAL_ACCESS_TOKEN}"
   },
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},

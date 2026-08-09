@@ -36,6 +36,31 @@ if [ -x /home/vscode/.opencode/bin/opencode ] && ! command -v opencode >/dev/nul
     fi
 fi
 
+# Serena (MCP セマンティック検索 / IDE for Coding Agent)
+# opencode と対に導入する。 feature にはせず、uv + serena-agent (PyPI) を postCreate で導入する
+# (リポジトリ固有ツールのため、クロスリポジトリ汎用向けの feature にはしない)
+if ! command -v uv >/dev/null 2>&1; then
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+if command -v uv >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/serena" ]; then
+    uv tool install -p 3.13 serena-agent || echo "serena (uv tool install) failed"
+fi
+if command -v serena >/dev/null 2>&1; then
+    if [ ! -d "$HOME/.serena" ]; then
+        # 初回初期化
+        serena init || echo "serena init failed"
+    fi
+    SERENA_CFG="$HOME/.serena/serena_config.yml"
+    if [ -f "$SERENA_CFG" ]; then
+        # serena init は web_dashboard_open_on_launch: true を生成するため、
+        # 値が false でなければ sed で false に書き換える (ダッシュボード自動起動を無効化)
+        if ! grep -q '^web_dashboard_open_on_launch: false' "$SERENA_CFG"; then
+            sed -i 's/^web_dashboard_open_on_launch:.*/web_dashboard_open_on_launch: false/' "$SERENA_CFG"
+        fi
+    fi
+fi
+
 # Git hooks (pre-commit lint) を有効化する
 if [ -d .githooks ]; then
     chmod +x .githooks/pre-commit 2>/dev/null || true
