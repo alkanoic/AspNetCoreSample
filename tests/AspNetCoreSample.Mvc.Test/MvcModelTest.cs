@@ -108,11 +108,22 @@ public sealed class MvcModelTest
 
     [Fact]
     [Trait("Category", nameof(MvcModelTest))]
-    public void FluentViewModelValidator_PassesWithValidData()
+    public void FluentViewModelValidator_NoMustBeGreaterThanOrEqualToZero()
     {
         var validator = new FluentViewModelValidator();
 
         var result = validator.Validate(new FluentViewModel { Name = "test", Email = "test@example.com", No = -1 });
+
+        Assert.False(result.IsValid);
+    }
+
+    [Fact]
+    [Trait("Category", nameof(MvcModelTest))]
+    public void FluentViewModelValidator_PassesWithValidData()
+    {
+        var validator = new FluentViewModelValidator();
+
+        var result = validator.Validate(new FluentViewModel { Name = "test", Email = "test@example.com", No = 0 });
 
         Assert.True(result.IsValid);
     }

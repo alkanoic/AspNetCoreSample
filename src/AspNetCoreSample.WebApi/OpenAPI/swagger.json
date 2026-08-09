@@ -258,7 +258,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/CreateUser": {
@@ -313,7 +318,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/UpdateUser": {
@@ -368,7 +378,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/UpdateUserByUsername": {
@@ -422,7 +437,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/ChangePassword": {
@@ -477,7 +497,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/ChangePasswordByUsername": {
@@ -532,7 +557,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/ResetPasswordByEmail": {
@@ -586,7 +616,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/ResetPasswordByEmailByUsername": {
@@ -640,7 +675,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/DeleteUser": {
@@ -695,7 +735,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/DeleteUserByUsername": {
@@ -749,11 +794,16 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/FetchRoles": {
-      "post": {
+      "get": {
         "tags": [
           "Keycloak"
         ],
@@ -791,10 +841,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
-    "/api/Keycloak/FtechUserRoleMappings": {
+    "/api/Keycloak/FetchUserRoleMappings": {
       "post": {
         "tags": [
           "Keycloak"
@@ -846,7 +901,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/AddUserRoleMapping": {
@@ -901,7 +961,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/DeleteUserRoleMapping": {
@@ -956,11 +1021,16 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/FetchClients": {
-      "post": {
+      "get": {
         "tags": [
           "Keycloak"
         ],
@@ -998,7 +1068,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/FetchClient": {
@@ -1052,7 +1127,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/FetchClientRoles": {
@@ -1106,7 +1186,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/FetchUserClientRoles": {
@@ -1160,7 +1245,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/AddUserClientRoleMappings": {
@@ -1214,7 +1304,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Keycloak/DeleteUserClientRoleMapping": {
@@ -1268,7 +1363,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/api/Simple": {

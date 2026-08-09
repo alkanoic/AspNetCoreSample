@@ -57,6 +57,13 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
         await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
     }
 
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        await _keycloakContainer.DisposeAsync();
+        await _postgresqlContainer.DisposeAsync();
+        await base.DisposeAsync();
+    }
+
     public string KeycloakBaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
 
     public string HostUrl { get; private set; } = "";

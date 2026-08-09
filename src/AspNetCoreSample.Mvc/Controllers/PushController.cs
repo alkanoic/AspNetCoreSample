@@ -2,11 +2,13 @@ using System.Diagnostics;
 
 using AspNetCoreSample.Mvc.Models;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace AspNetCoreSample.Mvc.Controllers;
 
+[Authorize]
 public class PushController : Controller
 {
     private readonly ILogger<PushController> _logger;
@@ -36,23 +38,30 @@ public class PushController : Controller
         return View();
     }
 
-    private static Models.SubscribeViewModel? _subscribeViewModel;
-
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public void Subscribe([FromBody] Models.SubscribeViewModel subscribeViewModel)
     {
-        _subscribeViewModel = subscribeViewModel;
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "anonymous";
+        PushSubscriptionStore.Set(userId, subscribeViewModel);
     }
 
     public async Task Trigger()
     {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "anonymous";
+        var subscribeViewModel = PushSubscriptionStore.Get(userId);
+        if (subscribeViewModel == null)
+        {
+            _logger.LogWarning("Push subscription not found for user {UserId}", userId);
+            return;
+        }
 
         var client = new WebPush.WebPushClient();
         var subscription = new WebPush.PushSubscription
         {
-            Auth = _subscribeViewModel?.Keys?.Auth,
-            P256DH = _subscribeViewModel?.Keys?.P256dh,
-            Endpoint = _subscribeViewModel?.Endpoint
+            Auth = subscribeViewModel.Keys?.Auth,
+            P256DH = subscribeViewModel.Keys?.P256dh,
+            Endpoint = subscribeViewModel.Endpoint
         };
         var vapid = new WebPush.VapidDetails();
         vapid.Subject = "mailto:test@example.com";
@@ -65,7 +74,7 @@ public class PushController : Controller
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            _logger.LogError(ex, "Push notification failed");
         }
     }
 

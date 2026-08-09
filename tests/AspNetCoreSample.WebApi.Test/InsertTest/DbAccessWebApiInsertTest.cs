@@ -30,7 +30,6 @@ public sealed class DbAccessWebApiInsertTest : IClassFixture<WebApplicationFacto
     {
         _httpClient.Dispose();
         _serviceScope.Dispose();
-        _webApplicationFactoryFixture.Dispose();
     }
 
     [Fact]
@@ -45,6 +44,6 @@ public sealed class DbAccessWebApiInsertTest : IClassFixture<WebApplicationFacto
         var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
 
         // Then
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 }

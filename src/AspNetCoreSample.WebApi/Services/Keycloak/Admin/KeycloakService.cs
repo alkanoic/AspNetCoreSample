@@ -88,10 +88,9 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(fetchUserRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            fetchUserRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users?exact=true&username={fetchUserRequest.Username}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users?exact=true&username={Uri.EscapeDataString(fetchUserRequest.Username)}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchUserRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
@@ -115,8 +114,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(createUserRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            createUserRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", createUserRequest.AccessToken);
@@ -139,8 +137,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(updateUserRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            updateUserRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", updateUserRequest.AccessToken);
@@ -161,8 +158,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(updateUserRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            updateUserRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { Username = username, AccessToken = updateUserRequest.AccessToken });
         await UpdateUserAsync(fetchUserResponse.Id, updateUserRequest);
@@ -175,8 +171,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(changePasswordRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            changePasswordRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/reset-password");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", changePasswordRequest.AccessToken);
@@ -197,8 +192,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(changePasswordRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            changePasswordRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { AccessToken = changePasswordRequest.AccessToken, Username = username });
         await ChangePasswordAsync(fetchUserResponse.Id, changePasswordRequest);
@@ -208,8 +202,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(resetPasswordByEmailRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            resetPasswordByEmailRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var request = new HttpRequestMessage(HttpMethod.Put, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/reset-password-email");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", resetPasswordByEmailRequest.AccessToken);
@@ -226,10 +219,9 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(resetPasswordByEmailRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            resetPasswordByEmailRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
-        var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { Username = username });
+        var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { Username = username, AccessToken = resetPasswordByEmailRequest.AccessToken });
         await ResetPasswordByEmailAsync(fetchUserResponse.Id, resetPasswordByEmailRequest);
     }
 
@@ -237,8 +229,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(deleteUserRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            deleteUserRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var request = new HttpRequestMessage(HttpMethod.Delete, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", deleteUserRequest.AccessToken);
@@ -255,10 +246,9 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(deleteUserRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            deleteUserRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
-        var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { Username = username });
+        var fetchUserResponse = await FetchUserAsync(new FetchUserRequest() { Username = username, AccessToken = deleteUserRequest.AccessToken });
         await DeleteUserAsync(fetchUserResponse.Id, deleteUserRequest);
     }
 
@@ -286,8 +276,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(fetchUserRoleMappingsRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            fetchUserRoleMappingsRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{fetchUserRoleMappingsRequest.UserId}/role-mappings/realm");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchUserRoleMappingsRequest.AccessToken);
@@ -340,8 +329,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(fetchClientsRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            fetchClientsRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchClientsRequest.AccessToken);
@@ -364,10 +352,9 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(fetchClientRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            fetchClientRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
-        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients?clientId={fetchClientRequest.ClientId}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients?clientId={Uri.EscapeDataString(fetchClientRequest.ClientId)}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchClientRequest.AccessToken);
 
         var response = await _httpClient.SendAsync(request);
@@ -388,8 +375,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(fetchClientRolesRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            fetchClientRolesRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/clients/{fetchClientRolesRequest.ClientUuid}/roles");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchClientRolesRequest.AccessToken);
@@ -412,8 +398,7 @@ public class KeycloakService : IKeycloakService
     {
         if (string.IsNullOrEmpty(fetchUserClientRolesRequest.AccessToken))
         {
-            var tokenResponse = await AdminAccessToken();
-            fetchUserClientRolesRequest.AccessToken = tokenResponse.AccessToken;
+            throw new UnauthorizedAccessException("AccessToken is required");
         }
         var request = new HttpRequestMessage(HttpMethod.Get, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{fetchUserClientRolesRequest.UserId}/role-mappings/clients/{fetchUserClientRolesRequest.ClientUuid}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", fetchUserClientRolesRequest.AccessToken);
@@ -430,12 +415,10 @@ public class KeycloakService : IKeycloakService
             throw new InvalidCastException("fetch keycloak client fail no content");
         }
         return results;
-        // GET /admin/realms/{realm}/users/{user-id}/role-mappings/clients/{client}
     }
 
     public async ValueTask AddUserClientRoleMappingAsync(string userId, string clientUuid, List<AddUserRoleMappingsRequest> addUserClientRoleMappingRequest)
     {
-        // POST /admin/realms/{realm}/users/{user-id}/role-mappings/clients/{client}
         var tokenResponse = await AdminAccessToken();
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/role-mappings/clients/{clientUuid}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
@@ -451,7 +434,6 @@ public class KeycloakService : IKeycloakService
 
     public async ValueTask DeleteUserClientRoleMappingAsync(string userId, string clientUuid, List<DeleteUserRoleMappingsRequest> deleteUserClientRoleMappingRequest)
     {
-        // DELETE /admin/realms/{realm}/users/{user-id}/role-mappings/clients/{client}
         var tokenResponse = await AdminAccessToken();
         var request = new HttpRequestMessage(HttpMethod.Delete, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users/{userId}/role-mappings/clients/{clientUuid}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);

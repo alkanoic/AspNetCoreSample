@@ -36,9 +36,9 @@ public sealed class DbFixture : IAsyncLifetime
         await _postgresqlContainer.StartAsync();
     }
 
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
-        return ValueTask.CompletedTask;
+        await _postgresqlContainer.DisposeAsync();
     }
 
     private sealed class MigrationCompleted : IWaitUntil

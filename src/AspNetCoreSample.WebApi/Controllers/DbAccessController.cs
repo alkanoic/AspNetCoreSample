@@ -41,10 +41,9 @@ public class DbAccessController : ControllerBase
 
         try
         {
-            _sampleContext.Add(name);
             _sampleContext.Names.Add(name);
             await _sampleContext.SaveChangesAsync();
-            return Ok(100);
+            return CreatedAtAction(nameof(Get), new { id = name.Id }, name);
         }
         catch (Exception ex)
         {

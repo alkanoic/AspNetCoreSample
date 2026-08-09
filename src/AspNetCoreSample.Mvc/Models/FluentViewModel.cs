@@ -26,14 +26,14 @@ public class FluentViewModelValidator : AbstractValidator<FluentViewModel>
         RuleFor(x => x.Name).NotNull().WithMessage("{PropertyName}は必須入力ですぅ")
             .Length(1, 5).WithMessage("{MinLength}:{MaxLength}:{PropertyValue}:範囲内の文字数で入力してください");
 
-        RuleFor(x => x.No).LessThan(0).WithMessage("Noは0以上を入力してください");
+        RuleFor(x => x.No).GreaterThanOrEqualTo(0).WithMessage("Noは0以上を入力してください");
 
         RuleFor(x => x.Email).NotNull().WithMessage("Emailは必須入力ですよ")
             .EmailAddress().WithMessage("{PropertyName}:{PropertyValue}:メールアドレスの形式チェック");
 
         When(x => x.Name == "abc", () =>
         {
-            RuleFor(x => x.Option).Length(1, 3).WithMessage("NameがabcのときOptionは3文字以下である必要がある");
+            RuleFor(x => x.Option).NotNull().Length(1, 3).WithMessage("NameがabcのときOptionは3文字以下である必要がある");
         });
     }
 }

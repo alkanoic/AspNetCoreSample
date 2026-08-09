@@ -23,8 +23,7 @@ public class LitController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Index(IndexViewModel model)
     {
-        Console.WriteLine(model.LightName);
-        Console.WriteLine(model.ShadowName);
+        _logger.LogInformation("LightName: {LightName}, ShadowName: {ShadowName}", model.LightName, model.ShadowName);
         return RedirectToAction("Index");
     }
 

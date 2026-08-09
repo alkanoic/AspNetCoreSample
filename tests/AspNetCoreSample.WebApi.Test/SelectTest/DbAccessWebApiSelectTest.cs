@@ -29,7 +29,6 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFacto
     {
         _httpClient.Dispose();
         _serviceScope.Dispose();
-        _webApplicationFactoryFixture.Dispose();
     }
 
     [Fact]

@@ -4,11 +4,13 @@ using AspNetCoreSample.WebApi.Services.Keycloak.Admin;
 
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSample.WebApi.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class KeycloakController(ILogger<KeycloakController> logger,
                                 IKeycloakService keycloakService,
@@ -65,9 +67,18 @@ public class KeycloakController(ILogger<KeycloakController> logger,
 
             return await func();
         }
-        catch (Exception ex)
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+        catch (InvalidDataException ex)
         {
             return BadRequest(new WebApiFailResponse(ex));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unexpected error in KeycloakController");
+            return StatusCode(500, new WebApiFailResponse(new Exception("Internal server error")));
         }
     }
 
@@ -265,16 +276,21 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// <summary>
     /// Realmに登録されているロール一覧を取得
     /// </summary>
-    [HttpPost("FetchRoles")]
+    [HttpGet("FetchRoles")]
     public async ValueTask<IActionResult> FetchRoles()
     {
         try
         {
             return Ok(await _keycloakService.FetchRolesAsync());
         }
-        catch (Exception ex)
+        catch (InvalidDataException ex)
         {
             return BadRequest(new WebApiFailResponse(ex));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unexpected error fetching roles");
+            return StatusCode(500, new WebApiFailResponse(new Exception("Internal server error")));
         }
     }
 
@@ -282,7 +298,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーに登録されているロール一覧を取得
     /// </summary>
     /// <param name="input">ユーザー情報</param>
-    [HttpPost("FtechUserRoleMappings")]
+    [HttpPost("FetchUserRoleMappings")]
     public async ValueTask<IActionResult> FetchUserRoleMappings(FetchUserRoleMappingsInput input)
     {
         return await CommonValidationResponse(input, _fetchUserRoleMappingsInputValidator, async () =>
@@ -345,7 +361,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// <summary>
     /// Client一覧を取得する
     /// </summary>
-    [HttpPost("FetchClients")]
+    [HttpGet("FetchClients")]
     public async ValueTask<IActionResult> FetchClients()
     {
         try
@@ -356,9 +372,18 @@ public class KeycloakController(ILogger<KeycloakController> logger,
             };
             return Ok(await _keycloakService.FetchClientsAsync(request));
         }
-        catch (Exception ex)
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+        catch (InvalidDataException ex)
         {
             return BadRequest(new WebApiFailResponse(ex));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unexpected error fetching clients");
+            return StatusCode(500, new WebApiFailResponse(new Exception("Internal server error")));
         }
     }
 

@@ -70,12 +70,14 @@ try
       });
     builder.Services.AddAuthorization();
 
-    var vapidKeys = VapidHelper.GenerateVapidKeys();
-    var vapidOption = new AspNetCoreSample.Mvc.Options.VapidOption()
+    var vapidSection = builder.Configuration.GetSection(AspNetCoreSample.Mvc.Options.VapidOption.Position);
+    var vapidOption = vapidSection.Get<AspNetCoreSample.Mvc.Options.VapidOption>() ?? new AspNetCoreSample.Mvc.Options.VapidOption();
+    if (string.IsNullOrEmpty(vapidOption.PublicKey) || string.IsNullOrEmpty(vapidOption.PrivateKey))
     {
-        PublicKey = vapidKeys.PublicKey,
-        PrivateKey = vapidKeys.PrivateKey
-    };
+        var vapidKeys = VapidHelper.GenerateVapidKeys();
+        vapidOption.PublicKey = vapidKeys.PublicKey;
+        vapidOption.PrivateKey = vapidKeys.PrivateKey;
+    }
 
     builder.Services.AddSingleton(vapidOption);
 

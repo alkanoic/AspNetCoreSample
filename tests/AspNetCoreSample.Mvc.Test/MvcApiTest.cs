@@ -188,10 +188,10 @@ public sealed class MvcApiTest : IClassFixture<WebApplicationFactoryFixture<Prog
 
     [Fact]
     [Trait("Category", nameof(MvcApiTest))]
-    public async Task GetPushReturnsOk()
+    public async Task GetPushReturnsRedirectWhenUnauthenticated()
     {
         var response = await _httpClient.GetAsync($"{_factory.HostUrl}/Push", TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
     [Fact]

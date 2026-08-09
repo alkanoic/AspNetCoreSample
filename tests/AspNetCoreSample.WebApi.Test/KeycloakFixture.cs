@@ -38,9 +38,9 @@ public sealed class KeycloakFixture : IAsyncLifetime
         await _keycloakContainer.StartAsync();
     }
 
-    ValueTask IAsyncDisposable.DisposeAsync()
+    async ValueTask IAsyncDisposable.DisposeAsync()
     {
-        return ValueTask.CompletedTask;
+        await _keycloakContainer.DisposeAsync();
     }
 
 }

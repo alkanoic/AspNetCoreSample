@@ -143,7 +143,6 @@ public class LoggingAttribute : Attribute, IMethodDecorator
                 new MyLogEvent($"Method exit warning")
                     .WithProperty("EventType", "MethodExit")
                     .WithProperty("MethodName", _methodName ?? "UnknownMethod")
-                    .WithProperty("Arguments", _args ?? Array.Empty<object>())
                     .WithProperty("Arguments", LogOnStartArgs ? _args ?? Array.Empty<object>() : "Off")
                     .WithProperty("ReturnValue", LogOnEndArgs ? returnValue ?? Array.Empty<object>() : "Off")
                     .WithProperty("ExecutionTime", executionTime),

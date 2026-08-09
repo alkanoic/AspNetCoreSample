@@ -31,7 +31,6 @@ public sealed class DbAccessWebApiAuthTest : IClassFixture<WebApplicationFactory
     {
         _httpClient.Dispose();
         _serviceScope.Dispose();
-        _webApplicationFactoryFixture.Dispose();
     }
 
     [Fact]
