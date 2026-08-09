@@ -55,6 +55,7 @@ dotnet format                # フォーマットチェック・適用（editorc
 | `bash -n` | 変更された `*.sh` | シェル構文 |
 
 - ツールが未インストールの場合はスキップされる（コミットは阻害しない）。正規のゲートは CI（`main.yml` の `lint` ジョブ）+ 必要なら `git commit --no-verify` も可能。ただし CI で必ずチェックされる。
+- `textlint` / `markdownlint-cli2` / `cyclonedx-npm` はグローバルには導入せず、**npx 実行時パッケージ**で実行する（CI と同一方式）。pnpm は corepack で有効化する（`NuxtSample/package.json` の `packageManager` でバージョン固定）。
 - textlint は日本語文字を含む `*.md` のみ対象（英語文書やライセンスファイルは対象外）。
 - 個別に手動で回す場合: `bash .githooks/pre-commit`（ステージ済み前提）。textlint のみ手動実行する場合: `npx --yes -p textlint@14 -p textlint-rule-preset-ja-technical-writing@12 textlint --config .textlintrc.json <file>`。
 
@@ -137,6 +138,19 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 - **管理コマンド**（npm ライク）: 追加 `npx skills add <repo> --skill <name> -a opencode`、一覧 `npx skills list`、復元 `npx skills experimental_install`（`skills-lock.json` から）。ここで導入した公式セットは `skills-lock.json` に記録され、**devcontainer の `postCreateCommand.sh` で自動復元される**。ロックファイルは手動編集しない。
 - **汎用フォルダ**: `.agents/skills/` は Claude Code / Cursor / Codex / opencode など複数エージェントが読み込む共通フォルダ。リポジトリ固有スキルもここに置くことで全エージェントから利用できる。
 - **設定ファイルベースの代替**: 外部スキルは `opencode.json` の `skills.urls` / `skills.paths` でも表記できる（URL/パスで解決）。本リポジトリはファイルコピー方式（`.agents/skills/`）を採用。
+
+## MCP サーバー（opencode 用）
+
+`opencode.json` の `mcp` セクションで定義する。増減時はここに反映する。
+
+| キー | type | 用途 | 前提 |
+| ------ | ---- | ---- | ---- |
+| `github` | remote | GitHub の issue / PR / code search などを操作（GitHub Copilot MCP） | `GITHUB_PERSONAL_ACCESS_TOKEN` を環境変数に設定（devcontainer では `devcontainer.json` の `containerEnv` で注入、Bearer token で認証） |
+| `serena` | local | セマンティック検索 / IDE for Coding Agent の MCP サーバー | `serena start-mcp-server --context ide --project-from-cwd` を `cwd: .` で起動。CLI（`serena-agent`）は `postCreateCommand.sh` が uv で導入する |
+
+- `github` は認証に `GITHUB_PERSONAL_ACCESS_TOKEN` が必要。パスワードや機密情報を設定ファイルに直接書かないこと（環境変数参照のみ）。
+- `serena` は初回に index を構築するため、大規模リポジトリでは起動に時間を要することがある。
+- 追加例: `opencode.json` の `mcp` に `{ "type": "local", "command": ["...", ...] }` または `{ "type": "remote", "url": "..." }` を追記する。
 
 ## CI / Azure
 
