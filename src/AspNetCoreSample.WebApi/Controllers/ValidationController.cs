@@ -5,7 +5,7 @@ using FluentValidation.Results;
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApiSample.Controllers;
+namespace AspNetCoreSample.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -22,14 +22,7 @@ public class ValidationController : ControllerBase
             return BadRequest(CommonValidation.GetValidationErrors(validationResult));
         }
 
-        try
-        {
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
+        return Ok();
     }
 
 }

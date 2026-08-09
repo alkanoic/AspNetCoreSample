@@ -56,7 +56,7 @@ public class __ControllerName__ : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!Exists(__PrimaryKeyNameArguments__))
+            if (!await Exists(__PrimaryKeyNameArguments__))
             {
                 return NotFound();
             }
@@ -82,7 +82,7 @@ public class __ControllerName__ : ControllerBase
         }
         catch (DbUpdateException)
         {
-            if (Exists(__PrimaryKeyNameTargetArguments__))
+            if (await Exists(__PrimaryKeyNameTargetArguments__))
             {
                 return Conflict();
             }
@@ -111,7 +111,7 @@ public class __ControllerName__ : ControllerBase
         return NoContent();
     }
 
-    private bool Exists(__PrimaryKeyArguments__)
+    private async Task<bool> Exists(__PrimaryKeyArguments__)
     {
         __EntitySetExist__
     }

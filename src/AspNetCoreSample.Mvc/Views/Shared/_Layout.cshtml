@@ -100,7 +100,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script>
-        const jsOptions = @Html.Raw(JsonSerializer.Serialize(jsOptions.Value));
+        const jsOptions = @Json.Serialize(jsOptions.Value);
     </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

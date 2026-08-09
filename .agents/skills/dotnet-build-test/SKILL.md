@@ -5,7 +5,7 @@ description: Use when the user asks to build the .NET solution or run tests (dot
 
 # .NET ビルド & テスト
 
-AspNetCoreSample の .NET 9 ビルド・テスト手順。
+AspNetCoreSample の .NET 10 ビルド・テスト手順。
 
 ## ビルド
 

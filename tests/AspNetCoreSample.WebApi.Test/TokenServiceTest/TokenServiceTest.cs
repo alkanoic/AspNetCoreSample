@@ -50,7 +50,7 @@ public sealed class TokenServiceTest
         });
         var service = CreateService(handler);
 
-        var result = await service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "pass" });
+        var result = await service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "pass" }, TestContext.Current.CancellationToken);
 
         Assert.Equal("access-token-123", result.AccessToken);
         Assert.Equal("refresh-token-456", result.RefreshToken);
@@ -66,7 +66,7 @@ public sealed class TokenServiceTest
         var service = CreateService(handler);
 
         await Assert.ThrowsAsync<InvalidDataException>(() =>
-            service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "wrong" }).AsTask());
+            service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "wrong" }, TestContext.Current.CancellationToken).AsTask());
     }
 
     [Fact]
@@ -78,7 +78,7 @@ public sealed class TokenServiceTest
         var service = CreateService(handler);
 
         await Assert.ThrowsAsync<InvalidDataException>(() =>
-            service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "pass" }).AsTask());
+            service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "pass" }, TestContext.Current.CancellationToken).AsTask());
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public sealed class TokenServiceTest
         });
         var service = CreateService(handler);
 
-        var result = await service.RefreshTokenAsync(new UpdateTokenRequest { RefreshToken = "old-refresh" });
+        var result = await service.RefreshTokenAsync(new UpdateTokenRequest { RefreshToken = "old-refresh" }, TestContext.Current.CancellationToken);
 
         Assert.Equal("new-access-token", result.AccessToken);
         Assert.Equal("new-refresh-token", result.RefreshToken);
@@ -113,7 +113,7 @@ public sealed class TokenServiceTest
         var service = CreateService(handler);
 
         await Assert.ThrowsAsync<InvalidDataException>(() =>
-            service.RefreshTokenAsync(new UpdateTokenRequest { RefreshToken = "invalid" }).AsTask());
+            service.RefreshTokenAsync(new UpdateTokenRequest { RefreshToken = "invalid" }, TestContext.Current.CancellationToken).AsTask());
     }
 
     [Fact]
@@ -124,7 +124,7 @@ public sealed class TokenServiceTest
             new HttpResponseMessage(HttpStatusCode.NoContent));
         var service = CreateService(handler);
 
-        await service.RevokeTokenAsync(new RevokeTokenRequest { RefreshToken = "token-to-revoke" });
+        await service.RevokeTokenAsync(new RevokeTokenRequest { RefreshToken = "token-to-revoke" }, TestContext.Current.CancellationToken);
     }
 
     [Fact]
@@ -136,7 +136,7 @@ public sealed class TokenServiceTest
         var service = CreateService(handler);
 
         await Assert.ThrowsAsync<InvalidDataException>(() =>
-            service.RevokeTokenAsync(new RevokeTokenRequest { RefreshToken = "invalid" }).AsTask());
+            service.RevokeTokenAsync(new RevokeTokenRequest { RefreshToken = "invalid" }, TestContext.Current.CancellationToken).AsTask());
     }
 
     private sealed class FakeHttpMessageHandler : HttpMessageHandler

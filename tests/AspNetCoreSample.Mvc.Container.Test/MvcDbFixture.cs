@@ -83,14 +83,7 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
 
     public void SetBaseAddress()
     {
-        try
-        {
-            var uriBuilder = new UriBuilder("https", _mvcContainer.Hostname, _mvcContainer.GetMappedPublicPort(MvcImage.HttpsPort));
-            BaseAddress = uriBuilder.Uri;
-        }
-        catch
-        {
-            // Set the base address only once.
-        }
+        var uriBuilder = new UriBuilder("https", _mvcContainer.Hostname, _mvcContainer.GetMappedPublicPort(MvcImage.HttpsPort));
+        BaseAddress = uriBuilder.Uri;
     }
 }

@@ -20,13 +20,13 @@ public class SessionController : Controller
         _cache = cache;
     }
 
-    public ActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        string? value = _cache.GetString("CacheTime");
+        string? value = await _cache.GetStringAsync("CacheTime");
         if (value == null)
         {
             value = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-            _cache.SetString("CacheTime", value);
+            await _cache.SetStringAsync("CacheTime", value);
         }
         ViewData["CacheTime"] = value;
         ViewData["CurrentTime"] = DateTime.Now.ToString(CultureInfo.InvariantCulture);

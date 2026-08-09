@@ -45,9 +45,9 @@ public class DbAccessController : ControllerBase
             await _sampleContext.SaveChangesAsync();
             return CreatedAtAction(nameof(Get), new { id = name.Id }, name);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, "Internal server error");
         }
     }
 }

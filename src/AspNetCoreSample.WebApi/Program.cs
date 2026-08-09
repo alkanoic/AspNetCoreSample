@@ -59,7 +59,11 @@ try
         {
             options.Authority = keycloakOptions.Authority;
             options.Audience = keycloakOptions.Audience;
-            options.RequireHttpsMetadata = false;
+            if (builder.Environment.IsDevelopment())
+            {
+                // 開発のためHttpを許可する
+                options.RequireHttpsMetadata = false;
+            }
         });
     builder.Services.AddAuthorization();
 
@@ -91,7 +95,7 @@ try
                    .AllowAnyHeader()
                    .AllowAnyMethod();
 
-            builder.WithOrigins(corsSection.MvcUrl).AllowAnyHeader().AllowAnyHeader().AllowAnyMethod();
+            builder.WithOrigins(corsSection.MvcUrl).AllowAnyHeader().AllowAnyMethod();
         });
     });
     builder.Services.AddEndpointsApiExplorer();
@@ -126,12 +130,12 @@ try
     ServiceProviderAccessor.Initialize(app.Services);
 
     // Configure the HTTP request pipeline.
-    // if (app.Environment.IsDevelopment())
-    // {
-    app.UseOpenApi(); // serve OpenAPI/Swagger documents
-    app.UseSwaggerUi(); // serve Swagger UI
-    app.UseReDoc(); // serve ReDoc UI
-                    // }
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseOpenApi(); // serve OpenAPI/Swagger documents
+        app.UseSwaggerUi(); // serve Swagger UI
+        app.UseReDoc(); // serve ReDoc UI
+    }
 
     app.MapDefaultEndpoints();
 

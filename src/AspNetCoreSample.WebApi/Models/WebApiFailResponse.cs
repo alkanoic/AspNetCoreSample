@@ -26,6 +26,11 @@ public class WebApiFailResponse
     {
         ErrorMessage = ex.Message;
     }
+
+    public WebApiFailResponse(string errorMessage)
+    {
+        ErrorMessage = errorMessage;
+    }
 }
 
 public class ErrorModel

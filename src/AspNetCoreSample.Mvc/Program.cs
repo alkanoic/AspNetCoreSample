@@ -43,6 +43,25 @@ try
 
     builder.Services.AddHttpClient();
 
+    // MyComponent から WebApi を呼び出すためのクライアントを登録する
+    builder.Services.AddHttpClient(AspNetCoreSample.Mvc.Components.MyComponent.HttpClientName, client =>
+        {
+            var webApiOption = builder.Configuration.GetSection(WebApiOption.Position).Get<WebApiOption>()!;
+            client.BaseAddress = new Uri($"{webApiOption.WebApiBaseUrl}/api/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        }).ConfigurePrimaryHttpMessageHandler(() =>
+        {
+            var handler = new HttpClientHandler();
+            if (builder.Environment.IsDevelopment())
+            {
+                // 開発環境のローカル WebApi は自己署名証明書のため、検証を無効化する
+                handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+            }
+
+            return handler;
+        });
+
     var keycloakOptions = builder.Configuration.GetSection(KeycloakOptions.Position).Get<KeycloakOptions>()!;
     builder.Services.AddAuthentication(options =>
     {
@@ -66,7 +85,10 @@ try
           //       RoleClaimType = "role"
           //   };
           // 開発のためHttpを許可する
-          options.RequireHttpsMetadata = false;
+          if (builder.Environment.IsDevelopment())
+          {
+              options.RequireHttpsMetadata = false;
+          }
       });
     builder.Services.AddAuthorization();
 

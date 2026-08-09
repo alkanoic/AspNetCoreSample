@@ -78,7 +78,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unexpected error in KeycloakController");
-            return StatusCode(500, new WebApiFailResponse(new Exception("Internal server error")));
+            return StatusCode(500, new WebApiFailResponse("Internal server error"));
         }
     }
 
@@ -91,8 +91,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザー情報を取得
     /// </summary>
     /// <param name="input">ユーザー名</param>
+    /// <param name="ct">CancellationToken</param>
     [HttpPost("FetchUser")]
-    public async ValueTask<IActionResult> FetchUser(FetchUserInput input)
+    public async ValueTask<IActionResult> FetchUser(FetchUserInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _fetchUserInputValidator, async () =>
         {
@@ -101,7 +102,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                 AccessToken = GetAccessTokenByHeader(),
                 Username = input.Username,
             };
-            var response = await _keycloakService.FetchUserAsync(request);
+            var response = await _keycloakService.FetchUserAsync(request, ct);
             return Ok(response);
         });
     }
@@ -110,8 +111,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーを作成する
     /// </summary>
     /// <param name="input">ユーザー情報</param>
+    /// <param name="ct">CancellationToken</param>
     [HttpPost("CreateUser")]
-    public async ValueTask<IActionResult> CreateUser(CreateUserInput input)
+    public async ValueTask<IActionResult> CreateUser(CreateUserInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _createUserInputValidator, async () =>
         {
@@ -125,7 +127,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                 Credentials = new List<Credential> { new(input.Password) },
                 Attributes = input.Attributes
             };
-            var response = await _keycloakService.CreateUserAsync(request);
+            var response = await _keycloakService.CreateUserAsync(request, ct);
             return Ok(response);
         });
     }
@@ -134,8 +136,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザー情報を更新する
     /// </summary>
     /// <param name="input">ユーザー情報</param>
+    /// <param name="ct">CancellationToken</param>
     [HttpPut("UpdateUser")]
-    public async ValueTask<IActionResult> UpdateUser(UpdateUserInput input)
+    public async ValueTask<IActionResult> UpdateUser(UpdateUserInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _updateUserInputValidator, async () =>
         {
@@ -150,7 +153,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
             {
                 request.Credentials = new List<Credential>() { new Credential(input.Password) };
             }
-            await _keycloakService.UpdateUserAsync(input.UserId, request);
+            await _keycloakService.UpdateUserAsync(input.UserId, request, ct);
             return Ok();
         });
     }
@@ -160,7 +163,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザー名で更新する
     /// </summary>
     [HttpPut("UpdateUserByUsername")]
-    public async ValueTask<IActionResult> UpdateUserByUsername(UpdateUserByUsernameInput input)
+    public async ValueTask<IActionResult> UpdateUserByUsername(UpdateUserByUsernameInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _updateUserByUsernameInputValidator, async () =>
         {
@@ -175,7 +178,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
             {
                 request.Credentials = new List<Credential>() { new Credential(input.Password) };
             }
-            await _keycloakService.UpdateUserByUsernameAsync(input.Username, request);
+            await _keycloakService.UpdateUserByUsernameAsync(input.Username, request, ct);
             return Ok();
         });
     }
@@ -184,8 +187,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーのパスワードを変更する
     /// </summary>
     /// <param name="input">パスワード情報</param>
+    /// <param name="ct">CancellationToken</param>
     [HttpPut("ChangePassword")]
-    public async ValueTask<IActionResult> ChangePassword(ChangePasswordInput input)
+    public async ValueTask<IActionResult> ChangePassword(ChangePasswordInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _changePasswordInputValidator, async () =>
         {
@@ -193,7 +197,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
             {
                 Credential = new Credential(input.Password)
             };
-            await _keycloakService.ChangePasswordAsync(input.UserId, request);
+            await _keycloakService.ChangePasswordAsync(input.UserId, request, ct);
             return Ok();
         });
     }
@@ -202,8 +206,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーのパスワードを変更する
     /// </summary>
     /// <param name="input">パスワード情報</param>
+    /// <param name="ct">CancellationToken</param>
     [HttpPut("ChangePasswordByUsername")]
-    public async ValueTask<IActionResult> ChangePasswordByUsername(ChangePasswordByUsernameInput input)
+    public async ValueTask<IActionResult> ChangePasswordByUsername(ChangePasswordByUsernameInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _changePasswordByUsernameInputValidator, async () =>
         {
@@ -211,7 +216,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
             {
                 Credential = new Credential(input.Password)
             };
-            await _keycloakService.ChangePasswordByUsernameAsync(input.Username, request);
+            await _keycloakService.ChangePasswordByUsernameAsync(input.Username, request, ct);
             return Ok();
         });
     }
@@ -220,12 +225,12 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーのパスワードをリセットするためのメールを送信
     /// </summary>
     [HttpPut("ResetPasswordByEmail")]
-    public async ValueTask<IActionResult> ResetPasswordByEmail(ResetPasswordByEmailInput input)
+    public async ValueTask<IActionResult> ResetPasswordByEmail(ResetPasswordByEmailInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _resetPasswordByEmailInputValidator, async () =>
         {
             var request = new ResetPasswordByEmailRequest();
-            await _keycloakService.ResetPasswordByEmailAsync(input.UserId, request);
+            await _keycloakService.ResetPasswordByEmailAsync(input.UserId, request, ct);
             return Ok();
         });
     }
@@ -234,12 +239,12 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザー名でユーザーのパスワードをリセットするためのメールを送信
     /// </summary>
     [HttpPut("ResetPasswordByEmailByUsername")]
-    public async ValueTask<IActionResult> ResetPasswordByEmailByUsername(ResetPasswordByEmailByUsernameInput input)
+    public async ValueTask<IActionResult> ResetPasswordByEmailByUsername(ResetPasswordByEmailByUsernameInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _resetPasswordByEmailByUsernameInputValidator, async () =>
         {
             var request = new ResetPasswordByEmailRequest();
-            await _keycloakService.ResetPasswordByEmailByUsernameAsync(input.Username, request);
+            await _keycloakService.ResetPasswordByEmailByUsernameAsync(input.Username, request, ct);
             return Ok();
         });
     }
@@ -248,13 +253,14 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーを削除する
     /// </summary>
     /// <param name="input">ユーザー情報</param>
+    /// <param name="ct">CancellationToken</param>
     [HttpDelete("DeleteUser")]
-    public async ValueTask<IActionResult> DeleteUser(DeleteUserInput input)
+    public async ValueTask<IActionResult> DeleteUser(DeleteUserInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _deleteUserInputValidator, async () =>
         {
             var request = new DeleteUserRequest();
-            await _keycloakService.DeleteUserAsync(input.UserId, request);
+            await _keycloakService.DeleteUserAsync(input.UserId, request, ct);
             return Ok();
         });
     }
@@ -263,12 +269,12 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザー名でユーザーを削除する
     /// </summary>
     [HttpDelete("DeleteUserByUsername")]
-    public async ValueTask<IActionResult> DeleteUserByUsername(DeleteUserByUsernameInput input)
+    public async ValueTask<IActionResult> DeleteUserByUsername(DeleteUserByUsernameInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _deleteUserByUsernameInputValidator, async () =>
         {
             var request = new DeleteUserRequest();
-            await _keycloakService.DeleteUserByUsernameAsync(input.Username, request);
+            await _keycloakService.DeleteUserByUsernameAsync(input.Username, request, ct);
             return Ok();
         });
     }
@@ -277,11 +283,11 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// Realmに登録されているロール一覧を取得
     /// </summary>
     [HttpGet("FetchRoles")]
-    public async ValueTask<IActionResult> FetchRoles()
+    public async ValueTask<IActionResult> FetchRoles(CancellationToken ct)
     {
         try
         {
-            return Ok(await _keycloakService.FetchRolesAsync());
+            return Ok(await _keycloakService.FetchRolesAsync(ct));
         }
         catch (InvalidDataException ex)
         {
@@ -290,7 +296,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unexpected error fetching roles");
-            return StatusCode(500, new WebApiFailResponse(new Exception("Internal server error")));
+            return StatusCode(500, new WebApiFailResponse("Internal server error"));
         }
     }
 
@@ -298,8 +304,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーに登録されているロール一覧を取得
     /// </summary>
     /// <param name="input">ユーザー情報</param>
+    /// <param name="ct">CancellationToken</param>
     [HttpPost("FetchUserRoleMappings")]
-    public async ValueTask<IActionResult> FetchUserRoleMappings(FetchUserRoleMappingsInput input)
+    public async ValueTask<IActionResult> FetchUserRoleMappings(FetchUserRoleMappingsInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _fetchUserRoleMappingsInputValidator, async () =>
         {
@@ -307,7 +314,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
             {
                 UserId = input.UserId,
             };
-            var result = await _keycloakService.FetchUserRoleMappingsAsync(request);
+            var result = await _keycloakService.FetchUserRoleMappingsAsync(request, ct);
             return Ok(result);
         });
     }
@@ -316,8 +323,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーにロールをアタッチする
     /// </summary>
     /// <param name="input">ユーザーとロール情報</param>
+    /// <param name="ct">CancellationToken</param>
     [HttpPost("AddUserRoleMapping")]
-    public async ValueTask<IActionResult> AddUserRoleMapping(AddUserRoleMappingInput input)
+    public async ValueTask<IActionResult> AddUserRoleMapping(AddUserRoleMappingInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _addUserRoleMappingInputValidator, async () =>
         {
@@ -330,7 +338,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                     Name = a.RoleName
                 });
             }
-            await _keycloakService.AddUserRoleMappingAsync(input.UserId, request);
+            await _keycloakService.AddUserRoleMappingAsync(input.UserId, request, ct);
             return Ok();
         });
     }
@@ -339,8 +347,9 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーからロールをデタッチする
     /// </summary>
     /// <param name="input">ユーザーとロール情報</param>
+    /// <param name="ct">CancellationToken</param>
     [HttpDelete("DeleteUserRoleMapping")]
-    public async ValueTask<IActionResult> DeleteUserRoleMapping(DeleteUserRoleMappingInput input)
+    public async ValueTask<IActionResult> DeleteUserRoleMapping(DeleteUserRoleMappingInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _deleteUserRoleMappingInputValidator, async () =>
         {
@@ -353,7 +362,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                     Name = a.RoleName
                 });
             }
-            await _keycloakService.DeleteUserRoleMappingAsync(input.UserId, request);
+            await _keycloakService.DeleteUserRoleMappingAsync(input.UserId, request, ct);
             return Ok();
         });
     }
@@ -362,7 +371,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// Client一覧を取得する
     /// </summary>
     [HttpGet("FetchClients")]
-    public async ValueTask<IActionResult> FetchClients()
+    public async ValueTask<IActionResult> FetchClients(CancellationToken ct)
     {
         try
         {
@@ -370,7 +379,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
             {
                 AccessToken = GetAccessTokenByHeader()
             };
-            return Ok(await _keycloakService.FetchClientsAsync(request));
+            return Ok(await _keycloakService.FetchClientsAsync(request, ct));
         }
         catch (UnauthorizedAccessException)
         {
@@ -383,7 +392,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unexpected error fetching clients");
-            return StatusCode(500, new WebApiFailResponse(new Exception("Internal server error")));
+            return StatusCode(500, new WebApiFailResponse("Internal server error"));
         }
     }
 
@@ -391,7 +400,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ClientをClientIdで検索して取得する
     /// </summary>
     [HttpPost("FetchClient")]
-    public async ValueTask<IActionResult> FetchClient(FetchClientInput input)
+    public async ValueTask<IActionResult> FetchClient(FetchClientInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _fetchClientInputValidator, async () =>
         {
@@ -400,7 +409,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                 AccessToken = GetAccessTokenByHeader(),
                 ClientId = input.ClientId
             };
-            return Ok(await _keycloakService.FetchClientAsync(request));
+            return Ok(await _keycloakService.FetchClientAsync(request, ct));
         });
     }
 
@@ -408,7 +417,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// Client-Roleの一覧を取得する
     /// </summary>
     [HttpPost("FetchClientRoles")]
-    public async ValueTask<IActionResult> FetchClientRoles(FetchClientRolesInput input)
+    public async ValueTask<IActionResult> FetchClientRoles(FetchClientRolesInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _fetchClientRolesInputValidator, async () =>
         {
@@ -417,7 +426,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                 AccessToken = GetAccessTokenByHeader(),
                 ClientUuid = input.ClientUuid
             };
-            return Ok(await _keycloakService.FetchClientRolesAsync(request));
+            return Ok(await _keycloakService.FetchClientRolesAsync(request, ct));
         });
     }
 
@@ -425,7 +434,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーに紐づくClient-Roleを取得する
     /// </summary>
     [HttpPost("FetchUserClientRoles")]
-    public async ValueTask<IActionResult> FetchUserClientRoles(FetchUserClientRolesInput input)
+    public async ValueTask<IActionResult> FetchUserClientRoles(FetchUserClientRolesInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _fetchUserClientRolesInputValidator, async () =>
         {
@@ -435,7 +444,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                 UserId = input.UserId,
                 ClientUuid = input.ClientUuid
             };
-            return Ok(await _keycloakService.FetchUserClientRolesAsync(request));
+            return Ok(await _keycloakService.FetchUserClientRolesAsync(request, ct));
         });
     }
 
@@ -443,7 +452,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーにClient-Roleをアタッチする
     /// </summary>
     [HttpPost("AddUserClientRoleMappings")]
-    public async ValueTask<IActionResult> AddUserClientRoleMappings(AddUserClientRoleMappingInput input)
+    public async ValueTask<IActionResult> AddUserClientRoleMappings(AddUserClientRoleMappingInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _addUserClientRoleMappingInputValidator, async () =>
         {
@@ -456,7 +465,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                     Name = a.RoleName
                 });
             }
-            await _keycloakService.AddUserClientRoleMappingAsync(input.UserId, input.ClientUuid, request);
+            await _keycloakService.AddUserClientRoleMappingAsync(input.UserId, input.ClientUuid, request, ct);
             return Ok();
         });
     }
@@ -465,7 +474,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// ユーザーからClient-Roleをデタッチする
     /// </summary>
     [HttpDelete("DeleteUserClientRoleMapping")]
-    public async ValueTask<IActionResult> DeleteUserClientRoleMapping(DeleteUserClientRoleMappingInput input)
+    public async ValueTask<IActionResult> DeleteUserClientRoleMapping(DeleteUserClientRoleMappingInput input, CancellationToken ct)
     {
         return await CommonValidationResponse(input, _deleteUserClientRoleMappingInputValidator, async () =>
         {
@@ -478,7 +487,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                     Name = a.RoleName
                 });
             }
-            await _keycloakService.DeleteUserClientRoleMappingAsync(input.UserId, input.ClientUuid, request);
+            await _keycloakService.DeleteUserClientRoleMappingAsync(input.UserId, input.ClientUuid, request, ct);
             return Ok();
         });
     }

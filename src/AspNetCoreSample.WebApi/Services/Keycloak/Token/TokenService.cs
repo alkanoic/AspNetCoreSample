@@ -9,9 +9,9 @@ namespace AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 public interface ITokenService
 {
-    ValueTask<TokenResponse> AuthTokenAsync(TokenRequest tokenRequest);
-    ValueTask<TokenResponse> RefreshTokenAsync(UpdateTokenRequest updateTokenRequest);
-    ValueTask RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest);
+    ValueTask<TokenResponse> AuthTokenAsync(TokenRequest tokenRequest, CancellationToken ct = default);
+    ValueTask<TokenResponse> RefreshTokenAsync(UpdateTokenRequest updateTokenRequest, CancellationToken ct = default);
+    ValueTask RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest, CancellationToken ct = default);
 }
 
 public class TokenService : ITokenService
@@ -29,7 +29,7 @@ public class TokenService : ITokenService
         };
     }
 
-    public async ValueTask<TokenResponse> AuthTokenAsync(TokenRequest tokenRequest)
+    public async ValueTask<TokenResponse> AuthTokenAsync(TokenRequest tokenRequest, CancellationToken ct = default)
     {
         var parameters = new Dictionary<string, string>
         {
@@ -41,18 +41,18 @@ public class TokenService : ITokenService
         };
 
         var encodedContent = new FormUrlEncodedContent(parameters);
-        var response = await _httpClient.PostAsync(_keycloakOptions.TokenEndpoint, encodedContent);
+        var response = await _httpClient.PostAsync(_keycloakOptions.TokenEndpoint, encodedContent, ct);
         if (!response.IsSuccessStatusCode)
         {
             throw new InvalidDataException("authenticate fail response");
         }
-        var content = await response.Content.ReadAsStringAsync();
+        var content = await response.Content.ReadAsStringAsync(ct);
         var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content, _jsonSerializerOptions);
         if (tokenResponse == null) throw new InvalidDataException("authenticate fail response");
         return tokenResponse;
     }
 
-    public async ValueTask<TokenResponse> RefreshTokenAsync(UpdateTokenRequest updateTokenRequest)
+    public async ValueTask<TokenResponse> RefreshTokenAsync(UpdateTokenRequest updateTokenRequest, CancellationToken ct = default)
     {
         var parameters = new Dictionary<string, string>
         {
@@ -63,18 +63,18 @@ public class TokenService : ITokenService
         };
 
         var encodedContent = new FormUrlEncodedContent(parameters);
-        var response = await _httpClient.PostAsync(_keycloakOptions.TokenEndpoint, encodedContent);
+        var response = await _httpClient.PostAsync(_keycloakOptions.TokenEndpoint, encodedContent, ct);
         if (!response.IsSuccessStatusCode)
         {
             throw new InvalidDataException("refresh token fail response");
         }
-        var content = await response.Content.ReadAsStringAsync();
+        var content = await response.Content.ReadAsStringAsync(ct);
         var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content, _jsonSerializerOptions);
         if (tokenResponse == null) throw new InvalidDataException("refresh token fail response");
         return tokenResponse;
     }
 
-    public async ValueTask RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest)
+    public async ValueTask RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest, CancellationToken ct = default)
     {
         var parameters = new Dictionary<string, string>
         {
@@ -84,7 +84,7 @@ public class TokenService : ITokenService
         };
 
         var encodedContent = new FormUrlEncodedContent(parameters);
-        var response = await _httpClient.PostAsync(_keycloakOptions.RevokeTokenEndpoint, encodedContent);
+        var response = await _httpClient.PostAsync(_keycloakOptions.RevokeTokenEndpoint, encodedContent, ct);
         if (!response.IsSuccessStatusCode)
         {
             throw new InvalidDataException("revoke refresh token fail response");

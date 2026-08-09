@@ -21,12 +21,12 @@ public static class QueryableExtensions
 
     public static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> source, string propertyName)
     {
-        return ApplyOrder(source, propertyName, "OrderBy");
+        return ApplyOrder(source, propertyName, "ThenBy");
     }
 
     public static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> source, string propertyName)
     {
-        return ApplyOrder(source, propertyName, "OrderByDescending");
+        return ApplyOrder(source, propertyName, "ThenByDescending");
     }
 
     private static IOrderedQueryable<T> ApplyOrder<T>(IQueryable<T> source, string propertyName, string methodName)
@@ -239,7 +239,8 @@ public static class QueryableExtensions
 
     private static MethodCallExpression? GetContainsMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
     {
-        if (!int.TryParse(searchTerm, out var result))
+        // Contains は string プロパティのみ有効
+        if (property.PropertyType != typeof(string))
         {
             return null;
         }
@@ -285,21 +286,50 @@ public static class QueryableExtensions
 
     private static UnaryExpression? GetNotEqualMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
     {
-        var expr = GetContainsMethod(parameter, property, searchTerm);
+        var expr = GetEqualMethod(parameter, property, searchTerm);
         if (expr is null) return null;
         return Expression.Not(expr);
     }
 
     private static BinaryExpression? GetEqualMethod(ParameterExpression parameter, PropertyInfo property, string searchTerm)
     {
-        if (!int.TryParse(searchTerm, out var result))
+        if (!TryConvert(searchTerm, property.PropertyType, out object? value))
         {
             return null;
         }
         return Expression.Equal(
             Expression.Property(parameter, property),
-            Expression.Constant(result)
+            Expression.Constant(value, property.PropertyType)
         );
+    }
+
+    private static bool TryConvert(string searchTerm, Type targetType, out object? value)
+    {
+        if (targetType == typeof(string))
+        {
+            value = searchTerm;
+            return true;
+        }
+        if (targetType == typeof(int))
+        {
+            var exists = int.TryParse(searchTerm, out var intValue);
+            value = intValue;
+            return exists;
+        }
+        if (targetType == typeof(long))
+        {
+            var exists = long.TryParse(searchTerm, out var longValue);
+            value = longValue;
+            return exists;
+        }
+        if (targetType == typeof(bool))
+        {
+            var exists = bool.TryParse(searchTerm, out var boolValue);
+            value = boolValue;
+            return exists;
+        }
+        value = default;
+        return false;
     }
 
     private static BinaryExpression? GetIsNullMethod(ParameterExpression parameter, PropertyInfo property)

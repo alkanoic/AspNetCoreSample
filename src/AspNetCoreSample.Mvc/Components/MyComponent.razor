@@ -1,11 +1,6 @@
 @page "/mycomponent"
-@inject HttpClient Http
-@inject IOptions<WebApiOption> _webApiOption
-@using System.Net.Http.Headers
+@inject IHttpClientFactory HttpClientFactory
 @using System.Text.Json
-@using System.Linq
-@using AspNetCoreSample.Mvc.Options
-@using Microsoft.Extensions.Options
 
 <h3>Hello from MyComponent</h3>
 
@@ -21,6 +16,8 @@ else
 }
 
 @code {
+    public const string HttpClientName = "WebApi";
+
     private WeatherForecast? data;
 
     protected override async Task OnInitializedAsync()
@@ -32,20 +29,8 @@ else
     {
         try
         {
-            var handler = new HttpClientHandler
-                {
-                    ServerCertificateCustomValidationCallback = (request, cert, chain, errors) =>
-                    {
-                        Console.WriteLine("SSL error skipped");
-                        return true;
-                    }
-                };
-            HttpClient client = new HttpClient(handler);
-            client.BaseAddress = new Uri($"{_webApiOption.Value.WebApiBaseUrl}/api/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = await client.GetAsync("WeatherForecast");
-            string jsonString = await response.Content.ReadAsStringAsync();
+            var client = HttpClientFactory.CreateClient(HttpClientName);
+            string jsonString = await client.GetStringAsync("WeatherForecast");
             var options = new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

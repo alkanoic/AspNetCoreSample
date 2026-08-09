@@ -164,7 +164,7 @@ internal sealed class TemplateControl
         {
             target.AppendLine(DefaultCultureInfo, $"target = target.Where(x => x.{pp.Name} == {pp.Name.ToCamelCase()});");
         }
-        target.Append(DefaultCultureInfo, $"return target.Any();");
+        target.Append(DefaultCultureInfo, $"return await target.AnyAsync();");
         return target.ToString();
     }
 
@@ -207,7 +207,7 @@ internal sealed class TemplateControl
                 <div class="form-group">
                     <label asp-for="{{p.Name}}" class="control-label"></label>
                     <input asp-for="{{p.Name}}" class="form-control" />
-                    <span asp-validation-for="Id" class="text-danger"></span>
+                    <span asp-validation-for="{{p.Name}}" class="text-danger"></span>
                 </div>
 
             """);

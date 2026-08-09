@@ -71,14 +71,17 @@ public class CustomController : Controller
 
         var takes = ordered.Skip(parameters.Start).Take(parameters.Length);
 
-        // 全件数を取得
-        var totalCount = query.Count();
+        // フィルタ後の件数
+        var filteredCount = await query.CountAsync();
+
+        // フィルタ適用前の全件数
+        var totalCount = await _context.MultiTables.CountAsync();
 
         // データと合計件数をレスポンスで返す
         return Json(new
         {
             data = await takes.ToListAsync(),
-            recordsFiltered = totalCount,
+            recordsFiltered = filteredCount,
             recordsTotal = totalCount
         });
     }

@@ -35,19 +35,20 @@ public class TokenController : ControllerBase
     /// Keycloakによる認証を行う
     /// </summary>
     /// <param name="request">ユーザ名およびパスワード</param>
+    /// <param name="ct">CancellationToken</param>
     /// <returns>AccessTokenおよびRefreshTokenの取得</returns>
     [HttpPost("Auth")]
-    public async ValueTask<IActionResult> Auth(TokenRequest request)
+    public async ValueTask<IActionResult> Auth(TokenRequest request, CancellationToken ct)
     {
         try
         {
-            var result = await _tokenRequestValidator.ValidateAsync(request);
+            var result = await _tokenRequestValidator.ValidateAsync(request, ct);
             if (!result.IsValid)
             {
                 var errors = new WebApiFailResponse(result);
                 return BadRequest(errors);
             }
-            return Ok(await _tokenService.AuthTokenAsync(request));
+            return Ok(await _tokenService.AuthTokenAsync(request, ct));
         }
         catch (Exception ex)
         {
@@ -59,19 +60,20 @@ public class TokenController : ControllerBase
     /// RefreshTokenを使用してAccessTokenを更新する
     /// </summary>
     /// <param name="request">RefreshToken</param>
+    /// <param name="ct">CancellationToken</param>
     /// <returns>AccessTokenおよびRefreshTokenの取得</returns>
     [HttpPost("RefreshToken")]
-    public async ValueTask<IActionResult> RefreshToken(UpdateTokenRequest request)
+    public async ValueTask<IActionResult> RefreshToken(UpdateTokenRequest request, CancellationToken ct)
     {
         try
         {
-            var result = await _updateTokenRequestValidator.ValidateAsync(request);
+            var result = await _updateTokenRequestValidator.ValidateAsync(request, ct);
             if (!result.IsValid)
             {
                 var errors = new WebApiFailResponse(result);
                 return BadRequest(errors);
             }
-            return Ok(await _tokenService.RefreshTokenAsync(request));
+            return Ok(await _tokenService.RefreshTokenAsync(request, ct));
         }
         catch (Exception ex)
         {
@@ -83,19 +85,20 @@ public class TokenController : ControllerBase
     /// RefreshTokenを無効化する
     /// </summary>
     /// <param name="request">RefreshToken</param>
+    /// <param name="ct">CancellationToken</param>
     /// <returns>なし</returns>
     [HttpPost("RevokeToken")]
-    public async ValueTask<IActionResult> RevokeToken(RevokeTokenRequest request)
+    public async ValueTask<IActionResult> RevokeToken(RevokeTokenRequest request, CancellationToken ct)
     {
         try
         {
-            var result = await _revokeTokenRequestValidator.ValidateAsync(request);
+            var result = await _revokeTokenRequestValidator.ValidateAsync(request, ct);
             if (!result.IsValid)
             {
                 var errors = new WebApiFailResponse(result);
                 return BadRequest(errors);
             }
-            await _tokenService.RevokeTokenAsync(request);
+            await _tokenService.RevokeTokenAsync(request, ct);
             return Ok();
         }
         catch (Exception ex)
