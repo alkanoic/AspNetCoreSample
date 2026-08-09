@@ -24,6 +24,12 @@
       }
     }
   },
+  "permission": {
+    "external_directory": {
+      "/tmp/**": "allow",
+      "*": "ask"
+    }
+  },
   "mcp": {
     "github": {
       "type": "remote",
