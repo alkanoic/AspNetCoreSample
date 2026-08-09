@@ -102,15 +102,15 @@ JA_MD=$(printf '%s\n' "$STAGED" | { grep '\.md$' || true; } | while IFS= read -r
 done)
 if [ -n "$JA_MD" ]; then
   echo "textlint (日本語 Markdown)"
-  if command -v textlint >/dev/null 2>&1; then
+  if command -v npx >/dev/null 2>&1; then
     mapfile -t TL_LIST <<<"$JA_MD"
-    if ! textlint --config .textlintrc.json "${TL_LIST[@]}" >/tmp/textlint.log 2>&1; then
+    if ! npx --yes -p textlint@14 -p textlint-rule-preset-ja-technical-writing@12 textlint --config .textlintrc.json "${TL_LIST[@]}" >/tmp/textlint.log 2>&1; then
       echo "   textlint error:" >&2
       tail -40 /tmp/textlint.log >&2
       failures=$((failures + 1))
     fi
   else
-    echo "   SKIP: textlint not found"
+    echo "   SKIP: npx not found"
   fi
 fi
 

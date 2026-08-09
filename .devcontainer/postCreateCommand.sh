@@ -68,13 +68,14 @@ if [ -d .githooks ]; then
 fi
 
 # SBOM 生成物 (export-cyclonedx.sh で使用)
-npm install -g @cyclonedx/cyclonedx-npm || echo "cyclonedx-npm skipped"
+# グローバル導入はせず、cyclonedx-npm は npx 実行時パッケージで使う (npx --yes @cyclonedx/cyclonedx-npm)
 
-# Nuxt (NuxtSample) は pnpm で依存を管理しているため、グローバルに導入する
-npm install -g pnpm || echo "pnpm skipped"
+# Nuxt (NuxtSample) は pnpm で依存を管理しているため、corepack で有効化する
+# (CI の main.yml と同じ方式。バージョンは NuxtSample/package.json の packageManager に従う)
+corepack enable pnpm || echo "corepack (pnpm) skipped"
 
 # 日本語 Markdown レビュー (textlint / preset-ja-technical-writing) を pre-commit で実行するため
-npm install -g textlint@14 textlint-rule-preset-ja-technical-writing@12 || echo "textlint skipped"
+# グローバル導入はせず、pre-commit / AGENTS.md の npx 実行時パッケージで実行する
 
 # Nuxt (NuxtSample) のローカル環境設定 (.env) を .env.example から初期化する
 if [ -f "src/NuxtSample/.env.example" ] && [ ! -f "src/NuxtSample/.env" ]; then
