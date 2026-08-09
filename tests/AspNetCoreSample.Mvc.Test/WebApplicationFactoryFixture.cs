@@ -54,16 +54,14 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    async ValueTask IAsyncLifetime.InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
     }
 
-    public new async ValueTask DisposeAsync()
+    public ValueTask DisposeAsync()
     {
-        await _keycloakContainer.DisposeAsync();
-        await _postgresqlContainer.DisposeAsync();
-        await base.DisposeAsync();
+        return ValueTask.CompletedTask;
     }
 
     public string KeycloakBaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
@@ -74,7 +72,6 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
     {
         HostUrl = $"https://localhost:{AvailablePort.GetAvailablePort()}";
 
-        // 環境変数による設定の上書きはほかのテストに影響するため、InMemoryCollectionを使う
         builder.UseConfiguration(new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
             {
                 {"ConnectionStrings:Default", DbConnectionString},
