@@ -94,10 +94,17 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
+        // TestServer 用のダミーホスト（WebApplicationFactory がクライアント生成に使用）
         var dummyHost = builder.Build();
 
+        // Playwright がアクセスする Kestrel サーバーを起動する
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-        builder.Build().Start();
+        var kestrelHost = builder.Build();
+        kestrelHost.Start();
+
+        // ダミーホスト停止時に Kestrel も停止する
+        var lifetime = dummyHost.Services.GetRequiredService<IHostApplicationLifetime>();
+        lifetime.ApplicationStopping.Register(() => kestrelHost.StopAsync().GetAwaiter().GetResult());
 
         return dummyHost;
     }
