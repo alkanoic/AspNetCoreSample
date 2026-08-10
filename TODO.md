@@ -31,6 +31,7 @@
 
 ## S4: テスト・生成系
 
-- [ ] **`CreateHost` で `builder.Build()` の二重呼出 + 未破棄 Kestrel**
-  `tests/AspNetCoreSample.WebApi.Test/WebApplicationFactoryFixture.cs`（Mvc 側にも複製）。
-  ホスト / ポート漏洩、flaky の原因。単純な修正では副作用が出たため要再検討。
+- [x] **`WebApplicationFactoryFixture` の `CreateHost` 二重 `Build()` + 未破棄 Kestrel**
+  `tests/AspNetCoreSample.Mvc.Test` / `tests/AspNetCoreSample.WebApi.Test` の `WebApplicationFactoryFixture.cs`。
+  ポート 0 + `IServerAddressesFeature` による動的ポート割り当て、`DisposeAsync` での
+  Kestrel ホスト・コンテナ破棄、`LoggingAttribute` の `ObjectDisposedException` 対策を実施済み。

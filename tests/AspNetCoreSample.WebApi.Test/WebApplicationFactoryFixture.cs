@@ -1,13 +1,14 @@
 using System.Data.Common;
 
-using AspNetCoreSample.Test.Common;
-
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Npgsql;
@@ -23,6 +24,8 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
 
     private readonly PostgreSqlContainer _postgresqlContainer;
     private readonly IContainer _keycloakContainer;
+    private IHost? _kestrelHost;
+    private bool _disposed;
 
     public WebApplicationFactoryFixture()
     {
@@ -59,8 +62,21 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
         await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
     }
 
-    async ValueTask IAsyncDisposable.DisposeAsync()
+    public override async ValueTask DisposeAsync()
     {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+
+        if (_kestrelHost != null)
+        {
+            await _kestrelHost.StopAsync();
+            _kestrelHost.Dispose();
+        }
+
         await _keycloakContainer.DisposeAsync();
         await _postgresqlContainer.DisposeAsync();
         await base.DisposeAsync();
@@ -72,7 +88,7 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        HostUrl = $"https://localhost:{AvailablePort.GetAvailablePort()}";
+        builder.UseUrls("https://127.0.0.1:0");
 
         // 環境変数による設定の上書きはほかのテストに影響するため、InMemoryCollectionを使う
         builder.UseSetting("ConnectionStrings:Default", DbConnectionString);
@@ -81,7 +97,6 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
         builder.UseSetting("KeycloakOptions:RevokeTokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test/protocol/openid-connect/revoke").ToString());
         builder.UseSetting("KeycloakOptions:AdminTokenEndpoint", new Uri(new Uri(KeycloakBaseAddress), "/realms/master/protocol/openid-connect/token").ToString());
         builder.UseSetting("KeycloakOptions:AdminBaseAddress", KeycloakBaseAddress);
-        builder.UseUrls(HostUrl);
     }
 
     protected override IHost CreateHost(IHostBuilder builder)
@@ -89,8 +104,26 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
         var dummyHost = builder.Build();
 
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-        builder.Build().Start();
+        _kestrelHost = builder.Build();
+        _kestrelHost.Start();
+
+        HostUrl = ResolveHostUrl(_kestrelHost);
 
         return dummyHost;
+    }
+
+    private static string ResolveHostUrl(IHost host)
+    {
+        var addresses = host.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>();
+        var address = addresses?.Addresses.FirstOrDefault(a => a.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
+
+        // ポート 0 の場合、バインド先の確定を待つ必要がある
+        for (var i = 0; address == null && i < 50; i++)
+        {
+            Task.Delay(100).GetAwaiter().GetResult();
+            address = addresses?.Addresses.FirstOrDefault(a => a.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
+        }
+
+        return address ?? throw new InvalidOperationException("Kestrel のバインド先アドレスを解決できませんでした。");
     }
 }

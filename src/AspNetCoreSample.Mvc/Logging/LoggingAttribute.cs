@@ -39,14 +39,21 @@ public class LoggingAttribute : Attribute, IMethodDecorator
         var serviceProvider = ServiceProviderAccessor.ServiceProvider;
         if (serviceProvider != null)
         {
-            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-            if (instance != null)
+            try
             {
-                _logger = loggerFactory?.CreateLogger(instance.GetType());
+                var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+                if (instance != null)
+                {
+                    _logger = loggerFactory?.CreateLogger(instance.GetType());
+                }
+                else
+                {
+                    _logger = loggerFactory?.CreateLogger(method.DeclaringType);
+                }
             }
-            else
+            catch (ObjectDisposedException)
             {
-                _logger = loggerFactory?.CreateLogger(method.DeclaringType);
+                // ホスト停止後に ServiceProvider を参照した場合はログを出力しない
             }
         }
 

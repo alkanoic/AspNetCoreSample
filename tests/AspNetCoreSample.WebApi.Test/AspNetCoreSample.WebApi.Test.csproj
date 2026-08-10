@@ -45,7 +45,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AspNetCoreSample.WebApi\AspNetCoreSample.WebApi.csproj" />
-    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 
 </Project>

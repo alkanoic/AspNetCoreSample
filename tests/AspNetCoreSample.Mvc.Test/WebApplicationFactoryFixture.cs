@@ -1,11 +1,11 @@
 using System.Data.Common;
 
-using AspNetCoreSample.Test.Common;
-
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +25,8 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
 {
     private readonly PostgreSqlContainer _postgresqlContainer;
     private readonly IContainer _keycloakContainer;
+    private IHost? _kestrelHost;
+    private bool _disposed;
 
     public WebApplicationFactoryFixture()
     {
@@ -61,9 +63,26 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
         await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
     }
 
-    public ValueTask DisposeAsync()
+    public override async ValueTask DisposeAsync()
     {
-        return ValueTask.CompletedTask;
+        GC.SuppressFinalize(this);
+
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+
+        if (_kestrelHost != null)
+        {
+            await _kestrelHost.StopAsync();
+            _kestrelHost.Dispose();
+        }
+
+        await _keycloakContainer.DisposeAsync();
+        await _postgresqlContainer.DisposeAsync();
+        await base.DisposeAsync();
     }
 
     public string KeycloakBaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
@@ -72,7 +91,7 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        HostUrl = $"https://localhost:{AvailablePort.GetAvailablePort()}";
+        builder.UseUrls("https://127.0.0.1:0");
 
         builder.UseConfiguration(new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
             {
@@ -80,7 +99,6 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
                 {"KeycloakOptions:Authority", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test").ToString()},
                 {"KeycloakOptions:MetadataAddress", new Uri(new Uri(KeycloakBaseAddress), "/realms/Test/.well-known/openid-configuration").ToString()},
             }).Build());
-        builder.UseUrls(HostUrl);
 
         builder.ConfigureServices(services =>
         {
@@ -95,8 +113,26 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
         var dummyHost = builder.Build();
 
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-        builder.Build().Start();
+        _kestrelHost = builder.Build();
+        _kestrelHost.Start();
+
+        HostUrl = ResolveHostUrl(_kestrelHost);
 
         return dummyHost;
+    }
+
+    private static string ResolveHostUrl(IHost host)
+    {
+        var addresses = host.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>();
+        var address = addresses?.Addresses.FirstOrDefault(a => a.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
+
+        // ポート 0 の場合、バインド先の確定を待つ必要がある
+        for (var i = 0; address == null && i < 50; i++)
+        {
+            Task.Delay(100).GetAwaiter().GetResult();
+            address = addresses?.Addresses.FirstOrDefault(a => a.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
+        }
+
+        return address ?? throw new InvalidOperationException("Kestrel のバインド先アドレスを解決できませんでした。");
     }
 }
