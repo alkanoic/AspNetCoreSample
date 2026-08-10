@@ -84,11 +84,9 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        var dummyHost = builder.Build();
-
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-        builder.Build().Start();
-
-        return dummyHost;
+        var host = builder.Build();
+        host.Start();
+        return host;
     }
 }
