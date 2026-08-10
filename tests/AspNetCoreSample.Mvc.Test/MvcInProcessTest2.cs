@@ -19,8 +19,19 @@ public sealed class MvcInProcessTest2 : IClassFixture<WebApplicationFactoryFixtu
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
         var page = await browser.NewPageAsync();
-        await PlaywrightSettings.GotoWithRetryAsync(page, $"{_factory.HostUrl}");
 
-        Assert.Contains("AspNetCoreSample.Mvc", await page.TitleAsync());
+        await PlaywrightRetry.RunAsync(async () =>
+        {
+            try
+            {
+                await page.GotoAsync($"{_factory.HostUrl}");
+
+                Assert.Contains("AspNetCoreSample.Mvc", await page.TitleAsync());
+            }
+            finally
+            {
+                await page.CloseAsync();
+            }
+        });
     }
 }
