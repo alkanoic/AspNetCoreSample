@@ -8,7 +8,6 @@ using DotNet.Testcontainers.Containers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Npgsql;
@@ -87,17 +86,10 @@ public sealed class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFa
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        // TestServer 用のダミーホスト（WebApplicationFactory がクライアント生成に使用）
         var dummyHost = builder.Build();
 
-        // Playwright がアクセスする Kestrel サーバーを起動する
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-        var kestrelHost = builder.Build();
-        kestrelHost.Start();
-
-        // ダミーホスト停止時に Kestrel も停止する
-        var lifetime = dummyHost.Services.GetRequiredService<IHostApplicationLifetime>();
-        lifetime.ApplicationStopping.Register(() => kestrelHost.StopAsync().GetAwaiter().GetResult());
+        builder.Build().Start();
 
         return dummyHost;
     }

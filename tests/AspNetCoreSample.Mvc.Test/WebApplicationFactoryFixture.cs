@@ -61,11 +61,9 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
         await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
     }
 
-    async ValueTask IAsyncDisposable.DisposeAsync()
+    public ValueTask DisposeAsync()
     {
-        await _keycloakContainer.DisposeAsync();
-        await _postgresqlContainer.DisposeAsync();
-        await base.DisposeAsync();
+        return ValueTask.CompletedTask;
     }
 
     public string KeycloakBaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
@@ -94,17 +92,10 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        // TestServer 用のダミーホスト（WebApplicationFactory がクライアント生成に使用）
         var dummyHost = builder.Build();
 
-        // Playwright がアクセスする Kestrel サーバーを起動する
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-        var kestrelHost = builder.Build();
-        kestrelHost.Start();
-
-        // ダミーホスト停止時に Kestrel も停止する
-        var lifetime = dummyHost.Services.GetRequiredService<IHostApplicationLifetime>();
-        lifetime.ApplicationStopping.Register(() => kestrelHost.StopAsync().GetAwaiter().GetResult());
+        builder.Build().Start();
 
         return dummyHost;
     }
