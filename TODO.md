@@ -14,6 +14,9 @@
   Authorization ヘッダなし時に `Options` の admin 資格情報で代理アクセスする。
   コントローラは `[Authorize]` 付きになったが、任意のログインユーザーが admin 操作へ昇格しうる。
   フォールバックを廃止し、明示的な管理トークンのみで操作する。
+- [ ] **Mvc / WebApi: `RequireHttpsMetadata = false` が無条件設定**
+  `Program.cs` で `IsDevelopment()` ゲートを外して HTTP で OIDC/JWT メタデータを取得・検証スキップしている。
+  Authority も `http://keycloak`。Keycloak が HTTPS 化されたら Development 限定に戻す。
 - [ ] **平文シークレットのリポジトリコミット**
   `src/AspNetCoreSample.Mvc/appsettings.json` / `src/AspNetCoreSample.WebApi/appsettings.json` の DB パスワード /
   Keycloak `ClientSecret` / `AdminPassword`。**devcontainer のローカル用途では許容**。
