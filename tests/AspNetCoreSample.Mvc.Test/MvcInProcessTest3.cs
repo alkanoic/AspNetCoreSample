@@ -19,7 +19,7 @@ public sealed class MvcInProcessTest3 : IClassFixture<WebApplicationFactoryFixtu
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
         var page = await browser.NewPageAsync();
-        await page.GotoAsync($"{_factory.HostUrl}/Name");
+        await PlaywrightSettings.GotoWithRetryAsync(page, $"{_factory.HostUrl}/Name");
         await page.GetByRole(AriaRole.Link, new() { Name = "Edit" }).First.ClickAsync();
         await page.GetByLabel("Name1").ClickAsync();
         await page.GetByLabel("Name1").ClickAsync();

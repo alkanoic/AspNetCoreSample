@@ -23,7 +23,7 @@ public sealed class MvcInProcessTest : IClassFixture<WebApplicationFactoryFixtur
 
         var page = await context.NewPageAsync();
 
-        await page.GotoAsync($"{_factory.HostUrl}");
+        await PlaywrightSettings.GotoWithRetryAsync(page, $"{_factory.HostUrl}");
         await page.GetByRole(AriaRole.Link, new() { Name = "Auth" }).ClickAsync();
         await page.GetByLabel("ユーザー名またはメールアドレス").FillAsync("admin");
         await page.GetByRole(AriaRole.Textbox, new() { Name = "パスワード" }).FillAsync("admin");
