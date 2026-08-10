@@ -90,9 +90,11 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
+        var dummyHost = builder.Build();
+
         builder.ConfigureWebHost(webHostBuilder => webHostBuilder.UseKestrel());
-        var host = builder.Build();
-        host.Start();
-        return host;
+        builder.Build().Start();
+
+        return dummyHost;
     }
 }
