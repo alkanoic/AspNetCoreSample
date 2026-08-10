@@ -1,5 +1,7 @@
 using System.Data.Common;
 
+using AspNetCoreSample.Test.Common;
+
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 

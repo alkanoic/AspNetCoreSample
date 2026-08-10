@@ -73,7 +73,8 @@ public class KeycloakController(ILogger<KeycloakController> logger,
         }
         catch (InvalidDataException ex)
         {
-            return BadRequest(new WebApiFailResponse(ex));
+            _logger.LogWarning(ex, "Invalid data in KeycloakController");
+            return BadRequest(new WebApiFailResponse("Invalid request data"));
         }
         catch (Exception ex)
         {
@@ -90,17 +91,17 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// <summary>
     /// ユーザー情報を取得
     /// </summary>
-    /// <param name="input">ユーザー名</param>
+    /// <param name="username">ユーザー名</param>
     /// <param name="ct">CancellationToken</param>
-    [HttpPost("FetchUser")]
-    public async ValueTask<IActionResult> FetchUser(FetchUserInput input, CancellationToken ct)
+    [HttpGet("FetchUser")]
+    public async ValueTask<IActionResult> FetchUser([FromQuery] string username, CancellationToken ct)
     {
-        return await CommonValidationResponse(input, _fetchUserInputValidator, async () =>
+        return await CommonValidationResponse(new FetchUserInput { Username = username }, _fetchUserInputValidator, async () =>
         {
             var request = new FetchUserRequest()
             {
                 AccessToken = GetAccessTokenByHeader(),
-                Username = input.Username,
+                Username = username,
             };
             var response = await _keycloakService.FetchUserAsync(request, ct);
             return Ok(response);
@@ -252,15 +253,15 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// <summary>
     /// ユーザーを削除する
     /// </summary>
-    /// <param name="input">ユーザー情報</param>
+    /// <param name="userId">ユーザーID</param>
     /// <param name="ct">CancellationToken</param>
-    [HttpDelete("DeleteUser")]
-    public async ValueTask<IActionResult> DeleteUser(DeleteUserInput input, CancellationToken ct)
+    [HttpDelete("DeleteUser/{userId}")]
+    public async ValueTask<IActionResult> DeleteUser(string userId, CancellationToken ct)
     {
-        return await CommonValidationResponse(input, _deleteUserInputValidator, async () =>
+        return await CommonValidationResponse(new DeleteUserInput { UserId = userId }, _deleteUserInputValidator, async () =>
         {
             var request = new DeleteUserRequest();
-            await _keycloakService.DeleteUserAsync(input.UserId, request, ct);
+            await _keycloakService.DeleteUserAsync(userId, request, ct);
             return Ok();
         });
     }
@@ -268,13 +269,13 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// <summary>
     /// ユーザー名でユーザーを削除する
     /// </summary>
-    [HttpDelete("DeleteUserByUsername")]
-    public async ValueTask<IActionResult> DeleteUserByUsername(DeleteUserByUsernameInput input, CancellationToken ct)
+    [HttpDelete("DeleteUserByUsername/{username}")]
+    public async ValueTask<IActionResult> DeleteUserByUsername(string username, CancellationToken ct)
     {
-        return await CommonValidationResponse(input, _deleteUserByUsernameInputValidator, async () =>
+        return await CommonValidationResponse(new DeleteUserByUsernameInput { Username = username }, _deleteUserByUsernameInputValidator, async () =>
         {
             var request = new DeleteUserRequest();
-            await _keycloakService.DeleteUserByUsernameAsync(input.Username, request, ct);
+            await _keycloakService.DeleteUserByUsernameAsync(username, request, ct);
             return Ok();
         });
     }
@@ -291,7 +292,8 @@ public class KeycloakController(ILogger<KeycloakController> logger,
         }
         catch (InvalidDataException ex)
         {
-            return BadRequest(new WebApiFailResponse(ex));
+            _logger.LogWarning(ex, "Invalid data fetching roles");
+            return BadRequest(new WebApiFailResponse("Invalid request data"));
         }
         catch (Exception ex)
         {
@@ -303,16 +305,16 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// <summary>
     /// ユーザーに登録されているロール一覧を取得
     /// </summary>
-    /// <param name="input">ユーザー情報</param>
+    /// <param name="userId">ユーザーID</param>
     /// <param name="ct">CancellationToken</param>
-    [HttpPost("FetchUserRoleMappings")]
-    public async ValueTask<IActionResult> FetchUserRoleMappings(FetchUserRoleMappingsInput input, CancellationToken ct)
+    [HttpGet("FetchUserRoleMappings")]
+    public async ValueTask<IActionResult> FetchUserRoleMappings([FromQuery] string userId, CancellationToken ct)
     {
-        return await CommonValidationResponse(input, _fetchUserRoleMappingsInputValidator, async () =>
+        return await CommonValidationResponse(new FetchUserRoleMappingsInput { UserId = userId }, _fetchUserRoleMappingsInputValidator, async () =>
         {
             var request = new FetchUserRoleMappingsRequest()
             {
-                UserId = input.UserId,
+                UserId = userId,
             };
             var result = await _keycloakService.FetchUserRoleMappingsAsync(request, ct);
             return Ok(result);
@@ -387,7 +389,8 @@ public class KeycloakController(ILogger<KeycloakController> logger,
         }
         catch (InvalidDataException ex)
         {
-            return BadRequest(new WebApiFailResponse(ex));
+            _logger.LogWarning(ex, "Invalid data fetching clients");
+            return BadRequest(new WebApiFailResponse("Invalid request data"));
         }
         catch (Exception ex)
         {
@@ -399,15 +402,15 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// <summary>
     /// ClientをClientIdで検索して取得する
     /// </summary>
-    [HttpPost("FetchClient")]
-    public async ValueTask<IActionResult> FetchClient(FetchClientInput input, CancellationToken ct)
+    [HttpGet("FetchClient")]
+    public async ValueTask<IActionResult> FetchClient([FromQuery] string clientId, CancellationToken ct)
     {
-        return await CommonValidationResponse(input, _fetchClientInputValidator, async () =>
+        return await CommonValidationResponse(new FetchClientInput { ClientId = clientId }, _fetchClientInputValidator, async () =>
         {
             var request = new FetchClientRequest()
             {
                 AccessToken = GetAccessTokenByHeader(),
-                ClientId = input.ClientId
+                ClientId = clientId
             };
             return Ok(await _keycloakService.FetchClientAsync(request, ct));
         });
@@ -416,15 +419,15 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// <summary>
     /// Client-Roleの一覧を取得する
     /// </summary>
-    [HttpPost("FetchClientRoles")]
-    public async ValueTask<IActionResult> FetchClientRoles(FetchClientRolesInput input, CancellationToken ct)
+    [HttpGet("FetchClientRoles")]
+    public async ValueTask<IActionResult> FetchClientRoles([FromQuery] string clientUuid, CancellationToken ct)
     {
-        return await CommonValidationResponse(input, _fetchClientRolesInputValidator, async () =>
+        return await CommonValidationResponse(new FetchClientRolesInput { ClientUuid = clientUuid }, _fetchClientRolesInputValidator, async () =>
         {
             var request = new FetchClientRolesRequest()
             {
                 AccessToken = GetAccessTokenByHeader(),
-                ClientUuid = input.ClientUuid
+                ClientUuid = clientUuid
             };
             return Ok(await _keycloakService.FetchClientRolesAsync(request, ct));
         });
@@ -433,16 +436,16 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     /// <summary>
     /// ユーザーに紐づくClient-Roleを取得する
     /// </summary>
-    [HttpPost("FetchUserClientRoles")]
-    public async ValueTask<IActionResult> FetchUserClientRoles(FetchUserClientRolesInput input, CancellationToken ct)
+    [HttpGet("FetchUserClientRoles")]
+    public async ValueTask<IActionResult> FetchUserClientRoles([FromQuery] string userId, [FromQuery] string clientUuid, CancellationToken ct)
     {
-        return await CommonValidationResponse(input, _fetchUserClientRolesInputValidator, async () =>
+        return await CommonValidationResponse(new FetchUserClientRolesInput { UserId = userId, ClientUuid = clientUuid }, _fetchUserClientRolesInputValidator, async () =>
         {
             var request = new FetchUserClientRolesRequest()
             {
                 AccessToken = GetAccessTokenByHeader(),
-                UserId = input.UserId,
-                ClientUuid = input.ClientUuid
+                UserId = userId,
+                ClientUuid = clientUuid
             };
             return Ok(await _keycloakService.FetchUserClientRolesAsync(request, ct));
         });

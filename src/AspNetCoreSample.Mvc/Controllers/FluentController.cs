@@ -10,13 +10,10 @@ namespace AspNetCoreSample.Mvc.Controllers;
 
 public class FluentController : Controller
 {
-    private readonly ILogger<FluentController> _logger;
     private readonly IValidator<FluentViewModel> _fluentViewModelValidator;
 
-    public FluentController(ILogger<FluentController> logger,
-        IValidator<FluentViewModel> fluentViewModelValidator)
+    public FluentController(IValidator<FluentViewModel> fluentViewModelValidator)
     {
-        _logger = logger;
         _fluentViewModelValidator = fluentViewModelValidator;
     }
 

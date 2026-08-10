@@ -52,7 +52,8 @@ public class TokenController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new WebApiFailResponse(ex));
+            _logger.LogWarning(ex, "Authentication failed");
+            return BadRequest(new WebApiFailResponse("Authentication failed"));
         }
     }
 
@@ -77,7 +78,8 @@ public class TokenController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new WebApiFailResponse(ex));
+            _logger.LogWarning(ex, "Token refresh failed");
+            return BadRequest(new WebApiFailResponse("Token refresh failed"));
         }
     }
 
@@ -103,7 +105,8 @@ public class TokenController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new WebApiFailResponse(ex));
+            _logger.LogWarning(ex, "Token revocation failed");
+            return BadRequest(new WebApiFailResponse("Token revocation failed"));
         }
     }
 }

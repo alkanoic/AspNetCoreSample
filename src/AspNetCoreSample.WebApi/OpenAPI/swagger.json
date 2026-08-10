@@ -154,13 +154,22 @@
       }
     },
     "/api/Keycloak/FetchUser": {
-      "post": {
+      "get": {
         "tags": [
           "Keycloak"
         ],
         "summary": "ユーザー情報を取得",
         "operationId": "Keycloak_FetchUser",
         "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "ユーザー名",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
           {
             "name": "Accept-Language",
             "in": "header",
@@ -180,19 +189,6 @@
             "nullable": true
           }
         ],
-        "requestBody": {
-          "x-name": "input",
-          "description": "ユーザー名",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FetchUserInput"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": "",
@@ -630,7 +626,7 @@
         ]
       }
     },
-    "/api/Keycloak/DeleteUser": {
+    "/api/Keycloak/DeleteUser/{userId}": {
       "delete": {
         "tags": [
           "Keycloak"
@@ -638,6 +634,16 @@
         "summary": "ユーザーを削除する",
         "operationId": "Keycloak_DeleteUser",
         "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ユーザーID",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
           {
             "name": "Accept-Language",
             "in": "header",
@@ -657,19 +663,6 @@
             "nullable": true
           }
         ],
-        "requestBody": {
-          "x-name": "input",
-          "description": "ユーザー情報",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeleteUserInput"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": "",
@@ -690,7 +683,7 @@
         ]
       }
     },
-    "/api/Keycloak/DeleteUserByUsername": {
+    "/api/Keycloak/DeleteUserByUsername/{username}": {
       "delete": {
         "tags": [
           "Keycloak"
@@ -698,6 +691,15 @@
         "summary": "ユーザー名でユーザーを削除する",
         "operationId": "Keycloak_DeleteUserByUsername",
         "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
           {
             "name": "Accept-Language",
             "in": "header",
@@ -717,18 +719,6 @@
             "nullable": true
           }
         ],
-        "requestBody": {
-          "x-name": "input",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeleteUserByUsernameInput"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": "",
@@ -797,13 +787,22 @@
       }
     },
     "/api/Keycloak/FetchUserRoleMappings": {
-      "post": {
+      "get": {
         "tags": [
           "Keycloak"
         ],
         "summary": "ユーザーに登録されているロール一覧を取得",
         "operationId": "Keycloak_FetchUserRoleMappings",
         "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "ユーザーID",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
           {
             "name": "Accept-Language",
             "in": "header",
@@ -823,19 +822,6 @@
             "nullable": true
           }
         ],
-        "requestBody": {
-          "x-name": "input",
-          "description": "ユーザー情報",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FetchUserRoleMappingsInput"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": "",
@@ -1024,13 +1010,21 @@
       }
     },
     "/api/Keycloak/FetchClient": {
-      "post": {
+      "get": {
         "tags": [
           "Keycloak"
         ],
         "summary": "ClientをClientIdで検索して取得する",
         "operationId": "Keycloak_FetchClient",
         "parameters": [
+          {
+            "name": "clientId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
           {
             "name": "Accept-Language",
             "in": "header",
@@ -1050,18 +1044,6 @@
             "nullable": true
           }
         ],
-        "requestBody": {
-          "x-name": "input",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FetchClientInput"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": "",
@@ -1083,13 +1065,21 @@
       }
     },
     "/api/Keycloak/FetchClientRoles": {
-      "post": {
+      "get": {
         "tags": [
           "Keycloak"
         ],
         "summary": "Client-Roleの一覧を取得する",
         "operationId": "Keycloak_FetchClientRoles",
         "parameters": [
+          {
+            "name": "clientUuid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
           {
             "name": "Accept-Language",
             "in": "header",
@@ -1109,18 +1099,6 @@
             "nullable": true
           }
         ],
-        "requestBody": {
-          "x-name": "input",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FetchClientRolesInput"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": "",
@@ -1142,13 +1120,29 @@
       }
     },
     "/api/Keycloak/FetchUserClientRoles": {
-      "post": {
+      "get": {
         "tags": [
           "Keycloak"
         ],
         "summary": "ユーザーに紐づくClient-Roleを取得する",
         "operationId": "Keycloak_FetchUserClientRoles",
         "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "clientUuid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
+          },
           {
             "name": "Accept-Language",
             "in": "header",
@@ -1168,18 +1162,6 @@
             "nullable": true
           }
         ],
-        "requestBody": {
-          "x-name": "input",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FetchUserClientRolesInput"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
         "responses": {
           "200": {
             "description": "",
@@ -2009,18 +1991,6 @@
           }
         }
       },
-      "FetchUserInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "username"
-        ],
-        "properties": {
-          "username": {
-            "type": "string"
-          }
-        }
-      },
       "CreateUserInput": {
         "type": "object",
         "additionalProperties": false,
@@ -2204,42 +2174,6 @@
           }
         }
       },
-      "DeleteUserInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "userId"
-        ],
-        "properties": {
-          "userId": {
-            "type": "string"
-          }
-        }
-      },
-      "DeleteUserByUsernameInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "username"
-        ],
-        "properties": {
-          "username": {
-            "type": "string"
-          }
-        }
-      },
-      "FetchUserRoleMappingsInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "userId"
-        ],
-        "properties": {
-          "userId": {
-            "type": "string"
-          }
-        }
-      },
       "AddUserRoleMappingInput": {
         "type": "object",
         "additionalProperties": false,
@@ -2306,46 +2240,6 @@
             "type": "string"
           },
           "roleName": {
-            "type": "string"
-          }
-        }
-      },
-      "FetchClientInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "clientId"
-        ],
-        "properties": {
-          "clientId": {
-            "type": "string"
-          }
-        }
-      },
-      "FetchClientRolesInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "clientUuid"
-        ],
-        "properties": {
-          "clientUuid": {
-            "type": "string"
-          }
-        }
-      },
-      "FetchUserClientRolesInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "userId",
-          "clientUuid"
-        ],
-        "properties": {
-          "userId": {
-            "type": "string"
-          },
-          "clientUuid": {
             "type": "string"
           }
         }

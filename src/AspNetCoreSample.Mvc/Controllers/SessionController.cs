@@ -9,14 +9,10 @@ namespace AspNetCoreSample.Mvc.Controllers;
 
 public class SessionController : Controller
 {
-    private readonly ILogger<SessionController> _logger;
-
     private readonly IDistributedCache _cache;
 
-    public SessionController(ILogger<SessionController> logger,
-                            IDistributedCache cache)
+    public SessionController(IDistributedCache cache)
     {
-        _logger = logger;
         _cache = cache;
     }
 

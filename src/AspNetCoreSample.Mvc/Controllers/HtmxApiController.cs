@@ -6,13 +6,6 @@ namespace AspNetCoreSample.Mvc.Controllers;
 
 public class HtmxApiController : ControllerBase
 {
-    private readonly ILogger<HtmxApiController> _logger;
-
-    public HtmxApiController(ILogger<HtmxApiController> logger)
-    {
-        _logger = logger;
-    }
-
     [HttpGet]
     public FetchClass Fetch(string request)
     {

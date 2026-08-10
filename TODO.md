@@ -22,36 +22,15 @@
   Keycloak `ClientSecret` / `AdminPassword`。**devcontainer のローカル用途では許容**。
   非デモ環境では user-secrets / Key Vault へ移行すること。
 
-## S2: 正確性バグ
-
-- [ ] **ログ属性で `.WithProperty("Arguments")` が二重発行**
-  `src/AspNetCoreSample.Mvc/Logging/LoggingAttribute.cs` と WebApi 側の複製。前一項を後一項が同じキーで上書きする。
-
 ## S3: API 設計・エラー処理
 
-- [ ] **Keycloak / DB 障害が 400 で `ex.Message`（内部メッセージ）を含む**
-  `Controllers/KeycloakController.cs` の `catch (InvalidDataException ex)` が `WebApiFailResponse(ex)` として
-  生の Keycloak 応答を返す。500 側は固定メッセージに化済み（`WebApiFailResponse("Internal server error")`）。
-  400 側も固定メッセージ化し、詳細はログのみへ。
-- [ ] **HTTP メソッドの意味が誤り**
-  `KeycloakController.cs` の読み取り系（`FetchUser` / `FetchClient` / `FetchClientRoles` /
-  `FetchUserRoleMappings` / `FetchUserClientRoles`）が `[HttpPost]`。また DELETE 系がリクエストボディを利用する。
-  `[HttpGet]` + パス / クエリパラメータ化。
+- [ ] **HTTP メソッドの意味が誤り（DELETE 系のリクエストボディ）**
+  `KeycloakController.cs` の `DeleteUserRoleMapping` / `DeleteUserClientRoleMapping` が
+  リクエストボディでロール一覧を受け取っている。読み取り系の POST→GET と単純な DELETE の
+  パスパラメータ化は対応済み。
 
 ## S4: テスト・生成系
 
-- [ ] **Testcontainers が全 Fixture で未 Dispose**
-  `tests/AspNetCoreSample.WebApi.Test/DbFixture.cs` / `KeycloakFixture.cs` / `WebApplicationFactoryFixture.cs`
-  が `ValueTask.CompletedTask` を返却し、Ryuk までコンテナが残る。
 - [ ] **`CreateHost` で `builder.Build()` の二重呼出 + 未破棄 Kestrel**
   `tests/AspNetCoreSample.WebApi.Test/WebApplicationFactoryFixture.cs`（Mvc 側にも複製）。
-  ホスト / ポート漏洩、flaky の原因。
-
-## S5: 整理・お掃除
-
-- [ ] **未使用の DI 注入を掃除**
-  コンストラクタに注入しているが未使用の `ILogger<T>` / `IHttpClientFactory`。
-  `QrCodeController` と `Console.WriteLine` の NLog 化は対応済み。
-- [ ] **重複規定の共通化**
-  Htmx / Vue / VueComponent コントローラのビューモデル構築が逐語複製。
-  `GetAvailablePort` も WebApi テスト / Mvc テストに同一実装がある（共通ヘルパへ集約候補）。
+  ホスト / ポート漏洩、flaky の原因。単純な修正では副作用が出たため要再検討。

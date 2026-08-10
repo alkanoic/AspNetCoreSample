@@ -8,13 +8,6 @@ namespace AspNetCoreSample.Mvc.Controllers;
 
 public class JQueryController : Controller
 {
-    private readonly ILogger<JQueryController> _logger;
-
-    public JQueryController(ILogger<JQueryController> logger)
-    {
-        _logger = logger;
-    }
-
     public IActionResult Index()
     {
         return View();

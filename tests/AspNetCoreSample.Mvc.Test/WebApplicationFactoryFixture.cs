@@ -1,5 +1,7 @@
 using System.Data.Common;
 
+using AspNetCoreSample.Test.Common;
+
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 
@@ -59,9 +61,11 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
         await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
     }
 
-    public ValueTask DisposeAsync()
+    async ValueTask IAsyncDisposable.DisposeAsync()
     {
-        return ValueTask.CompletedTask;
+        await _keycloakContainer.DisposeAsync();
+        await _postgresqlContainer.DisposeAsync();
+        await base.DisposeAsync();
     }
 
     public string KeycloakBaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
