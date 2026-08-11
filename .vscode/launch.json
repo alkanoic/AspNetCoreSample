@@ -328,6 +328,126 @@
                 "/Views": "${workspaceFolder}/src/CodeGen.Result/Views"
             }
         },
+        {
+            "name": "Test: WebApi.Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "tests-build",
+            "program": "dotnet",
+            "args": [
+                "exec",
+                "${workspaceFolder}/tests/AspNetCoreSample.WebApi.Test/bin/Debug/net10.0/AspNetCoreSample.WebApi.Test.dll",
+                "--treenode-filter",
+                "${input:tunitFilter}"
+            ],
+            "cwd": "${workspaceFolder}/tests/AspNetCoreSample.WebApi.Test",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Test: Mvc.Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "tests-build",
+            "program": "dotnet",
+            "args": [
+                "exec",
+                "${workspaceFolder}/tests/AspNetCoreSample.Mvc.Test/bin/Debug/net10.0/AspNetCoreSample.Mvc.Test.dll",
+                "--treenode-filter",
+                "${input:tunitFilter}"
+            ],
+            "cwd": "${workspaceFolder}/tests/AspNetCoreSample.Mvc.Test",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Test: Mvc.Container.Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "tests-build",
+            "program": "dotnet",
+            "args": [
+                "exec",
+                "${workspaceFolder}/tests/AspNetCoreSample.Mvc.Container.Test/bin/Debug/net10.0/AspNetCoreSample.Mvc.Container.Test.dll",
+                "--treenode-filter",
+                "${input:tunitFilter}"
+            ],
+            "cwd": "${workspaceFolder}/tests/AspNetCoreSample.Mvc.Container.Test",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Test: DbContainer.Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "tests-build",
+            "program": "dotnet",
+            "args": [
+                "exec",
+                "${workspaceFolder}/tests/DbContainer.Test/bin/Debug/net10.0/DbContainer.Test.dll",
+                "--treenode-filter",
+                "${input:tunitFilter}"
+            ],
+            "cwd": "${workspaceFolder}/tests/DbContainer.Test",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Test: Grpc.Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "tests-build",
+            "program": "dotnet",
+            "args": [
+                "exec",
+                "${workspaceFolder}/tests/AspNetCoreSample.Grpc.Test/bin/Debug/net10.0/AspNetCoreSample.Grpc.Test.dll",
+                "--treenode-filter",
+                "${input:tunitFilter}"
+            ],
+            "cwd": "${workspaceFolder}/tests/AspNetCoreSample.Grpc.Test",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Test: DataModel.Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "tests-build",
+            "program": "dotnet",
+            "args": [
+                "exec",
+                "${workspaceFolder}/tests/AspNetCoreSample.DataModel.Test/bin/Debug/net10.0/AspNetCoreSample.DataModel.Test.dll",
+                "--treenode-filter",
+                "${input:tunitFilter}"
+            ],
+            "cwd": "${workspaceFolder}/tests/AspNetCoreSample.DataModel.Test",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Test: ServiceDefaults.Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "tests-build",
+            "program": "dotnet",
+            "args": [
+                "exec",
+                "${workspaceFolder}/tests/AspNetCoreSample.ServiceDefaults.Test/bin/Debug/net10.0/AspNetCoreSample.ServiceDefaults.Test.dll",
+                "--treenode-filter",
+                "${input:tunitFilter}"
+            ],
+            "cwd": "${workspaceFolder}/tests/AspNetCoreSample.ServiceDefaults.Test",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+    ],
+    "inputs": [
+        {
+            "id": "tunitFilter",
+            "type": "promptString",
+            "description": "TUnit --treenode-filter (例: /*/*/ExtensionsTest/* や /*/*/*/*[Category=MvcApiTest]。全テストは /*/*/*/*)  [空欄なら全テスト]",
+            "default": "/*/*/*/*"
+        }
     ],
     "compounds": [
         {
