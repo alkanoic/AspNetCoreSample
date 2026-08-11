@@ -38,6 +38,24 @@ public static class SharedTestContainers
             .Build();
 
         await Task.WhenAll(Keycloak.StartAsync(), PostgreSql.StartAsync());
+
+        // docker-entrypoint-initdb.d の SQL 実行完了を待つ
+        for (var i = 0; i < 30; i++)
+        {
+            try
+            {
+                await using var conn = new NpgsqlConnection(PostgreSql.GetConnectionString());
+                await conn.OpenAsync();
+                await using var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT 1 FROM name LIMIT 1";
+                await cmd.ExecuteScalarAsync();
+                break;
+            }
+            catch
+            {
+                await Task.Delay(1000);
+            }
+        }
     });
 
     public static PostgreSqlContainer PostgreSql { get; private set; } = null!;
