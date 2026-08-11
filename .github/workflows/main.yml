@@ -172,12 +172,8 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
-      - name: playwright install
-        run: pwsh bin/Release/net10.0/playwright.ps1 install --with-deps
-        working-directory: ${{ env.TESTS_MVC_LOCATION }}
-
       - name: Mvc Run tests with coverage
-        run: dotnet test --configuration Release
+        run: dotnet test --configuration Release --filter "FullyQualifiedName!~MvcInProcessTest"
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
       - name: Upload coverage artifact
@@ -188,8 +184,9 @@ jobs:
           path: ${{ env.TESTS_MVC_LOCATION }}/TestResults/coverage.cobertura.xml
           retention-days: 1
 
-  mvc_container_test:
+  playwright_test:
     runs-on: ubuntu-latest
+    needs: [dbcontainer_test, webapi_test, grpc_test, datamodel_test]
 
     steps:
       - uses: actions/checkout@v5
@@ -203,15 +200,27 @@ jobs:
         run: bash create_certificate.sh
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
+      - name: Mvc Build with dotnet
+        run: dotnet build --configuration Release --framework net10.0
+        working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
       - name: Mvc Container Build with dotnet
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
-      - name: playwright install
+      - name: playwright install for mvc
+        run: pwsh bin/Release/net10.0/playwright.ps1 install --with-deps
+        working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
+      - name: playwright install for mvc container
         run: pwsh bin/Release/net10.0/playwright.ps1 install --with-deps
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
-      - name: Mvc Container Run tests with coverage
+      - name: Mvc Playwright tests
+        run: dotnet test --configuration Release --filter "FullyQualifiedName~MvcInProcessTest"
+        working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
+      - name: Mvc Container Playwright tests
         run: dotnet test --configuration Release
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
@@ -219,8 +228,10 @@ jobs:
         uses: actions/upload-artifact@v6
         if: always()
         with:
-          name: coverage-mvc-container
-          path: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}/TestResults/coverage.cobertura.xml
+          name: coverage-playwright
+          path: |
+            ${{ env.TESTS_MVC_LOCATION }}/TestResults/coverage.cobertura.xml
+            ${{ env.TESTS_MVC_CONTAINER_LOCATION }}/TestResults/coverage.cobertura.xml
           retention-days: 1
 
   grpc_test:
@@ -279,7 +290,7 @@ jobs:
 
   coverage_report:
     runs-on: ubuntu-latest
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, playwright_test, grpc_test, datamodel_test]
     if: always()
 
     steps:
@@ -324,7 +335,7 @@ jobs:
   mvc:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, playwright_test, grpc_test, datamodel_test]
 
     steps:
       - uses: actions/checkout@v5
@@ -361,7 +372,7 @@ jobs:
   webapi:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, playwright_test, grpc_test, datamodel_test]
 
     steps:
       - uses: actions/checkout@v5
@@ -390,7 +401,7 @@ jobs:
   nuxt:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, playwright_test, grpc_test, datamodel_test]
 
     steps:
       - uses: actions/checkout@v5
@@ -423,7 +434,7 @@ jobs:
   spring:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, playwright_test, grpc_test, datamodel_test]
 
     steps:
       - uses: actions/checkout@v5
@@ -461,7 +472,7 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: [dbcontainer_test, webapi_test, mvc_test, mvc_container_test, grpc_test, datamodel_test]
+    needs: [dbcontainer_test, webapi_test, mvc_test, playwright_test, grpc_test, datamodel_test]
 
     permissions:
       contents: read
