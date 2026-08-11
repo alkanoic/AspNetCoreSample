@@ -9,38 +9,20 @@ using Microsoft.Playwright;
 
 namespace AspNetCoreSample.Mvc.Container.Test;
 
-public sealed class MvcTest : IClassFixture<MvcDbFixture>
+[ClassDataSource<MvcDbFixture>]
+public sealed class MvcTest(MvcDbFixture mvcFixture) : PageTest
 {
-    private readonly MvcDbFixture _mvcFixture;
-
-    public MvcTest(MvcDbFixture mvcFixture)
-    {
-        _mvcFixture = mvcFixture;
-        _mvcFixture.SetBaseAddress();
-    }
-
-    [Fact]
-    [Trait("Category", nameof(MvcTest))]
+    [Test]
+    [Category(nameof(MvcTest))]
     public async Task GetIndexPlaywright()
     {
-        using var playwright = await Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
-        await using var context = await browser.NewContextAsync();
-        PlaywrightSettings.SetDefaultBrowserContext(context);
+        mvcFixture.SetBaseAddress();
 
         await PlaywrightRetry.RunAsync(async () =>
         {
-            var page = await context.NewPageAsync();
-            try
-            {
-                await page.GotoAsync(_mvcFixture.BaseAddress!.ToString());
+            await Page.GotoAsync(mvcFixture.BaseAddress!.ToString());
 
-                Assert.Contains("AspNetCoreSample.Mvc", await page.TitleAsync());
-            }
-            finally
-            {
-                await page.CloseAsync();
-            }
+            await Assert.That(await Page.TitleAsync()).Contains("AspNetCoreSample.Mvc");
         });
     }
 }

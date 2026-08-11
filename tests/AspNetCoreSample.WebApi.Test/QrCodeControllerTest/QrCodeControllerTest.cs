@@ -8,8 +8,8 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class QrCodeControllerTest
 {
-    [Fact]
-    [Trait("Category", nameof(QrCodeControllerTest))]
+    [Test]
+    [Category(nameof(QrCodeControllerTest))]
     public async Task PostSendsQRCodeDataToAllClients()
     {
         var mockClientProxy = new MockClientProxy();
@@ -21,12 +21,12 @@ public sealed class QrCodeControllerTest
 
         var result = await controller.Post(model);
 
-        Assert.IsType<OkResult>(result);
-        Assert.True(mockClientProxy.SendCoreAsyncCalled);
-        Assert.Equal("ReceiveQRCodeData", mockClientProxy.Method);
-        Assert.NotNull(mockClientProxy.Args);
-        Assert.Single(mockClientProxy.Args);
-        Assert.Equal("test-qr-data", mockClientProxy.Args[0]);
+        await Assert.That(result).IsOfType(typeof(OkResult));
+        await Assert.That(mockClientProxy.SendCoreAsyncCalled).IsTrue();
+        await Assert.That(mockClientProxy.Method).IsEqualTo("ReceiveQRCodeData");
+        var args = mockClientProxy.Args!;
+        await Assert.That(args).HasSingleItem();
+        await Assert.That(args[0]).IsEqualTo("test-qr-data");
     }
 
     private sealed class MockClientProxy : IClientProxy

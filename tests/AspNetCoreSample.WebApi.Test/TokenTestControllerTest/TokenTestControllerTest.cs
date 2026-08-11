@@ -13,9 +13,8 @@ public sealed class TokenTestControllerTest
         var logger = new MockLogger<TokenTestController>();
         return new TokenTestController(logger);
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenTestControllerTest))]
+    [Test]
+    [Category(nameof(TokenTestControllerTest))]
     public async Task SampleReturnsInput()
     {
         var controller = CreateController();
@@ -26,11 +25,10 @@ public sealed class TokenTestControllerTest
 
         var result = await controller.Sample("hello");
 
-        Assert.Equal("hello", result);
+        await Assert.That(result).IsEqualTo("hello");
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenTestControllerTest))]
+    [Test]
+    [Category(nameof(TokenTestControllerTest))]
     public async Task SampleUserReturnsInput()
     {
         var controller = CreateController();
@@ -41,11 +39,10 @@ public sealed class TokenTestControllerTest
 
         var result = await controller.SampleUser("world");
 
-        Assert.Equal("world", result);
+        await Assert.That(result).IsEqualTo("world");
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenTestControllerTest))]
+    [Test]
+    [Category(nameof(TokenTestControllerTest))]
     public async Task SampleAdminReturnsInput()
     {
         var controller = CreateController();
@@ -56,7 +53,7 @@ public sealed class TokenTestControllerTest
 
         var result = await controller.SampleAdmin("admin-data");
 
-        Assert.Equal("admin-data", result);
+        await Assert.That(result).IsEqualTo("admin-data");
     }
 
     private sealed class MockLogger<T> : ILogger<T>

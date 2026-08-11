@@ -7,45 +7,46 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class WeatherForecastControllerTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
+public sealed class WeatherForecastControllerTest : IDisposable
 {
     private readonly WebApplicationFactoryFixture<Program> _webApplicationFactoryFixture;
     private readonly HttpClient _httpClient;
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
-    public WeatherForecastControllerTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture)
+    public WeatherForecastControllerTest()
     {
-        _webApplicationFactoryFixture = webApplicationFactoryFixture;
+        _webApplicationFactoryFixture = new WebApplicationFactoryFixture<Program>();
         _httpClient = _webApplicationFactoryFixture.CreateClient();
     }
 
     public void Dispose()
     {
         _httpClient.Dispose();
+        _webApplicationFactoryFixture.Dispose();
     }
 
-    [Fact]
-    [Trait("Category", nameof(WeatherForecastControllerTest))]
+    [Test]
+    [Category(nameof(WeatherForecastControllerTest))]
     public async Task GetWeatherForecastReturnsFiveItems()
     {
         const string path = "api/WeatherForecast";
 
-        var response = await _httpClient.GetAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var response = await _httpClient.GetAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.OK);
 
-        var stream = await response.Content.ReadAsStreamAsync(TestContext.Current.CancellationToken);
-        var forecasts = await JsonSerializer.DeserializeAsync<List<WeatherForecast>>(stream, JsonSerializerOptions, TestContext.Current.CancellationToken);
-        Assert.NotNull(forecasts);
-        Assert.Equal(5, forecasts.Count);
+        var stream = await response.Content.ReadAsStreamAsync(CancellationToken.None);
+        var forecasts = await JsonSerializer.DeserializeAsync<List<WeatherForecast>>(stream, JsonSerializerOptions, CancellationToken.None);
+        await Assert.That(forecasts).IsNotNull();
+        await Assert.That(forecasts.Count).IsEqualTo(5);
         foreach (var forecast in forecasts)
         {
-            Assert.NotNull(forecast.Summary);
-            Assert.True(forecast.TemperatureC >= -20 && forecast.TemperatureC <= 55);
+            await Assert.That(forecast.Summary).IsNotNull();
+            await Assert.That(forecast.TemperatureC >= -20 && forecast.TemperatureC <= 55).IsTrue();
         }
     }
 
-    [Fact]
-    [Trait("Category", nameof(WeatherForecastControllerTest))]
+    [Test]
+    [Category(nameof(WeatherForecastControllerTest))]
     public async Task PostWeatherForecastReturnsSameData()
     {
         const string path = "api/WeatherForecast";
@@ -57,14 +58,14 @@ public sealed class WeatherForecastControllerTest : IClassFixture<WebApplication
             Summary = "Warm"
         };
         var content = new StringContent(JsonSerializer.Serialize(input, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.OK);
 
-        var stream = await response.Content.ReadAsStreamAsync(TestContext.Current.CancellationToken);
-        var result = await JsonSerializer.DeserializeAsync<WeatherForecast>(stream, JsonSerializerOptions, TestContext.Current.CancellationToken);
-        Assert.NotNull(result);
-        Assert.Equal(input.Date, result.Date);
-        Assert.Equal(input.TemperatureC, result.TemperatureC);
-        Assert.Equal(input.Summary, result.Summary);
+        var stream = await response.Content.ReadAsStreamAsync(CancellationToken.None);
+        var result = await JsonSerializer.DeserializeAsync<WeatherForecast>(stream, JsonSerializerOptions, CancellationToken.None);
+        await Assert.That(result).IsNotNull();
+        await Assert.That(result.Date).IsEqualTo(input.Date);
+        await Assert.That(result.TemperatureC).IsEqualTo(input.TemperatureC);
+        await Assert.That(result.Summary).IsEqualTo(input.Summary);
     }
 }

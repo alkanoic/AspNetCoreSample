@@ -118,17 +118,9 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_DB_LOCATION }}
 
-      - name: DbContainer Run tests with coverage
-        run: dotnet test --configuration Release
+      - name: DbContainer Run tests
+        run: dotnet run --project DbContainer.Test.csproj --configuration Release -- --timeout 10m
         working-directory: ${{ env.TESTS_DB_LOCATION }}
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: coverage-dbcontainer
-          path: ${{ env.TESTS_DB_LOCATION }}/TestResults/coverage.cobertura.xml
-          retention-days: 1
 
   webapi_test:
     runs-on: ubuntu-latest
@@ -145,17 +137,9 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
 
-      - name: WebApi Run tests with coverage
-        run: dotnet test --configuration Release
+      - name: WebApi Run tests
+        run: dotnet run --project AspNetCoreSample.WebApi.Test.csproj --configuration Release -- --timeout 10m
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: coverage-webapi
-          path: ${{ env.TESTS_WEBAPI_LOCATION }}/TestResults/coverage.cobertura.xml
-          retention-days: 1
 
   mvc_test:
     runs-on: ubuntu-latest
@@ -172,17 +156,9 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
-      - name: Mvc Run tests with coverage
-        run: dotnet test --configuration Release --filter "FullyQualifiedName!~MvcInProcessTest"
+      - name: Mvc Run tests
+        run: dotnet run --project AspNetCoreSample.Mvc.Test.csproj --configuration Release -- --timeout 10m --treenode-filter "/*/*/*/*[Category=MvcApiTest]"
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: coverage-mvc
-          path: ${{ env.TESTS_MVC_LOCATION }}/TestResults/coverage.cobertura.xml
-          retention-days: 1
 
   playwright_test:
     runs-on: ubuntu-latest
@@ -217,22 +193,12 @@ jobs:
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
 
       - name: Mvc Playwright tests
-        run: dotnet test --configuration Release --filter "FullyQualifiedName~MvcInProcessTest"
+        run: dotnet run --project AspNetCoreSample.Mvc.Test.csproj --configuration Release -- --timeout 10m --treenode-filter "/*/*/*/*[Category=MvcInProcessTest]"
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
       - name: Mvc Container Playwright tests
-        run: dotnet test --configuration Release
+        run: dotnet run --project AspNetCoreSample.Mvc.Container.Test.csproj --configuration Release -- --timeout 15m
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: coverage-playwright
-          path: |
-            ${{ env.TESTS_MVC_LOCATION }}/TestResults/coverage.cobertura.xml
-            ${{ env.TESTS_MVC_CONTAINER_LOCATION }}/TestResults/coverage.cobertura.xml
-          retention-days: 1
 
   grpc_test:
     runs-on: ubuntu-latest
@@ -249,17 +215,9 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_GRPC_LOCATION }}
 
-      - name: Grpc Run tests with coverage
-        run: dotnet test --configuration Release
+      - name: Grpc Run tests
+        run: dotnet run --project AspNetCoreSample.Grpc.Test.csproj --configuration Release -- --timeout 10m
         working-directory: ${{ env.TESTS_GRPC_LOCATION }}
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: coverage-grpc
-          path: ${{ env.TESTS_GRPC_LOCATION }}/TestResults/coverage.cobertura.xml
-          retention-days: 1
 
   datamodel_test:
     runs-on: ubuntu-latest
@@ -276,17 +234,9 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_DATAMODEL_LOCATION }}
 
-      - name: DataModel Run tests with coverage
-        run: dotnet test --configuration Release
+      - name: DataModel Run tests
+        run: dotnet run --project AspNetCoreSample.DataModel.Test.csproj --configuration Release -- --timeout 10m
         working-directory: ${{ env.TESTS_DATAMODEL_LOCATION }}
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v6
-        if: always()
-        with:
-          name: coverage-datamodel
-          path: ${{ env.TESTS_DATAMODEL_LOCATION }}/TestResults/coverage.cobertura.xml
-          retention-days: 1
 
   coverage_report:
     runs-on: ubuntu-latest
@@ -301,23 +251,14 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Download all coverage artifacts
-        uses: actions/download-artifact@v7
-        continue-on-error: true
-        with:
-          pattern: coverage-*
-          path: coverage-artifacts
-
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.5.11
 
-      - name: Generate coverage report
+      - name: Generate empty coverage report
         run: |
           mkdir -p coveragereport
-          reportgenerator \
-            -reports:"coverage-artifacts/**/coverage.cobertura.xml" \
-            -targetdir:"coveragereport" \
-            -reporttypes:MarkdownSummaryGithub\;Html
+          echo "# Coverage Report" > coveragereport/SummaryGithub.md
+          echo "Coverage collection is disabled after migrating to TUnit / Microsoft.Testing.Platform." >> coveragereport/SummaryGithub.md
 
       - name: Upload coverage report artifact
         uses: actions/upload-artifact@v6

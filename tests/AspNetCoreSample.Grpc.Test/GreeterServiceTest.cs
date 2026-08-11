@@ -10,8 +10,8 @@ namespace AspNetCoreSample.Grpc.Test;
 
 public sealed class GreeterServiceTest
 {
-    [Fact]
-    [Trait("Category", nameof(GreeterServiceTest))]
+    [Test]
+    [Category(nameof(GreeterServiceTest))]
     public async Task SayHelloReturnsGreeting()
     {
         var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
@@ -35,11 +35,11 @@ public sealed class GreeterServiceTest
 
         var response = await service.SayHello(request, context);
 
-        Assert.Equal("Hello World", response.Message);
+        await Assert.That(response.Message).IsEqualTo("Hello World");
     }
 
-    [Fact]
-    [Trait("Category", nameof(GreeterServiceTest))]
+    [Test]
+    [Category(nameof(GreeterServiceTest))]
     public async Task SayHelloWithEmptyNameReturnsHello()
     {
         var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
@@ -63,11 +63,11 @@ public sealed class GreeterServiceTest
 
         var response = await service.SayHello(request, context);
 
-        Assert.Equal("Hello ", response.Message);
+        await Assert.That(response.Message).IsEqualTo("Hello ");
     }
 
-    [Fact]
-    [Trait("Category", nameof(GreeterServiceTest))]
+    [Test]
+    [Category(nameof(GreeterServiceTest))]
     public async Task SayHelloWithJapaneseNameReturnsGreeting()
     {
         var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
@@ -91,6 +91,6 @@ public sealed class GreeterServiceTest
 
         var response = await service.SayHello(request, context);
 
-        Assert.Equal("Hello 太郎", response.Message);
+        await Assert.That(response.Message).IsEqualTo("Hello 太郎");
     }
 }

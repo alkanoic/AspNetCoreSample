@@ -8,8 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-[Collection(nameof(VerifySettingsFixtures))]
-public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
+public sealed class DbAccessWebApiSelectTest : IDisposable
 {
     private readonly WebApplicationFactoryFixture<Program> _webApplicationFactoryFixture;
     private readonly IServiceScope _serviceScope;
@@ -17,32 +16,32 @@ public sealed class DbAccessWebApiSelectTest : IClassFixture<WebApplicationFacto
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
     private readonly VerifySettings _verifySettings;
 
-    public DbAccessWebApiSelectTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture, VerifySettingsFixture settingsFixture)
+    public DbAccessWebApiSelectTest()
     {
-        _webApplicationFactoryFixture = webApplicationFactoryFixture;
+        _webApplicationFactoryFixture = new WebApplicationFactoryFixture<Program>();
         _serviceScope = _webApplicationFactoryFixture.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _httpClient = _webApplicationFactoryFixture.CreateClient();
-        _verifySettings = settingsFixture.VerifySettings;
+        _verifySettings = new VerifySettingsFixture().VerifySettings;
     }
 
     public void Dispose()
     {
         _httpClient.Dispose();
         _serviceScope.Dispose();
+        _webApplicationFactoryFixture.Dispose();
     }
-
-    [Fact]
-    [Trait("Category", nameof(DbAccessWebApiSelectTest))]
+    [Test]
+    [Category(nameof(DbAccessWebApiSelectTest))]
     public async Task GetDbAccessReturnsThreeNames()
     {
         // Given
         const string path = "api/dbaccess";
 
         // When
-        var response = await _httpClient.GetAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), TestContext.Current.CancellationToken);
-        var dbAccessStream = await response.Content.ReadAsStreamAsync(TestContext.Current.CancellationToken);
+        var response = await _httpClient.GetAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), CancellationToken.None);
+        var dbAccessStream = await response.Content.ReadAsStreamAsync(CancellationToken.None);
 
-        var names = await JsonSerializer.DeserializeAsync<IList<Name>>(dbAccessStream, JsonSerializerOptions, TestContext.Current.CancellationToken);
+        var names = await JsonSerializer.DeserializeAsync<IList<Name>>(dbAccessStream, JsonSerializerOptions, CancellationToken.None);
 
         // Then
         await Verify(names, _verifySettings);

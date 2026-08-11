@@ -4,31 +4,29 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class KeycloakValidatorTest
 {
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void FetchUserInputValidator_RequiresUsername()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task FetchUserInputValidator_RequiresUsername()
     {
         var validator = new FetchUserInputValidator();
 
         var result = validator.Validate(new FetchUserInput { Username = "" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void FetchUserInputValidator_PassesWithUsername()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task FetchUserInputValidator_PassesWithUsername()
     {
         var validator = new FetchUserInputValidator();
 
         var result = validator.Validate(new FetchUserInput { Username = "user" });
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void CreateUserInputValidator_RequiresUsernameAndPassword()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task CreateUserInputValidator_RequiresUsernameAndPassword()
     {
         var validator = new CreateUserInputValidator();
 
@@ -41,12 +39,11 @@ public sealed class KeycloakValidatorTest
             Password = ""
         });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void CreateUserInputValidator_PasswordMinLength()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task CreateUserInputValidator_PasswordMinLength()
     {
         var validator = new CreateUserInputValidator();
 
@@ -59,12 +56,11 @@ public sealed class KeycloakValidatorTest
             Password = "1234567"
         });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void CreateUserInputValidator_InvalidEmail()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task CreateUserInputValidator_InvalidEmail()
     {
         var validator = new CreateUserInputValidator();
 
@@ -77,12 +73,11 @@ public sealed class KeycloakValidatorTest
             Password = "12345678"
         });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void CreateUserInputValidator_PassesWithValidData()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task CreateUserInputValidator_PassesWithValidData()
     {
         var validator = new CreateUserInputValidator();
 
@@ -95,100 +90,91 @@ public sealed class KeycloakValidatorTest
             Password = "12345678"
         });
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void UpdateUserInputValidator_RequiresUserId()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task UpdateUserInputValidator_RequiresUserId()
     {
         var validator = new UpdateUserInputValidator();
 
         var result = validator.Validate(new UpdateUserInput { UserId = "" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void UpdateUserInputValidator_PassesWithUserId()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task UpdateUserInputValidator_PassesWithUserId()
     {
         var validator = new UpdateUserInputValidator();
 
         var result = validator.Validate(new UpdateUserInput { UserId = "user-id" });
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void ChangePasswordInputValidator_RequiresUserIdAndPassword()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task ChangePasswordInputValidator_RequiresUserIdAndPassword()
     {
         var validator = new ChangePasswordInputValidator();
 
         var result = validator.Validate(new ChangePasswordInput { UserId = "", Password = "" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void ChangePasswordInputValidator_PasswordMinLength()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task ChangePasswordInputValidator_PasswordMinLength()
     {
         var validator = new ChangePasswordInputValidator();
 
         var result = validator.Validate(new ChangePasswordInput { UserId = "user-id", Password = "1234567" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void ChangePasswordInputValidator_PassesWithValidData()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task ChangePasswordInputValidator_PassesWithValidData()
     {
         var validator = new ChangePasswordInputValidator();
 
         var result = validator.Validate(new ChangePasswordInput { UserId = "user-id", Password = "12345678" });
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void DeleteUserInputValidator_RequiresUserId()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task DeleteUserInputValidator_RequiresUserId()
     {
         var validator = new DeleteUserInputValidator();
 
         var result = validator.Validate(new DeleteUserInput { UserId = "" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void DeleteUserInputValidator_PassesWithUserId()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task DeleteUserInputValidator_PassesWithUserId()
     {
         var validator = new DeleteUserInputValidator();
 
         var result = validator.Validate(new DeleteUserInput { UserId = "user-id" });
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void AddUserRoleMappingInputValidator_RequiresUserIdAndDetails()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task AddUserRoleMappingInputValidator_RequiresUserIdAndDetails()
     {
         var validator = new AddUserRoleMappingInputValidator();
 
         var result = validator.Validate(new AddUserRoleMappingInput { UserId = "", AddUserRoleMappingInputDetails = null });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void AddUserRoleMappingInputValidator_RequiresAtLeastOneDetail()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task AddUserRoleMappingInputValidator_RequiresAtLeastOneDetail()
     {
         var validator = new AddUserRoleMappingInputValidator();
 
@@ -198,12 +184,11 @@ public sealed class KeycloakValidatorTest
             AddUserRoleMappingInputDetails = new List<AddUserRoleMappingInputDetail>()
         });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void AddUserRoleMappingInputValidator_PassesWithValidData()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task AddUserRoleMappingInputValidator_PassesWithValidData()
     {
         var validator = new AddUserRoleMappingInputValidator();
 
@@ -216,12 +201,11 @@ public sealed class KeycloakValidatorTest
             }
         });
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void AddUserClientRoleMappingInputValidator_RequiresClientUuid()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task AddUserClientRoleMappingInputValidator_RequiresClientUuid()
     {
         var validator = new AddUserClientRoleMappingInputValidator();
 
@@ -235,12 +219,11 @@ public sealed class KeycloakValidatorTest
             }
         });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void AddUserClientRoleMappingInputValidator_PassesWithValidData()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task AddUserClientRoleMappingInputValidator_PassesWithValidData()
     {
         var validator = new AddUserClientRoleMappingInputValidator();
 
@@ -254,61 +237,56 @@ public sealed class KeycloakValidatorTest
             }
         });
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void TokenRequestValidator_RequiresUserNameAndPassword()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task TokenRequestValidator_RequiresUserNameAndPassword()
     {
         var validator = new Services.Keycloak.Token.TokenRequestValidator();
 
         var result = validator.Validate(new Services.Keycloak.Token.TokenRequest { UserName = "", Password = "" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void TokenRequestValidator_PasswordMinLength()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task TokenRequestValidator_PasswordMinLength()
     {
         var validator = new Services.Keycloak.Token.TokenRequestValidator();
 
         var result = validator.Validate(new Services.Keycloak.Token.TokenRequest { UserName = "user", Password = "123" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void TokenRequestValidator_PassesWithValidData()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task TokenRequestValidator_PassesWithValidData()
     {
         var validator = new Services.Keycloak.Token.TokenRequestValidator();
 
         var result = validator.Validate(new Services.Keycloak.Token.TokenRequest { UserName = "user", Password = "1234" });
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void RevokeTokenRequestValidator_RequiresRefreshToken()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task RevokeTokenRequestValidator_RequiresRefreshToken()
     {
         var validator = new Services.Keycloak.Token.RevokeTokenRequestValidator();
 
         var result = validator.Validate(new Services.Keycloak.Token.RevokeTokenRequest { RefreshToken = "" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
-
-    [Fact]
-    [Trait("Category", nameof(KeycloakValidatorTest))]
-    public void UpdateTokenRequestValidator_RequiresRefreshToken()
+    [Test]
+    [Category(nameof(KeycloakValidatorTest))]
+    public async Task UpdateTokenRequestValidator_RequiresRefreshToken()
     {
         var validator = new Services.Keycloak.Token.UpdateTokenRequestValidator();
 
         var result = validator.Validate(new Services.Keycloak.Token.UpdateTokenRequest { RefreshToken = "" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
 }

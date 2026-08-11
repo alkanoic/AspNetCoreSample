@@ -14,10 +14,9 @@ public sealed class PolicyServiceTest
         var monitor = new FakeOptionsMonitor<PolicyOptions>(options);
         return new PolicyService(policies, monitor);
     }
-
-    [Fact]
-    [Trait("Category", nameof(PolicyServiceTest))]
-    public void RefreshPoliciesClearsDictionary()
+    [Test]
+    [Category(nameof(PolicyServiceTest))]
+    public async Task RefreshPoliciesClearsDictionary()
     {
         var policies = new ConcurrentDictionary<string, AuthorizationPolicy>();
         policies.TryAdd("test", new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
@@ -25,12 +24,11 @@ public sealed class PolicyServiceTest
 
         service.RefreshPolicies();
 
-        Assert.Empty(policies);
+        await Assert.That(policies).IsEmpty();
     }
-
-    [Fact]
-    [Trait("Category", nameof(PolicyServiceTest))]
-    public void RefreshPoliciesByTimeSpan_WhenTimeSpanIsZero_DoesNotClear()
+    [Test]
+    [Category(nameof(PolicyServiceTest))]
+    public async Task RefreshPoliciesByTimeSpan_WhenTimeSpanIsZero_DoesNotClear()
     {
         var policies = new ConcurrentDictionary<string, AuthorizationPolicy>();
         policies.TryAdd("test", new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
@@ -39,12 +37,11 @@ public sealed class PolicyServiceTest
 
         service.RefreshPoliciesByTimeSpan();
 
-        Assert.Single(policies);
+        await Assert.That(policies).HasSingleItem();
     }
-
-    [Fact]
-    [Trait("Category", nameof(PolicyServiceTest))]
-    public void RefreshPoliciesByTimeSpan_WhenTimeSpanIsOneSecond_DoesNotClear()
+    [Test]
+    [Category(nameof(PolicyServiceTest))]
+    public async Task RefreshPoliciesByTimeSpan_WhenTimeSpanIsOneSecond_DoesNotClear()
     {
         var policies = new ConcurrentDictionary<string, AuthorizationPolicy>();
         policies.TryAdd("test", new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
@@ -53,12 +50,11 @@ public sealed class PolicyServiceTest
 
         service.RefreshPoliciesByTimeSpan();
 
-        Assert.Single(policies);
+        await Assert.That(policies).HasSingleItem();
     }
-
-    [Fact]
-    [Trait("Category", nameof(PolicyServiceTest))]
-    public void RefreshPoliciesByTimeSpan_WhenElapsed_DoesNotClearImmediately()
+    [Test]
+    [Category(nameof(PolicyServiceTest))]
+    public async Task RefreshPoliciesByTimeSpan_WhenElapsed_DoesNotClearImmediately()
     {
         var policies = new ConcurrentDictionary<string, AuthorizationPolicy>();
         policies.TryAdd("test", new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
@@ -67,7 +63,7 @@ public sealed class PolicyServiceTest
 
         service.RefreshPoliciesByTimeSpan();
 
-        Assert.Single(policies);
+        await Assert.That(policies).HasSingleItem();
     }
 
     private sealed class FakeOptionsMonitor<T> : IOptionsMonitor<T>

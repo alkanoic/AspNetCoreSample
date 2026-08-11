@@ -4,9 +4,9 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class CommonValidationTest
 {
-    [Fact]
-    [Trait("Category", nameof(CommonValidationTest))]
-    public void GetValidationErrorsReturnsErrors()
+    [Test]
+    [Category(nameof(CommonValidationTest))]
+    public async Task GetValidationErrorsReturnsErrors()
     {
         var failures = new List<ValidationFailure>
         {
@@ -17,23 +17,22 @@ public sealed class CommonValidationTest
 
         var errors = CommonValidation.GetValidationErrors(validationResult);
 
-        Assert.NotNull(errors);
-        Assert.Equal(2, errors.Count);
-        Assert.Equal("Name1", errors[0].Field);
-        Assert.Equal("文字列は必須です", errors[0].Message);
-        Assert.Equal("Name1", errors[1].Field);
-        Assert.Equal("文字列は100文字以内で入力してください", errors[1].Message);
+        await Assert.That(errors).IsNotNull();
+        await Assert.That(errors.Count).IsEqualTo(2);
+        await Assert.That(errors[0].Field).IsEqualTo("Name1");
+        await Assert.That(errors[0].Message).IsEqualTo("文字列は必須です");
+        await Assert.That(errors[1].Field).IsEqualTo("Name1");
+        await Assert.That(errors[1].Message).IsEqualTo("文字列は100文字以内で入力してください");
     }
-
-    [Fact]
-    [Trait("Category", nameof(CommonValidationTest))]
-    public void GetValidationErrorsWithNoErrorsReturnsEmptyList()
+    [Test]
+    [Category(nameof(CommonValidationTest))]
+    public async Task GetValidationErrorsWithNoErrorsReturnsEmptyList()
     {
         var validationResult = new ValidationResult();
 
         var errors = CommonValidation.GetValidationErrors(validationResult);
 
-        Assert.NotNull(errors);
-        Assert.Empty(errors);
+        await Assert.That(errors).IsNotNull();
+        await Assert.That(errors).IsEmpty();
     }
 }

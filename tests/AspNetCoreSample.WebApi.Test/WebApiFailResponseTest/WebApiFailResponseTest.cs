@@ -6,20 +6,19 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class WebApiFailResponseTest
 {
-    [Fact]
-    [Trait("Category", nameof(WebApiFailResponseTest))]
-    public void DefaultConstructorHasEmptyErrors()
+    [Test]
+    [Category(nameof(WebApiFailResponseTest))]
+    public async Task DefaultConstructorHasEmptyErrors()
     {
         var response = new WebApiFailResponse();
 
-        Assert.False(response.Success);
-        Assert.Null(response.ErrorMessage);
-        Assert.Empty(response.Errors);
+        await Assert.That(response.Success).IsFalse();
+        await Assert.That(response.ErrorMessage).IsNull();
+        await Assert.That(response.Errors).IsEmpty();
     }
-
-    [Fact]
-    [Trait("Category", nameof(WebApiFailResponseTest))]
-    public void ValidationResultConstructorPopulatesErrors()
+    [Test]
+    [Category(nameof(WebApiFailResponseTest))]
+    public async Task ValidationResultConstructorPopulatesErrors()
     {
         var failures = new List<ValidationFailure>
         {
@@ -30,25 +29,24 @@ public sealed class WebApiFailResponseTest
 
         var response = new WebApiFailResponse(validationResult);
 
-        Assert.False(response.Success);
-        Assert.Null(response.ErrorMessage);
-        Assert.Equal(2, response.Errors.Count);
-        Assert.Equal("Field1", response.Errors[0].PropertyName);
-        Assert.Equal("Error1", response.Errors[0].ErrorMessage);
-        Assert.Equal("Field2", response.Errors[1].PropertyName);
-        Assert.Equal("Error2", response.Errors[1].ErrorMessage);
+        await Assert.That(response.Success).IsFalse();
+        await Assert.That(response.ErrorMessage).IsNull();
+        await Assert.That(response.Errors.Count).IsEqualTo(2);
+        await Assert.That(response.Errors[0].PropertyName).IsEqualTo("Field1");
+        await Assert.That(response.Errors[0].ErrorMessage).IsEqualTo("Error1");
+        await Assert.That(response.Errors[1].PropertyName).IsEqualTo("Field2");
+        await Assert.That(response.Errors[1].ErrorMessage).IsEqualTo("Error2");
     }
-
-    [Fact]
-    [Trait("Category", nameof(WebApiFailResponseTest))]
-    public void ExceptionConstructorSetsErrorMessage()
+    [Test]
+    [Category(nameof(WebApiFailResponseTest))]
+    public async Task ExceptionConstructorSetsErrorMessage()
     {
         var ex = new InvalidOperationException("test error");
 
         var response = new WebApiFailResponse(ex);
 
-        Assert.False(response.Success);
-        Assert.Equal("test error", response.ErrorMessage);
-        Assert.Empty(response.Errors);
+        await Assert.That(response.Success).IsFalse();
+        await Assert.That(response.ErrorMessage).IsEqualTo("test error");
+        await Assert.That(response.Errors).IsEmpty();
     }
 }

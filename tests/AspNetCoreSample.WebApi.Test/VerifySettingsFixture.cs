@@ -10,8 +10,3 @@ public class VerifySettingsFixture
         VerifySettings.UseDirectory("snapshots");
     }
 }
-
-[CollectionDefinition(nameof(VerifySettingsFixtures))]
-public class VerifySettingsFixtures : ICollectionFixture<VerifySettingsFixture>
-{
-}

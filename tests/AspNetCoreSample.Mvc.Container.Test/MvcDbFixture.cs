@@ -15,7 +15,7 @@ using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
 namespace AspNetCoreSample.Mvc.Container.Test;
 
-public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
+public sealed class MvcDbFixture : HttpClient
 {
     private readonly INetwork _network;
 
@@ -55,13 +55,15 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
             .WithEnvironment("ConnectionStrings__DefaultConnection", DbConnectionString)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MvcImage.HttpsPort))
             .Build();
+
+        InitializeAsync().GetAwaiter().GetResult();
     }
 
     public const string DbConnectionString = $"Server={nameof(_postgresqlContainer)};Username={PostgreSqlBuilder.DefaultUsername};Password={PostgreSqlBuilder.DefaultPassword};Database={PostgreSqlBuilder.DefaultDatabase}";
 
     public static DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public async ValueTask InitializeAsync()
+    private async Task InitializeAsync()
     {
         await _mvcImage.InitializeAsync().ConfigureAwait(false);
         await _network.CreateAsync().ConfigureAwait(false);
@@ -69,16 +71,21 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
         await _mvcContainer.StartAsync().ConfigureAwait(false);
     }
 
-    public async ValueTask DisposeAsync()
+    protected override void Dispose(bool disposing)
     {
         // We do not need to manually dispose Docker resources. If resources depend on each
         // other, it is necessary to dispose them in the correct order. Testcontainers'
         // Resource Reaper (Ryuk) will reliably take care of these resources and dispose
         // them after the test automatically.
-        await _mvcImage.DisposeAsync().ConfigureAwait(false);
-        await _mvcContainer.DisposeAsync().ConfigureAwait(false);
-        await _postgresqlContainer.DisposeAsync().ConfigureAwait(false);
-        await _network.DisposeAsync().ConfigureAwait(false);
+        if (disposing)
+        {
+            _mvcImage.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(30));
+            _mvcContainer.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(30));
+            _postgresqlContainer.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(30));
+            _network.DisposeAsync().AsTask().Wait(TimeSpan.FromSeconds(30));
+        }
+
+        base.Dispose(disposing);
     }
 
     public void SetBaseAddress()

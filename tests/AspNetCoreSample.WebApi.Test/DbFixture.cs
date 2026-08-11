@@ -6,7 +6,7 @@ using Testcontainers.PostgreSql;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class DbFixture : IAsyncLifetime
+public sealed class DbFixture : IAsyncDisposable
 {
     private readonly PostgreSqlContainer _postgresqlContainer;
 
@@ -18,18 +18,15 @@ public sealed class DbFixture : IAsyncLifetime
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("POSTGRES_INITDB_ARGS", "--encoding=UTF-8")
             .Build();
+
+        _postgresqlContainer.StartAsync().GetAwaiter().GetResult();
     }
 
     public string DbConnectionString => _postgresqlContainer.GetConnectionString();
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    async ValueTask IAsyncLifetime.InitializeAsync()
-    {
-        await _postgresqlContainer.StartAsync();
-    }
-
-    async ValueTask IAsyncDisposable.DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         await _postgresqlContainer.DisposeAsync();
     }

@@ -8,27 +8,26 @@ using AspNetCoreSample.WebApi.Services.Keycloak.Token;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class KeycloakWebApiTest : IClassFixture<KeycloakFixture>
+public sealed class KeycloakWebApiTest
 {
-    private readonly KeycloakFixture _keycloakFixture;
     private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
     private readonly JsonSerializerOptions _jsonTokenSerializerOptions;
 
-    public KeycloakWebApiTest(KeycloakFixture keycloak)
+    public KeycloakWebApiTest()
     {
-        _keycloakFixture = keycloak;
+        SharedTestContainers.InitializeAsync().GetAwaiter().GetResult();
         _jsonTokenSerializerOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
         };
     }
 
-    [Fact]
-    [Trait("Category", nameof(DbAccessWebApiAuthTest))]
+    [Test]
+    [Category(nameof(DbAccessWebApiAuthTest))]
     public async Task PostDbAccessAuth()
     {
         // Given
-        var httpClient = new HttpClient() { BaseAddress = new Uri(_keycloakFixture.BaseAddress) };
+        var httpClient = new HttpClient() { BaseAddress = new Uri(SharedTestContainers.KeycloakBaseAddress) };
         var parameters = new Dictionary<string, string>
         {
             ["grant_type"] = "password",
@@ -38,26 +37,26 @@ public sealed class KeycloakWebApiTest : IClassFixture<KeycloakFixture>
         };
 
         var encodedContent = new FormUrlEncodedContent(parameters);
-        var response = await httpClient.PostAsync($"realms/master/protocol/openid-connect/token", encodedContent, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var response = await httpClient.PostAsync($"realms/master/protocol/openid-connect/token", encodedContent, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.OK);
 
-        var content = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+        var content = await response.Content.ReadAsStringAsync(CancellationToken.None);
         var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(content, _jsonTokenSerializerOptions);
 
         // Then
-        Assert.NotNull(tokenResponse);
-        Assert.NotEmpty(tokenResponse.AccessToken);
-        Assert.NotEmpty(tokenResponse.RefreshToken);
+        await Assert.That(tokenResponse).IsNotNull();
+        await Assert.That(tokenResponse.AccessToken).IsNotEmpty();
+        await Assert.That(tokenResponse.RefreshToken).IsNotEmpty();
 
-        var fetchUserRequest = new HttpRequestMessage(HttpMethod.Get, $"{_keycloakFixture.BaseAddress}admin/realms/Test/users?exact=true&username=admin");
+        var fetchUserRequest = new HttpRequestMessage(HttpMethod.Get, $"{SharedTestContainers.KeycloakBaseAddress}admin/realms/Test/users?exact=true&username=admin");
         fetchUserRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.AccessToken);
 
-        var fetchUserResponse = await httpClient.SendAsync(fetchUserRequest, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, fetchUserResponse.StatusCode);
+        var fetchUserResponse = await httpClient.SendAsync(fetchUserRequest, CancellationToken.None);
+        await Assert.That(fetchUserResponse.StatusCode).IsEqualTo(HttpStatusCode.OK);
 
-        var fetchUserContent = await fetchUserResponse.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+        var fetchUserContent = await fetchUserResponse.Content.ReadAsStringAsync(CancellationToken.None);
         var result = JsonSerializer.Deserialize<List<FetchUserResponse>>(fetchUserContent, _jsonSerializerOptions)?.FirstOrDefault();
-        Assert.NotNull(result);
-        Assert.NotEmpty(result.Id);
+        await Assert.That(result).IsNotNull();
+        await Assert.That(result.Id).IsNotEmpty();
     }
 }

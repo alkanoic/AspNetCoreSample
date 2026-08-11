@@ -7,25 +7,26 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class ValidationControllerTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
+public sealed class ValidationControllerTest : IDisposable
 {
     private readonly WebApplicationFactoryFixture<Program> _webApplicationFactoryFixture;
     private readonly HttpClient _httpClient;
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
-    public ValidationControllerTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture)
+    public ValidationControllerTest()
     {
-        _webApplicationFactoryFixture = webApplicationFactoryFixture;
+        _webApplicationFactoryFixture = new WebApplicationFactoryFixture<Program>();
         _httpClient = _webApplicationFactoryFixture.CreateClient();
     }
 
     public void Dispose()
     {
         _httpClient.Dispose();
+        _webApplicationFactoryFixture.Dispose();
     }
 
-    [Fact]
-    [Trait("Category", nameof(ValidationControllerTest))]
+    [Test]
+    [Category(nameof(ValidationControllerTest))]
     public async Task PostValidDataReturnsOk()
     {
         const string path = "api/Validation";
@@ -37,12 +38,12 @@ public sealed class ValidationControllerTest : IClassFixture<WebApplicationFacto
             dateValue = DateTime.Now
         };
         var content = new StringContent(JsonSerializer.Serialize(data, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.OK);
     }
 
-    [Fact]
-    [Trait("Category", nameof(ValidationControllerTest))]
+    [Test]
+    [Category(nameof(ValidationControllerTest))]
     public async Task PostEmptyStringValueReturnsBadRequest()
     {
         const string path = "api/Validation";
@@ -54,12 +55,12 @@ public sealed class ValidationControllerTest : IClassFixture<WebApplicationFacto
             dateValue = DateTime.Now
         };
         var content = new StringContent(JsonSerializer.Serialize(data, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
     }
 
-    [Fact]
-    [Trait("Category", nameof(ValidationControllerTest))]
+    [Test]
+    [Category(nameof(ValidationControllerTest))]
     public async Task PostOutOfRangeNumberReturnsBadRequest()
     {
         const string path = "api/Validation";
@@ -71,12 +72,12 @@ public sealed class ValidationControllerTest : IClassFixture<WebApplicationFacto
             dateValue = DateTime.Now
         };
         var content = new StringContent(JsonSerializer.Serialize(data, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
     }
 
-    [Fact]
-    [Trait("Category", nameof(ValidationControllerTest))]
+    [Test]
+    [Category(nameof(ValidationControllerTest))]
     public async Task PostOutOfRangeDateReturnsBadRequest()
     {
         const string path = "api/Validation";
@@ -88,7 +89,7 @@ public sealed class ValidationControllerTest : IClassFixture<WebApplicationFacto
             dateValue = DateTime.Now.AddYears(5)
         };
         var content = new StringContent(JsonSerializer.Serialize(data, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
     }
 }

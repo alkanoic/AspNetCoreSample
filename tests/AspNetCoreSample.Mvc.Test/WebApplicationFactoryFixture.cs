@@ -1,8 +1,5 @@
 using System.Data.Common;
 
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -15,53 +12,26 @@ using Microsoft.Extensions.Hosting;
 
 using Npgsql;
 
-using Testcontainers.Keycloak;
-using Testcontainers.PostgreSql;
-
 namespace AspNetCoreSample.Mvc.Test;
 
-public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<TEntryPoint>, IAsyncLifetime
+public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<TEntryPoint>
     where TEntryPoint : class
 {
-    private readonly PostgreSqlContainer _postgresqlContainer;
-    private readonly IContainer _keycloakContainer;
     private IHost? _kestrelHost;
     private bool _disposed;
 
     public WebApplicationFactoryFixture()
     {
-        _postgresqlContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:latest")
-            .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
-            .WithEnvironment("TZ", "Asia/Tokyo")
-            .WithEnvironment("POSTGRES_INITDB_ARGS", "--encoding=UTF-8")
-            .Build();
-
-        _keycloakContainer = new ContainerBuilder()
-            .WithImage("quay.io/keycloak/keycloak:latest")
-            .WithResourceMapping("Test-realm.json", "/opt/keycloak/data/import/")
-            .WithEnvironment("TZ", "Asia/Tokyo")
-            .WithEnvironment("LANG", "ja_JP.UTF-8")
-            .WithEnvironment("KC_HEALTH_ENABLED", "true")
-            .WithEnvironment("KEYCLOAK_ADMIN", "admin")
-            .WithEnvironment("KEYCLOAK_ADMIN_PASSWORD", "passwd")
-            .WithPortBinding(KeycloakBuilder.KeycloakPort, true)
-            .WithPortBinding(KeycloakBuilder.KeycloakHealthPort, true)
-            .WithCommand("start-dev")
-            .WithCommand("--import-realm")
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(request =>
-                request.ForPath("/health/ready").ForPort(KeycloakBuilder.KeycloakHealthPort)))
-            .Build();
+        SharedTestContainers.InitializeAsync().GetAwaiter().GetResult();
     }
 
-    public string DbConnectionString => _postgresqlContainer.GetConnectionString();
+    public string DbConnectionString => SharedTestContainers.DbConnectionString;
 
     public DbConnection DbConnection => new NpgsqlConnection(DbConnectionString);
 
-    public async ValueTask InitializeAsync()
-    {
-        await Task.WhenAll(_keycloakContainer.StartAsync(), _postgresqlContainer.StartAsync());
-    }
+    public string KeycloakBaseAddress => SharedTestContainers.KeycloakBaseAddress;
+
+    public string HostUrl { get; private set; } = "";
 
     public override async ValueTask DisposeAsync()
     {
@@ -80,14 +50,8 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
             _kestrelHost.Dispose();
         }
 
-        await _keycloakContainer.DisposeAsync();
-        await _postgresqlContainer.DisposeAsync();
         await base.DisposeAsync();
     }
-
-    public string KeycloakBaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
-
-    public string HostUrl { get; private set; } = "";
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -126,7 +90,6 @@ public class WebApplicationFactoryFixture<TEntryPoint> : WebApplicationFactory<T
         var addresses = host.Services.GetRequiredService<IServer>().Features.Get<IServerAddressesFeature>();
         var address = addresses?.Addresses.FirstOrDefault(a => a.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
 
-        // ポート 0 の場合、バインド先の確定を待つ必要がある
         for (var i = 0; address == null && i < 50; i++)
         {
             Task.Delay(100).GetAwaiter().GetResult();

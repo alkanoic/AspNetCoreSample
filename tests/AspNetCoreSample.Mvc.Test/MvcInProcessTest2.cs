@@ -2,35 +2,31 @@ using Microsoft.Playwright;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class MvcInProcessTest2 : IClassFixture<WebApplicationFactoryFixture<Program>>
+public sealed class MvcInProcessTest2 : PageTest, IAsyncDisposable
 {
     private readonly WebApplicationFactoryFixture<Program> _factory;
 
-    public MvcInProcessTest2(WebApplicationFactoryFixture<Program> factory)
+    public MvcInProcessTest2()
     {
-        _factory = factory;
-        factory.CreateDefaultClient();
+        _factory = new WebApplicationFactoryFixture<Program>();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcInProcessTest2))]
+    public async ValueTask DisposeAsync()
+    {
+        await _factory.DisposeAsync();
+    }
+
+    [Test]
+    [Category(nameof(MvcInProcessTest2))]
     public async Task GetIndexPlaywright()
     {
-        using var playwright = await Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
+        _factory.CreateDefaultClient();
+
         await PlaywrightRetry.RunAsync(async () =>
         {
-            var page = await browser.NewPageAsync();
-            try
-            {
-                await page.GotoAsync($"{_factory.HostUrl}");
+            await Page.GotoAsync($"{_factory.HostUrl}");
 
-                Assert.Contains("AspNetCoreSample.Mvc", await page.TitleAsync());
-            }
-            finally
-            {
-                await page.CloseAsync();
-            }
+            await Assert.That(await Page.TitleAsync()).Contains("AspNetCoreSample.Mvc");
         });
     }
 }

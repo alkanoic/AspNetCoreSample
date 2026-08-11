@@ -10,30 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.4">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.msbuild" Version="6.0.4">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.10" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-    <PackageReference Include="Microsoft.Playwright" Version="1.50.0" />
     <PackageReference Include="Npgsql" Version="10.0.3" />
+    <PackageReference Include="TUnit" Version="1.5.80" />
+    <PackageReference Include="TUnit.Playwright" Version="1.5.80" />
     <PackageReference Include="Testcontainers" Version="4.3.0" />
     <PackageReference Include="Testcontainers.PostgreSql" Version="4.3.0" />
-    <PackageReference Include="xunit.v3" Version="2.0.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Using Include="Xunit" />
+    <Using Include="TUnit.Core" />
+    <Using Include="TUnit.Assertions" />
+    <Using Include="TUnit.Playwright" />
+    <Using Include="Microsoft.Playwright" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,40 +2,38 @@ using Microsoft.Playwright;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class MvcInProcessTest3 : IClassFixture<WebApplicationFactoryFixture<Program>>
+public sealed class MvcInProcessTest3 : PageTest, IAsyncDisposable
 {
     private readonly WebApplicationFactoryFixture<Program> _factory;
 
-    public MvcInProcessTest3(WebApplicationFactoryFixture<Program> factory)
+    public MvcInProcessTest3()
     {
-        _factory = factory;
-        factory.CreateDefaultClient();
+        _factory = new WebApplicationFactoryFixture<Program>();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcInProcessTest3))]
+    public async ValueTask DisposeAsync()
+    {
+        await _factory.DisposeAsync();
+    }
+
+    [Test]
+    [Category(nameof(MvcInProcessTest3))]
     public async Task GetIndexPlaywright()
     {
-        using var playwright = await Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
+        _factory.CreateDefaultClient();
+
         await PlaywrightRetry.RunAsync(async () =>
         {
-            var page = await browser.NewPageAsync();
-            try
-            {
-                await page.GotoAsync($"{_factory.HostUrl}/Name");
-                await page.GetByRole(AriaRole.Link, new() { Name = "Edit" }).First.ClickAsync();
-                await page.GetByLabel("Name1").ClickAsync();
-                await page.GetByLabel("Name1").ClickAsync();
-                await page.GetByLabel("Name1").FillAsync("太郎123");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+            await Page.GotoAsync($"{_factory.HostUrl}/Name");
+            await Page.GetByRole(AriaRole.Link, new() { Name = "Edit" }).First.ClickAsync();
+            await Page.GetByLabel("Name1").ClickAsync();
+            await Page.GetByLabel("Name1").ClickAsync();
+            await Page.GetByLabel("Name1").FillAsync("太郎123");
+            await Page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
 
-                Assert.Contains("AspNetCoreSample.Mvc", await page.TitleAsync());
-            }
-            finally
-            {
-                await page.CloseAsync();
-            }
+            await Assert.That(await Page.TitleAsync()).Contains("AspNetCoreSample.Mvc");
         });
+
+        await SharedTestContainers.ResetNameTableAsync();
     }
 }

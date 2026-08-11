@@ -6,7 +6,7 @@ using IContainer = DotNet.Testcontainers.Containers.IContainer;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class KeycloakFixture : IAsyncLifetime
+public sealed class KeycloakFixture
 {
     private readonly IContainer _keycloakContainer;
     private const int KeycloakPort = 8080;
@@ -29,11 +29,13 @@ public sealed class KeycloakFixture : IAsyncLifetime
             .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(request =>
                 request.ForPath("/health/ready").ForPort(KeycloakHealthPort)))
             .Build();
+
+        Task.Run(async () => await InitializeAsync());
     }
 
     public string BaseAddress => new UriBuilder(Uri.UriSchemeHttp, _keycloakContainer.Hostname, _keycloakContainer.GetMappedPublicPort(KeycloakBuilder.KeycloakPort)).ToString();
 
-    public async ValueTask InitializeAsync()
+    private async Task InitializeAsync()
     {
         await _keycloakContainer.StartAsync();
     }

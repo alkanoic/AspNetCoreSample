@@ -5,9 +5,9 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class AcceptLanguageHeaderParameterTest
 {
-    [Fact]
-    [Trait("Category", nameof(AcceptLanguageHeaderParameterTest))]
-    public void ProcessAddsAcceptLanguageHeaderParameter()
+    [Test]
+    [Category(nameof(AcceptLanguageHeaderParameterTest))]
+    public async Task ProcessAddsAcceptLanguageHeaderParameter()
     {
         var processor = new AcceptLanguageHeaderParameter();
         var document = new OpenApiDocument();
@@ -33,13 +33,13 @@ public sealed class AcceptLanguageHeaderParameterTest
 
         var result = processor.Process(context);
 
-        Assert.True(result);
-        Assert.Contains(operationDescription.Operation.Parameters, p => p.Name == "Accept-Language");
+        await Assert.That(result).IsTrue();
+        await Assert.That(operationDescription.Operation.Parameters.Any(p => p.Name == "Accept-Language")).IsTrue();
         var parameter = operationDescription.Operation.Parameters.First(p => p.Name == "Accept-Language");
-        Assert.Equal(OpenApiParameterKind.Header, parameter.Kind);
-        Assert.True(parameter.IsRequired);
-        Assert.Equal("ja-JP", parameter.Default);
-        Assert.Contains("ja-JP", parameter.Schema.Enumeration);
-        Assert.Contains("en-US", parameter.Schema.Enumeration);
+        await Assert.That(parameter.Kind).IsEqualTo(OpenApiParameterKind.Header);
+        await Assert.That(parameter.IsRequired).IsTrue();
+        await Assert.That(parameter.Default).IsEqualTo("ja-JP");
+        await Assert.That(parameter.Schema.Enumeration).Contains("ja-JP");
+        await Assert.That(parameter.Schema.Enumeration).Contains("en-US");
     }
 }

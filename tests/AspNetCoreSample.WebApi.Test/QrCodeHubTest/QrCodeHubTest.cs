@@ -6,8 +6,8 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class QrCodeHubTest
 {
-    [Fact]
-    [Trait("Category", nameof(QrCodeHubTest))]
+    [Test]
+    [Category(nameof(QrCodeHubTest))]
     public async Task SendQRCodeData_CallsSendAsyncOnAllClients()
     {
         var hub = new QrCodeHub();
@@ -21,9 +21,9 @@ public sealed class QrCodeHubTest
 
         await hub.SendQRCodeData("test-data");
 
-        Assert.True(mockClients.AllCalled);
-        Assert.Equal("ReceiveQRCodeData", mockClients.MethodName);
-        Assert.Equal("test-data", mockClients.Arg);
+        await Assert.That(mockClients.AllCalled).IsTrue();
+        await Assert.That(mockClients.MethodName).IsEqualTo("ReceiveQRCodeData");
+        await Assert.That(mockClients.Arg).IsEqualTo("test-data");
     }
 
     private sealed class MockHubCallerClients : IHubCallerClients

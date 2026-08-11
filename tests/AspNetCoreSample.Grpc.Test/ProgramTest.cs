@@ -7,34 +7,39 @@ using Microsoft.Extensions.Hosting;
 
 namespace AspNetCoreSample.Grpc.Test;
 
-public sealed class ProgramTest : IClassFixture<WebApplicationFactory<Program>>
+public sealed class ProgramTest : IDisposable
 {
     private readonly WebApplicationFactory<Program> _factory;
 
-    public ProgramTest(WebApplicationFactory<Program> factory)
+    public ProgramTest()
     {
-        _factory = factory;
+        _factory = new WebApplicationFactory<Program>();
     }
 
-    [Fact]
-    [Trait("Category", nameof(ProgramTest))]
-    public async ValueTask RootReturnsGrpcInstructionMessage()
+    public void Dispose()
+    {
+        _factory.Dispose();
+    }
+
+    [Test]
+    [Category(nameof(ProgramTest))]
+    public async Task RootReturnsGrpcInstructionMessage()
     {
         var client = _factory.CreateClient();
 
-        var response = await client.GetAsync("/", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/", CancellationToken.None);
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var body = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
-        Assert.Contains("Communication with gRPC endpoints", body);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.OK);
+        var body = await response.Content.ReadAsStringAsync(CancellationToken.None);
+        await Assert.That(body).Contains("Communication with gRPC endpoints");
     }
 
-    [Fact]
-    [Trait("Category", nameof(ProgramTest))]
-    public async ValueTask AppUsesDevelopmentEnvironment()
+    [Test]
+    [Category(nameof(ProgramTest))]
+    public async Task AppUsesDevelopmentEnvironment()
     {
         var env = _factory.Services.GetRequiredService<IHostEnvironment>();
 
-        Assert.Equal(Environments.Development, env.EnvironmentName);
+        await Assert.That(env.EnvironmentName).IsEqualTo(Environments.Development);
     }
 }

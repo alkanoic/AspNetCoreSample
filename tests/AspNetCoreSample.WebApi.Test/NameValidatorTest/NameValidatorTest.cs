@@ -5,41 +5,39 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class NameValidatorTest
 {
-    [Fact]
-    [Trait("Category", nameof(NameValidatorTest))]
-    public void ValidateValidNamePasses()
+    [Test]
+    [Category(nameof(NameValidatorTest))]
+    public async Task ValidateValidNamePasses()
     {
         var validator = new NameValidator();
         var name = new Name { Id = 0, Name1 = "テスト" };
 
         var result = validator.Validate(name);
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(NameValidatorTest))]
-    public void ValidateEmptyNameFails()
+    [Test]
+    [Category(nameof(NameValidatorTest))]
+    public async Task ValidateEmptyNameFails()
     {
         var validator = new NameValidator();
         var name = new Name { Id = 0, Name1 = "" };
 
         var result = validator.Validate(name);
 
-        Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.ErrorMessage == "文字列は必須です");
+        await Assert.That(result.IsValid).IsFalse();
+        await Assert.That(result.Errors.Any(e => e.ErrorMessage == "文字列は必須です")).IsTrue();
     }
-
-    [Fact]
-    [Trait("Category", nameof(NameValidatorTest))]
-    public void ValidateTooLongNameFails()
+    [Test]
+    [Category(nameof(NameValidatorTest))]
+    public async Task ValidateTooLongNameFails()
     {
         var validator = new NameValidator();
         var name = new Name { Id = 0, Name1 = new string('a', 101) };
 
         var result = validator.Validate(name);
 
-        Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.ErrorMessage == "文字列は100文字以内で入力してください");
+        await Assert.That(result.IsValid).IsFalse();
+        await Assert.That(result.Errors.Any(e => e.ErrorMessage == "文字列は100文字以内で入力してください")).IsTrue();
     }
 }

@@ -9,70 +9,71 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCoreSample.WebApi.Test;
 
-public sealed class TokenControllerTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
+public sealed class TokenControllerTest : IDisposable
 {
     private readonly WebApplicationFactoryFixture<Program> _webApplicationFactoryFixture;
     private readonly HttpClient _httpClient;
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
-    public TokenControllerTest(WebApplicationFactoryFixture<Program> webApplicationFactoryFixture)
+    public TokenControllerTest()
     {
-        _webApplicationFactoryFixture = webApplicationFactoryFixture;
+        _webApplicationFactoryFixture = new WebApplicationFactoryFixture<Program>();
         _httpClient = _webApplicationFactoryFixture.CreateClient();
     }
 
     public void Dispose()
     {
         _httpClient.Dispose();
+        _webApplicationFactoryFixture.Dispose();
     }
 
-    [Fact]
-    [Trait("Category", nameof(TokenControllerTest))]
+    [Test]
+    [Category(nameof(TokenControllerTest))]
     public async Task AuthWithValidCredentialsReturnsToken()
     {
         const string path = "api/Token/Auth";
 
         var content = new StringContent(JsonSerializer.Serialize(new { userName = "admin", password = "admin" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.OK);
 
-        var stream = await response.Content.ReadAsStreamAsync(TestContext.Current.CancellationToken);
-        var tokenResponse = await JsonSerializer.DeserializeAsync<TokenResponse>(stream, JsonSerializerOptions, TestContext.Current.CancellationToken);
-        Assert.NotNull(tokenResponse);
-        Assert.NotEmpty(tokenResponse.AccessToken);
-        Assert.NotEmpty(tokenResponse.RefreshToken);
+        var stream = await response.Content.ReadAsStreamAsync(CancellationToken.None);
+        var tokenResponse = await JsonSerializer.DeserializeAsync<TokenResponse>(stream, JsonSerializerOptions, CancellationToken.None);
+        await Assert.That(tokenResponse).IsNotNull();
+        await Assert.That(tokenResponse.AccessToken).IsNotEmpty();
+        await Assert.That(tokenResponse.RefreshToken).IsNotEmpty();
     }
 
-    [Fact]
-    [Trait("Category", nameof(TokenControllerTest))]
+    [Test]
+    [Category(nameof(TokenControllerTest))]
     public async Task AuthWithInvalidCredentialsReturnsBadRequest()
     {
         const string path = "api/Token/Auth";
 
         var content = new StringContent(JsonSerializer.Serialize(new { userName = "invalid", password = "invalid" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
     }
 
-    [Fact]
-    [Trait("Category", nameof(TokenControllerTest))]
+    [Test]
+    [Category(nameof(TokenControllerTest))]
     public async Task RefreshTokenWithInvalidTokenReturnsBadRequest()
     {
         const string path = "api/Token/RefreshToken";
 
         var content = new StringContent(JsonSerializer.Serialize(new { refreshToken = "invalid-refresh-token" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
     }
 
-    [Fact]
-    [Trait("Category", nameof(TokenControllerTest))]
+    [Test]
+    [Category(nameof(TokenControllerTest))]
     public async Task RevokeTokenWithInvalidTokenReturnsBadRequest()
     {
         const string path = "api/Token/RevokeToken";
 
         var content = new StringContent(JsonSerializer.Serialize(new { refreshToken = "" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, CancellationToken.None);
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
     }
 }

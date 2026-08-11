@@ -32,10 +32,9 @@ public sealed class TokenServiceTest
         });
         return new TokenService(httpClient, options);
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenServiceTest))]
-    public async ValueTask AuthTokenAsync_ReturnsTokenResponse()
+    [Test]
+    [Category(nameof(TokenServiceTest))]
+    public async Task AuthTokenAsync_ReturnsTokenResponse()
     {
         var expectedToken = new TokenResponse
         {
@@ -52,40 +51,37 @@ public sealed class TokenServiceTest
         });
         var service = CreateService(handler);
 
-        var result = await service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "pass" }, TestContext.Current.CancellationToken);
+        var result = await service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "pass" }, CancellationToken.None);
 
-        Assert.Equal("access-token-123", result.AccessToken);
-        Assert.Equal("refresh-token-456", result.RefreshToken);
-        Assert.Equal("Bearer", result.TokenType);
+        await Assert.That(result.AccessToken).IsEqualTo("access-token-123");
+        await Assert.That(result.RefreshToken).IsEqualTo("refresh-token-456");
+        await Assert.That(result.TokenType).IsEqualTo("Bearer");
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenServiceTest))]
-    public async ValueTask AuthTokenAsync_ThrowsOnNonSuccess()
+    [Test]
+    [Category(nameof(TokenServiceTest))]
+    public async Task AuthTokenAsync_ThrowsOnNonSuccess()
     {
         var handler = new FakeHttpMessageHandler(_ =>
             new HttpResponseMessage(HttpStatusCode.BadRequest));
         var service = CreateService(handler);
 
         await Assert.ThrowsAsync<InvalidDataException>(() =>
-            service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "wrong" }, TestContext.Current.CancellationToken).AsTask());
+            service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "wrong" }, CancellationToken.None).AsTask());
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenServiceTest))]
-    public async ValueTask AuthTokenAsync_ThrowsOnNullResponse()
+    [Test]
+    [Category(nameof(TokenServiceTest))]
+    public async Task AuthTokenAsync_ThrowsOnNullResponse()
     {
         var handler = new FakeHttpMessageHandler(_ =>
             new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("null", Encoding.UTF8, "application/json") });
         var service = CreateService(handler);
 
         await Assert.ThrowsAsync<InvalidDataException>(() =>
-            service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "pass" }, TestContext.Current.CancellationToken).AsTask());
+            service.AuthTokenAsync(new TokenRequest { UserName = "user", Password = "pass" }, CancellationToken.None).AsTask());
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenServiceTest))]
-    public async ValueTask RefreshTokenAsync_ReturnsTokenResponse()
+    [Test]
+    [Category(nameof(TokenServiceTest))]
+    public async Task RefreshTokenAsync_ReturnsTokenResponse()
     {
         var expectedToken = new TokenResponse
         {
@@ -100,45 +96,42 @@ public sealed class TokenServiceTest
         });
         var service = CreateService(handler);
 
-        var result = await service.RefreshTokenAsync(new UpdateTokenRequest { RefreshToken = "old-refresh" }, TestContext.Current.CancellationToken);
+        var result = await service.RefreshTokenAsync(new UpdateTokenRequest { RefreshToken = "old-refresh" }, CancellationToken.None);
 
-        Assert.Equal("new-access-token", result.AccessToken);
-        Assert.Equal("new-refresh-token", result.RefreshToken);
+        await Assert.That(result.AccessToken).IsEqualTo("new-access-token");
+        await Assert.That(result.RefreshToken).IsEqualTo("new-refresh-token");
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenServiceTest))]
-    public async ValueTask RefreshTokenAsync_ThrowsOnNonSuccess()
+    [Test]
+    [Category(nameof(TokenServiceTest))]
+    public async Task RefreshTokenAsync_ThrowsOnNonSuccess()
     {
         var handler = new FakeHttpMessageHandler(_ =>
             new HttpResponseMessage(HttpStatusCode.BadRequest));
         var service = CreateService(handler);
 
         await Assert.ThrowsAsync<InvalidDataException>(() =>
-            service.RefreshTokenAsync(new UpdateTokenRequest { RefreshToken = "invalid" }, TestContext.Current.CancellationToken).AsTask());
+            service.RefreshTokenAsync(new UpdateTokenRequest { RefreshToken = "invalid" }, CancellationToken.None).AsTask());
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenServiceTest))]
-    public async ValueTask RevokeTokenAsync_CompletesOnSuccess()
+    [Test]
+    [Category(nameof(TokenServiceTest))]
+    public async Task RevokeTokenAsync_CompletesOnSuccess()
     {
         var handler = new FakeHttpMessageHandler(_ =>
             new HttpResponseMessage(HttpStatusCode.NoContent));
         var service = CreateService(handler);
 
-        await service.RevokeTokenAsync(new RevokeTokenRequest { RefreshToken = "token-to-revoke" }, TestContext.Current.CancellationToken);
+        await service.RevokeTokenAsync(new RevokeTokenRequest { RefreshToken = "token-to-revoke" }, CancellationToken.None);
     }
-
-    [Fact]
-    [Trait("Category", nameof(TokenServiceTest))]
-    public async ValueTask RevokeTokenAsync_ThrowsOnNonSuccess()
+    [Test]
+    [Category(nameof(TokenServiceTest))]
+    public async Task RevokeTokenAsync_ThrowsOnNonSuccess()
     {
         var handler = new FakeHttpMessageHandler(_ =>
             new HttpResponseMessage(HttpStatusCode.BadRequest));
         var service = CreateService(handler);
 
         await Assert.ThrowsAsync<InvalidDataException>(() =>
-            service.RevokeTokenAsync(new RevokeTokenRequest { RefreshToken = "invalid" }, TestContext.Current.CancellationToken).AsTask());
+            service.RevokeTokenAsync(new RevokeTokenRequest { RefreshToken = "invalid" }, CancellationToken.None).AsTask());
     }
 
     private sealed class FakeHttpMessageHandler : HttpMessageHandler

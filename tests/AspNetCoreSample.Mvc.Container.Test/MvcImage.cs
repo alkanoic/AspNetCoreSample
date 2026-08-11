@@ -6,7 +6,7 @@ using DotNet.Testcontainers.Images;
 
 namespace AspNetCoreSample.Mvc.Container.Test;
 
-public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
+public sealed class MvcImage : IImage, IDisposable
 {
     public const ushort HttpsPort = 443;
 
@@ -20,7 +20,12 @@ public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
 
     private string _tempDockerPath = "";
 
-    public async ValueTask InitializeAsync()
+    public MvcImage()
+    {
+        InitializeAsync().GetAwaiter().GetResult();
+    }
+
+    public async Task InitializeAsync()
     {
         await _semaphoreSlim.WaitAsync()
           .ConfigureAwait(false);
@@ -47,6 +52,7 @@ public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
 
     public ValueTask DisposeAsync()
     {
+        _semaphoreSlim.Dispose();
         return ValueTask.CompletedTask;
     }
 

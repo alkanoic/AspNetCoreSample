@@ -4,127 +4,127 @@ namespace AspNetCoreSample.Mvc.Test;
 
 public sealed class MvcModelTest
 {
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void ErrorViewModel_ShowRequestId_WhenRequestIdIsNull_ReturnsFalse()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task ErrorViewModel_ShowRequestId_WhenRequestIdIsNull_ReturnsFalse()
     {
         var model = new ErrorViewModel { RequestId = null };
 
-        Assert.False(model.ShowRequestId);
+        await Assert.That(model.ShowRequestId).IsFalse();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void ErrorViewModel_ShowRequestId_WhenRequestIdIsEmpty_ReturnsFalse()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task ErrorViewModel_ShowRequestId_WhenRequestIdIsEmpty_ReturnsFalse()
     {
         var model = new ErrorViewModel { RequestId = "" };
 
-        Assert.False(model.ShowRequestId);
+        await Assert.That(model.ShowRequestId).IsFalse();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void ErrorViewModel_ShowRequestId_WhenRequestIdIsSet_ReturnsTrue()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task ErrorViewModel_ShowRequestId_WhenRequestIdIsSet_ReturnsTrue()
     {
         var model = new ErrorViewModel { RequestId = "abc-123" };
 
-        Assert.True(model.ShowRequestId);
+        await Assert.That(model.ShowRequestId).IsTrue();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void ButtonViewModel_SetsControlName()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task ButtonViewModel_SetsControlName()
     {
         var model = new ButtonViewModel("btn-submit");
 
-        Assert.Equal("btn-submit", model.ControlName);
+        await Assert.That(model.ControlName).IsEqualTo("btn-submit");
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void FluentViewModelValidator_NameIsRequired()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task FluentViewModelValidator_NameIsRequired()
     {
         var validator = new FluentViewModelValidator();
 
         var result = validator.Validate(new FluentViewModel { Name = null, Email = "test@example.com" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void FluentViewModelValidator_NameMaxLength()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task FluentViewModelValidator_NameMaxLength()
     {
         var validator = new FluentViewModelValidator();
 
         var result = validator.Validate(new FluentViewModel { Name = "123456", Email = "test@example.com" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void FluentViewModelValidator_EmailIsRequired()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task FluentViewModelValidator_EmailIsRequired()
     {
         var validator = new FluentViewModelValidator();
 
         var result = validator.Validate(new FluentViewModel { Name = "test", Email = null });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void FluentViewModelValidator_InvalidEmail()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task FluentViewModelValidator_InvalidEmail()
     {
         var validator = new FluentViewModelValidator();
 
         var result = validator.Validate(new FluentViewModel { Name = "test", Email = "not-email" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void FluentViewModelValidator_OptionRequiredWhenNameIsAbc()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task FluentViewModelValidator_OptionRequiredWhenNameIsAbc()
     {
         var validator = new FluentViewModelValidator();
 
         var result = validator.Validate(new FluentViewModel { Name = "abc", Email = "test@example.com", Option = null });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void FluentViewModelValidator_OptionMaxLengthWhenNameIsAbc()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task FluentViewModelValidator_OptionMaxLengthWhenNameIsAbc()
     {
         var validator = new FluentViewModelValidator();
 
         var result = validator.Validate(new FluentViewModel { Name = "abc", Email = "test@example.com", Option = "1234" });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void FluentViewModelValidator_NoMustBeGreaterThanOrEqualToZero()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task FluentViewModelValidator_NoMustBeGreaterThanOrEqualToZero()
     {
         var validator = new FluentViewModelValidator();
 
         var result = validator.Validate(new FluentViewModel { Name = "test", Email = "test@example.com", No = -1 });
 
-        Assert.False(result.IsValid);
+        await Assert.That(result.IsValid).IsFalse();
     }
 
-    [Fact]
-    [Trait("Category", nameof(MvcModelTest))]
-    public void FluentViewModelValidator_PassesWithValidData()
+    [Test]
+    [Category(nameof(MvcModelTest))]
+    public async Task FluentViewModelValidator_PassesWithValidData()
     {
         var validator = new FluentViewModelValidator();
 
         var result = validator.Validate(new FluentViewModel { Name = "test", Email = "test@example.com", No = 0 });
 
-        Assert.True(result.IsValid);
+        await Assert.That(result.IsValid).IsTrue();
     }
 }
