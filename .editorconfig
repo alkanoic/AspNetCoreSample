@@ -379,6 +379,17 @@ generated_code = true
 [src/AspNetCoreSample.WebApi/OpenAPI/swagger.json]
 generated_code = true
 
+# CA1707: テストメソッド名のアンダースコア（Given-When-Then 命名を許容）
+[tests/**.cs]
+dotnet_diagnostic.CA1707.severity = none
+
+# 自動生成モデルの nullable 注釈に関するコンパイラ警告（生成物のため抑制）
+[src/AspNetCoreSample.Templates/Models/*.cs]
+dotnet_diagnostic.CS8669.severity = none
+
+[src/CodeGen.Result/Models/*.cs]
+dotnet_diagnostic.CS8669.severity = none
+
 # CA1848: LoggerMessage デリゲート使用のパフォーマンス提案（既存コードとの一貫性のため抑制）
 [*.cs]
 dotnet_diagnostic.CA1848.severity = none

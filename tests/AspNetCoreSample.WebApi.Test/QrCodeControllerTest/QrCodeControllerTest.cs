@@ -24,6 +24,7 @@ public sealed class QrCodeControllerTest
         Assert.IsType<OkResult>(result);
         Assert.True(mockClientProxy.SendCoreAsyncCalled);
         Assert.Equal("ReceiveQRCodeData", mockClientProxy.Method);
+        Assert.NotNull(mockClientProxy.Args);
         Assert.Single(mockClientProxy.Args);
         Assert.Equal("test-qr-data", mockClientProxy.Args[0]);
     }

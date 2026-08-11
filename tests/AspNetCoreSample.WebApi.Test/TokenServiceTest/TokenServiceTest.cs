@@ -11,6 +11,8 @@ namespace AspNetCoreSample.WebApi.Test;
 
 public sealed class TokenServiceTest
 {
+    private static readonly JsonSerializerOptions s_snakeCaseJsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
+
     private static TokenService CreateService(HttpMessageHandler handler)
     {
         var httpClient = new HttpClient(handler) { BaseAddress = new Uri("http://keycloak") };
@@ -45,7 +47,7 @@ public sealed class TokenServiceTest
         };
         var handler = new FakeHttpMessageHandler(req =>
         {
-            var json = JsonSerializer.Serialize(expectedToken, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower });
+            var json = JsonSerializer.Serialize(expectedToken, s_snakeCaseJsonOptions);
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(json, Encoding.UTF8, "application/json") };
         });
         var service = CreateService(handler);
@@ -93,7 +95,7 @@ public sealed class TokenServiceTest
         };
         var handler = new FakeHttpMessageHandler(req =>
         {
-            var json = JsonSerializer.Serialize(expectedToken, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower });
+            var json = JsonSerializer.Serialize(expectedToken, s_snakeCaseJsonOptions);
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(json, Encoding.UTF8, "application/json") };
         });
         var service = CreateService(handler);
