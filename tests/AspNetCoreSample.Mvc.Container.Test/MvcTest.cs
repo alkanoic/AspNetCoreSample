@@ -28,9 +28,19 @@ public sealed class MvcTest : IClassFixture<MvcDbFixture>
         await using var context = await browser.NewContextAsync();
         PlaywrightSettings.SetDefaultBrowserContext(context);
 
-        var page = await context.NewPageAsync();
-        await page.GotoAsync(_mvcFixture.BaseAddress!.ToString());
+        await PlaywrightRetry.RunAsync(async () =>
+        {
+            var page = await context.NewPageAsync();
+            try
+            {
+                await page.GotoAsync(_mvcFixture.BaseAddress!.ToString());
 
-        Assert.Contains("AspNetCoreSample.Mvc", await page.TitleAsync());
+                Assert.Contains("AspNetCoreSample.Mvc", await page.TitleAsync());
+            }
+            finally
+            {
+                await page.CloseAsync();
+            }
+        });
     }
 }

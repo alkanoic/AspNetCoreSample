@@ -21,10 +21,9 @@ public sealed class MvcInProcessTest : IClassFixture<WebApplicationFactoryFixtur
         await using var context = await browser.NewContextAsync(PlaywrightSettings.DefaultBrowserNewContextOptions());
         PlaywrightSettings.SetDefaultBrowserContext(context);
 
-        var page = await context.NewPageAsync();
-
         await PlaywrightRetry.RunAsync(async () =>
         {
+            var page = await context.NewPageAsync();
             try
             {
                 await page.GotoAsync($"{_factory.HostUrl}");
