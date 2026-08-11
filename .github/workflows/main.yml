@@ -138,7 +138,7 @@ jobs:
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
 
       - name: WebApi Run tests
-        run: dotnet run --project AspNetCoreSample.WebApi.Test.csproj --configuration Release -- --timeout 10m
+        run: dotnet run --project AspNetCoreSample.WebApi.Test.csproj --configuration Release -- --timeout 10m --maximum-parallel-tests 1
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
 
   mvc_test:
