@@ -7,11 +7,18 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Playwright;
 
+using TUnit.Core;
+
 namespace AspNetCoreSample.Mvc.Container.Test;
 
 [ClassDataSource<MvcDbFixture>]
 public sealed class MvcTest(MvcDbFixture mvcFixture) : PageTest
 {
+    public override BrowserNewContextOptions ContextOptions(TestContext testContext)
+    {
+        return new BrowserNewContextOptions { IgnoreHTTPSErrors = true };
+    }
+
     [Test]
     [Category(nameof(MvcTest))]
     public async Task GetIndexPlaywright()
