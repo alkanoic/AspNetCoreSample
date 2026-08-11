@@ -57,6 +57,13 @@ CI 相当の全実行は `main.yml` の各テストジョブ（`dbcontainer_test
   ```
 - `PlaywrightSettings.cs`（BaseUrl 等）を参照。
 
+## ブランチ・マージ規約
+
+- `main` ブランチへのマージは **Pull Request 経由の merge commit** で行う。fast-forward merge は使用しない。
+- ローカルでの `git merge --ff-only` による直接マージは避け、GitHub の UI または `gh pr merge --merge` を使用する。
+- ブランチは不要になったら削除する。
+- 例外的に hotfix 等で直接 push が必要な場合は、事前に明示的な承認を得ること。
+
 ## 注意
 - ログは NLog（`Web.AspnetCore`）。テストでもログが `logs/` に出力されることがあるので `.gitignore` 対象を把握。
 - MySQL 系の検証は `tests/DbContainer.Test`（Postgres）のみ。MySQL 対応は `CodeGen.Result` で Pomelo を使用する別経路。

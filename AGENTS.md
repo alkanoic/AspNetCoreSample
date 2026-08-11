@@ -121,6 +121,13 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 - 例: `feat(webapi): Keycloak のトークン更新 API を追加する`、`fix(mvc): QrCode 通知の再送処理を修正する`、`chore: .NET 9 へ依存を更新する`
 - コミット時は `git diff` / `git status` で対象を確認し、意図しないファイルを含めないこと。生成物（SBOM・playwright-report・CodeGen 生成物）等は `--no-verify` でない限りフックに注意する。
 
+## ブランチ・マージ規約
+
+- `main` ブランチへのマージは **Pull Request 経由の merge commit** で行う。fast-forward merge は使用しない。
+- ローカルでの `git merge --ff-only` による直接マージは避け、GitHub の UI または `gh pr merge --merge` を使用する。
+- ブランチは不要になったら削除する。
+- 例外的に hotfix 等で直接 push が必要な場合は、事前に明示的な承認を得ること。
+
 ## 生成物の扱い
 - `src/CodeGen/Outputs/**`, `src/CodeGen.Result/**`, `src/CodeGen.Result.Kiota/**` はテスト生成である。テンプレート変更時は再生成して `Outputs` をビルド可能に保つこと。
 - 自動生成・生成テンプレート・SBOM・playwright-report は手で編集しない。
