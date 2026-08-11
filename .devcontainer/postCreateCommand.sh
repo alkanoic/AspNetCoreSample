@@ -96,6 +96,11 @@ if [ -f e2e/package.json ]; then
     (cd e2e && npm ci) || echo "npm ci (e2e) skipped"
 fi
 
+# Playwright ブラウザをインストール（Mvc.Test / Mvc.Container.Test 用）
+if [ -f tests/AspNetCoreSample.Mvc.Test/AspNetCoreSample.Mvc.Test.csproj ]; then
+    (cd tests/AspNetCoreSample.Mvc.Test && dotnet build --configuration Release --framework net10.0 && pwsh bin/Release/net10.0/playwright.ps1 install --with-deps) || echo "playwright install (Mvc.Test) skipped"
+fi
+
 # MkDocs (ドキュメント生成) の依存関係をインストール
 if [ -f requirements.txt ]; then
     if [ ! -d .venv ]; then

@@ -1,5 +1,7 @@
 using Microsoft.Playwright;
 
+using TUnit.Core;
+
 namespace AspNetCoreSample.Mvc.Test;
 
 public sealed class MvcInProcessTest3 : PageTest, IAsyncDisposable
@@ -9,6 +11,11 @@ public sealed class MvcInProcessTest3 : PageTest, IAsyncDisposable
     public MvcInProcessTest3()
     {
         _factory = new WebApplicationFactoryFixture<Program>();
+    }
+
+    public override BrowserNewContextOptions ContextOptions(TestContext testContext)
+    {
+        return new BrowserNewContextOptions { IgnoreHTTPSErrors = true };
     }
 
     public async ValueTask DisposeAsync()
