@@ -54,4 +54,13 @@ RUN PSQLDEF_ARCH="$(case "${TARGETARCH:-amd64}" in arm64) echo arm64;; *) echo a
 #     && tar -xzf "mssqldef_linux_${PSQLDEF_ARCH}.tar.gz" -C /usr/local/bin \
 #     && rm "mssqldef_linux_${PSQLDEF_ARCH}.tar.gz"
 
+# opencode web がブラウザ自動起動に使う xdg-open の no-op 版を用意する
+# (ヘッドレス環境では xdg-open が無く、起動時にエラーになるため)
+RUN printf '#!/bin/sh\nexit 0\n' > /usr/local/bin/xdg-open \
+    && chmod +x /usr/local/bin/xdg-open
+
+# code-server (ブラウザで動く VS Code) をインストールする
+# (Tailscale 経由で他端末からソースコードを閲覧・編集するため)
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
 # Node / Java / Azure CLI / Playwright は devcontainer.json の features で導入
