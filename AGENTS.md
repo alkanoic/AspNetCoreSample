@@ -95,6 +95,7 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 | `sqldef.sh` | mysqldef / psqldef / mssqldef による now schema 差分適用 |
 | `keycloak/*.sh`, `src/AspNetCoreSample.WebApi/keycloak.sh` | Keycloak token 取得などの動作確認 |
 | `localstack/command.sh` | LocalStack の S3/CF 動作確認 |
+| `worktree-session.sh` | セッションごとに git worktree（`../<name>/`、ブランチ `feat/<name>`）を作成し、その中で opencode を起動するラッパー。`--mode tui`（既定・TUI 起動）/ `server`（worktree のみ作成し web UI で開くパスを表示）/ `none`（worktree のみ作成）を指定可能 |
 | `src/CodeGen/*.sh`, `e2e/*.sh` | 各生成・E2E ワークフロー（各 SKILL.md 参照） |
 
 ## 監理・フォーマット・規約

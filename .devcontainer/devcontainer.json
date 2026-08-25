@@ -9,7 +9,8 @@
   "remoteUser": "vscode",
   "containerEnv": {
     "OLLAMA_API_KEY": "${localEnv:OLLAMA_API_KEY}",
-    "GITHUB_PERSONAL_ACCESS_TOKEN": "${localEnv:GITHUB_PERSONAL_ACCESS_TOKEN}"
+    "GITHUB_PERSONAL_ACCESS_TOKEN": "${localEnv:GITHUB_PERSONAL_ACCESS_TOKEN}",
+    "OPENCODE_SERVER_PASSWORD": "${localEnv:OPENCODE_SERVER_PASSWORD}"
   },
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
@@ -32,7 +33,9 @@
     7036,
     7079,
     7189,
-    5173
+    5173,
+    8088,
+    8089
   ],
   "customizations": {
     "vscode": {
