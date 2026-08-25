@@ -68,10 +68,43 @@ dotnet test tests/AspNetCoreSample.Mvc.Test               # Mvc 実行時検証�
 dotnet test tests/AspNetCoreSample.Mvc.Container.Test     # Docker ビルド + Mvc テスト
 ```
 
-- xunit v3（`xunit.v3`、`OutputType=Exe`、global `Using Xunit`）。`ValueTask` 使用。
-- `Microsoft.AspNetCore.Mvc.Testing`（`WebApplicationFactory`）+ `Testcontainers.PostgreSql` / `Testcontainers.Keycloak` での統合テスト。
+- TUnit（`TUnit` / `TUnit.Playwright`、`OutputType=Exe`、global `Using TUnit.Core` / `TUnit.Assertions`）。`[Test]` + `[Category]`、`await Assert.That(...)` 形式。アサーションは必ず `await` する（未 await は TUnitAssertions0002 でビルドエラー）。
+- `Microsoft.AspNetCore.Mvc.Testing`（`WebApplicationFactory`）+ `Testcontainers.PostgreSql` / `Testcontainers.Keycloak` での統合テスト。コンテナは `SharedTestContainers` で共有し、起動を 1 回に抑える。
 - WebApi テストでは **Verify（差分スナップショット）**使用。`.verified.txt` を変えたら `dotnet test`（自己検証すること）。差分更新は Verify の規約に従う。
 - ブラウザ系は `install-playwright.sh` で `dotnet build ... && playwright.ps1 install --with-deps` から実行。
+
+### テスト実行時の並列数（PC スペックに応じて決める）
+
+Testcontainers（Postgres / Keycloak）や Playwright は CPU・メモリを大きく消費するため、**実行前に PC のスペックを確認して並列数を決める**こと。スペック不足のまま並列実行するとフリーズ・タイムアウトの原因になる。
+
+- 確認コマンド: `nproc`（論理 CPU 数）、`free -h`（メモリ）、`grep -m1 "model name" /proc/cpuinfo`（CPU 種別）。
+- 目安（論理 CPU 数 `N`、空きメモリ `M`）:
+  - 十分な余裕（例: `N >= 8` かつ `M >= 8Gi`）: 既定の並列実行でよい。
+  - 余裕が少ない（例: `N < 8` または `M < 8Gi`）: 並列数を絞る。
+- 絞り方:
+  - TUnit は Microsoft.Testing.Platform 上で動くため、xUnit の `--filter` は使えない（`Zero tests ran` になる）。対象の絞り込みは `--treenode-filter` を使う（構文は下記）。
+  - 並列制御は `[NotInParallel]` / `[ParallelLimiter<T>]` / `[DependsOn]` 属性、および `tunit.runner.json`（`MaximumParallelTests` 等）で行う。
+  - コンテナ系テストは `--treenode-filter` で対象を絞る、またはテストクラス単位で直列化（`[NotInParallel]`）する。
+  - Playwright 系はブラウザ起動が重いため、`[NotInParallel]` で直列化するか、`MaximumParallelTests` を 1〜2 に抑える。
+- フリーズした場合は、まず `docker ps` でコンテナの多重起動がないか確認し、不要なコンテナを `docker rm -f` で破棄してから再実行する。
+
+### `--treenode-filter` の書き方
+
+TUnit は `dotnet test --filter` をサポートしない（フラグが無視され `Zero tests ran` になる）。代わりに `--treenode-filter` を使う。構文は `/<Assembly>/<Namespace>/<Class name>/<Test name>` の 4 セグメントで、`*` はワイルドカード。
+
+| 目的 | コマンド |
+| ---- | -------- |
+| クラス名で絞る | `dotnet test <proj> --treenode-filter "/*/*/NameControllerTest/*"` |
+| テスト名で絞る | `dotnet test <proj> --treenode-filter "/*/*/*/GetHomeIndexReturnsOk"` |
+| 名前空間で絞る | `dotnet test <proj> --treenode-filter "/*/AspNetCoreSample.Mvc.Test/*/*"` |
+| Category で絞る | `dotnet test <proj> --treenode-filter "/*/*/*/*[Category=MvcApiTest]"` |
+| 除外（`!=`） | `dotnet test <proj> --treenode-filter "/*/*/*/*[Category!=Slow]"` |
+| AND（`&`） | `dotnet test <proj> --treenode-filter "/*/*/*/*[(Category=Smoke)&(Priority=High)]"` |
+| OR（`\|`） | `dotnet test <proj> --treenode-filter "/*/*/(Class1)\|(Class2)/*"` |
+
+- プロパティ条件 `[...]` は 1 セグメントにつき 1 つまで。複数条件は `[(A=1)&(B=2)]` のように 1 つの括弧内にまとめる。
+- `**` は任意の深さに一致（パスの末尾のみ）。
+- テスト一覧の確認は `dotnet test <proj> --list-tests`。
 
 ## ローカル起動
 
