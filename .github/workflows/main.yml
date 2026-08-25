@@ -118,9 +118,19 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_DB_LOCATION }}
 
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
       - name: DbContainer Run tests
-        run: dotnet test --project DbContainer.Test.csproj --configuration Release --no-build --timeout 10m
+        run: dotnet test --project DbContainer.Test.csproj --configuration Release --no-build --timeout 10m --coverage --coverage-output dbcontainer.cobertura.xml --coverage-output-format cobertura
         working-directory: ${{ env.TESTS_DB_LOCATION }}
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-dbcontainer
+          path: ${{ env.TESTS_DB_LOCATION }}/dbcontainer.cobertura.xml
+          retention-days: 7
 
   webapi_test:
     runs-on: ubuntu-latest
@@ -137,9 +147,19 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
 
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
       - name: WebApi Run tests
-        run: dotnet test --project AspNetCoreSample.WebApi.Test.csproj --configuration Release --no-build --timeout 10m --maximum-parallel-tests 1
+        run: dotnet test --project AspNetCoreSample.WebApi.Test.csproj --configuration Release --no-build --timeout 10m --maximum-parallel-tests 1 --coverage --coverage-output webapi.cobertura.xml --coverage-output-format cobertura
         working-directory: ${{ env.TESTS_WEBAPI_LOCATION }}
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-webapi
+          path: ${{ env.TESTS_WEBAPI_LOCATION }}/webapi.cobertura.xml
+          retention-days: 7
 
   mvc_test:
     runs-on: ubuntu-latest
@@ -156,9 +176,19 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
 
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
       - name: Mvc Run tests
-        run: dotnet test --project AspNetCoreSample.Mvc.Test.csproj --configuration Release --no-build --timeout 10m --treenode-filter "/*/*/*/*[Category=MvcApiTest]"
+        run: dotnet test --project AspNetCoreSample.Mvc.Test.csproj --configuration Release --no-build --timeout 10m --treenode-filter "/*/*/*/*[Category=MvcApiTest]" --coverage --coverage-output mvc.cobertura.xml --coverage-output-format cobertura
         working-directory: ${{ env.TESTS_MVC_LOCATION }}
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-mvc
+          path: ${{ env.TESTS_MVC_LOCATION }}/mvc.cobertura.xml
+          retention-days: 7
 
   playwright_test:
     runs-on: ubuntu-latest
@@ -215,9 +245,19 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_GRPC_LOCATION }}
 
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
       - name: Grpc Run tests
-        run: dotnet test --project AspNetCoreSample.Grpc.Test.csproj --configuration Release --no-build --timeout 10m
+        run: dotnet test --project AspNetCoreSample.Grpc.Test.csproj --configuration Release --no-build --timeout 10m --coverage --coverage-output grpc.cobertura.xml --coverage-output-format cobertura
         working-directory: ${{ env.TESTS_GRPC_LOCATION }}
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-grpc
+          path: ${{ env.TESTS_GRPC_LOCATION }}/grpc.cobertura.xml
+          retention-days: 7
 
   datamodel_test:
     runs-on: ubuntu-latest
@@ -234,9 +274,19 @@ jobs:
         run: dotnet build --configuration Release --framework net10.0
         working-directory: ${{ env.TESTS_DATAMODEL_LOCATION }}
 
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
       - name: DataModel Run tests
-        run: dotnet test --project AspNetCoreSample.DataModel.Test.csproj --configuration Release --no-build --timeout 10m
+        run: dotnet test --project AspNetCoreSample.DataModel.Test.csproj --configuration Release --no-build --timeout 10m --coverage --coverage-output datamodel.cobertura.xml --coverage-output-format cobertura
         working-directory: ${{ env.TESTS_DATAMODEL_LOCATION }}
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-datamodel
+          path: ${{ env.TESTS_DATAMODEL_LOCATION }}/datamodel.cobertura.xml
+          retention-days: 7
 
   coverage_report:
     runs-on: ubuntu-latest
@@ -251,14 +301,27 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Restore dotnet tools
+        run: dotnet tool restore
+
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v6
+        with:
+          path: coverage
+          pattern: coverage-*
+          merge-multiple: true
+
+      - name: Merge coverage reports
+        run: |
+          mkdir -p coveragereport
+          dotnet tool run dotnet-coverage -- merge coverage/*.cobertura.xml -o coveragereport/merged.cobertura.xml -f cobertura
+
       - name: Install ReportGenerator
         run: dotnet tool install --global dotnet-reportgenerator-globaltool --version 5.5.11
 
-      - name: Generate empty coverage report
+      - name: Generate coverage report
         run: |
-          mkdir -p coveragereport
-          echo "# Coverage Report" > coveragereport/SummaryGithub.md
-          echo "Coverage collection is disabled after migrating to TUnit / Microsoft.Testing.Platform." >> coveragereport/SummaryGithub.md
+          reportgenerator -reports:coveragereport/merged.cobertura.xml -targetdir:coveragereport -reporttypes:MarkdownSummaryGithub
 
       - name: Upload coverage report artifact
         uses: actions/upload-artifact@v6

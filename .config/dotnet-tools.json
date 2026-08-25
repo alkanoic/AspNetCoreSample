@@ -50,6 +50,13 @@
         "dotnet-CycloneDX"
       ],
       "rollForward": false
+    },
+    "dotnet-coverage": {
+      "version": "18.10.0",
+      "commands": [
+        "dotnet-coverage"
+      ],
+      "rollForward": false
     }
   }
 }
