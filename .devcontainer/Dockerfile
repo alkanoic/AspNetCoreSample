@@ -27,6 +27,15 @@ RUN wget -q -O - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg 
     && apt-get update \
     && apt-get install -y trivy
 
+# Google Chrome (起動中の Chrome に接続する Playwright テスト用)
+# devcontainer 内でヘッドレス起動し、connectOverCDP で接続する (e2e/playwright-usage.md 参照)
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
+    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
+        > /etc/apt/sources.list.d/google-chrome.list \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # protoc-gen-grpc-web (マルチアーキ)
 RUN GRPC_WEB_ARCH="$(case "${TARGETARCH:-amd64}" in arm64) echo aarch64;; *) echo x86_64;; esac)" \
     && wget -q "https://github.com/grpc/grpc-web/releases/download/1.5.0/protoc-gen-grpc-web-1.5.0-linux-${GRPC_WEB_ARCH}" \
