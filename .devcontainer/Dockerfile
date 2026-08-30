@@ -7,33 +7,43 @@ ARG TARGETARCH
 
 # 基本 CLI と DB クライアント
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
-        gnupg \
-        iputils-ping \
-        mysql-client \
-        postgresql-client \
-        protobuf-compiler \
-        python3 \
-        python3-pip \
-        python3-venv \
-        wget \
+    ca-certificates \
+    curl \
+    gnupg \
+    iputils-ping \
+    mysql-client \
+    postgresql-client \
+    protobuf-compiler \
+    python3 \
+    python3-pip \
+    python3-venv \
+    wget \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # trivy (vulnerability scanner) - signed 方式でインストール
 RUN wget -q -O - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor -o /usr/share/keyrings/trivy.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" \
-        > /etc/apt/sources.list.d/trivy.list \
+    > /etc/apt/sources.list.d/trivy.list \
     && apt-get update \
     && apt-get install -y trivy
 
 # Google Chrome (起動中の Chrome に接続する Playwright テスト用)
 # devcontainer 内でヘッドレス起動し、connectOverCDP で接続する (e2e/playwright-usage.md 参照)
+# あわせて Windows 相当の表示にするための日本語フォント・描画ライブラリを導入する
 RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
-        > /etc/apt/sources.list.d/google-chrome.list \
+    > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
     && apt-get install -y google-chrome-stable \
+    fonts-noto-cjk \
+    fonts-ipafont-gothic \
+    fonts-ipafont-mincho \
+    fonts-vlgothic \
+    fonts-takao \
+    fonts-liberation \
+    fonts-dejavu \
+    fontconfig \
+    && fc-cache -fv \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # protoc-gen-grpc-web (マルチアーキ)

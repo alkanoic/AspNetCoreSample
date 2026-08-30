@@ -1,4 +1,4 @@
-import { test, expect, chromium } from "@playwright/test";
+import { test, expect, chromium, type BrowserContext } from "@playwright/test";
 
 /**
  * 起動中の Chrome に接続してテストを実行するサンプル。
@@ -12,11 +12,30 @@ import { test, expect, chromium } from "@playwright/test";
  *   npx playwright test connect-chrome.spec.ts
  *   CDP_ENDPOINT=http://172.17.160.1:9223 npx playwright test connect-chrome.spec.ts
  */
-test("起動中の Chrome に接続して Google を表示する", async () => {
-  const endpoint = process.env.CDP_ENDPOINT ?? "http://localhost:9222";
-  const browser = await chromium.connectOverCDP(endpoint);
 
-  const context = browser.contexts()[0];
+/**
+ * Chrome に接続する。既にデバッグポート 9222 で起動していれば接続し、
+ * 起動していなければデバッグポート付きで Chrome を起動してから接続する。
+ */
+async function launchAndConnect(): Promise<BrowserContext> {
+  const endpoint = process.env.CDP_ENDPOINT ?? "http://localhost:9222";
+
+  try {
+    const browser = await chromium.connectOverCDP(endpoint);
+    return browser.contexts()[0];
+  } catch {
+    // 起動していない場合は、デバッグポート付きで Chrome を起動する
+    const userDataDir = `${process.env.TEMP ?? "/tmp"}\\chrome-debug-profile`;
+    return await chromium.launchPersistentContext(userDataDir, {
+      channel: "chrome",
+      headless: false,
+      args: ["--remote-debugging-port=9222"],
+    });
+  }
+}
+
+test("起動中の Chrome に接続して Google を表示する", async () => {
+  const context = await launchAndConnect();
   const page = context.pages()[0] ?? (await context.newPage());
 
   await page.goto("https://www.google.com/");
