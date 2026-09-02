@@ -18,9 +18,9 @@
 1. デスクトップなどで右クリック → **新規作成 → ショートカット**
 2. 「項目の場所」に以下を指定:
 
-```
-"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="%TEMP%\chrome-debug-profile"
-```
+   ```
+   "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="%TEMP%\chrome-debug-profile"
+   ```
 
 3. 名前を付けて完了。以後このショートカットから起動すれば、常にポート 9222 が開いた状態になる。
 4. 初回起動時は Chrome のサインイン画面が表示される。テスト用プロファイルなので Google アカウントにログインせず、**「ログアウト状態を保持する」**を選択する。
@@ -78,7 +78,7 @@ WSL2 には **localhost 転送**が備わっており、WSL2 内の `localhost` 
 const browser = await chromium.connectOverCDP("http://localhost:9222");
 ```
 
-- Chrome 152 以降は `--remote-debugging-address=0.0.0.0` が廃止され、デバッグポートは常に `127.0.0.1` にバインドされる。しかし WSL2 の localhost 転送を使えば、接続元がループバックに見えるため問題にならない。
+- Chrome 152 以降は `--remote-debugging-address=0.0.0.0` が廃止され、デバッグポートは常に `127.0.0.1` へバインドされる。しかし WSL2 の localhost 転送を使えば、接続元がループバックに見えるため問題は起きない。
 - `netsh portproxy` は不要（むしろ `Host` ヘッダーを書き換えないため Chrome 152 では失敗する）。
 
 ### 2-3. テストを実行する
@@ -92,7 +92,7 @@ npx playwright test --config playwright.connect.config.ts
 
 ### 2-4. localhost 転送が効かない場合（Tailscale 等）
 
-Tailscale などの VPN が入っていると、WSL2 の localhost 転送が無効になり `localhost:9222` が届かないことがある。
+Tailscale などの VPN が入っていると、WSL2 の localhost 転送が無効になり `localhost:9222` へ届かないことがある。
 その場合は「4. devcontainer 内で実行し、Windows で起動中の Chrome に接続する」と同じく、**Windows 直上にリバースプロキシを立てる**方式を使う。
 
 ```powershell
@@ -159,7 +159,7 @@ npx playwright install --with-deps
 
 #### 3-4-2. 日本語フォント（Windows 相当の表示にするため）
 
-Windows の既定フォント（MS ゴシック / メイリオ / Yu Gothic）に近い表示にするため、日本語フォントを導入する。
+Windows の既定フォント（MS ゴシック / メイリオ / Yu Gothic）へ近い表示にするため、日本語フォントを導入する。
 
 ```bash
 sudo apt-get update
@@ -183,7 +183,7 @@ sudo apt-get install -y \
   fontconfig
 ```
 
-- `fonts-liberation` は Arial / Times New Roman などのメトリクス互換フォントで、Windows の標準フォントに近い幅になる。
+- `fonts-liberation` は Arial / Times New Roman などのメトリクス互換フォントで、Windows の標準フォントへ近い幅になる。
 - `fontconfig` はフォント解決の設定。導入後 `fc-cache -fv` でキャッシュを更新する。
 
 #### 3-4-4. フォントキャッシュの更新
@@ -211,7 +211,7 @@ devcontainer はヘッドレスの Linux コンテナ（Ubuntu noble ベース�
 Chrome 152 以降、デバッグポートは常に `127.0.0.1` にバインドされ、`--remote-debugging-address=0.0.0.0` は廃止された。
 さらに DevTools の HTTP エンドポイントは **DNS リバインディング対策**として、リクエストの `Host` ヘッダーが `localhost` / `127.0.0.1` 以外だと黙って切断する。
 
-devcontainer は Docker Desktop（WSL2 バックエンド）上の 2 段 NAT の内側にいるため、Windows の Chrome に届くには IP（`172.17.160.1` など）を指定するしかなく、その時点で `Host` ヘッダーが IP になり Chrome に拒否される。
+devcontainer は Docker Desktop（WSL2 バックエンド）上の 2 段 NAT の内側にいるため、Windows の Chrome へ届くには IP（`172.17.160.1` など）を指定するしかなく、その時点で `Host` ヘッダーが IP へ変わり Chrome に拒否される。
 
 `netsh portproxy` は TCP をそのまま転送するだけで `Host` ヘッダーを書き換えないため、この問題を解決できない。
 また、WSL2 の localhost 転送（mirrored networking）も、この環境では Tailscale の影響で無効になっており使えない。
@@ -248,7 +248,7 @@ npm init -y
 npm install http-proxy
 ```
 
-`chrome-proxy.js` を作成する:
+`chrome-proxy.js` を作成する。
 
 ```js
 const httpProxy = require("http-proxy");
@@ -294,7 +294,7 @@ proxy.listen(9223, "0.0.0.0");
 console.log("Chrome proxy listening on 0.0.0.0:9223");
 ```
 
-起動する:
+起動する。
 
 ```powershell
 node chrome-proxy.js
@@ -408,7 +408,7 @@ fc-cache -fv
 | ③ Mailpit でメール受信      | テスト用 SMTP でコードを受信                   | メール確認を自動化する場合       |
 | ④ 手入力 + セッション再利用 | 2FA だけ人間が入力し、以後はセッションを再利用 | **既存サイトで最も現実的**       |
 
-既存サイトでは ②③ が使えないことが多いため、**④（手入力 + セッション再利用）**を基本とする。
+既存サイトでは ②③ を使えないことが多いため、**④（手入力 + セッション再利用）**を基本とする。
 
 ### 6-2. 手入力 + セッション再利用（推奨）
 
@@ -476,7 +476,7 @@ test("保存したセッションでログイン済み状態を確認する", as
 - 2回目以降は `auth.json` を再利用するため、2FA を毎回通す必要がない。
 - セッションが切れたら `auth.json` を削除して再生成する。
 
-実行方法:
+実行方法。
 
 ```bash
 # 初回（2FA を手入力してセッション保存）
@@ -563,7 +563,7 @@ async function main() {
 main();
 ```
 
-使い方:
+使い方。
 
 ```bash
 npx tsx aria-snapshot.ts            # 現在のタブを解析
@@ -572,7 +572,7 @@ npx tsx aria-snapshot.ts <URL>      # 指定 URL を開いて解析
 
 - `ariaSnapshot()` は Playwright 1.49+ の機能。
 - 出力は role / name / 階層のみの YAML で、HTML 全体より大幅に小さい。`getByRole` ベースのコード生成に最適。
-- 生の CDP `Accessibility.getFullAXTree` は `none` / `generic` / `StaticText` などのノイズが多く、`ariaSnapshot()` の方がトークン効率が良い。
+- 生の CDP `Accessibility.getFullAXTree` は `none` / `generic` / `StaticText` などのノイズが多く、`ariaSnapshot()` の方がトークン効率に優れる。
 
 ### 7-2. 協業ワークフロー（1ページごと）
 
@@ -709,4 +709,4 @@ expect(results.violations).toEqual([]);
 
 - 接続先 Chrome のバージョンと Playwright のバージョンが大きく離れていると、CDP の互換性で失敗することがある。その場合は Playwright を更新するか、Chrome のバージョンを合わせる。
 - スナップショット比較は **ブラウザ・OS ごとに描画が微妙に異なる**ため、CI とローカルで OS を揃えるか、`--update-snapshots` で環境ごとに更新する運用を推奨する。
-- 既存の実行スクリプト（`execute-test.sh` / `headed-test.sh` / `codegen.sh` など）は Playwright 管理ブラウザを使う。起動中 Chrome への接続は上記の `connectOverCDP` を spec 内に書く形になる。
+- 既存の実行スクリプト（`execute-test.sh` / `headed-test.sh` / `codegen.sh` など）は Playwright 管理ブラウザを使う。起動中 Chrome への接続は上記の `connectOverCDP` を spec 内へ書く形になる。
