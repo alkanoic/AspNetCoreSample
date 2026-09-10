@@ -64,6 +64,7 @@ try
 
     var keycloakOptions = builder.Configuration.GetSection(KeycloakOptions.Position).Get<KeycloakOptions>()
                           ?? new KeycloakOptions();
+    builder.Services.Configure<KeycloakOptions>(builder.Configuration.GetSection(KeycloakOptions.Position));
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

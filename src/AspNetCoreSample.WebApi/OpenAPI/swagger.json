@@ -214,7 +214,7 @@
         "tags": [
           "Keycloak"
         ],
-        "summary": "ユーザーを作成する",
+        "summary": "ユーザーを作成する（認証済みユーザー用）",
         "operationId": "Keycloak_CreateUser",
         "parameters": [
           {
@@ -267,6 +267,61 @@
             "JWT": []
           }
         ]
+      }
+    },
+    "/api/Keycloak/CreateUserAdmin": {
+      "post": {
+        "tags": [
+          "Keycloak"
+        ],
+        "summary": "ユーザーを作成する（管理者権限で実行・認証不要）",
+        "operationId": "Keycloak_CreateUserAdmin",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": true,
+            "description": "Language preference for the response.",
+            "schema": {
+              "type": "string",
+              "items": {
+                "type": "string"
+              },
+              "enum": [
+                "ja-JP",
+                "en-US"
+              ]
+            },
+            "default": "ja-JP",
+            "nullable": true
+          }
+        ],
+        "requestBody": {
+          "x-name": "input",
+          "description": "ユーザー情報",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserInput"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Keycloak/UpdateUser": {

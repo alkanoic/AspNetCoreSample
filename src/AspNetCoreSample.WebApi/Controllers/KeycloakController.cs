@@ -109,7 +109,7 @@ public class KeycloakController(ILogger<KeycloakController> logger,
     }
 
     /// <summary>
-    /// ユーザーを作成する
+    /// ユーザーを作成する（認証済みユーザー用）
     /// </summary>
     /// <param name="input">ユーザー情報</param>
     /// <param name="ct">CancellationToken</param>
@@ -129,6 +129,34 @@ public class KeycloakController(ILogger<KeycloakController> logger,
                 Attributes = input.Attributes
             };
             var response = await _keycloakService.CreateUserAsync(request, ct);
+            return Ok(response);
+        });
+    }
+
+    /// <summary>
+    /// ユーザーを作成する（管理者権限で実行・認証不要）
+    /// </summary>
+    /// <param name="input">ユーザー情報</param>
+    /// <param name="ct">CancellationToken</param>
+    [AllowAnonymous]
+    [HttpPost("CreateUserAdmin")]
+    public async ValueTask<IActionResult> CreateUserAdmin(CreateUserInput input, CancellationToken ct)
+    {
+        return await CommonValidationResponse(input, _createUserInputValidator, async () =>
+        {
+            var request = new CreateUserRequest()
+            {
+                Username = input.Username,
+                FirstName = input.FirstName,
+                LastName = input.LastName,
+                Email = input.Email,
+                Enabled = true,
+                Credentials = new List<Credential> { new(input.Password) },
+                Attributes = input.Attributes
+            };
+            // 管理者トークンを取得してユーザー作成
+            var adminToken = await _keycloakService.GetAdminAccessTokenAsync(ct);
+            var response = await _keycloakService.CreateUserWithTokenAsync(request, adminToken.AccessToken, ct);
             return Ok(response);
         });
     }

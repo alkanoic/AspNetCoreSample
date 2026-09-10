@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Keycloak User Creation";
+    var uniqueSuffix = DateTime.Now.Ticks.ToString();
+    var defaultUsername = $"testuser_{uniqueSuffix}";
+    var defaultEmail = $"testuser_{uniqueSuffix}@example.com";
+}
+
+<div class="text-center mb-4">
+    <h1 class="display-4">Keycloak User Creation & Login</h1>
+    <p class="lead">Create a new user in Keycloak and log in as that user (server-side)</p>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error:</strong> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Create & Login</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" asp-action="CreateAndLogin" id="createUserForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" value="@defaultUsername" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" value="Test" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" value="User" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="@defaultEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" value="Password123!" required minlength="8">
+                        <div class="form-text">Minimum 8 characters</div>
+                    </div>
+                    <button type="submit" id="createUserBtn" class="btn btn-primary btn-lg w-100" disabled>
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        <span class="btn-text">Create User & Login</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const form = document.getElementById('createUserForm');
+            const btn = document.getElementById('createUserBtn');
+            const btnText = btn.querySelector('.btn-text');
+            const spinner = btn.querySelector('.spinner-border');
+
+            // Enable button when all fields are filled
+            const inputs = form.querySelectorAll('input[required]');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    const allFilled = Array.from(inputs).every(i => i.value.trim() !== '');
+                    btn.disabled = !allFilled;
+                });
+            });
+
+            // Show loading state on submit
+            form.addEventListener('submit', function () {
+                btn.disabled = true;
+                btnText.textContent = 'Creating user and logging in...';
+                spinner.classList.remove('d-none');
+            });
+        })();
+    </script>
+}
