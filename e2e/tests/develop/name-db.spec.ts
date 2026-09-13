@@ -37,7 +37,20 @@ test('name db create test', async ({ page }, testinfo) => {
   });
   expect(create_name.name).toBe(input_name);
 
+  // Edit flow
   await page.getByRole('link', { name: 'Back to List' }).click();
+  await page.getByRole('link', { name: 'Edit' }).nth(3).click();
+  const edit_name = 'edited-bbb';
+  await page.getByLabel('Name1').fill(edit_name);
+  await page.getByRole('button', { name: 'Save' }).click();
+
+  const edited_name = await prisma.name.findUnique({
+    where: {
+      id: create_id,
+    },
+  });
+  expect(edited_name.name).toBe(edit_name);
+
   await page.getByRole('link', { name: 'Delete' }).nth(3).click();
   await page.getByRole('button', { name: 'Delete' }).click();
   await expect(page).toHaveScreenshot('name-6.png');
