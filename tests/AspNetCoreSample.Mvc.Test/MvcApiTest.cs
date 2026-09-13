@@ -7,7 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class MvcApiTest : IClassFixture<WebApplicationFactoryFixture<Program>>, IDisposable
+[Collection(nameof(MvcTestFixtures))]
+public sealed class MvcApiTest : IDisposable
 {
     private readonly WebApplicationFactoryFixture<Program> _factory;
     private readonly HttpClient _httpClient;

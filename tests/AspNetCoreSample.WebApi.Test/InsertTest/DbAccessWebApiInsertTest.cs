@@ -46,4 +46,19 @@ public sealed class DbAccessWebApiInsertTest : IClassFixture<WebApplicationFacto
         // Then
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
+
+    [Fact]
+    [Trait("Category", nameof(DbAccessWebApiInsertTest))]
+    public async Task PostDbAccessWithEmptyNameReturnsBadRequest()
+    {
+        // Given
+        const string path = "api/dbaccess";
+
+        // When
+        var content = new StringContent(JsonSerializer.Serialize(new Name() { Id = 0, Name1 = "" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync(new Uri(new Uri(_webApplicationFactoryFixture.HostUrl), path), content, TestContext.Current.CancellationToken);
+
+        // Then
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }

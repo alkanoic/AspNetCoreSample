@@ -2,7 +2,8 @@ using Microsoft.Playwright;
 
 namespace AspNetCoreSample.Mvc.Test;
 
-public sealed class MvcInProcessTest3 : IClassFixture<WebApplicationFactoryFixture<Program>>
+[Collection(nameof(MvcTestFixtures))]
+public sealed class MvcInProcessTest3
 {
     private readonly WebApplicationFactoryFixture<Program> _factory;
 
