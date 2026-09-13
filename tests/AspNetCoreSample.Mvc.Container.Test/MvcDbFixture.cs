@@ -35,8 +35,7 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
     {
         _network = new NetworkBuilder().Build();
 
-        _postgresqlContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:latest")
+        _postgresqlContainer = new PostgreSqlBuilder("postgres:latest")
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("POSTGRES_INITDB_ARGS", "--encoding=UTF-8")
@@ -44,16 +43,15 @@ public sealed class MvcDbFixture : HttpClient, IAsyncLifetime
             .WithNetworkAliases(nameof(_postgresqlContainer))
             .Build();
 
-        _mvcContainer = new ContainerBuilder()
+        _mvcContainer = new ContainerBuilder(_mvcImage)
             // .DependsOn(_mySqlContainer)
-            .WithImage(_mvcImage)
             .WithNetwork(_network)
             .WithPortBinding(MvcImage.HttpsPort, true)
             .WithEnvironment("ASPNETCORE_URLS", "https://+")
             .WithEnvironment("ASPNETCORE_Kestrel__Certificates__Default__Path", MvcImage.CertificateFilePath)
             .WithEnvironment("ASPNETCORE_Kestrel__Certificates__Default__Password", MvcImage.CertificatePassword)
             .WithEnvironment("ConnectionStrings__DefaultConnection", DbConnectionString)
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(MvcImage.HttpsPort))
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(MvcImage.HttpsPort))
             .Build();
     }
 

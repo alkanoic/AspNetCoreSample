@@ -67,6 +67,8 @@ public sealed class MvcImage : IImage, IAsyncLifetime, IDisposable
 
     public string Digest => _image.Digest;
 
+    public string Platform => _image.Platform;
+
     public string GetHostname()
     {
         return _image.GetHostname();
