@@ -1,0 +1,3 @@
+# 設計項目モデル (model/) の生成・検証。mkdocs 本体には依存しない。
+PyYAML>=6.0
+jsonschema>=4.18

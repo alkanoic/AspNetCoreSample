@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/entity.schema.json",
+  "title": "設計項目: エンティティ",
+  "description": "model/entities/*.yml の形式。項目定義の Single Source of Truth。",
+  "type": "object",
+  "required": ["kind", "id", "title", "fields"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": { "const": "entity" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "項目の一意な識別子"
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "table": { "type": "string", "description": "物理テーブル名" },
+    "owner": { "type": "string" },
+    "description": { "type": "string" },
+    "key": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "主キーを構成するフィールド名"
+    },
+    "fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/field" }
+    },
+    "relations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/relation" }
+    },
+    "emits": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "このエンティティが発行する意図イベントの id 一覧"
+    },
+    "auto_events": {
+      "type": "array",
+      "items": { "enum": ["created", "updated", "deleted"] },
+      "uniqueItems": true,
+      "description": "項目定義から自動生成する状態変化イベント"
+    }
+  },
+  "$defs": {
+    "field": {
+      "type": "object",
+      "required": ["name", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "column": { "type": "string" },
+        "type": {
+          "enum": ["integer", "string", "decimal", "date", "boolean", "datetime"]
+        },
+        "required": { "type": "boolean" },
+        "key": { "type": "boolean" },
+        "max_length": { "type": "integer", "minimum": 1 },
+        "description": { "type": "string" }
+      }
+    },
+    "relation": {
+      "type": "object",
+      "required": ["id", "type", "target", "inverse"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "type": {
+          "enum": ["has-one", "has-many", "belongs-to", "many-to-many", "references"]
+        },
+        "target": { "type": "string" },
+        "inverse": { "type": "string", "description": "相手側の関係 id" },
+        "foreign_key": { "type": "string" },
+        "required": { "type": "boolean" }
+      }
+    }
+  }
+}

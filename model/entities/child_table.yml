@@ -1,0 +1,26 @@
+kind: entity
+id: child_table
+title: 子テーブル
+table: child_table
+owner: team-sample
+description: 親子関係の子テーブル。
+key:
+  - id
+auto_events:
+  - created
+  - updated
+  - deleted
+fields:
+  - { name: id, column: id, type: integer, key: true, required: true, description: 子テーブルId }
+  - { name: parent_id, column: parent_id, type: integer, required: true, description: 親テーブルid }
+  - { name: child_name, column: child_name, type: string, required: true, max_length: 30, description: 子テーブル要素名 }
+  - { name: child_int, column: child_int, type: integer, description: 子テーブルint型 }
+  - { name: child_decimal, column: child_decimal, type: decimal, description: 子テーブルdeimal型 }
+  - { name: child_date, column: child_date, type: date, description: 子テーブルDate型 }
+  - { name: child_bit, column: child_bit, type: boolean, description: 子テーブルbit型 }
+  - { name: create_at, column: create_at, type: datetime, required: true, description: 作成日時 }
+  - { name: create_user, column: create_user, type: string, required: true, max_length: 20, description: 作成ユーザー }
+  - { name: update_at, column: update_at, type: datetime, required: true, description: 更新日時 }
+  - { name: update_user, column: update_user, type: string, required: true, max_length: 20, description: 更新ユーザー }
+relations:
+  - { id: parent, type: belongs-to, target: parent_table, inverse: children, foreign_key: parent_id, required: true }

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/generated/events/name.deleted.json",
+  "title": "name.deleted",
+  "description": "",
+  "type": "object",
+  "required": [
+    "specversion",
+    "type",
+    "source",
+    "id",
+    "time",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "const": "1.0"
+    },
+    "type": {
+      "const": "name.deleted"
+    },
+    "source": {
+      "const": "entity:name"
+    },
+    "id": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

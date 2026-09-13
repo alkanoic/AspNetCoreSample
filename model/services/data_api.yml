@@ -1,0 +1,24 @@
+kind: service
+id: data_api
+title: データ API
+owner: team-sample
+description: DbAccessController が提供する CRUD API。
+produces:
+  - sample_table.created
+  - sample_table.updated
+  - sample_table.deleted
+  - multi_table.created
+  - multi_table.updated
+  - multi_table.deleted
+  - name.created
+  - name.updated
+  - name.deleted
+  - enum_sample.created
+  - enum_sample.updated
+  - enum_sample.deleted
+  - parent_table.created
+  - parent_table.updated
+  - parent_table.deleted
+  - child_table.created
+  - child_table.updated
+  - child_table.deleted

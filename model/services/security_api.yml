@@ -1,0 +1,11 @@
+kind: service
+id: security_api
+title: セキュリティ管理 API
+owner: team-security
+description: KeycloakController が提供する認可ポリシー管理 API。
+produces:
+  - policy.created
+  - policy.deleted
+  - role_policy.created
+  - role_policy.deleted
+  - role_policy.granted

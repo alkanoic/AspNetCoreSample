@@ -1,0 +1,9 @@
+kind: service
+id: audit_sink
+title: 監査シンク
+owner: team-security
+description: 認可ポリシーの変更を購読して監査ログへ記録する。
+consumes:
+  - policy.created
+  - policy.deleted
+  - role_policy.granted

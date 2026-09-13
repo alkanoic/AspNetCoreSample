@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/generated/events/sample_table.deleted.json",
+  "title": "sample_table.deleted",
+  "description": "",
+  "type": "object",
+  "required": [
+    "specversion",
+    "type",
+    "source",
+    "id",
+    "time",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "const": "1.0"
+    },
+    "type": {
+      "const": "sample_table.deleted"
+    },
+    "source": {
+      "const": "entity:sample_table"
+    },
+    "id": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+}

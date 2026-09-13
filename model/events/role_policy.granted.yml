@@ -1,0 +1,13 @@
+kind: event
+id: role_policy.granted
+title: ロールにポリシーを付与
+source: role_policy
+trigger: command.grant_role_policy
+description: ロールにポリシーが割り当てられたことを示す意図イベント。
+data_fields:
+  - role_name
+  - policy_name
+producers:
+  - security_api
+consumers:
+  - audit_sink

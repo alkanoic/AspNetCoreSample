@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/service.schema.json",
+  "title": "設計項目: サービス",
+  "description": "model/services/*.yml の形式。イベントの producer/consumer を宣言する。",
+  "type": "object",
+  "required": ["kind", "id", "title"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": { "const": "service" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "title": { "type": "string", "minLength": 1 },
+    "owner": { "type": "string" },
+    "description": { "type": "string" },
+    "produces": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "このサービスが発行するイベント id 一覧"
+    },
+    "consumes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "このサービスが購読するイベント id 一覧"
+    }
+  }
+}

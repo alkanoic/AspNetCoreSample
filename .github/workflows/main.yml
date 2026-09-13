@@ -103,6 +103,17 @@ jobs:
             echo "no changed markdown files"
           fi
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Model check (design items graph / events / drift)
+        run: |
+          pip install -r tools/modelgen/requirements.txt
+          PYTHONPATH=tools/modelgen python -m unittest discover -s tools/modelgen/tests
+          tools/modelgen/run.sh check --strict
+
   dbcontainer_test:
     runs-on: ubuntu-latest
 

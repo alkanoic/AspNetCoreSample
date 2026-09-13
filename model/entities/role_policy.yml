@@ -1,0 +1,19 @@
+kind: entity
+id: role_policy
+title: ロール・ポリシー割当
+table: role_policies
+owner: team-security
+description: ロールとポリシーのマッピング。
+key:
+  - role_name
+  - policy_name
+emits:
+  - role_policy.granted
+auto_events:
+  - created
+  - deleted
+fields:
+  - { name: role_name, column: role_name, type: string, key: true, required: true, max_length: 255, description: ロール名 }
+  - { name: policy_name, column: policy_name, type: string, key: true, required: true, max_length: 255, description: ポリシー名 }
+relations:
+  - { id: policy, type: belongs-to, target: policy, inverse: role_policies, foreign_key: policy_name, required: true }

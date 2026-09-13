@@ -1,0 +1,15 @@
+kind: entity
+id: name
+title: 名前
+table: name
+owner: team-sample
+description: 簡易な名前エンティティ。
+key:
+  - id
+auto_events:
+  - created
+  - updated
+  - deleted
+fields:
+  - { name: id, column: id, type: integer, key: true, required: true, description: id }
+  - { name: name1, column: name, type: string, required: true, description: 名前列 }

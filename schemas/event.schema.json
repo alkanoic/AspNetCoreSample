@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/event.schema.json",
+  "title": "設計項目: イベント",
+  "description": "model/events/*.yml の形式。項目定義から生成されるイベントと、手書きの意図イベントを表す。",
+  "type": "object",
+  "required": ["kind", "id", "source", "trigger"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": { "const": "event" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_.]*$" },
+    "title": { "type": "string" },
+    "source": { "type": "string", "description": "発生元エンティティの id" },
+    "trigger": { "type": "string", "description": "生成/発生の契機" },
+    "description": { "type": "string" },
+    "data_fields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "payload に含めるフィールド名 (source エンティティの fields を参照)"
+    },
+    "producers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "発行するサービス id (service.produces と双方向で一致する必要がある)"
+    },
+    "consumers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "description": "購読するサービス id (service.consumes と双方向で一致する必要がある)"
+    }
+  }
+}

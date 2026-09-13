@@ -1,0 +1,15 @@
+kind: entity
+id: policy
+title: ポリシー
+table: policies
+owner: team-security
+description: 認可ポリシー名。
+key:
+  - policy_name
+auto_events:
+  - created
+  - deleted
+fields:
+  - { name: policy_name, column: policy_name, type: string, key: true, required: true, max_length: 255, description: ポリシー名 }
+relations:
+  - { id: role_policies, type: has-many, target: role_policy, inverse: policy, foreign_key: policy_name }

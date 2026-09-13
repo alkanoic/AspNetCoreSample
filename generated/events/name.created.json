@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/generated/events/name.created.json",
+  "title": "name.created",
+  "description": "",
+  "type": "object",
+  "required": [
+    "specversion",
+    "type",
+    "source",
+    "id",
+    "time",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "const": "1.0"
+    },
+    "type": {
+      "const": "name.created"
+    },
+    "source": {
+      "const": "entity:name"
+    },
+    "id": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "id"
+        },
+        "name1": {
+          "type": "string",
+          "description": "名前列"
+        }
+      },
+      "required": [
+        "id",
+        "name1"
+      ]
+    }
+  }
+}

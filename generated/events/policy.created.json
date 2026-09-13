@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/generated/events/policy.created.json",
+  "title": "policy.created",
+  "description": "",
+  "type": "object",
+  "required": [
+    "specversion",
+    "type",
+    "source",
+    "id",
+    "time",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "const": "1.0"
+    },
+    "type": {
+      "const": "policy.created"
+    },
+    "source": {
+      "const": "entity:policy"
+    },
+    "id": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "policy_name": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "ポリシー名"
+        }
+      },
+      "required": [
+        "policy_name"
+      ]
+    }
+  }
+}

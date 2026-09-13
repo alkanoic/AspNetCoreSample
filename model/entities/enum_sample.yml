@@ -1,0 +1,15 @@
+kind: entity
+id: enum_sample
+title: Enum サンプル
+table: enum_sample
+owner: team-sample
+description: Enum カラムのデモ。
+key:
+  - id
+auto_events:
+  - created
+  - updated
+  - deleted
+fields:
+  - { name: id, column: id, type: integer, key: true, required: true, description: id }
+  - { name: enum_column, column: enum_column, type: integer, required: true, description: Enum列 }

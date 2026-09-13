@@ -1,0 +1,354 @@
+asyncapi: 3.0.0
+info:
+  title: AspNetCoreSample 設計項目イベント
+  version: 1.0.0
+  description: 項目モデルから自動生成。手編集禁止 (tools/modelgen generate)。
+channels:
+  child_table.created:
+    address: child_table.created
+    messages:
+      child_table.created:
+        $ref: '#/components/messages/child_table.created'
+  child_table.deleted:
+    address: child_table.deleted
+    messages:
+      child_table.deleted:
+        $ref: '#/components/messages/child_table.deleted'
+  child_table.updated:
+    address: child_table.updated
+    messages:
+      child_table.updated:
+        $ref: '#/components/messages/child_table.updated'
+  enum_sample.created:
+    address: enum_sample.created
+    messages:
+      enum_sample.created:
+        $ref: '#/components/messages/enum_sample.created'
+  enum_sample.deleted:
+    address: enum_sample.deleted
+    messages:
+      enum_sample.deleted:
+        $ref: '#/components/messages/enum_sample.deleted'
+  enum_sample.updated:
+    address: enum_sample.updated
+    messages:
+      enum_sample.updated:
+        $ref: '#/components/messages/enum_sample.updated'
+  multi_table.created:
+    address: multi_table.created
+    messages:
+      multi_table.created:
+        $ref: '#/components/messages/multi_table.created'
+  multi_table.deleted:
+    address: multi_table.deleted
+    messages:
+      multi_table.deleted:
+        $ref: '#/components/messages/multi_table.deleted'
+  multi_table.updated:
+    address: multi_table.updated
+    messages:
+      multi_table.updated:
+        $ref: '#/components/messages/multi_table.updated'
+  name.created:
+    address: name.created
+    messages:
+      name.created:
+        $ref: '#/components/messages/name.created'
+  name.deleted:
+    address: name.deleted
+    messages:
+      name.deleted:
+        $ref: '#/components/messages/name.deleted'
+  name.updated:
+    address: name.updated
+    messages:
+      name.updated:
+        $ref: '#/components/messages/name.updated'
+  parent_table.created:
+    address: parent_table.created
+    messages:
+      parent_table.created:
+        $ref: '#/components/messages/parent_table.created'
+  parent_table.deleted:
+    address: parent_table.deleted
+    messages:
+      parent_table.deleted:
+        $ref: '#/components/messages/parent_table.deleted'
+  parent_table.updated:
+    address: parent_table.updated
+    messages:
+      parent_table.updated:
+        $ref: '#/components/messages/parent_table.updated'
+  policy.created:
+    address: policy.created
+    messages:
+      policy.created:
+        $ref: '#/components/messages/policy.created'
+  policy.deleted:
+    address: policy.deleted
+    messages:
+      policy.deleted:
+        $ref: '#/components/messages/policy.deleted'
+  role_policy.created:
+    address: role_policy.created
+    messages:
+      role_policy.created:
+        $ref: '#/components/messages/role_policy.created'
+  role_policy.deleted:
+    address: role_policy.deleted
+    messages:
+      role_policy.deleted:
+        $ref: '#/components/messages/role_policy.deleted'
+  role_policy.granted:
+    address: role_policy.granted
+    messages:
+      role_policy.granted:
+        $ref: '#/components/messages/role_policy.granted'
+  sample_table.created:
+    address: sample_table.created
+    messages:
+      sample_table.created:
+        $ref: '#/components/messages/sample_table.created'
+  sample_table.deleted:
+    address: sample_table.deleted
+    messages:
+      sample_table.deleted:
+        $ref: '#/components/messages/sample_table.deleted'
+  sample_table.updated:
+    address: sample_table.updated
+    messages:
+      sample_table.updated:
+        $ref: '#/components/messages/sample_table.updated'
+operations:
+  child_table.created:
+    action: send
+    channel:
+      $ref: '#/channels/child_table.created'
+  child_table.deleted:
+    action: send
+    channel:
+      $ref: '#/channels/child_table.deleted'
+  child_table.updated:
+    action: send
+    channel:
+      $ref: '#/channels/child_table.updated'
+  enum_sample.created:
+    action: send
+    channel:
+      $ref: '#/channels/enum_sample.created'
+  enum_sample.deleted:
+    action: send
+    channel:
+      $ref: '#/channels/enum_sample.deleted'
+  enum_sample.updated:
+    action: send
+    channel:
+      $ref: '#/channels/enum_sample.updated'
+  multi_table.created:
+    action: send
+    channel:
+      $ref: '#/channels/multi_table.created'
+  multi_table.deleted:
+    action: send
+    channel:
+      $ref: '#/channels/multi_table.deleted'
+  multi_table.updated:
+    action: send
+    channel:
+      $ref: '#/channels/multi_table.updated'
+  name.created:
+    action: send
+    channel:
+      $ref: '#/channels/name.created'
+  name.deleted:
+    action: send
+    channel:
+      $ref: '#/channels/name.deleted'
+  name.updated:
+    action: send
+    channel:
+      $ref: '#/channels/name.updated'
+  parent_table.created:
+    action: send
+    channel:
+      $ref: '#/channels/parent_table.created'
+  parent_table.deleted:
+    action: send
+    channel:
+      $ref: '#/channels/parent_table.deleted'
+  parent_table.updated:
+    action: send
+    channel:
+      $ref: '#/channels/parent_table.updated'
+  policy.created:
+    action: send
+    channel:
+      $ref: '#/channels/policy.created'
+  policy.deleted:
+    action: send
+    channel:
+      $ref: '#/channels/policy.deleted'
+  role_policy.created:
+    action: send
+    channel:
+      $ref: '#/channels/role_policy.created'
+  role_policy.deleted:
+    action: send
+    channel:
+      $ref: '#/channels/role_policy.deleted'
+  role_policy.granted:
+    action: send
+    channel:
+      $ref: '#/channels/role_policy.granted'
+  sample_table.created:
+    action: send
+    channel:
+      $ref: '#/channels/sample_table.created'
+  sample_table.deleted:
+    action: send
+    channel:
+      $ref: '#/channels/sample_table.deleted'
+  sample_table.updated:
+    action: send
+    channel:
+      $ref: '#/channels/sample_table.updated'
+components:
+  messages:
+    child_table.created:
+      name: child_table.created
+      title: 子テーブル created
+      summary: entity.created
+      payload:
+        $ref: ./events/child_table.created.json
+    child_table.deleted:
+      name: child_table.deleted
+      title: 子テーブル deleted
+      summary: entity.deleted
+      payload:
+        $ref: ./events/child_table.deleted.json
+    child_table.updated:
+      name: child_table.updated
+      title: 子テーブル updated
+      summary: entity.updated
+      payload:
+        $ref: ./events/child_table.updated.json
+    enum_sample.created:
+      name: enum_sample.created
+      title: Enum サンプル created
+      summary: entity.created
+      payload:
+        $ref: ./events/enum_sample.created.json
+    enum_sample.deleted:
+      name: enum_sample.deleted
+      title: Enum サンプル deleted
+      summary: entity.deleted
+      payload:
+        $ref: ./events/enum_sample.deleted.json
+    enum_sample.updated:
+      name: enum_sample.updated
+      title: Enum サンプル updated
+      summary: entity.updated
+      payload:
+        $ref: ./events/enum_sample.updated.json
+    multi_table.created:
+      name: multi_table.created
+      title: マルチテーブル created
+      summary: entity.created
+      payload:
+        $ref: ./events/multi_table.created.json
+    multi_table.deleted:
+      name: multi_table.deleted
+      title: マルチテーブル deleted
+      summary: entity.deleted
+      payload:
+        $ref: ./events/multi_table.deleted.json
+    multi_table.updated:
+      name: multi_table.updated
+      title: マルチテーブル updated
+      summary: entity.updated
+      payload:
+        $ref: ./events/multi_table.updated.json
+    name.created:
+      name: name.created
+      title: 名前 created
+      summary: entity.created
+      payload:
+        $ref: ./events/name.created.json
+    name.deleted:
+      name: name.deleted
+      title: 名前 deleted
+      summary: entity.deleted
+      payload:
+        $ref: ./events/name.deleted.json
+    name.updated:
+      name: name.updated
+      title: 名前 updated
+      summary: entity.updated
+      payload:
+        $ref: ./events/name.updated.json
+    parent_table.created:
+      name: parent_table.created
+      title: 親テーブル created
+      summary: entity.created
+      payload:
+        $ref: ./events/parent_table.created.json
+    parent_table.deleted:
+      name: parent_table.deleted
+      title: 親テーブル deleted
+      summary: entity.deleted
+      payload:
+        $ref: ./events/parent_table.deleted.json
+    parent_table.updated:
+      name: parent_table.updated
+      title: 親テーブル updated
+      summary: entity.updated
+      payload:
+        $ref: ./events/parent_table.updated.json
+    policy.created:
+      name: policy.created
+      title: ポリシー created
+      summary: entity.created
+      payload:
+        $ref: ./events/policy.created.json
+    policy.deleted:
+      name: policy.deleted
+      title: ポリシー deleted
+      summary: entity.deleted
+      payload:
+        $ref: ./events/policy.deleted.json
+    role_policy.created:
+      name: role_policy.created
+      title: ロール・ポリシー割当 created
+      summary: entity.created
+      payload:
+        $ref: ./events/role_policy.created.json
+    role_policy.deleted:
+      name: role_policy.deleted
+      title: ロール・ポリシー割当 deleted
+      summary: entity.deleted
+      payload:
+        $ref: ./events/role_policy.deleted.json
+    role_policy.granted:
+      name: role_policy.granted
+      title: ロールにポリシーを付与
+      summary: command.grant_role_policy
+      payload:
+        $ref: ./events/role_policy.granted.json
+    sample_table.created:
+      name: sample_table.created
+      title: サンプルテーブル created
+      summary: entity.created
+      payload:
+        $ref: ./events/sample_table.created.json
+    sample_table.deleted:
+      name: sample_table.deleted
+      title: サンプルテーブル deleted
+      summary: entity.deleted
+      payload:
+        $ref: ./events/sample_table.deleted.json
+    sample_table.updated:
+      name: sample_table.updated
+      title: サンプルテーブル updated
+      summary: entity.updated
+      payload:
+        $ref: ./events/sample_table.updated.json

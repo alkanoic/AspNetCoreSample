@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/generated/events/policy.deleted.json",
+  "title": "policy.deleted",
+  "description": "",
+  "type": "object",
+  "required": [
+    "specversion",
+    "type",
+    "source",
+    "id",
+    "time",
+    "data"
+  ],
+  "properties": {
+    "specversion": {
+      "const": "1.0"
+    },
+    "type": {
+      "const": "policy.deleted"
+    },
+    "source": {
+      "const": "entity:policy"
+    },
+    "id": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "policy_name": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "ポリシー名"
+        }
+      },
+      "required": [
+        "policy_name"
+      ]
+    }
+  }
+}

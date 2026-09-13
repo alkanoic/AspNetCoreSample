@@ -126,6 +126,37 @@ if printf '%s\n' "$STAGED" | grep -qE '\.sh$'; then
   done
 fi
 
+# ------------------------------------------------------------
+# 6. 設計項目モデル: グラフ/イベント生成の双方向チェック (modelgen)
+#    対象検知: model/ / schemas/ / tools/modelgen/ / generated/ の変更
+# ------------------------------------------------------------
+if printf '%s\n' "$STAGED" | grep -qE '^(model/|schemas/|tools/modelgen/|generated/)'; then
+  echo "modelgen check (設計項目モデル)"
+  if [ -x tools/modelgen/run.sh ]; then
+    MG_PY="${PYTHON:-}"
+    if [ -z "$MG_PY" ] && [ -x .venv/bin/python ] \
+      && .venv/bin/python -c 'import yaml, jsonschema' >/dev/null 2>&1; then
+      MG_PY=".venv/bin/python"
+    fi
+    if [ -z "$MG_PY" ]; then
+      if command -v python3 >/dev/null 2>&1; then
+        MG_PY="python3"
+      else
+        MG_PY="python"
+      fi
+    fi
+    if ! "$MG_PY" -c 'import yaml, jsonschema' >/dev/null 2>&1; then
+      echo "   SKIP: python 依存 (PyYAML/jsonschema) 未導入。'pip install -r tools/modelgen/requirements.txt'"
+    elif ! tools/modelgen/run.sh check --strict >/tmp/modelgen.log 2>&1; then
+      echo "   modelgen error:" >&2
+      tail -40 /tmp/modelgen.log >&2
+      failures=$((failures + 1))
+    fi
+  else
+    echo "   SKIP: tools/modelgen/run.sh なし"
+  fi
+fi
+
 if [ "$failures" -gt 0 ]; then
   echo "pre-commit lint failed ($failures problem(s))."
   echo "  -- --no-verify を付けるとバイパスできますが、CI の lint job で必ずチェックされます。"

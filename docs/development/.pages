@@ -4,3 +4,5 @@ nav:
   - testing.md
   - ci-cd.md
   - deployment.md
+  - design-model.md
+  - model-graph.md

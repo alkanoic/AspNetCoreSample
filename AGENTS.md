@@ -29,6 +29,7 @@
 | `.github/workflows/` | Azure デプロイ（main.yml でテスト成功時のみデプロイ） |
 | `.devcontainer/`, `keycloak/`, `localstack/`, `sbom/` | 開発環境・Keycloak 設定・Lambda 局所テスト・CycloneDX SBOM |
 | `.agents/skills/`, `skills-lock.json` | Agent Skills（自製 + 公式を混在）。`.agents/skills/` は Claude/Cursor/Codex/opencode 共通の汎用フォルダ、`skills-lock.json` で公式スキルのバージョン管理 |
+| `model/`, `schemas/`, `generated/`, `tools/modelgen/` | 設計項目モデル（SSOT）。`model/entities`・`model/events` の YAML から、関連グラフ・イベント定義（AsyncAPI/JSON Schema）を `generated/` へ生成し、双方向の整合性を検証 |
 
 ## ビルド
 
@@ -53,6 +54,7 @@ dotnet format                # フォーマットチェック・適用（editorc
 | `markdownlint-cli2` | 変更された `*.md` | 設定は `.markdownlint.json` |
 | `textlint` | 変更された日本語を含む `*.md` | 設定は `.textlintrc.json`（preset-ja-technical-writing） |
 | `bash -n` | 変更された `*.sh` | シェル構文 |
+| `modelgen check`（`tools/modelgen/run.sh`） | `model/` / `schemas/` / `tools/modelgen/` / `generated/` の変更時 | 設計項目モデルのスキーマ・関係の双方向整合・イベント参照・生成ドリフト。CI は `--strict` |
 
 - ツールが未インストールの場合はスキップされる（コミットは阻害しない）。正規のゲートは CI（`main.yml` の `lint` ジョブ）+ 必要なら `git commit --no-verify` も可能。ただし CI で必ずチェックされる。
 - `textlint` / `markdownlint-cli2` / `cyclonedx-npm` はグローバルには導入せず、**npx 実行時パッケージ**で実行する（CI と同一方式）。pnpm は corepack で有効化する（`NuxtSample/package.json` の `packageManager` でバージョン固定）。
@@ -132,6 +134,7 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 ## 生成物の扱い
 - `src/CodeGen/Outputs/**`, `src/CodeGen.Result/**`, `src/CodeGen.Result.Kiota/**` はテスト生成である。テンプレート変更時は再生成して `Outputs` をビルド可能に保つこと。
 - 自動生成・生成テンプレート・SBOM・playwright-report は手で編集しない。
+- `generated/` は `tools/modelgen/run.sh generate` の生成物。手で編集せず、`model/` を変更して再生成する（CI の `modelgen check` がドリフトを検出する）。
 
 ## エージェントスキル（opencode 用）
 

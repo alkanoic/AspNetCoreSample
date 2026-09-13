@@ -1,0 +1,23 @@
+kind: entity
+id: sample_table
+title: サンプルテーブル
+table: sample_table
+owner: team-sample
+description: メインのサンプルテーブル。
+key:
+  - id
+auto_events:
+  - created
+  - updated
+  - deleted
+fields:
+  - { name: id, column: id, type: integer, key: true, required: true, description: id }
+  - { name: target_name, column: target_name, type: string, required: true, max_length: 30, description: target_name }
+  - { name: target_int, column: target_int, type: integer, description: target_int }
+  - { name: target_decimal, column: target_decimal, type: decimal, description: target_decimal }
+  - { name: target_date, column: target_date, type: date, description: target_date }
+  - { name: target_bit, column: target_bit, type: boolean, description: target_bit }
+  - { name: create_at, column: create_at, type: datetime, required: true, description: create_at }
+  - { name: create_user, column: create_user, type: string, required: true, max_length: 20, description: create_user }
+  - { name: update_at, column: update_at, type: datetime, required: true, description: update_at }
+  - { name: update_user, column: update_user, type: string, required: true, max_length: 20, description: update_user }
