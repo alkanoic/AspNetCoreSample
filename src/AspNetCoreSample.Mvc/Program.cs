@@ -64,6 +64,7 @@ try
 
     var keycloakOptions = builder.Configuration.GetSection(KeycloakOptions.Position).Get<KeycloakOptions>()
                           ?? new KeycloakOptions();
+    builder.Services.Configure<KeycloakOptions>(builder.Configuration.GetSection(KeycloakOptions.Position));
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -87,6 +88,21 @@ try
           //   };
           // 開発のためHttpを許可する
           options.RequireHttpsMetadata = false;
+          options.Events.OnRemoteFailure = context =>
+          {
+              // ブラウザバック等で signin-oidc に再アクセスした際の Correlation failed は
+              // 既知の無害な事象のため、エラー画面ではなくホームへリダイレクトする
+              if (context.Failure is Exception ex
+                  && ex.Message.Contains("Correlation failed", StringComparison.Ordinal))
+              {
+                  context.Response.Redirect("/");
+                  context.HandleResponse();
+                  return Task.CompletedTask;
+              }
+
+              // それ以外の認証失敗は既定のエラー処理に委ねる
+              return Task.CompletedTask;
+          };
       });
     builder.Services.AddAuthorization();
 

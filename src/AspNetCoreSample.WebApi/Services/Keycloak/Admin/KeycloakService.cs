@@ -34,6 +34,8 @@ public interface IKeycloakService
     ValueTask<List<FetchRoleResponse>> FetchUserClientRolesAsync(FetchUserClientRolesRequest fetchUserClientRolesRequest, CancellationToken ct = default);
     ValueTask AddUserClientRoleMappingAsync(string userId, string clientUuid, List<AddUserRoleMappingsRequest> addUserClientRoleMappingRequest, CancellationToken ct = default);
     ValueTask DeleteUserClientRoleMappingAsync(string userId, string clientUuid, List<DeleteUserRoleMappingsRequest> deleteUserClientRoleMappingRequest, CancellationToken ct = default);
+    ValueTask<TokenResponse> GetAdminAccessTokenAsync(CancellationToken ct = default);
+    ValueTask<CreateUserResponse> CreateUserWithTokenAsync(CreateUserRequest createUserRequest, string accessToken, CancellationToken ct = default);
 }
 
 public class KeycloakService : IKeycloakService
@@ -118,6 +120,37 @@ public class KeycloakService : IKeycloakService
         }
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", createUserRequest.AccessToken);
+        request.Content = new StringContent(JsonSerializer.Serialize(createUserRequest, createUserRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
+
+        var response = await _httpClient.SendAsync(request, ct);
+        if (!response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync(ct);
+            throw new InvalidDataException($"create user fail response detail:{content}");
+        }
+        var segments = response.Headers.Location?.LocalPath.Split('/');
+        return new CreateUserResponse() { Id = segments?[segments.Length - 1] ?? "" };
+    }
+
+    /// <summary>
+    /// 管理者トークンを取得する
+    /// </summary>
+    public ValueTask<TokenResponse> GetAdminAccessTokenAsync(CancellationToken ct = default)
+    {
+        return AdminAccessToken(ct);
+    }
+
+    /// <summary>
+    /// 指定したアクセストークンでユーザーを作成する
+    /// </summary>
+    public async ValueTask<CreateUserResponse> CreateUserWithTokenAsync(CreateUserRequest createUserRequest, string accessToken, CancellationToken ct = default)
+    {
+        if (string.IsNullOrEmpty(accessToken))
+        {
+            throw new UnauthorizedAccessException("AccessToken is required");
+        }
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_httpClient.BaseAddress}admin/realms/{_keycloakOptions.TargetRealmName}/users");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         request.Content = new StringContent(JsonSerializer.Serialize(createUserRequest, createUserRequest.GetType(), _jsonSerializerOptions), Encoding.UTF8, MediaTypeNames.Application.Json);
 
         var response = await _httpClient.SendAsync(request, ct);

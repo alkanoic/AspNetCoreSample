@@ -12,8 +12,7 @@ public sealed class DbFixture : IAsyncLifetime
 
     public DbFixture()
     {
-        _postgresqlContainer = new PostgreSqlBuilder()
-            .WithImage("postgres:latest")
+        _postgresqlContainer = new PostgreSqlBuilder("postgres:latest")
             .WithResourceMapping("migrate", "/docker-entrypoint-initdb.d")
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("POSTGRES_INITDB_ARGS", "--encoding=UTF-8")

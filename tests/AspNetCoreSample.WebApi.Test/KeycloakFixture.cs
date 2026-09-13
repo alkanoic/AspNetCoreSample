@@ -14,8 +14,7 @@ public sealed class KeycloakFixture : IAsyncLifetime
 
     public KeycloakFixture()
     {
-        _keycloakContainer = new ContainerBuilder()
-            .WithImage("quay.io/keycloak/keycloak:latest")
+        _keycloakContainer = new ContainerBuilder("quay.io/keycloak/keycloak:latest")
             .WithResourceMapping("Test-realm.json", "/opt/keycloak/data/import/")
             .WithEnvironment("TZ", "Asia/Tokyo")
             .WithEnvironment("LANG", "ja_JP.UTF-8")

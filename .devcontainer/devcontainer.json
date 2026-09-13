@@ -20,6 +20,7 @@
     },
     "ghcr.io/devcontainers/features/java:1": {
       "version": "21",
+      "jdkDistro": "tem",
       "installMaven": true
     },
     "ghcr.io/schlich/devcontainer-features/playwright:0": {

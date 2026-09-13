@@ -6,4 +6,6 @@ public class JavaScriptOptions
     public required string ApplicationRoot { get; set; }
 
     public required string SampleValue { get; set; }
+
+    public required string WebApiBaseUrl { get; set; }
 }
