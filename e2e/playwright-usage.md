@@ -60,6 +60,14 @@ npx playwright test --config playwright.connect.config.ts
 ## 2. WSL で実行し、Windows で起動中の Chrome に接続する
 
 WSL 内で Playwright を実行しつつ、**Windows 側で起動している Chrome** に接続する。
+接続方式は WSL2 の**ネットワークモード**によって変わるため、まず現在のモードを確認する。
+
+```bash
+wslinfo --networking-mode
+```
+
+- `nat`（既定）: WSL → Windows 方向の `localhost` は届かない。「2-4」のリバースプロキシを使う。
+- `mirrored`: `localhost` が Windows と共有されるため、そのまま接続できる。
 
 ### 2-1. Windows 側で Chrome をデバッグポート付きで起動する
 
@@ -69,31 +77,49 @@ WSL 内で Playwright を実行しつつ、**Windows 側で起動している Ch
   --user-data-dir="$env:TEMP\chrome-debug-profile"
 ```
 
-### 2-2. WSL から Windows の Chrome に接続する
+### 2-2. ネットワークモードごとの接続方法
 
-WSL2 には **localhost 転送**が備わっており、WSL2 内の `localhost` は Windows の `127.0.0.1` に届く。
-そのため `localhost:9222` に直接接続すれば、`Host` ヘッダーが `localhost` のまま Chrome に届き、Chrome 152 の DNS リバインディング対策を通過できる。
+WSL2 の localhost 転送は **Windows → WSL 方向のみ**で、WSL → Windows 方向には働かない。
+`nat` モードでは WSL の `localhost` は WSL 自身を指すため、Windows の Chrome には届かない。
+Windows のサービスへは Windows ホストの IP（既定ゲートウェイ）を使うが、Chrome 152 はデバッグポートを `127.0.0.1` にのみバインドするため、ホスト IP からも直接は届かない。
+そこで「2-4」のリバースプロキシを使う。
+
+| モード | WSL → Windows の `localhost` | 接続方法 |
+| ------ | ---------------------------- | -------- |
+| `nat`（既定） | 届かない | 「2-4」のリバースプロキシ（`CDP_ENDPOINT=http://<WIN_HOST>:9223`） |
+| `mirrored` | 届く | `localhost:9222` にそのまま接続 |
+
+`mirrored` モードでは `C:\Users\<ユーザー名>\.wslconfig` に以下を追記し、`wsl --shutdown` で再起動する。
+
+```ini
+[wsl2]
+networkingMode=mirrored
+```
 
 ```ts
 const browser = await chromium.connectOverCDP("http://localhost:9222");
 ```
 
-- Chrome 152 以降は `--remote-debugging-address=0.0.0.0` が廃止され、デバッグポートは常に `127.0.0.1` へバインドされる。しかし WSL2 の localhost 転送を使えば、接続元がループバックに見えるため問題は起きない。
-- `netsh portproxy` は不要（むしろ `Host` ヘッダーを書き換えないため Chrome 152 では失敗する）。
+- `mirrored` では `Host` ヘッダーが `localhost` のまま Chrome に届くため、Chrome 152 の DNS リバインディング対策を通過できる。
+- `netsh portproxy` は `Host` ヘッダーを書き換えないため、Chrome 152 では `nat` / `mirrored` のどちらでも使えない（「4. なぜ portproxy では接続できないのか」参照）。
 
 ### 2-3. テストを実行する
 
 ```bash
-# WSL → Windows の Chrome
+# WSL（mirrored）→ Windows の Chrome
 npx playwright test --config playwright.connect.config.ts
+
+# WSL（nat）→ Windows の Chrome（「2-4」のプロキシ経由）
+WIN_HOST=$(ip route show default | awk '{print $3}')
+CDP_ENDPOINT=http://$WIN_HOST:9223 npx playwright test --config playwright.connect.config.ts
 ```
 
 - 接続テストは単一の Chrome インスタンスに接続するため、専用設定 `playwright.connect.config.ts`（単一プロジェクト・並列なし）で実行する。
 
-### 2-4. localhost 転送が効かない場合（Tailscale 等）
+### 2-4. `nat` モード用のリバースプロキシを立てる
 
-Tailscale などの VPN が入っていると、WSL2 の localhost 転送が無効になり `localhost:9222` へ届かないことがある。
-その場合は「4. devcontainer 内で実行し、Windows で起動中の Chrome に接続する」と同じく、**Windows 直上にリバースプロキシを立てる**方式を使う。
+`nat` モードでは WSL → Windows の localhost 転送が働かないため、「4-2」と同じく **Windows 直上にリバースプロキシを立てる**方式を使う。
+プロキシは Windows の `localhost:9222`（Chrome）へ転送し、待受ポートは **9223**（9222 は Chrome が使用中）にする。
 
 ```powershell
 # Windows 側でリバースプロキシを起動（詳細はセクション 4-2 参照）
@@ -101,10 +127,12 @@ node chrome-proxy.js
 ```
 
 ```bash
-# WSL からは Windows ホストの IP を指定
+# WSL からは Windows ホストの IP とプロキシのポート 9223 を指定
 WIN_HOST=$(ip route show default | awk '{print $3}')
-CDP_ENDPOINT=http://$WIN_HOST:9222 npx playwright test --config playwright.connect.config.ts
+CDP_ENDPOINT=http://$WIN_HOST:9223 npx playwright test --config playwright.connect.config.ts
 ```
+
+- Tailscale などの VPN 環境では、`mirrored` モードにしても localhost 転送を利用できないことがある。その場合もこのプロキシ方式を使う。
 
 ---
 
@@ -214,7 +242,7 @@ Chrome 152 以降、デバッグポートは常に `127.0.0.1` にバインド�
 devcontainer は Docker Desktop（WSL2 バックエンド）上の 2 段 NAT の内側にいるため、Windows の Chrome へ届くには IP（`172.17.160.1` など）を指定するしかなく、その時点で `Host` ヘッダーが IP へ変わり Chrome に拒否される。
 
 `netsh portproxy` は TCP をそのまま転送するだけで `Host` ヘッダーを書き換えないため、この問題を解決できない。
-また、WSL2 の localhost 転送（mirrored networking）も、この環境では Tailscale の影響で無効になっており使えない。
+また、WSL2 の localhost 転送（`mirrored` モード）も、Docker コンテナ内からは利用できない（WSL2 の localhost 転送は Windows ↔ WSL 間の機能で、コンテナには及ばない）。
 
 そこで、**Windows 直上にリバースプロキシを立てて `Host` ヘッダーを `localhost` に書き換える**方式を使う。
 
@@ -235,11 +263,11 @@ devcontainer は Docker Desktop（WSL2 バックエンド）上の 2 段 NAT の
 ### 4-2. Windows 側にリバースプロキシを立てる
 
 Node.js の `http-proxy` で、Chrome の `localhost:9222` へ転送する。
-Chrome 152 の仕様変更（IPv6 バインド・DNS リバインディング対策）に対応するため、以下の 3 点を行う。
+Chrome 152 の仕様（デバッグポートの `127.0.0.1` バインド・DNS リバインディング対策）に対応するため、以下の 3 点を行う。
 
-1. 転送先を `localhost:9222` にする（Chrome 152 は `[::1]:9222` にバインドするため `127.0.0.1` では届かない）
+1. 転送先を `localhost:9222` にする（Chrome のバインド先が IPv4 の `127.0.0.1` でも IPv6 の `[::1]` でも名前解決で届くようにする）
 2. `Host` ヘッダーを `localhost:9222` に書き換える（DNS リバインディング対策を回避）
-3. レスポンス内の `webSocketDebuggerUrl` をプロキシのアドレスに書き換える（`ws://localhost:9222` のままだと devcontainer 内の `localhost` に接続してしまう）
+3. レスポンス内の `webSocketDebuggerUrl` をプロキシのアドレスに書き換える（`ws://localhost:9222` のままだと接続元（WSL / devcontainer）の `localhost` に接続してしまう）
 
 ```powershell
 # プロキシ用フォルダを作成して依存を導入
