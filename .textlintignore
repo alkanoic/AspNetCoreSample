@@ -1,0 +1,11 @@
+# 公式スキル（skills-lock.json 管理・第三者文書）は文章チェック対象外。
+# 自製スキル（aspnet-run / dotnet-build-test / frontend-ts / playwright-e2e）は対象のまま。
+# 公式スキルを追加・削除した場合はここも更新する。
+.agents/skills/authoring-github-workflows/**
+.agents/skills/configuring-opentelemetry-dotnet/**
+.agents/skills/convert-blazor-server-to-webapp/**
+.agents/skills/create-datadriven-aspnetcore/**
+.agents/skills/dotnet-webapi/**
+.agents/skills/minimal-api-file-upload/**
+.agents/skills/optimizing-ef-core-queries/**
+.agents/skills/playwright-cli/**

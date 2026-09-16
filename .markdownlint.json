@@ -20,5 +20,15 @@
   "MD046": false,
   "MD049": false,
   "MD058": false,
-  "MD060": false
+  "MD060": false,
+  "ignores": [
+    ".agents/skills/authoring-github-workflows/**",
+    ".agents/skills/configuring-opentelemetry-dotnet/**",
+    ".agents/skills/convert-blazor-server-to-webapp/**",
+    ".agents/skills/create-datadriven-aspnetcore/**",
+    ".agents/skills/dotnet-webapi/**",
+    ".agents/skills/minimal-api-file-upload/**",
+    ".agents/skills/optimizing-ef-core-queries/**",
+    ".agents/skills/playwright-cli/**"
+  ]
 }

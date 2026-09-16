@@ -147,6 +147,7 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
   | authoring-github-workflows | dotnet/skills（.NET チーム公式） | workflow YAML 検証 |
   | playwright-cli | microsoft/playwright-cli（Playwright 公式） | Playwright CLI によるブラウザ操作・テスト |
 - **管理コマンド**（npm ライク）: 追加 `npx skills add <repo> --skill <name> -a opencode`、一覧 `npx skills list`、復元 `npx skills experimental_install`（`skills-lock.json` から）。ここで導入した公式セットは `skills-lock.json` に記録され、**devcontainer の `postCreateCommand.sh` で自動復元される**。ロックファイルは手動編集しない。
+- **公式スキルの更新**: 上流の更新差分は `chore(skills): ...` で独立コミットする（featureコミットに混ぜない）。公式スキルは第三者文書のため文章 lint 対象外であり、公式スキルの増減時は `.textlintignore` / `.markdownlint.json` の `ignores` / `.githooks/pre-commit` / `main.yml` の除外リストも更新する。自製スキルは lint 対象のまま。
 - **汎用フォルダ**: `.agents/skills/` は Claude Code / Cursor / Codex / opencode など複数エージェントが読み込む共通フォルダ。リポジトリ固有スキルもここに置くことで全エージェントから利用できる。
 - **設定ファイルベースの代替**: 外部スキルは `opencode.json` の `skills.urls` / `skills.paths` でも表記できる（URL/パスで解決）。本リポジトリはファイルコピー方式（`.agents/skills/`）を採用。
 

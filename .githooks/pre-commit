@@ -13,6 +13,11 @@ cd "$ROOT"
 # ステージ済みファイルの一覧（追加/変更/リネーム）
 STAGED=$(git diff --cached --name-only --diff-filter=ACM)
 
+# 公式スキル（skills-lock.json 管理・第三者文書）は文章 lint の対象外。
+# 自製スキルは対象のまま。公式スキルの増減時はここも更新する。
+# （.textlintignore / .markdownlint.json の ignores と同じ一覧を保つこと）
+SKILL_EXCLUDE_RE='^\.agents/skills/(authoring-github-workflows|configuring-opentelemetry-dotnet|convert-blazor-server-to-webapp|create-datadriven-aspnetcore|dotnet-webapi|minimal-api-file-upload|optimizing-ef-core-queries|playwright-cli)/'
+
 if [ -z "$STAGED" ]; then
   exit 0
 fi
@@ -77,7 +82,7 @@ fi
 # ------------------------------------------------------------
 # 4. Markdown: 変更がある場合 markdownlint-cli2（あれば）
 # ------------------------------------------------------------
-MD_FILES=$(printf '%s\n' "$STAGED" | grep '\.md$' || true)
+MD_FILES=$(printf '%s\n' "$STAGED" | grep '\.md$' | grep -vE "$SKILL_EXCLUDE_RE" || true)
 if [ -n "$MD_FILES" ]; then
   echo "markdownlint"
   if command -v markdownlint-cli2 >/dev/null 2>&1; then
@@ -95,7 +100,7 @@ fi
 # ------------------------------------------------------------
 # 4.5 textlint: 日本語を含む Markdown の文章チェック（あれば）
 # ------------------------------------------------------------
-JA_MD=$(printf '%s\n' "$STAGED" | { grep '\.md$' || true; } | while IFS= read -r f; do
+JA_MD=$(printf '%s\n' "$STAGED" | { grep '\.md$' | grep -vE "$SKILL_EXCLUDE_RE" || true; } | while IFS= read -r f; do
   if grep -qE '[ぁ-んァ-ヶ一-龠]' "$f" 2>/dev/null; then
     printf '%s\n' "$f"
   fi
