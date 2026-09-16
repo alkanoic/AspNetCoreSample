@@ -1,0 +1,14 @@
+kind: app_policy
+id: errors.standard
+title: エラー・同時実行・トランザクション方針
+area: errors
+description: 異常系の扱いと確定単位の方針。
+rules:
+  - id: notfound
+    text: 存在しない id やエンティティは NotFound を返す
+  - id: problem
+    text: DbSet が null の異常系は Problem を返す
+  - id: concurrency
+    text: DbUpdateConcurrencyException 時は存在確認し、なければ NotFound、あれば再スローする
+  - id: transaction
+    text: SaveChangesAsync 単位で確定し、成功時のみ遷移する

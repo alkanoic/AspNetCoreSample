@@ -193,7 +193,7 @@ class ModelgenTest(unittest.TestCase):
         ctx = self.project.context()
         ids = {e.id for e in ctx.model.events()}
         self.assertEqual(ids, {"a.created", "a.deleted"})
-        schema = json.loads(ctx.outputs["events/a.created.json"])
+        schema = json.loads(ctx.outputs["generated/events/a.created.json"])
         self.assertIn("id", schema["properties"]["data"]["properties"])
 
     def test_drift_detected_then_resolved(self) -> None:
@@ -288,6 +288,376 @@ class ModelgenTest(unittest.TestCase):
         self.project.write("model/entities/b.yml", entity("b", table="b"))
         issues = source_drift.run(self.project.context())
         self.assertTrue(any(i.check == "source-drift" and i.severity == "error" for i in issues))
+
+    def test_mvc_view_drift_detects_unmodeled_view(self) -> None:
+        self.project.write_text(
+            "src/AspNetCoreSample.Mvc/Views/Test/Index.cshtml",
+            "<h1>Test</h1>\n",
+        )
+        self.project.write_text(
+            "src/AspNetCoreSample.Mvc/Controllers/TestController.cs",
+            "public class TestController {}\n",
+        )
+        self.project.write(
+            "model/screens.yml",
+            {
+                "kind": "screen_catalog",
+                "screens": [
+                    {
+                        "kind": "screen",
+                        "id": "test.index",
+                        "title": "Test",
+                        "route": "/Test/Index",
+                        "controller": "Test",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/Test/Index.cshtml",
+                    }
+                ],
+            },
+        )
+        self.project.write_text(
+            "src/AspNetCoreSample.Mvc/Views/Test/Extra.cshtml",
+            "<h1>Extra</h1>\n",
+        )
+
+        issues = source_drift.run(self.project.context())
+        self.assertTrue(any("Extra.cshtml" in i.message for i in issues))
+
+    def test_screen_missing_transition_target_is_error(self) -> None:
+        self.project.write(
+            "model/screens.yml",
+            {
+                "kind": "screen_catalog",
+                "screens": [
+                    {
+                        "kind": "screen",
+                        "id": "a.index",
+                        "title": "A",
+                        "route": "/A/Index",
+                        "controller": "A",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/A/Index.cshtml",
+                        "transitions": [{"to": "missing.index", "trigger": "go"}],
+                    }
+                ],
+            },
+        )
+        from modelgen.checks import screen_link
+
+        issues = screen_link.run(self.project.context())
+        self.assertTrue(any(i.check == "screen-link" and i.severity == "error" for i in issues))
+
+    def test_screen_pages_generated_per_screen(self) -> None:
+        self.project.write(
+            "model/screens.yml",
+            {
+                "kind": "screen_catalog",
+                "screens": [
+                    {
+                        "kind": "screen",
+                        "id": "a.index",
+                        "title": "A",
+                        "route": "/A/Index",
+                        "controller": "A",
+                        "view": "Index",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/A/Index.cshtml",
+                        "fields": [{"id": "name", "label": "名前", "type": "text"}],
+                        "transitions": [{"to": "b.index", "trigger": "go", "carry": ["name"]}],
+                        "events": [{"id": "a.submit", "trigger": "送信"}],
+                    },
+                    {
+                        "kind": "screen",
+                        "id": "b.index",
+                        "title": "B",
+                        "route": "/B/Index",
+                        "controller": "B",
+                        "view": "Index",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/B/Index.cshtml",
+                        "fields": [{"id": "name", "label": "名前", "type": "text"}],
+                    },
+                ],
+            },
+        )
+        outputs = self.project.context().outputs
+        self.assertIn("generated/mvc/screens/a.index.md", outputs)
+        self.assertIn("generated/mvc/screens/b.index.md", outputs)
+        page = outputs["generated/mvc/screens/a.index.md"]
+        self.assertIn("# A (`a.index`)", page)
+        self.assertIn("`name`", page)
+        self.assertIn("`b.index`", page)
+        self.assertIn("docs/development/mvc/a.index.md", outputs)
+        stub = outputs["docs/development/mvc/a.index.md"]
+        self.assertIn('--8<-- "generated/mvc/screens/a.index.md"', stub)
+        pages = outputs["docs/development/mvc/.pages"]
+        self.assertIn("a.index.md", pages)
+        self.assertIn("b.index.md", pages)
+
+    def test_combined_docs_have_no_per_screen_sections(self) -> None:
+        self.project.write(
+            "model/entities/a.yml",
+            entity(
+                "a",
+                table="a",
+                fields=[{"name": "id", "type": "integer"}],
+                auto_events=["created"],
+            ),
+        )
+        self.project.write(
+            "model/services/s.yml",
+            service("s", produces=["a.created"]),
+        )
+        self.project.write(
+            "model/screens.yml",
+            {
+                "kind": "screen_catalog",
+                "screens": [
+                    {
+                        "kind": "screen",
+                        "id": "a.index",
+                        "title": "A",
+                        "route": "/A/Index",
+                        "controller": "A",
+                        "view": "Index",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/A/Index.cshtml",
+                        "fields": [{"id": "name", "label": "名前", "type": "text"}],
+                        "events": [
+                            {
+                                "id": "a.submit",
+                                "trigger": "送信",
+                                "external": "ExtApi",
+                                "policy_refs": ["p.ok"],
+                                "db_operations": [
+                                    {"store": "a", "operation": "read", "fields": ["id"]}
+                                ],
+                            }
+                        ],
+                    }
+                ],
+            },
+        )
+        outputs = self.project.context().outputs
+        self.assertNotIn("generated/mvc/screen-flow.md", outputs)
+        self.assertNotIn("generated/mvc/screen-items.md", outputs)
+        self.assertNotIn("generated/mvc/screen-events.md", outputs)
+        common = outputs["generated/mvc/common-design.md"]
+        self.assertIn("# 共通の画面設計書", common)
+        self.assertIn("## 画面遷移図", common)
+        self.assertIn("## 項目の凡例と規約", common)
+        self.assertIn("## イベント命名規約", common)
+        self.assertIn("## DB操作種別", common)
+        self.assertNotIn("## 遷移と引き継ぎ項目", common)
+        self.assertNotIn("## 外部連携先別イベント", common)
+        self.assertNotIn("## DB更新先別イベント", common)
+        self.assertNotIn("## 方式参照別イベント", common)
+        self.assertNotIn("## A (`a.index`)", common)
+        page = outputs["generated/mvc/screens/a.index.md"]
+        self.assertIn("### 外部連携先別", page)
+        self.assertIn("#### ExtApi", page)
+        self.assertIn("### DB更新先別", page)
+        self.assertIn("#### a", page)
+        self.assertIn("### 方式参照別", page)
+        self.assertIn("#### `p.ok`", page)
+        self.assertNotIn("generated/mvc/domain.md", outputs)
+        graph = outputs["generated/model-graph.md"]
+        self.assertIn("## エンティティ一覧", graph)
+        self.assertIn("| `a` | `a` |", graph)
+        self.assertNotIn("## サービス一覧", graph)
+        self.assertNotIn("erDiagram", graph)
+        self.assertNotIn("flowchart", graph)
+        self.assertNotIn("主キー", graph)
+        self.assertNotIn("data_fields", graph)
+        page = outputs["generated/mvc/screens/a.index.md"]
+        self.assertIn("../mvc-common-design.md", page)
+        self.assertIn("../mvc-domain.md", page)
+        self.assertNotIn("mvc-screen-items.md", page)
+        self.assertIn("## 関連ドメインイベント", page)
+        self.assertIn("### A (`a`)", page)
+        self.assertIn("- `a.created`（発行: `s`）", page)
+
+    def test_policy_ref_missing_is_error(self) -> None:
+        self.project.write(
+            "model/screens.yml",
+            {
+                "kind": "screen_catalog",
+                "screens": [
+                    {
+                        "kind": "screen",
+                        "id": "a.index",
+                        "title": "A",
+                        "route": "/A/Index",
+                        "controller": "A",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/A/Index.cshtml",
+                        "events": [
+                            {"id": "a.submit", "trigger": "送信", "policy_refs": ["missing.policy"]}
+                        ],
+                    }
+                ],
+            },
+        )
+        from modelgen.checks import screen_link
+
+        issues = screen_link.run(self.project.context())
+        self.assertTrue(
+            any(
+                i.check == "screen-link"
+                and i.severity == "error"
+                and "missing.policy" in i.message
+                for i in issues
+            )
+        )
+
+    def test_policy_ref_resolves(self) -> None:
+        self.project.write(
+            "model/app_policy/p.yml",
+            {"kind": "app_policy", "id": "p.ok", "title": "P", "area": "auth"},
+        )
+        self.project.write(
+            "model/screens.yml",
+            {
+                "kind": "screen_catalog",
+                "screens": [
+                    {
+                        "kind": "screen",
+                        "id": "a.index",
+                        "title": "A",
+                        "route": "/A/Index",
+                        "controller": "A",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/A/Index.cshtml",
+                        "events": [{"id": "a.submit", "trigger": "送信", "policy_refs": ["p.ok"]}],
+                    }
+                ],
+            },
+        )
+        from modelgen.checks import screen_link
+
+        issues = screen_link.run(self.project.context())
+        self.assertEqual([i for i in issues if i.check == "screen-link"], [])
+
+    def test_branches_rendered_in_screen_page(self) -> None:
+        self.project.write(
+            "model/screens.yml",
+            {
+                "kind": "screen_catalog",
+                "screens": [
+                    {
+                        "kind": "screen",
+                        "id": "a.index",
+                        "title": "A",
+                        "route": "/A/Index",
+                        "controller": "A",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/A/Index.cshtml",
+                        "events": [
+                            {
+                                "id": "a.submit",
+                                "trigger": "送信",
+                                "policy_refs": ["p.ok"],
+                                "branches": [{"when": "invalid", "result": "redisplay"}],
+                            }
+                        ],
+                    }
+                ],
+            },
+        )
+        outputs = self.project.context().outputs
+        page = outputs["generated/mvc/screens/a.index.md"]
+        self.assertIn("`p.ok`", page)
+        self.assertIn("`invalid` → redisplay", page)
+
+    def test_app_policy_doc_generated(self) -> None:
+        self.project.write(
+            "model/app_policy/p.yml",
+            {
+                "kind": "app_policy",
+                "id": "p.ok",
+                "title": "P",
+                "area": "validation",
+                "rules": [{"id": "r1", "text": "規則内容"}],
+            },
+        )
+        outputs = self.project.context().outputs
+        self.assertIn("generated/app-policy.md", outputs)
+        doc = outputs["generated/app-policy.md"]
+        self.assertIn("## 検証方式", doc)
+        self.assertIn("`p.ok`", doc)
+        self.assertIn("規則内容", doc)
+
+    def test_docs_stub_drift_detected(self) -> None:
+        self.project.write(
+            "model/screens.yml",
+            {
+                "kind": "screen_catalog",
+                "screens": [
+                    {
+                        "kind": "screen",
+                        "id": "a.index",
+                        "title": "A",
+                        "route": "/A/Index",
+                        "controller": "A",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/A/Index.cshtml",
+                    }
+                ],
+            },
+        )
+        self.project.generate()
+        self.assertEqual(drift.run(self.project.context()), [])
+
+        stub = self.root / "docs/development/mvc/a.index.md"
+        stub.unlink()
+
+        issues = drift.run(self.project.context())
+        self.assertTrue(
+            any(
+                i.check == "drift"
+                and i.severity == "error"
+                and "docs/development/mvc/a.index.md" in i.message
+                for i in issues
+            )
+        )
+
+
+    def test_er_diagram_generated_from_a5er(self) -> None:
+        self.project.write(
+            "model/entities/a.yml",
+            entity("a", table="a", fields=[{"name": "id", "type": "integer"}]),
+        )
+        self.project.write_text(
+            "er.a5er",
+            "# A5:ER FORMAT:19\r\n"
+            "[Entity]\r\n"
+            "PName=a\r\n"
+            "LName=A\r\n"
+            'Field="id","id","int","NOT NULL",0,"","",$FFFFFFFF,""\r\n'
+            "[Relation]\r\n"
+            "Entity1=a\r\n"
+            "Entity2=b\r\n"
+            "Fields1=id\r\n"
+            "Fields2=a_id\r\n"
+            "RelationType1=2\r\n"
+            "RelationType2=3\r\n",
+        )
+        outputs = self.project.context().outputs
+        self.assertNotIn("generated/er-diagram.mmd", outputs)
+        graph = outputs["generated/model-graph.md"]
+        self.assertIn("erDiagram", graph)
+        self.assertIn("    a {", graph)
+        self.assertIn("PK", graph)
+        self.assertIn('a ||--o{ b : "a_id"', graph)
+        self.assertIn("| `a` | `a` |", graph)
+
+    def test_er_table_mismatch_is_error(self) -> None:
+        self.project.write(
+            "model/entities/a.yml",
+            entity("a", table="a", fields=[{"name": "id", "type": "integer"}]),
+        )
+        self.project.write(
+            "model/entities/b.yml",
+            entity("b", table="b", fields=[{"name": "id", "type": "integer"}]),
+        )
+        self.project.write_text(
+            "er.a5er",
+            "[Entity]\r\nPName=a\r\nLName=A\r\n",
+        )
+        issues = source_drift.run(self.project.context())
+        messages = [i.message for i in issues if i.check == "source-drift"]
+        self.assertTrue(any("'b'" in message for message in messages))
 
 
 if __name__ == "__main__":

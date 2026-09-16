@@ -64,6 +64,9 @@ markdown_extensions:
   - attr_list
   - md_in_html
 
+hooks:
+  - tools/mkdocs_hooks.py
+
 plugins:
   - search:
       lang: ja

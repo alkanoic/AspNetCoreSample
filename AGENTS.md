@@ -29,7 +29,7 @@
 | `.github/workflows/` | Azure デプロイ（main.yml でテスト成功時のみデプロイ） |
 | `.devcontainer/`, `keycloak/`, `localstack/`, `sbom/` | 開発環境・Keycloak 設定・Lambda 局所テスト・CycloneDX SBOM |
 | `.agents/skills/`, `skills-lock.json` | Agent Skills（自製 + 公式を混在）。`.agents/skills/` は Claude/Cursor/Codex/opencode 共通の汎用フォルダ、`skills-lock.json` で公式スキルのバージョン管理 |
-| `model/`, `schemas/`, `generated/`, `tools/modelgen/` | 設計項目モデル（SSOT）。`model/entities`・`model/events` の YAML から、関連グラフ・イベント定義（AsyncAPI/JSON Schema）を `generated/` へ生成し、双方向の整合性を検証 |
+| `model/`, `schemas/`, `generated/`, `tools/modelgen/` | 設計項目モデル（SSOT）。`model/entities`・`model/events`・`model/services`・`model/screens.yml`・`model/app_policy` から、イベント・MVC 画面設計書・AP処理方式書・関連一覧（AsyncAPI/JSON Schema/Mermaid）を `generated/` へ生成し、双方向の整合性を検証（ER図は A5SQL Mk-2 で管理） |
 
 ## ビルド
 
@@ -134,7 +134,7 @@ dotnet run --project src/AspNetCoreSample.AppHost   # Aspire オーケストレ�
 ## 生成物の扱い
 - `src/CodeGen/Outputs/**`, `src/CodeGen.Result/**`, `src/CodeGen.Result.Kiota/**` はテスト生成である。テンプレート変更時は再生成して `Outputs` をビルド可能に保つこと。
 - 自動生成・生成テンプレート・SBOM・playwright-report は手で編集しない。
-- `generated/` は `tools/modelgen/run.sh generate` の生成物。手で編集せず、`model/` を変更して再生成する（CI の `modelgen check` がドリフトを検出する）。
+- `generated/` と `docs/development/mvc/` は `tools/modelgen/run.sh generate` の生成物で gitignore 対象。手で編集・コミットせず、`model/` を変更して再生成する（CI は生成後に `modelgen check` を実行する）。
 
 ## エージェントスキル（opencode 用）
 

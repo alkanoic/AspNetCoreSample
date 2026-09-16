@@ -1,0 +1,14 @@
+kind: app_policy
+id: auth.cookie
+title: Cookie 認証方式
+area: auth
+description: Keycloak OIDC でログインし、Cookie 認証で保持する。
+rules:
+  - id: authorize
+    text: 要認証画面の Controller に [Authorize] を付与する
+  - id: claims
+    text: Claims は HttpContext.User.Claims から取得する
+  - id: name-identifier
+    text: NameIdentifier がなければ sub クレームで補完し、それもなければ anonymous とする
+  - id: login
+    text: KeycloakUser.CreateAndLogin でユーザー作成後にトークンを取得し Cookie にサインインする

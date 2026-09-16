@@ -128,9 +128,10 @@ fi
 
 # ------------------------------------------------------------
 # 6. 設計項目モデル: グラフ/イベント生成の双方向チェック (modelgen)
-#    対象検知: model/ / schemas/ / tools/modelgen/ / generated/ の変更
+#    対象検知: model/ / schemas/ / tools/modelgen/ の変更
+#    (generated/ と docs/development/mvc/ は生成物のため gitignore 対象)
 # ------------------------------------------------------------
-if printf '%s\n' "$STAGED" | grep -qE '^(model/|schemas/|tools/modelgen/|generated/)'; then
+if printf '%s\n' "$STAGED" | grep -qE '^(model/|schemas/|tools/modelgen/)'; then
   echo "modelgen check (設計項目モデル)"
   if [ -x tools/modelgen/run.sh ]; then
     MG_PY="${PYTHON:-}"

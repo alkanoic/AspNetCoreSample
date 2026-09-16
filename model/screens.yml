@@ -1,0 +1,389 @@
+kind: screen_catalog
+navigation:
+  - { to: home.index, label: Sample }
+  - { to: name.index, label: Name }
+  - { to: map.index, label: Map }
+  - { to: push.index, label: Push }
+  - { to: fluent.index, label: Fluent }
+  - { to: bootstrap.index, label: Bootstrap }
+  - { to: vue.index, label: Vue }
+  - { to: vue_component.index, label: Vue Component }
+  - { to: component.index, label: Component }
+  - { to: jquery.index, label: jQuery }
+  - { to: lit.index, label: Lit }
+  - { to: htmx.index, label: Htmx }
+  - { to: vite.index, label: Vite }
+  - { to: chat.index, label: Chat }
+  - { to: auth.index, label: Auth }
+  - { to: session.index, label: Session }
+  - { to: qrcode.index, label: Qr }
+  - { to: qrcode_notification.index, label: QrNotification }
+  - { to: keycloak_user.index, label: Keycloak User }
+screens:
+  - id: home.index
+    title: ホーム
+    route: /Home/Index
+    controller: Home
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Home/Index.cshtml
+    fields: []
+    transitions: []
+    events: []
+
+  - id: auth.index
+    title: 認証情報
+    route: /Auth/Index
+    controller: Auth
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Auth/Index.cshtml
+    auth: authenticated
+    fields:
+      - { id: Claim.Type, label: Claim 種別, type: display, source: HttpContext.User.Claims }
+      - { id: Claim.Value, label: Claim 値, type: display, source: HttpContext.User.Claims }
+    transitions: []
+    events:
+      - { id: auth.show_claims, trigger: 画面表示, external: Cookie Authentication }
+
+  - id: bootstrap.index
+    title: Bootstrap フォーム
+    route: /Bootstrap/Index
+    controller: Bootstrap
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Bootstrap/Index.cshtml
+    fields:
+      - { id: username, label: ユーザー名, type: text, required: true }
+      - { id: email, label: メールアドレス, type: email, required: true }
+      - { id: age, label: 年齢, type: number, required: true }
+      - { id: birthday, label: 誕生日, type: date, required: true }
+    transitions: []
+    events:
+      - { id: bootstrap.submit, trigger: 送信ボタン, external: client-side validation }
+
+  - id: chat.index
+    title: チャット
+    route: /Chat/Index
+    controller: Chat
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Chat/Index.cshtml
+    fields:
+      - { id: message-input, label: メッセージ, type: text, required: true }
+    transitions: []
+    events:
+      - { id: chat.send, trigger: メッセージ送信, external: SignalR ChatHub }
+
+  - id: component.index
+    title: Razor Component
+    route: /Component/Index
+    controller: Component
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Component/Index.cshtml
+    fields: []
+    transitions: []
+    events: []
+
+  - id: fluent.index
+    title: FluentValidation フォーム
+    route: /Fluent/Index
+    controller: Fluent
+    view: index
+    source_view: src/AspNetCoreSample.Mvc/Views/Fluent/index.cshtml
+    fields:
+      - { id: Name, label: 名前, type: text, required: true }
+      - { id: "No", label: 番号, type: number }
+      - { id: Email, label: メールアドレス, type: email }
+      - { id: Option, label: オプション, type: text }
+    transitions: []
+    events:
+      - { id: fluent.submit, trigger: 送信, external: FluentValidation }
+
+  - id: htmx.index
+    title: HTMX
+    route: /Htmx/Index
+    controller: Htmx
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Htmx/Index.cshtml
+    fields:
+      - { id: request, label: リクエスト, type: text }
+    transitions: []
+    events:
+      - { id: htmx.fetch_post, trigger: HTMX ボタン, external: HtmxApi.FetchPost }
+
+  - id: jquery.index
+    title: jQuery
+    route: /JQuery/Index
+    controller: JQuery
+    view: index
+    source_view: src/AspNetCoreSample.Mvc/Views/JQuery/index.cshtml
+    fields:
+      - { id: sample-input, label: サンプル入力, type: text }
+    transitions: []
+    events:
+      - { id: jquery.submit, trigger: サンプル送信, external: JavaScript }
+
+  - id: keycloak_user.index
+    title: Keycloak ユーザー作成
+    route: /KeycloakUser/Index
+    controller: KeycloakUser
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/KeycloakUser/Index.cshtml
+    fields:
+      - { id: username, label: ユーザー名, type: text, required: true }
+      - { id: firstName, label: 名, type: text, required: true }
+      - { id: lastName, label: 姓, type: text, required: true }
+      - { id: email, label: メールアドレス, type: email, required: true }
+      - { id: password, label: パスワード, type: password, required: true }
+      - { id: TempData.Error, label: エラー情報, type: transient }
+    transitions:
+      - { to: auth.index, trigger: ユーザー作成・ログイン成功 }
+      - { to: keycloak_user.index, trigger: Web API/Keycloak エラー, carry: [TempData.Error] }
+    events:
+      - id: keycloak_user.create
+        trigger: CreateAndLogin 送信
+        external: WebApi.CreateUserAdmin
+        policy_refs: [auth.cookie, state.session-cache]
+        branches:
+          - { when: ユーザー作成失敗, result: TempData.Error を設定して自画面へ戻る }
+          - { when: トークン取得失敗, result: TempData.Error を設定して自画面へ戻る }
+        transition_to: auth.index
+      - { id: keycloak_user.token, trigger: ユーザー作成後, external: Keycloak Token Endpoint }
+
+  - id: lit.index
+    title: Lit
+    route: /Lit/Index
+    controller: Lit
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Lit/Index.cshtml
+    fields:
+      - { id: Email, label: メールアドレス, type: email }
+      - { id: Password, label: パスワード, type: password }
+    transitions: []
+    events:
+      - { id: lit.submit, trigger: フォーム送信, external: Lit Web Component }
+
+  - id: map.index
+    title: 地図
+    route: /Map/Index
+    controller: Map
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Map/Index.cshtml
+    fields:
+      - { id: latlngs, label: 緯度経度一覧, type: textarea }
+      - { id: heatmapRadius, label: ヒートマップ半径, type: number }
+      - { id: locations, label: 地点一覧, type: textarea }
+      - { id: distance, label: 距離, type: number }
+      - { id: repeatAnimation, label: 繰り返しアニメーション, type: checkbox }
+      - { id: animation, label: アニメーション, type: checkbox }
+    transitions: []
+    events:
+      - { id: map.update_query, trigger: 地図操作, external: Leaflet / URL query }
+
+  - id: name.index
+    title: 名前一覧
+    route: /Name/Index
+    controller: Name
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Name/Index.cshtml
+    fields:
+      - { id: Id, label: ID, type: number, source: Name.id }
+      - { id: Name1, label: 名前, type: text, source: Name.name1 }
+    transitions:
+      - { to: name.create, trigger: Create New }
+      - { to: name.edit, trigger: Edit, carry: [Id] }
+      - { to: name.details, trigger: Details, carry: [Id] }
+      - { to: name.delete, trigger: Delete, carry: [Id] }
+    events:
+      - { id: name.list, trigger: 画面表示, db_operations: [{ store: name, operation: read, fields: [id, name1] }] }
+
+  - id: name.create
+    title: 名前作成
+    route: /Name/Create
+    controller: Name
+    view: Create
+    source_view: src/AspNetCoreSample.Mvc/Views/Name/Create.cshtml
+    fields:
+      - { id: Name1, label: 名前, type: text, source: Name.name1, required: true }
+    transitions:
+      - { to: name.index, trigger: 作成成功 }
+      - { to: name.create, trigger: 入力エラー, carry: [Name1] }
+    events:
+      - id: name.create
+        trigger: Create POST
+        policy_refs: [validation.fluent, errors.standard]
+        branches:
+          - { when: ModelState invalid, result: redisplay, carry: [Name1] }
+        db_operations: [{ store: name, operation: insert, fields: [name1] }]
+        transition_to: name.index
+
+  - id: name.edit
+    title: 名前編集
+    route: /Name/Edit/{id}
+    controller: Name
+    view: Edit
+    source_view: src/AspNetCoreSample.Mvc/Views/Name/Edit.cshtml
+    fields:
+      - { id: Id, label: ID, type: hidden, source: Name.id, required: true, carry: true }
+      - { id: Name1, label: 名前, type: text, source: Name.name1, required: true }
+    transitions:
+      - { to: name.index, trigger: 保存成功 }
+      - { to: name.edit, trigger: 入力/同時更新エラー, carry: [Id, Name1] }
+    events:
+      - id: name.update
+        trigger: Edit POST
+        policy_refs: [validation.fluent, errors.standard]
+        branches:
+          - { when: id != name.Id, result: NotFound }
+          - { when: ModelState invalid, result: redisplay, carry: [Id, Name1] }
+          - { when: DbUpdateConcurrencyException and not exists, result: NotFound }
+        db_operations: [{ store: name, operation: update, fields: [id, name1] }]
+        transition_to: name.index
+
+  - id: name.details
+    title: 名前詳細
+    route: /Name/Details/{id}
+    controller: Name
+    view: Details
+    source_view: src/AspNetCoreSample.Mvc/Views/Name/Details.cshtml
+    fields:
+      - { id: Id, label: ID, type: display, source: Name.id, required: true, carry: true }
+      - { id: Name1, label: 名前, type: display, source: Name.name1 }
+    transitions:
+      - { to: name.edit, trigger: Edit, carry: [Id] }
+      - { to: name.index, trigger: Back to List }
+    events:
+      - { id: name.details, trigger: 画面表示, db_operations: [{ store: name, operation: read, fields: [id, name1] }] }
+
+  - id: name.delete
+    title: 名前削除確認
+    route: /Name/Delete/{id}
+    controller: Name
+    view: Delete
+    source_view: src/AspNetCoreSample.Mvc/Views/Name/Delete.cshtml
+    fields:
+      - { id: Id, label: ID, type: hidden, source: Name.id, required: true, carry: true }
+      - { id: Name1, label: 名前, type: display, source: Name.name1 }
+    transitions:
+      - { to: name.index, trigger: 削除完了 }
+      - { to: name.index, trigger: Back to List }
+    events:
+      - { id: name.delete, trigger: Delete POST, db_operations: [{ store: name, operation: delete, fields: [id] }], transition_to: name.index }
+
+  - id: push.index
+    title: Push 通知メニュー
+    route: /Push/Index
+    controller: Push
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Push/Index.cshtml
+    auth: authenticated
+    fields: []
+    transitions:
+      - { to: push.register, trigger: Register&Subscribe }
+      - { to: push.send, trigger: SendPush }
+    events: []
+
+  - id: push.register
+    title: Push 購読登録
+    route: /Push/Register
+    controller: Push
+    view: Register
+    source_view: src/AspNetCoreSample.Mvc/Views/Push/Register.cshtml
+    auth: authenticated
+    fields:
+      - { id: endpoint, label: Push endpoint, type: hidden, source: PushSubscriptionStore.endpoint }
+      - { id: keys.auth, label: Auth key, type: hidden, source: PushSubscriptionStore.keys.auth }
+      - { id: keys.p256dh, label: P256DH key, type: hidden, source: PushSubscriptionStore.keys.p256dh }
+    transitions:
+      - { to: push.send, trigger: 購読登録完了 }
+    events:
+      - { id: push.subscribe, trigger: Subscribe fetch, db_operations: [{ store: PushSubscriptionStore, operation: cache, fields: [endpoint, keys.auth, keys.p256dh] }] }
+
+  - id: push.send
+    title: Push 通知送信
+    route: /Push/SendPush
+    controller: Push
+    view: SendPush
+    source_view: src/AspNetCoreSample.Mvc/Views/Push/SendPush.cshtml
+    auth: authenticated
+    fields: []
+    transitions: []
+    events:
+      - { id: push.trigger, trigger: SendPush ボタン, db_operations: [{ store: PushSubscriptionStore, operation: cache }], external: WebPush }
+
+  - id: qrcode.index
+    title: QR コード
+    route: /QrCode/Index
+    controller: QrCode
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/QrCode/Index.cshtml
+    fields:
+      - { id: qr_payload, label: QR 読取値, type: text }
+    transitions: []
+    events:
+      - { id: qrcode.relay, trigger: QR 読取完了, external: WebApi /api/QrCode }
+
+  - id: qrcode_notification.index
+    title: QR 通知
+    route: /QrCodeNotification/Index
+    controller: QrCodeNotification
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/QrCodeNotification/Index.cshtml
+    fields: []
+    transitions: []
+    events:
+      - { id: qrcode_notification.receive, trigger: SignalR 通知受信, external: SignalR }
+
+  - id: session.index
+    title: セッション/キャッシュ
+    route: /Session/Index
+    controller: Session
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Session/Index.cshtml
+    fields:
+      - { id: id, label: セッション値, type: text, carry: true }
+      - { id: CacheTime, label: キャッシュ時刻, type: display, source: IDistributedCache }
+      - { id: CurrentTime, label: 現在時刻, type: display }
+      - { id: SessionData, label: セッション引き継ぎ値, type: transient, carry: true }
+    transitions:
+      - { to: session.index, trigger: 送信後リダイレクト, carry: [id, SessionData] }
+    events:
+      - id: session.post
+        trigger: Post POST
+        policy_refs: [state.session-cache]
+        db_operations: [{ store: Session, operation: session, fields: [id] }]
+      - { id: session.cache, trigger: 画面表示, db_operations: [{ store: IDistributedCache, operation: cache, fields: [CacheTime] }] }
+
+  - id: vite.index
+    title: Vite
+    route: /Vite/Index
+    controller: Vite
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Vite/Index.cshtml
+    fields: []
+    transitions: []
+    events:
+      - { id: vite.client_action, trigger: ボタンクリック, external: Vite JavaScript }
+
+  - id: vue.index
+    title: Vue
+    route: /Vue/Index
+    controller: Vue
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/Vue/Index.cshtml
+    fields:
+      - { id: username, label: ユーザー名, type: text, required: true }
+      - { id: email, label: メールアドレス, type: email, required: true }
+      - { id: age, label: 年齢, type: number, required: true }
+      - { id: birthday, label: 誕生日, type: date, required: true }
+      - { id: vue-target, label: 初期 ViewModel, type: hidden, source: VueIndexViewModel }
+    transitions: []
+    events:
+      - { id: vue.submit, trigger: 送信, external: Vue }
+
+  - id: vue_component.index
+    title: Vue Component
+    route: /VueComponent/Index
+    controller: VueComponent
+    view: Index
+    source_view: src/AspNetCoreSample.Mvc/Views/VueComponent/Index.cshtml
+    fields: []
+    transitions: []
+    events: []

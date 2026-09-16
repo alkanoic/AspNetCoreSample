@@ -5,4 +5,8 @@ nav:
   - ci-cd.md
   - deployment.md
   - design-model.md
+  - app-policy.md
   - model-graph.md
+  - mvc-common-design.md
+  - mvc-domain.md
+  - 画面詳細: mvc

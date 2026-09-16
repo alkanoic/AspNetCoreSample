@@ -115,12 +115,56 @@ class Service:
 
 
 @dataclass
+class Screen:
+    """MVC 画面項目 (model/screens.yml)。"""
+
+    id: str
+    meta: dict[str, Any]
+    path: str = ""
+
+    @property
+    def fields(self) -> list[dict[str, Any]]:
+        return self.meta.get("fields", [])
+
+    @property
+    def transitions(self) -> list[dict[str, Any]]:
+        return self.meta.get("transitions", [])
+
+    @property
+    def events(self) -> list[dict[str, Any]]:
+        return self.meta.get("events", [])
+
+    def field_names(self) -> set[str]:
+        return {field["id"] for field in self.fields if "id" in field}
+
+
+@dataclass
+class AppPolicy:
+    """AP処理方式 (model/app_policy/*.yml)。全体にかかわる内部設計。"""
+
+    id: str
+    meta: dict[str, Any]
+    path: str = ""
+
+    @property
+    def area(self) -> str:
+        return self.meta.get("area", "")
+
+    @property
+    def rules(self) -> list[dict[str, Any]]:
+        return self.meta.get("rules", [])
+
+
+@dataclass
 class Model:
     """項目モデル全体。"""
 
     entities: list[Entity] = field(default_factory=list)
     explicit_events: list[Event] = field(default_factory=list)
     services: list[Service] = field(default_factory=list)
+    screens: list[Screen] = field(default_factory=list)
+    navigation: list[dict[str, Any]] = field(default_factory=list)
+    policies: list[AppPolicy] = field(default_factory=list)
     parse_errors: list[tuple[str, str]] = field(default_factory=list)
     duplicate_ids: list[tuple[str, str]] = field(default_factory=list)
 
@@ -134,6 +178,12 @@ class Model:
         result: dict[str, Service] = {}
         for service in self.services:
             result.setdefault(service.id, service)
+        return result
+
+    def policy_map(self) -> dict[str, AppPolicy]:
+        result: dict[str, AppPolicy] = {}
+        for policy in self.policies:
+            result.setdefault(policy.id, policy)
         return result
 
     def event_producers(self) -> dict[str, set[str]]:
@@ -186,6 +236,18 @@ class Model:
             if event.id in seen_events:
                 self.duplicate_ids.append(("event", event.id))
             seen_events[event.id] = event.path
+
+        seen_screens: dict[str, str] = {}
+        for screen in self.screens:
+            if screen.id in seen_screens:
+                self.duplicate_ids.append(("screen", screen.id))
+            seen_screens[screen.id] = screen.path
+
+        seen_policies: dict[str, str] = {}
+        for policy in self.policies:
+            if policy.id in seen_policies:
+                self.duplicate_ids.append(("app_policy", policy.id))
+            seen_policies[policy.id] = policy.path
         for entity in self.entities:
             for event in entity.derived_events():
                 if event.id in seen_events:

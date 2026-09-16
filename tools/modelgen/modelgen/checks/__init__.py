@@ -9,6 +9,7 @@ from . import (
     relation_inverse,
     schema_check,
     service_link,
+    screen_link,
     source_drift,
 )
 
@@ -18,6 +19,7 @@ CHECKS = [
     relation_inverse.run,
     event_link.run,
     service_link.run,
+    screen_link.run,
     source_drift.run,
     drift.run,
 ]

@@ -1,127 +1,70 @@
-"""項目グラフ (Mermaid) と一覧表を Markdown で生成する。"""
+"""項目一覧を Markdown で生成する。ER図の正本は er.a5er（A5SQL Mk-2）。"""
 
 from __future__ import annotations
 
-import re
 from typing import Any
 
 from ..model import Model
 
-_CARDINALITY: dict[str, str] = {
-    "has-many": "||--o{",
-    "has-one": "||--||",
-    "many-to-many": "}o--o{",
-}
-
 HEADER = "<!-- 自動生成: tools/modelgen generate。手編集禁止 -->"
 
+# A5SQL の RelationType の組み合わせから Mermaid 記法への対応。
+# 本リポジトリの er.a5er に現れる (2, 3) は 1:N を表す。
+_RELATIONSHIP = {("2", "3"): "||--o{"}
 
-def _safe(value: str) -> str:
-    return re.sub(r"[^0-9a-zA-Z_]", "_", value)
 
-
-def build_mermaid(model: Model) -> str:
+def build_er_diagram(er: dict[str, Any]) -> list[str]:
+    """er.a5er から Mermaid 定義を生成する。"""
     lines = ["```mermaid", "erDiagram"]
-    for entity in sorted(model.entities, key=lambda e: e.id):
-        for relation in entity.relations:
-            cardinality = _CARDINALITY.get(relation.get("type", ""))
-            if cardinality is None:
-                continue  # belongs-to / references は逆側で描画
-            lines.append(f"    {entity.id} {cardinality} {relation['target']} : {relation.get('id', '')}")
+    for pname in sorted(er["tables"]):
+        table = er["tables"][pname]
+        lines.append(f"    {pname} {{")
+        for field in table["fields"]:
+            base = field["type"].split("(")[0]
+            pk = " PK" if field["key"] else ""
+            comment = field["lname"].replace('"', "")
+            lines.append(f'        {base} {field["pname"]}{pk} "{comment}"')
+        lines.append("    }")
+    for relation in er["relations"]:
+        cardinality = _RELATIONSHIP.get(
+            (relation.get("relationtype1"), relation.get("relationtype2")), "}o--o{"
+        )
+        lines.append(
+            f'    {relation["entity1"]} {cardinality} {relation["entity2"]} '
+            f': "{relation.get("fields2", "")}"'
+        )
     lines.append("```")
-    return "\n".join(lines)
+    lines.append("")
+    return lines
 
 
-def build_service_flow(model: Model) -> str:
-    producers = model.event_producers()
-    consumers = model.event_consumers()
-    lines = ["```mermaid", "flowchart LR"]
-    for service in sorted(model.services, key=lambda s: s.id):
-        lines.append(f'    svc_{service.id}["{service.meta.get("title", service.id)}"]')
-    for event in sorted(model.events(), key=lambda e: e.id):
-        lines.append(f'    ev_{_safe(event.id)}(("{event.id}"))')
-    for event_id, service_ids in sorted(producers.items()):
-        for service_id in sorted(service_ids):
-            lines.append(f"    svc_{service_id} -->|publishes| ev_{_safe(event_id)}")
-    for event_id, service_ids in sorted(consumers.items()):
-        for service_id in sorted(service_ids):
-            lines.append(f"    ev_{_safe(event_id)} -->|consumes| svc_{service_id}")
-    lines.append("```")
-    return "\n".join(lines)
-
-
-def build_entity_table(model: Model) -> str:
+def build_entity_list(model: Model) -> list[str]:
     lines = [
-        "| id | title | table | owner | 主キー | フィールド | 関係 |",
-        "| -- | ----- | ----- | ----- | ------ | ---------- | ---- |",
+        "| table | id | title |",
+        "| ----- | -- | ----- |",
     ]
-    for entity in sorted(model.entities, key=lambda e: e.id):
-        relations = ", ".join(f"{r.get('type')}→{r.get('target')}" for r in entity.relations)
-        fields = ", ".join(f["name"] for f in entity.fields if "name" in f)
+    for entity in sorted(model.entities, key=lambda e: (e.meta.get("table", ""), e.id)):
         lines.append(
-            f"| `{entity.id}` | {entity.meta.get('title', '')} | `{entity.meta.get('table', '')}` "
-            f"| {entity.meta.get('owner', '')} | {', '.join(entity.key)} | {fields} | {relations} |"
+            f"| `{entity.meta.get('table', '')}` | `{entity.id}` | {entity.meta.get('title', '')} |"
         )
-    return "\n".join(lines)
+    lines.append("")
+    return lines
 
 
-def build_service_table(model: Model) -> str:
-    lines = [
-        "| id | title | owner | produces | consumes |",
-        "| -- | ----- | ----- | -------- | -------- |",
-    ]
-    for service in sorted(model.services, key=lambda s: s.id):
-        lines.append(
-            f"| `{service.id}` | {service.meta.get('title', '')} | {service.meta.get('owner', '')} "
-            f"| {', '.join(service.produces)} | {', '.join(service.consumes)} |"
-        )
-    return "\n".join(lines)
-
-
-def build_event_table(model: Model) -> str:
-    producers = model.event_producers()
-    consumers = model.event_consumers()
-    lines = [
-        "| id | source | trigger | 種別 | producers | consumers | data_fields |",
-        "| -- | ------ | ------- | ---- | --------- | --------- | ----------- |",
-    ]
-    for event in sorted(model.events(), key=lambda e: e.id):
-        kind = "自動生成" if event.generated else "意図イベント"
-        lines.append(
-            f"| `{event.id}` | `{event.source}` | `{event.trigger}` | {kind} "
-            f"| {', '.join(sorted(producers.get(event.id, set())))} "
-            f"| {', '.join(sorted(consumers.get(event.id, set())))} "
-            f"| {', '.join(event.data_fields)} |"
-        )
-    return "\n".join(lines)
-
-
-def render(model: Model) -> str:
+def render(model: Model, er: dict[str, Any] | None = None) -> str:
     sections: list[str] = [
         HEADER,
         "# 項目モデル",
         "",
-        "`model/` を Single Source of Truth として自動生成した関連グラフと一覧です。",
+        "`model/` を Single Source of Truth として自動生成した一覧です。",
+        "ER図の正本は `er.a5er`（A5SQL Mk-2）であり、以下は表示用に生成したものです。",
         "",
-        "## エンティティ関連グラフ",
+    ]
+    if er and er.get("tables"):
+        sections += ["## ER図", "", *build_er_diagram(er)]
+    sections += [
+        "## エンティティ一覧",
         "",
-        build_mermaid(model),
-        "",
-        "## サービス・イベントフロー",
-        "",
-        build_service_flow(model),
-        "",
-        "## エンティティ",
-        "",
-        build_entity_table(model),
-        "",
-        "## サービス",
-        "",
-        build_service_table(model),
-        "",
-        "## イベント",
-        "",
-        build_event_table(model),
-        "",
+        *build_entity_list(model),
     ]
     return "\n".join(sections)

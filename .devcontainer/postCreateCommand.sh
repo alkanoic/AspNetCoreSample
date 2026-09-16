@@ -98,8 +98,10 @@ fi
 
 # MkDocs (ドキュメント生成) の依存関係をインストール
 if [ -f requirements.txt ]; then
-    if [ ! -d .venv ]; then
+    if [ ! -f .venv/pyvenv.cfg ]; then
+        rm -rf .venv
         python3 -m venv .venv
     fi
     .venv/bin/pip install -r requirements.txt || echo "pip install (mkdocs) skipped"
+    .venv/bin/pip install -r tools/modelgen/requirements.txt || echo "pip install (modelgen) skipped"
 fi

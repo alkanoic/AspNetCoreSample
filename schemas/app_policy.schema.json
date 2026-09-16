@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/app_policy.schema.json",
+  "title": "AP処理方式",
+  "description": "model/app_policy/*.yml の形式。全体にかかわる内部設計（認証認可・状態管理・検証・エラー方針）。",
+  "type": "object",
+  "required": ["kind", "id", "title", "area"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": { "const": "app_policy" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]*$" },
+    "title": { "type": "string", "minLength": 1 },
+    "area": { "enum": ["auth", "state", "validation", "errors"] },
+    "description": { "type": "string" },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "text"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

@@ -413,3 +413,7 @@ site/
 # Serena (semantic code analysis MCP) - version project.yml only
 .serena/*
 !.serena/project.yml
+
+# modelgen 生成物（model/ から再生成可能・コミットしない）
+/generated/
+/docs/development/mvc/

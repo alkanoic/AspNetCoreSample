@@ -29,5 +29,11 @@ def run(ctx: Context) -> list[Issue]:
         _validate(ctx, "entity", entity, issues)
     for event in ctx.model.explicit_events:
         _validate(ctx, "event", event, issues)
+    for service in ctx.model.services:
+        _validate(ctx, "service", service, issues)
+    for screen in ctx.model.screens:
+        _validate(ctx, "screen", screen, issues)
+    for policy in ctx.model.policies:
+        _validate(ctx, "app_policy", policy, issues)
 
     return issues

@@ -1,0 +1,16 @@
+kind: app_policy
+id: validation.fluent
+title: FluentValidation による検証方式
+area: validation
+description: 画面固有の制約は外部設計書に、方式はここに定義する。
+rules:
+  - id: validator
+    text: IValidator を DI し ValidateAsync して ModelState に反映する
+  - id: redisplay
+    text: 検証 NG 時は入力値を保持して自画面を再表示する
+  - id: model-only
+    text: 画面固有の業務エラーは ModelOnly として追加できる
+  - id: overposting
+    text: オーバーポスティング対策として [Bind] でバインド項目を限定する
+  - id: display
+    text: 表示名は DataAnnotations Display で定義する

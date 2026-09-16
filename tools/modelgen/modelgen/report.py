@@ -16,6 +16,8 @@ def render_text(ctx: Context, issues: list[Issue]) -> str:
         "== modelgen check ==",
         f"entities: {len(ctx.model.entities)} / events: {len(ctx.model.events())} "
         f"(explicit: {len(ctx.model.explicit_events)})",
+        f"services: {len(ctx.model.services)} / screens: {len(ctx.model.screens)}",
+        f"policies: {len(ctx.model.policies)}",
         f"outputs: {len(ctx.outputs)}",
         "",
     ]
@@ -40,6 +42,13 @@ def to_json(ctx: Context, issues: list[Issue]) -> dict[str, Any]:
         "services": [
             {"id": s.id, "produces": s.produces, "consumes": s.consumes}
             for s in ctx.model.services
+        ],
+        "screens": [
+            {"id": s.id, "route": s.meta.get("route"), "view": s.meta.get("source_view")}
+            for s in ctx.model.screens
+        ],
+        "policies": [
+            {"id": p.id, "area": p.area, "rules": len(p.rules)} for p in ctx.model.policies
         ],
         "outputs": sorted(ctx.outputs.keys()),
         "issues": [dataclasses.asdict(issue) for issue in issues],

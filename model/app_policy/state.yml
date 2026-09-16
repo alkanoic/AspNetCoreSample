@@ -1,0 +1,14 @@
+kind: app_policy
+id: state.session-cache
+title: セッション/キャッシュ管理方式
+area: state
+description: 画面間の状態受け渡しと共有キャッシュの方針。
+rules:
+  - id: session-key
+    text: セッション値は TestId キーで HttpContext.Session に保存する
+  - id: distributed-cache
+    text: 共有キャッシュは IDistributedCache を使い、CacheTime キーで保持する
+  - id: push-store
+    text: Push 購読情報は PushSubscriptionStore に NameIdentifier 単位で保持する
+  - id: tempdata
+    text: 画面間のエラー引継ぎは TempData を使用する

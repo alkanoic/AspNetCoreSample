@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # modelgen ラッパー。リポジトリルートを基準に実行する。
-# 使い方: tools/modelgen/run.sh check --strict / generate / graph
+# 使い方: tools/modelgen/run.sh check --strict / generate
 set -euo pipefail
 
 TOOL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

@@ -112,6 +112,7 @@ jobs:
         run: |
           pip install -r tools/modelgen/requirements.txt
           PYTHONPATH=tools/modelgen python -m unittest discover -s tools/modelgen/tests
+          tools/modelgen/run.sh generate
           tools/modelgen/run.sh check --strict
 
   dbcontainer_test:
@@ -504,6 +505,11 @@ jobs:
 
       - name: Install MkDocs dependencies
         run: pip install -r requirements.txt
+
+      - name: Install modelgen dependencies and generate design docs
+        run: |
+          pip install -r tools/modelgen/requirements.txt
+          tools/modelgen/run.sh generate
 
       - name: Build MkDocs site
         run: mkdocs build

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/screen.schema.json",
+  "title": "MVC 画面設計",
+  "type": "object",
+  "required": ["kind", "id", "title", "route", "source_view"],
+  "additionalProperties": false,
+  "properties": {
+    "kind": { "const": "screen" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]*$" },
+    "title": { "type": "string", "minLength": 1 },
+    "route": { "type": "string", "minLength": 1 },
+    "controller": { "type": "string" },
+    "view": { "type": "string" },
+    "source_view": { "type": "string" },
+    "auth": { "type": "string" },
+    "fields": { "type": "array", "items": { "$ref": "#/$defs/field" } },
+    "transitions": { "type": "array", "items": { "$ref": "#/$defs/transition" } },
+    "events": { "type": "array", "items": { "$ref": "#/$defs/event" } }
+  },
+  "$defs": {
+    "field": {
+      "type": "object",
+      "required": ["id", "label", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "label": { "type": "string" },
+        "type": { "type": "string" },
+        "source": { "type": "string" },
+        "required": { "type": "boolean" },
+        "carry": { "type": "boolean" }
+      }
+    },
+    "transition": {
+      "type": "object",
+      "required": ["to", "trigger"],
+      "additionalProperties": false,
+      "properties": {
+        "to": { "type": "string" },
+        "trigger": { "type": "string" },
+        "carry": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "event": {
+      "type": "object",
+      "required": ["id", "trigger"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "trigger": { "type": "string" },
+        "db_operations": { "type": "array", "items": { "$ref": "#/$defs/db_operation" } },
+        "external": { "type": "string" },
+        "transition_to": { "type": "string" },
+        "policy_refs": { "type": "array", "items": { "type": "string" } },
+        "branches": { "type": "array", "items": { "$ref": "#/$defs/branch" } }
+      }
+    },
+    "branch": {
+      "type": "object",
+      "required": ["when"],
+      "additionalProperties": false,
+      "properties": {
+        "when": { "type": "string" },
+        "result": { "type": "string" },
+        "transition_to": { "type": "string" },
+        "carry": { "type": "array", "items": { "type": "string" } },
+        "db": { "type": "array", "items": { "$ref": "#/$defs/db_operation" } }
+      }
+    },
+    "db_operation": {
+      "type": "object",
+      "required": ["store", "operation"],
+      "additionalProperties": false,
+      "properties": {
+        "store": { "type": "string" },
+        "operation": { "enum": ["read", "insert", "update", "delete", "cache", "session"] },
+        "fields": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
