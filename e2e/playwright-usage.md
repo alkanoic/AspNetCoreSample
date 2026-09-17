@@ -733,6 +733,110 @@ expect(results.violations).toEqual([]);
 
 ---
 
+## 9. C# と TypeScript のどちらでテストを書くか
+
+ASP.NET Core アプリのブラウザテストでは、**アプリをどう起動するか**で採用言語を分けるのが分かりやすい。
+このリポジトリも実際に両方を採用している（`tests/AspNetCoreSample.Mvc.Test` が C#、`e2e/` が TypeScript）。
+
+### 9-1. 判断基準（起動方式で選ぶ）
+
+| 起動方式 | 推奨言語 | 理由 |
+| -------- | -------- | ---- |
+| **Testcontainers でアプリ＋DB を起動**して検証する（ホワイトボックス寄せの統合テスト） | **C#（Playwright for .NET）** | DB 起動・DI 差し替え・アプリ起動・DB 検証を 1 プロセスで一体制御できる |
+| **デプロイ済み／別プロセスのアプリを外から叩く**（ブラックボックス E2E） | **TypeScript** | Playwright のエコシステム（codegen / trace / Allure）が最も充実 |
+
+### 9-2. Testcontainers で起動する場合は C#
+
+DB を Testcontainers で再現し、アプリ挙動と DB 状態を一体で検証するなら **C# が有利**。
+
+- `WebApplicationFactory` と `Testcontainers.PostgreSql` / `Testcontainers.Keycloak` を**同一プロセスで制御**できる。
+  「コンテナ起動 → DI を差し替え → アプリ起動 → Playwright で操作 → `DbContext` で DB を検証」が 1 つの C# テストで完結する。
+- テストのセットアップで EF Core の `DbContext` を直接使い、**シード投入・結果の SQL レベル検証**ができる。
+- xunit v3 + Verify のスナップショット資産、`dotnet test` / CI の同一パイプラインに乗る。アプリと型・モデルを共有できる。
+- Playwright for .NET は `Microsoft.Playwright` パッケージを使い、ブラウザ導入は `playwright.ps1 install`（`install-playwright.sh` 参照）で行う。
+
+### 9-3. ブラックボックスで実行する場合は TypeScript
+
+デプロイ済み環境や別プロセスで起動したアプリを**外側から URL で叩く**なら TypeScript が快適。
+`e2e/` がこの用途で、`playwright.develop.config.ts` / `playwright.production.config.ts` が対応する。
+
+- codegen・trace viewer・`ariaSnapshot()`・Allure などが TS 前提で最も揃う。
+- フロント（Nuxt / Vite）開発者と同じ言語で書け、Node ツール連携が容易。
+- テストコードは**アプリのソースに依存しない**。URL・API・画面遷移・DOM だけを前提に書く（`getByRole` ベース、セクション 7-4）。
+- テストデータは**アプリの公開経路（API / 面操作）または Prisma 直投入**（`e2e/prisma`）で用意する。アプリの内部 DI や `DbContext` には触れない。
+
+### 9-4. ブラックボックスの場合はカバレッジを取らない
+
+ブラックボックス（別プロセス）では、テスト実行側からアプリのコードカバレッジは直接計測できない。
+無理に .NET のカバレッジを取ろうとせず、**カバレッジは取得しない方針**とする。
+数値カバレッジが必要なら C# の統合テスト（Testcontainers + `dotnet test --collect:"XPlat Code Coverage"`）に任せ、
+ブラックボックス E2E は「**どのページのどのテストが成功／失敗したか**」が分かればよい、と役割を分ける。
+
+そのため E2E で必要なのは**テスト結果レポート（レポーター）**であり、これは Playwright 標準の機能で十分。
+
+#### 使うライブラリ
+
+| 目的 | ライブラリ | 備考 |
+| ---- | -------- | ---- |
+| テスト定義・実行・成功/失敗判定 | `@playwright/test`（Playwright Test Runner） | 追加不要。標準の `test` / `expect` で成否が決まる |
+| 結果の一覧表示（CLI / HTML） | Playwright 組み込みレポーター（`list` / `html`） | 追加インストール不要 |
+| リッチな結果レポート（履歴・ステップ・添付） | `allure-playwright` + `allure-commandline` | このリポジトリに導入済み（`e2e/package.json`）。`allure-create.sh` で生成 |
+
+- **標準レポーターで十分**：どのテストが通った/落ちたかは `@playwright/test` の組み込みレポーターで表示できる。別ライブラリは不要。
+- **より見やすくするなら Allure**：本リポジトリは `allure-playwright` / `allure-commandline` を導入済みなので、ページごと・ステップごとの成否や失敗時のスクショ/トレースを HTML で確認できる。
+
+#### レポーター設定（`playwright.config.ts`）
+
+```ts
+export default defineConfig({
+  reporter: [
+    ["list"], // CLI に 1 テストずつ 成功(✓)/失敗(✗) を表示
+    ["html", { open: "never" }], // playwright-report/ に HTML レポートを出力
+    ["allure-playwright"], // allure-results/ を出力（Allure でリッチ表示）
+  ],
+});
+```
+
+#### 「どのページで何をやったか」を分かりやすくする
+
+テスト名とステップ名を「ページ＋操作」で表現すれば、レポート上で成否が一目で分かる。
+
+```ts
+test.describe("商品一覧ページ", () => {
+  test("検索して結果が表示される", async ({ page }) => {
+    await test.step("一覧を開く", async () => {
+      await page.goto("/products");
+    });
+    await test.step("キーワードで検索する", async () => {
+      await page.getByLabel("検索").fill("apple");
+      await page.getByRole("button", { name: "検索" }).click();
+    });
+    await test.step("結果が 1 件以上表示される", async () => {
+      await expect(page.getByRole("row")).not.toHaveCount(0);
+    });
+  });
+});
+```
+
+- `test.describe` にページ名、`test` に検証内容、`test.step` に操作を書くと、レポートが「ページ → テスト → ステップ」の階層で表示される。
+- 失敗時は `trace` / `screenshot` / `video`（`use` で `on-first-retry` などに設定）を添付すれば、どのステップで落ちたかを後から追える。
+
+#### 実行と結果確認
+
+```bash
+# 実行（成功/失敗が CLI に出る）
+npx playwright test --config playwright.develop.config.ts
+
+# HTML レポートを開く
+npx playwright show-report
+
+# Allure レポートを生成・表示（allure-create.sh 参照）
+npx allure generate allure-results --clean -o allure-report
+npx allure open allure-report
+```
+
+---
+
 ## 補足
 
 - 接続先 Chrome のバージョンと Playwright のバージョンが大きく離れていると、CDP の互換性で失敗することがある。その場合は Playwright を更新するか、Chrome のバージョンを合わせる。
