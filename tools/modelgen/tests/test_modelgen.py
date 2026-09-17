@@ -365,6 +365,16 @@ class ModelgenTest(unittest.TestCase):
                     },
                     {
                         "kind": "screen",
+                        "id": "a.create",
+                        "title": "A 作成",
+                        "route": "/A/Create",
+                        "controller": "A",
+                        "view": "Create",
+                        "source_view": "src/AspNetCoreSample.Mvc/Views/A/Create.cshtml",
+                        "fields": [{"id": "name", "label": "名前", "type": "text"}],
+                    },
+                    {
+                        "kind": "screen",
                         "id": "b.index",
                         "title": "B",
                         "route": "/B/Index",
@@ -383,12 +393,16 @@ class ModelgenTest(unittest.TestCase):
         self.assertIn("# A (`a.index`)", page)
         self.assertIn("`name`", page)
         self.assertIn("`b.index`", page)
-        self.assertIn("docs/development/mvc/a.index.md", outputs)
-        stub = outputs["docs/development/mvc/a.index.md"]
+        self.assertIn("docs/development/mvc/a/index.md", outputs)
+        stub = outputs["docs/development/mvc/a/index.md"]
         self.assertIn('--8<-- "generated/mvc/screens/a.index.md"', stub)
+        self.assertIn("../../mvc-common-design.md", page)
         pages = outputs["docs/development/mvc/.pages"]
-        self.assertIn("a.index.md", pages)
+        self.assertIn("  - a\n", pages)
         self.assertIn("b.index.md", pages)
+        nested_pages = outputs["docs/development/mvc/a/.pages"]
+        self.assertIn("create.md", nested_pages)
+        self.assertIn("index.md", nested_pages)
 
     def test_combined_docs_have_no_per_screen_sections(self) -> None:
         self.project.write(

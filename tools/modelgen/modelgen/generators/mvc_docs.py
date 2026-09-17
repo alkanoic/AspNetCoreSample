@@ -2,13 +2,30 @@
 
 from __future__ import annotations
 
-from ..model import Model
+from ..model import Model, Screen
 
 HEADER = "<!-- 自動生成: tools/modelgen generate。手編集禁止 -->"
 
 
 def _node(screen_id: str) -> str:
     return screen_id.replace(".", "_")
+
+
+def _screen_groups(model: Model) -> dict[str, list[Screen]]:
+    """prefix（id の先頭要素）ごとに画面をまとめる。"""
+    groups: dict[str, list[Screen]] = {}
+    for screen in model.screens:
+        prefix = screen.id.split(".", 1)[0]
+        groups.setdefault(prefix, []).append(screen)
+    return groups
+
+
+def _doc_path(screen_id: str, grouped: bool) -> str:
+    """画面 id から docs スタブの相対パス（docs/development/mvc/ 以下）を返す。"""
+    if grouped:
+        prefix, rest = screen_id.split(".", 1)
+        return f"{prefix}/{rest}.md"
+    return f"{screen_id}.md"
 
 
 def _incoming(model: Model) -> dict[str, list[tuple[str, dict]]]:
@@ -196,12 +213,13 @@ def _related_domain_lines(screen, model: Model) -> list[str]:
     return lines
 
 
-def build_screen_page(screen, incoming: list[tuple[str, dict]], model: Model) -> str:
+def build_screen_page(screen, incoming: list[tuple[str, dict]], model: Model, grouped: bool = False) -> str:
+    up = "../../" if grouped else "../"
     lines = [
         HEADER,
         f"# {screen.meta.get('title', screen.id)} (`{screen.id}`)",
         "",
-        "> 共通: [共通画面設計書](../mvc-common-design.md)・[ドメイン](../mvc-domain.md)",
+        f"> 共通: [共通画面設計書]({up}mvc-common-design.md)・[ドメイン]({up}mvc-domain.md)",
         "",
         f"- Route: `{screen.meta.get('route', '')}`",
         f"- Controller/View: `{screen.meta.get('controller', '')}` / `{screen.meta.get('view', '')}`",
@@ -326,8 +344,14 @@ def build_app_policy_doc(model: Model) -> str:
 def build_screen_pages(model: Model) -> dict[str, str]:
     """画面ごとの設計書。キーは generated/ からの相対パス。"""
     incoming = _incoming(model)
+    groups = _screen_groups(model)
     return {
-        f"mvc/screens/{screen.id}.md": build_screen_page(screen, incoming.get(screen.id, []), model)
+        f"mvc/screens/{screen.id}.md": build_screen_page(
+            screen,
+            incoming.get(screen.id, []),
+            model,
+            grouped=len(groups[screen.id.split('.', 1)[0]]) > 1,
+        )
         for screen in model.screens
     }
 
@@ -335,18 +359,33 @@ def build_screen_pages(model: Model) -> dict[str, str]:
 def build_doc_pages(model: Model) -> dict[str, str]:
     """画面ごとの docs スタブと nav。キーはリポジトリルートからの相対パス。"""
     outputs: dict[str, str] = {}
-    names: list[str] = []
-    for screen in sorted(model.screens, key=lambda item: item.id):
-        filename = f"{screen.id}.md"
-        names.append(filename)
-        outputs[f"docs/development/mvc/{filename}"] = (
-            "---\n"
-            f"title: {screen.meta.get('title', screen.id)}\n"
-            "---\n"
-            "\n"
-            "<!-- 自動生成: tools/modelgen generate。手編集禁止。 -->\n"
-            "\n"
-            f'--8<-- "generated/mvc/screens/{filename}"\n'
-        )
-    outputs["docs/development/mvc/.pages"] = "nav:\n" + "".join(f"  - {name}\n" for name in names)
+    groups = _screen_groups(model)
+    top_level_names: list[str] = []
+    for prefix, screens in sorted(groups.items()):
+        grouped = len(screens) > 1
+        nested_names: list[str] = []
+        for screen in sorted(screens, key=lambda item: item.id):
+            filename = f"{screen.id}.md"
+            doc_path = _doc_path(screen.id, grouped)
+            if grouped:
+                nested_names.append(doc_path.split("/", 1)[1])
+            else:
+                top_level_names.append(doc_path)
+            outputs[f"docs/development/mvc/{doc_path}"] = (
+                "---\n"
+                f"title: {screen.meta.get('title', screen.id)}\n"
+                "---\n"
+                "\n"
+                "<!-- 自動生成: tools/modelgen generate。手編集禁止。 -->\n"
+                "\n"
+                f'--8<-- "generated/mvc/screens/{filename}"\n'
+            )
+        if grouped:
+            top_level_names.append(prefix)
+            outputs[f"docs/development/mvc/{prefix}/.pages"] = "nav:\n" + "".join(
+                f"  - {name}\n" for name in nested_names
+            )
+    outputs["docs/development/mvc/.pages"] = "nav:\n" + "".join(
+        f"  - {name}\n" for name in top_level_names
+    )
     return outputs
