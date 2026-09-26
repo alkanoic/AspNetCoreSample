@@ -45,7 +45,7 @@
         sample: "sample",
       };
       const response = await fetch(
-        `${runtimeConfig.public.apiBaseUrl}/api/auth/sample?` +
+        `${runtimeConfig.public.apiBaseUrl}/api/TokenTest/Sample?` +
           new URLSearchParams(params),
         {
           method: "GET",

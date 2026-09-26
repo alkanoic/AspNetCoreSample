@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample.DataModel.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample.DataModel", "src\AspNetCoreSample.DataModel\AspNetCoreSample.DataModel.csproj", "{E712F155-F06F-4CEF-871C-D58501BCFAC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSample.Spa.Test", "tests\AspNetCoreSample.Spa.Test\AspNetCoreSample.Spa.Test.csproj", "{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -227,6 +229,18 @@ Global
 		{E712F155-F06F-4CEF-871C-D58501BCFAC5}.Release|x64.Build.0 = Release|Any CPU
 		{E712F155-F06F-4CEF-871C-D58501BCFAC5}.Release|x86.ActiveCfg = Release|Any CPU
 		{E712F155-F06F-4CEF-871C-D58501BCFAC5}.Release|x86.Build.0 = Release|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Debug|x64.Build.0 = Debug|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Debug|x86.Build.0 = Debug|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Release|x64.ActiveCfg = Release|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Release|x64.Build.0 = Release|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Release|x86.ActiveCfg = Release|Any CPU
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,5 +261,6 @@ Global
 		{481581D8-703F-4CB4-8E5C-71BAAE665BCA} = {B12F1D4F-7CEE-41BD-BBBE-1CD1C85E675B}
 		{4A8767A2-136C-4C28-94E0-D4D22F278635} = {B12F1D4F-7CEE-41BD-BBBE-1CD1C85E675B}
 		{E712F155-F06F-4CEF-871C-D58501BCFAC5} = {3A4584AB-5BB6-4FD4-9A44-0A423EC5B916}
+		{6B38C2E1-A5B8-44B3-8064-45061DF9CA41} = {B12F1D4F-7CEE-41BD-BBBE-1CD1C85E675B}
 	EndGlobalSection
 EndGlobal

@@ -14,7 +14,7 @@
 | `tests/DbContainer.Test` | 統合テスト | PostgreSQL コンテナを使用した DB テスト |
 | `tests/AspNetCoreSample.WebApi.Test` | 統合テスト | WebApi の全テスト（Testcontainers で PostgreSQL + Keycloak 起動） |
 | `tests/AspNetCoreSample.Mvc.Test` | 統合テスト | Mvc 実行時検証（Playwright 必要） |
-| `tests/AspNetCoreSample.Mvc.Container.Test` | コンテナテスト | Docker ビルド + Mvc テスト |
+| `tests/AspNetCoreSample.Spa.Test` | 統合テスト | SPA と WebApi の連携検証（Playwright + Nuxt dev サーバー必要） |
 | `e2e/` | E2E テスト | Node 版 Playwright（Prisma, Allure） |
 
 ## テスト実行
@@ -42,16 +42,13 @@ bash tests/AspNetCoreSample.Mvc.Test/install-playwright.sh
 dotnet test tests/AspNetCoreSample.Mvc.Test
 ```
 
-### Mvc.Container.Test
+### Spa.Test
 
 ```bash
-# 証明書の作成
-bash tests/AspNetCoreSample.Mvc.Container.Test/create_certificate.sh
+# Playwright のインストール（初回のみ）
+bash tests/AspNetCoreSample.Spa.Test/install-playwright.sh
 
-# Playwright のインストール
-bash tests/AspNetCoreSample.Mvc.Container.Test/install-playwright.sh
-
-dotnet test tests/AspNetCoreSample.Mvc.Container.Test
+dotnet test tests/AspNetCoreSample.Spa.Test
 ```
 
 ### E2E テスト
@@ -109,12 +106,13 @@ public async ValueTask VerifyResponse()
 
 ## Testcontainers を使ったテストの作成手順
 
-まず WebApi で「依存コンテナの起動 + アプリの起動 + HTTP での検証」を作り、発展形として同じ構成を MVC に適用し、Playwright によるブラウザ検証を組み合わせます。どちらも Docker が必要です。
+まず WebApi で「依存コンテナの起動 + アプリの起動 + HTTP での検証」を作り、発展形として同じ構成を MVC に適用し、Playwright によるブラウザ検証を組み合わせます。応用形として SPA と WebApi の連携検証もあります。いずれも Docker が必要です。
 
 | 段階 | 実装例 | 検証方法 |
 | ---- | ------ | -------- |
 | 基本 | `tests/AspNetCoreSample.WebApi.Test` | `HttpClient` で API を呼ぶ |
-| 発展 | `tests/AspNetCoreSample.Mvc.Test` | Playwright で画面を操作する |
+| 発展 | `tests/AspNetCoreSample.Mvc.Test` | Playwright（C#）で画面を操作する |
+| 応用 | `tests/AspNetCoreSample.Spa.Test` | Playwright（C#）で SPA を操作する |
 
 ### 1. WebApi: Testcontainers とアプリを起動する
 
@@ -384,31 +382,43 @@ public sealed class MvcInProcessTest
 
 ブラウザを使わずに HTTP ステータスだけを確認するテスト（`MvcApiTest.cs`）も、同じコレクションフィクスチャを共有できます。
 
-### 3. SPA（Node.js）と WebApi を組み合わせる設計案
+### 3. SPA と WebApi を組み合わせる
 
-この構成の自動テストは、現時点ではリポジトリにありません。以下は Nuxt 4（`src/NuxtSample`）と WebApi を Playwright（Node.js）で検証する場合の設計方針です。既存の `e2e/` は MVC の URL を既定値としており、この構成はまだ実装されていません。
+Nuxt 4（`src/NuxtSample`）と WebApi を C# の Playwright で検証する構成です。実装は `tests/AspNetCoreSample.Spa.Test` にあり、WebApi.Test や Mvc.Test と同じフィクスチャの仕組みを使います。C# のフィクスチャは別プロセスから共有できないため、SPA（Nuxt dev サーバー）の寿命も同じフィクスチャで管理します。
 
-#### 3-1. 依存コンテナを起動する
+#### 3-1. テストプロジェクトを準備する
 
-PostgreSQL と Keycloak の初期データには、WebApi テストと同じ `tests/testcontainer/migrate/`、`tests/testcontainer/Test-realm.json` を使います。Node.js 側でコンテナを管理するなら Testcontainers for Node.js を新たに導入し、テスト実行ごとに起動・終了させます。このリポジトリでは未導入のため、実装時に依存関係の追加が必要です。既存の C# フィクスチャは別のテストプロセスから直接共有できません。
+`tests/AspNetCoreSample.Mvc.Test` と同じパッケージ（`xunit.v3` / `Microsoft.AspNetCore.Mvc.Testing` / `Microsoft.Playwright` / `Testcontainers.PostgreSql` / `Testcontainers.Keycloak`）を使います。テスト対象の `src/AspNetCoreSample.WebApi` を参照し、コンテナに渡す初期データ（`tests/testcontainer/migrate/`、`tests/testcontainer/Test-realm.json`）のコピー設定も同様にします。初回はビルド後にブラウザをインストールします。
 
-#### 3-2. WebApi を起動する
+```bash
+dotnet build tests/AspNetCoreSample.Spa.Test
+bash tests/AspNetCoreSample.Spa.Test/install-playwright.sh
+```
 
-動的に割り当てた PostgreSQL の接続文字列と Keycloak の公開 URL をアプリの設定に渡し、`dotnet run --project src/AspNetCoreSample.WebApi --no-launch-profile` などで起動します。`ConnectionStrings__Default` と `KeycloakOptions__Authority` など、アプリが参照する設定を子プロセスの環境変数に渡してください。固定ポートを避けて実際の待受 URL を確定させ、HTTP のヘルスチェックなどで起動完了を待ってからテストを始めます。
+#### 3-2. WebAPI と SPA をまとめて起動する
 
-#### 3-3. SPA を起動する
+`SpaTestFixture`（`IAsyncLifetime`）が、WebApi.Test と同じ `WebApplicationFactoryFixture<Program>` で PostgreSQL・Keycloak・Kestrel を起動します。`CreateDefaultClient()` で `HostUrl` を確定させた後、子プロセスで `pnpm dev --port 3000 --host 127.0.0.1` を起動します。
 
-`src/NuxtSample` で `pnpm install` 後に `pnpm dev` を起動し、待受 URL を Playwright の `baseURL` に設定します。Nuxt は `ssr: false` で動作し、`nuxt.config.ts` の `runtimeConfig.public.apiBaseUrl` は `API_BASE_URL`、Keycloak の URL は `NUXT_PUBLIC_KEYCLOAK_URL` を参照します。これらをテスト用の公開 URL に合わせて、SPA のプロセス起動前に設定してください。`generate` / `preview` で検証する場合は、設定を渡してからビルドし直します。
+```csharp
+startInfo.Environment["API_BASE_URL"] = WebApiUrl;
+startInfo.Environment["NUXT_PUBLIC_KEYCLOAK_URL"] = _webFactory.KeycloakBaseAddress;
+```
 
-#### 3-4. ブラウザから検証する
+`nuxt.config.ts` の `runtimeConfig.public.apiBaseUrl` は `API_BASE_URL`、Keycloak の URL は `NUXT_PUBLIC_KEYCLOAK_URL` を参照するため、テスト用の公開 URL に合わせてから SPA を起動します。`/login` が応答するまで待ってからテストを始めます。`DisposeAsync()` では SPA のプロセスツリーを停止してからコンテナを破棄します。子プロセスの標準出力は `bin/*/spa-logs/nuxt.log` に保存します。
 
-Playwright の Node.js 版で SPA の URL を開き、画面操作の結果と WebApi のレスポンス・DB の状態を確認します。API はブラウザから到達可能な URL にします。別オリジンで使う場合は、WebApi 側の CORS で SPA の実際のオリジンを許可してください（現在の `Program.cs` は `http://localhost:3000` などの固定オリジンのみ許可しています）。Keycloak 側の `spa-client` にも SPA のリダイレクト URI と Web Origin を登録します。現在の `tests/testcontainer/Test-realm.json` は `http://localhost:3000` 固定です。認証のリダイレクト先には、ブラウザから到達できる Keycloak の URL を使います。コンテナ内のホスト名（例: `keycloak`）は、ブラウザの実行環境から解決できるとは限りません。
+#### 3-3. SPA を操作して検証する
 
-#### 3-5. 終了処理をまとめる
+`SpaWebApiTest.cs` は、トークン発行と認可付き API の直接呼び出し、ログイン画面からの認証と認可付き API の画面操作を検証します。ブラウザ操作は Mvc.Test と同じ `PlaywrightSettings` / `PlaywrightRetry` を使います。ただし `Channel = "chromium"` でフル版の Chromium を起動します。headless shell は環境によって `NewPageAsync` 時にクラッシュすることがあります。
 
-Playwright の実行後（失敗時も含む）に SPA と WebApi の子プロセスを停止し、最後にコンテナを破棄します。Playwright の `webServer` だけでは DB や Keycloak の寿命を管理できないため、`globalSetup` / `globalTeardown` など全体を統括する処理が必要です。
+```bash
+dotnet test tests/AspNetCoreSample.Spa.Test
+```
 
-テスト用 URL を決める際は、**Node.js（テスト実行元）・ブラウザ・WebApi・Keycloak のそれぞれからどこに接続するか**を分けて確認してください。特に WebApi から Keycloak のメタデータを取得する URL と、SPA から認証画面へ遷移する URL が異なる環境では、OIDC の issuer との整合性も検証する必要があります。まず WebApi 単体テストで DB / 認証の動作を確認し、その後に SPA からの通信とログインを追加すると切り分けやすくなります。
+#### 3-4. 接続先の注意点
+
+別オリジンで使う場合は、WebApi 側の CORS で SPA の実際のオリジンを許可してください（現在の `Program.cs` は `http://localhost:3000` などの固定オリジンのみ許可しています）。Keycloak 側の `spa-client` にも SPA のリダイレクト URI と Web Origin を登録します。現在の `tests/testcontainer/Test-realm.json` は `http://localhost:3000` 固定です。認証のリダイレクト先には、ブラウザから到達できる Keycloak の URL を使います。コンテナ内のホスト名（例: `keycloak`）は、ブラウザの実行環境から解決できるとは限りません。
+
+テスト用 URL を決める際は、**ブラウザ・WebApi・Keycloak のそれぞれからどこに接続するか**を分けて確認してください。特に WebApi から Keycloak のメタデータを取得する URL と、SPA から認証画面へ遷移する URL が異なる環境では、OIDC の issuer との整合性も検証する必要があります。まず WebApi 単体テストで DB / 認証の動作を確認し、その後に SPA からの通信とログインを追加すると切り分けやすくなります。
 
 ### 注意点
 

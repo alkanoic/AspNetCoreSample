@@ -57,7 +57,7 @@ export const useAuthStore = defineStore("auth", {
         const runtimeConfig = useRuntimeConfig();
         // ここでWebAPIに対してユーザー名とパスワードを送信し、アクセストークンを取得する
         const response = await fetch(
-          `${runtimeConfig.public.apiBaseUrl}/api/auth`,
+          `${runtimeConfig.public.apiBaseUrl}/api/Token/Auth`,
           {
             method: "POST",
             headers: {
@@ -77,9 +77,9 @@ export const useAuthStore = defineStore("auth", {
             sameSite: "strict",
             maxAge: 3600, // 1時間
           });
-          cookie.value = data.access_token;
-          this.accessToken = data.access_token;
-          this.refreshToken = data.refresh_token;
+          cookie.value = data.accessToken ?? data.access_token;
+          this.accessToken = data.accessToken ?? data.access_token;
+          this.refreshToken = data.refreshToken ?? data.refresh_token;
 
           return true;
         } else {
@@ -103,7 +103,7 @@ export const useAuthStore = defineStore("auth", {
         const runtimeConfig = useRuntimeConfig();
         // ここでWebAPIに対してユーザー名とパスワードを送信し、アクセストークンを取得する
         const response = await fetch(
-          `${runtimeConfig.public.apiBaseUrl}/api/auth/updatetoken`,
+          `${runtimeConfig.public.apiBaseUrl}/api/Token/RefreshToken`,
           {
             method: "POST",
             headers: {
@@ -122,9 +122,9 @@ export const useAuthStore = defineStore("auth", {
             sameSite: "strict",
             maxAge: 3600, // 1時間
           });
-          cookie.value = data.access_token;
-          this.accessToken = data.access_token;
-          this.refreshToken = data.refresh_token;
+          cookie.value = data.accessToken ?? data.access_token;
+          this.accessToken = data.accessToken ?? data.access_token;
+          this.refreshToken = data.refreshToken ?? data.refresh_token;
 
           return true;
         } else {
