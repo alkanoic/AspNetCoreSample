@@ -388,7 +388,9 @@ Nuxt 4（`src/NuxtSample`）と WebApi を C# の Playwright で検証する構�
 
 #### 3-1. テストプロジェクトを準備する
 
-`tests/AspNetCoreSample.Mvc.Test` と同じパッケージ（`xunit.v3` / `Microsoft.AspNetCore.Mvc.Testing` / `Microsoft.Playwright` / `Testcontainers.PostgreSql` / `Testcontainers.Keycloak`）を使います。テスト対象の `src/AspNetCoreSample.WebApi` を参照し、コンテナに渡す初期データ（`tests/testcontainer/migrate/`、`tests/testcontainer/Test-realm.json`）のコピー設定も同様にします。初回はビルド後にブラウザをインストールします。
+`tests/AspNetCoreSample.Mvc.Test` と同じ主要パッケージ（`xunit.v3` / `Microsoft.AspNetCore.Mvc.Testing` / `Microsoft.Playwright` / `Testcontainers.PostgreSql` / `Testcontainers.Keycloak`）を使います。テスト対象の `src/AspNetCoreSample.WebApi` を参照し、コンテナに渡す初期データ（`tests/testcontainer/migrate/`、`tests/testcontainer/Test-realm.json`）のコピー設定も同様です。SPA テストでは Coverlet を参照せず、ブラウザー側の処理を C# のカバレッジ計測対象にしません。
+
+DevContainer の `postCreateCommand.sh` は、テストプロジェクトのビルド後に Playwright の Firefox をインストールします。DevContainer 外で実行する場合やブラウザーが未導入の場合は、次のスクリプトを実行します。
 
 ```bash
 dotnet build tests/AspNetCoreSample.Spa.Test
@@ -397,7 +399,7 @@ bash tests/AspNetCoreSample.Spa.Test/install-playwright.sh
 
 #### 3-2. WebAPI と SPA をまとめて起動する
 
-`SpaTestFixture`（`IAsyncLifetime`）が、WebApi.Test と同じ `WebApplicationFactoryFixture<Program>` で PostgreSQL・Keycloak・Kestrel を起動します。`CreateDefaultClient()` で `HostUrl` を確定させた後、子プロセスで `pnpm dev --port 3000 --host 127.0.0.1` を起動します。
+`SpaTestFixture`（`IAsyncLifetime`）が、WebApi.Test と同じ `WebApplicationFactoryFixture<Program>` で PostgreSQL・Keycloak・Kestrel を起動します。`CreateDefaultClient()` で `HostUrl` を確定させた後、子プロセスで `pnpm dev --port 3000 --host 0.0.0.0` を起動します。`0.0.0.0` で待ち受け、ブラウザーが `localhost` を IPv4 / IPv6 のどちらで解決しても接続できるようにします。
 
 ```csharp
 startInfo.Environment["API_BASE_URL"] = WebApiUrl;
@@ -408,7 +410,7 @@ startInfo.Environment["NUXT_PUBLIC_KEYCLOAK_URL"] = _webFactory.KeycloakBaseAddr
 
 #### 3-3. SPA を操作して検証する
 
-`SpaWebApiTest.cs` は、トークン発行と認可付き API の直接呼び出し、ログイン画面からの認証と認可付き API の画面操作を検証します。ブラウザ操作は Mvc.Test と同じ `PlaywrightSettings` / `PlaywrightRetry` を使います。ただし `Channel = "chromium"` でフル版の Chromium を起動します。headless shell は環境によって `NewPageAsync` 時にクラッシュすることがあります。
+`SpaWebApiTest.cs` は、トークン発行と認可付き API の直接呼び出し、ログイン画面からの認証と認可付き API の画面操作を検証します。ブラウザーは Firefox で起動し、ブラウザーコンテキストで自己署名 HTTPS 証明書を許可します。ページ読み込みは `DOMContentLoaded`、Nuxt のクライアント側ルート遷移は URL の `Commit` を待ちます。タイムアウトは3分で、失敗時にはテスト出力に実行段階を記録します。ネットワーク変更エラーだけ再試行し、操作タイムアウトはそのまま失敗させます。
 
 ```bash
 dotnet test tests/AspNetCoreSample.Spa.Test
