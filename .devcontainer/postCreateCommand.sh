@@ -13,6 +13,9 @@ fi
 dotnet tool restore
 dotnet restore
 
+# SPA + WebApi の C# Playwright テストで使う、Playwright のバージョンに対応した Firefox を導入する
+bash tests/AspNetCoreSample.Spa.Test/install-playwright.sh
+
 # opencode (Ollama Cloud を利用するための TUI/CLI)
 # compose.yaml の名前付きボリュームが root 所有でマウントされることがあるため、
 # 先に vscode ユーザーの所有権へ修正してから、バイナリ実在確認後にインストールする

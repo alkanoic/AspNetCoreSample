@@ -10,11 +10,13 @@ namespace AspNetCoreSample.Spa.Test;
 public sealed class SpaWebApiTest
 {
     private readonly SpaTestFixture _fixture;
+    private readonly ITestOutputHelper _output;
     private static readonly JsonSerializerOptions JsonSerializerOptions = new(JsonSerializerDefaults.Web);
 
-    public SpaWebApiTest(SpaTestFixture fixture)
+    public SpaWebApiTest(SpaTestFixture fixture, ITestOutputHelper output)
     {
         _fixture = fixture;
+        _output = output;
     }
 
     [Fact]
@@ -38,34 +40,54 @@ public sealed class SpaWebApiTest
         Assert.Contains("spa-webapi", await sampleResponse.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
     }
 
-    [Fact]
+    [Fact(Timeout = 180_000)]
     [Trait("Category", nameof(SpaWebApiTest))]
     public async ValueTask SpaLoginViaWebApi()
     {
+        _output.WriteLine("Playwright を初期化します。");
         using var playwright = await Playwright.CreateAsync();
-        await using var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions());
-        await using var context = await browser.NewContextAsync(PlaywrightSettings.DefaultBrowserNewContextOptions());
-        PlaywrightSettings.SetDefaultBrowserContext(context);
-
-        await PlaywrightRetry.RunAsync(async () =>
+        await using (var browser = await playwright.Firefox.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions()))
         {
-            var page = await context.NewPageAsync();
-            try
+            _output.WriteLine("Firefox を起動しました。");
+            await using (var context = await browser.NewContextAsync(PlaywrightSettings.DefaultBrowserNewContextOptions()))
             {
-                await page.GotoAsync($"{_fixture.SpaUrl}/login", new() { Timeout = 180000 });
-                await page.GetByPlaceholder("username").FillAsync("admin");
-                await page.GetByPlaceholder("password").FillAsync("admin");
-                await page.GetByRole(AriaRole.Button, new() { Name = "Login" }).ClickAsync();
-                await page.WaitForURLAsync("**/logined", new() { Timeout = 60000 });
-                await page.GetByText("PreferredUsername: admin").WaitForAsync(new() { Timeout = 30000 });
+                PlaywrightSettings.SetDefaultBrowserContext(context);
+                _output.WriteLine("ブラウザーコンテキストを作成しました。");
 
-                await page.GetByRole(AriaRole.Button, new() { Name = "webapi" }).ClickAsync();
-                await page.GetByText("sample", new() { Exact = true }).WaitForAsync(new() { Timeout = 30000 });
+                await PlaywrightRetry.RunAsync(async () =>
+                {
+                    var page = await context.NewPageAsync();
+                    try
+                    {
+                        await page.GotoAsync($"{_fixture.SpaUrl}/login", new()
+                        {
+                            Timeout = 60000,
+                            WaitUntil = WaitUntilState.DOMContentLoaded,
+                        });
+                        _output.WriteLine("SPA のログインページを開きました。");
+                        await page.GetByPlaceholder("username").FillAsync("admin");
+                        await page.GetByPlaceholder("password").FillAsync("admin");
+                        await page.GetByRole(AriaRole.Button, new() { Name = "Login" }).ClickAsync();
+                        _output.WriteLine("WebAPI 経由でログインを要求しました。");
+                        await page.WaitForURLAsync("**/logined", new()
+                        {
+                            Timeout = 60000,
+                            WaitUntil = WaitUntilState.Commit,
+                        });
+                        await page.GetByText("PreferredUsername: admin").WaitForAsync(new() { Timeout = 30000 });
+                        _output.WriteLine("ログイン後の画面を確認しました。");
+
+                        await page.GetByRole(AriaRole.Button, new() { Name = "webapi" }).ClickAsync();
+                        await page.GetByText("sample", new() { Exact = true }).WaitForAsync(new() { Timeout = 30000 });
+                        _output.WriteLine("認可付き WebAPI 呼び出しを確認しました。");
+                    }
+                    finally
+                    {
+                        await page.CloseAsync();
+                    }
+                });
             }
-            finally
-            {
-                await page.CloseAsync();
-            }
-        });
+        }
+
     }
 }

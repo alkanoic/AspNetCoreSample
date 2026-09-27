@@ -45,7 +45,7 @@ dotnet test tests/AspNetCoreSample.Mvc.Test
 ### Spa.Test
 
 ```bash
-# Playwright のインストール（初回のみ）
+# DevContainer 外で実行する場合、またはブラウザーが未導入の場合
 bash tests/AspNetCoreSample.Spa.Test/install-playwright.sh
 
 dotnet test tests/AspNetCoreSample.Spa.Test

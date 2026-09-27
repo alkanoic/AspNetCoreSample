@@ -2,8 +2,7 @@ using System.Diagnostics;
 
 namespace AspNetCoreSample.Spa.Test;
 
-// WebAPI（Testcontainers + Kestrel）と SPA（Nuxt dev サーバー）をまとめて起動する。
-// C# のフィクスチャは別プロセスから共有できないため、Node.js 側ではなくこちらで SPA の寿命も管理する。
+// WebAPI（Testcontainers + Kestrel）と SPA（Nuxt dev サーバー）をまとめて起動し、同じフィクスチャで寿命を管理する。
 public sealed class SpaTestFixture : IAsyncLifetime
 {
     private readonly WebApplicationFactoryFixture<Program> _webFactory = new();
@@ -30,7 +29,7 @@ public sealed class SpaTestFixture : IAsyncLifetime
         var startInfo = new ProcessStartInfo
         {
             FileName = "pnpm",
-            Arguments = "dev --port 3000 --host 127.0.0.1",
+            Arguments = "dev --port 3000 --host 0.0.0.0",
             WorkingDirectory = FindNuxtDir(),
             RedirectStandardOutput = true,
             RedirectStandardError = true,
