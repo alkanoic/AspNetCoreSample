@@ -46,9 +46,9 @@ public sealed class SpaWebApiTest
     {
         _output.WriteLine("Playwright を初期化します。");
         using var playwright = await Playwright.CreateAsync();
-        await using (var browser = await playwright.Firefox.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions()))
+        await using (var browser = await playwright.Chromium.LaunchAsync(PlaywrightSettings.DefaultBrowserTypeLaunchOptions()))
         {
-            _output.WriteLine("Firefox を起動しました。");
+            _output.WriteLine("Chrome を起動しました。");
             await using (var context = await browser.NewContextAsync(PlaywrightSettings.DefaultBrowserNewContextOptions()))
             {
                 PlaywrightSettings.SetDefaultBrowserContext(context);

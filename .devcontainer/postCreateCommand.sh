@@ -13,7 +13,7 @@ fi
 dotnet tool restore
 dotnet restore
 
-# SPA + WebApi の C# Playwright テストで使う、Playwright のバージョンに対応した Firefox を導入する
+# DevContainer にインストール済みの Chrome を SPA + WebApi テストで使えることを確認する
 bash tests/AspNetCoreSample.Spa.Test/install-playwright.sh
 
 # opencode (Ollama Cloud を利用するための TUI/CLI)

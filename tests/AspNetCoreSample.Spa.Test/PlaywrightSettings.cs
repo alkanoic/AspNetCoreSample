@@ -6,7 +6,7 @@ public static class PlaywrightSettings
 {
     public static BrowserTypeLaunchOptions DefaultBrowserTypeLaunchOptions(float? slowMo = default, bool headless = true)
     {
-        return new BrowserTypeLaunchOptions { SlowMo = slowMo, Headless = headless };
+        return new BrowserTypeLaunchOptions { Channel = "chrome", SlowMo = slowMo, Headless = headless };
     }
 
     public static BrowserNewContextOptions DefaultBrowserNewContextOptions()

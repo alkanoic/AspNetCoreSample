@@ -390,7 +390,7 @@ Nuxt 4（`src/NuxtSample`）と WebApi を C# の Playwright で検証する構�
 
 `tests/AspNetCoreSample.Mvc.Test` と同じ主要パッケージ（`xunit.v3` / `Microsoft.AspNetCore.Mvc.Testing` / `Microsoft.Playwright` / `Testcontainers.PostgreSql` / `Testcontainers.Keycloak`）を使います。テスト対象の `src/AspNetCoreSample.WebApi` を参照し、コンテナに渡す初期データ（`tests/testcontainer/migrate/`、`tests/testcontainer/Test-realm.json`）のコピー設定も同様です。SPA テストでは Coverlet を参照せず、ブラウザー側の処理を C# のカバレッジ計測対象にしません。
 
-DevContainer の `postCreateCommand.sh` は、テストプロジェクトのビルド後に Playwright の Firefox をインストールします。DevContainer 外で実行する場合やブラウザーが未導入の場合は、次のスクリプトを実行します。
+DevContainer の Dockerfile は Google Chrome Stable をインストールし、`postCreateCommand.sh` はテストプロジェクトのビルド後に利用可能なことを確認します。DevContainer 外で Chrome が未導入の場合は、次のスクリプトが Playwright 対応ブラウザーをインストールします。
 
 ```bash
 dotnet build tests/AspNetCoreSample.Spa.Test
@@ -410,7 +410,7 @@ startInfo.Environment["NUXT_PUBLIC_KEYCLOAK_URL"] = _webFactory.KeycloakBaseAddr
 
 #### 3-3. SPA を操作して検証する
 
-`SpaWebApiTest.cs` は、トークン発行と認可付き API の直接呼び出し、ログイン画面からの認証と認可付き API の画面操作を検証します。ブラウザーは Firefox で起動し、ブラウザーコンテキストで自己署名 HTTPS 証明書を許可します。ページ読み込みは `DOMContentLoaded`、Nuxt のクライアント側ルート遷移は URL の `Commit` を待ちます。タイムアウトは3分で、失敗時にはテスト出力に実行段階を記録します。ネットワーク変更エラーだけ再試行し、操作タイムアウトはそのまま失敗させます。
+`SpaWebApiTest.cs` は、トークン発行と認可付き API の直接呼び出し、ログイン画面からの認証と認可付き API の画面操作を検証します。Playwright は Chrome stable チャンネルで起動し、ブラウザーコンテキストで自己署名 HTTPS 証明書を許可します。ページ読み込みは `DOMContentLoaded`、Nuxt のクライアント側ルート遷移は URL の `Commit` を待ちます。タイムアウトは3分で、失敗時にはテスト出力に実行段階を記録します。ネットワーク変更エラーだけ再試行し、操作タイムアウトはそのまま失敗させます。
 
 ```bash
 dotnet test tests/AspNetCoreSample.Spa.Test
