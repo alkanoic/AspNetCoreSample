@@ -14,7 +14,15 @@ public sealed class SpaTestFixture : IAsyncLifetime
 
     public string SpaUrl { get; } = "http://localhost:3000";
 
-    public HttpClient CreateWebApiClient() => _webFactory.CreateClient();
+    public static HttpClient CreateWebApiClient()
+    {
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator,
+        };
+
+        return new HttpClient(handler);
+    }
 
     public async ValueTask InitializeAsync()
     {

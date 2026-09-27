@@ -23,7 +23,7 @@ public sealed class SpaWebApiTest
     [Trait("Category", nameof(SpaWebApiTest))]
     public async ValueTask WebApiIssuesToken()
     {
-        using var httpClient = _fixture.CreateWebApiClient();
+        using var httpClient = SpaTestFixture.CreateWebApiClient();
         var content = new StringContent(JsonSerializer.Serialize(new { userName = "admin", password = "admin" }, JsonSerializerOptions), Encoding.UTF8, "application/json");
         using var authResponse = await httpClient.PostAsync(new Uri(new Uri(_fixture.WebApiUrl), "api/Token/Auth"), content, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, authResponse.StatusCode);
@@ -54,38 +54,74 @@ public sealed class SpaWebApiTest
                 PlaywrightSettings.SetDefaultBrowserContext(context);
                 _output.WriteLine("ブラウザーコンテキストを作成しました。");
 
-                await PlaywrightRetry.RunAsync(async () =>
+                var page = await context.NewPageAsync();
+                IResponse? authResponse = null;
+                page.Console += (_, message) =>
                 {
-                    var page = await context.NewPageAsync();
-                    try
+                    if (message.Type == "error" || message.Text.Contains("login failed", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _output.WriteLine($"Browser console ({message.Type}): {message.Text}");
+                    }
+                };
+                page.RequestFailed += (_, request) =>
+                {
+                    if (request.Url.Contains("/api/Token/Auth", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _output.WriteLine($"Login request failed: {request.Url}: {request.Failure}");
+                    }
+                };
+                page.Response += (_, response) =>
+                {
+                    if (response.Url.Contains("/api/Token/Auth", StringComparison.OrdinalIgnoreCase))
+                    {
+                        authResponse = response;
+                    }
+                };
+                try
+                {
+                    await PlaywrightRetry.RunAsync(async () =>
                     {
                         await page.GotoAsync($"{_fixture.SpaUrl}/login", new()
                         {
                             Timeout = 60000,
                             WaitUntil = WaitUntilState.DOMContentLoaded,
                         });
-                        _output.WriteLine("SPA のログインページを開きました。");
-                        await page.GetByPlaceholder("username").FillAsync("admin");
-                        await page.GetByPlaceholder("password").FillAsync("admin");
-                        await page.GetByRole(AriaRole.Button, new() { Name = "Login" }).ClickAsync();
-                        _output.WriteLine("WebAPI 経由でログインを要求しました。");
+                    });
+                    _output.WriteLine("SPA のログインページを開きました。");
+                    await page.GetByPlaceholder("username").FillAsync("admin");
+                    await page.GetByPlaceholder("password").FillAsync("admin");
+                    await page.GetByRole(AriaRole.Button, new() { Name = "Login" }).ClickAsync();
+                    _output.WriteLine("WebAPI 経由でログインを要求しました。");
+                    try
+                    {
                         await page.WaitForURLAsync("**/logined", new()
                         {
                             Timeout = 60000,
                             WaitUntil = WaitUntilState.Commit,
                         });
-                        await page.GetByText("PreferredUsername: admin").WaitForAsync(new() { Timeout = 30000 });
-                        _output.WriteLine("ログイン後の画面を確認しました。");
-
-                        await page.GetByRole(AriaRole.Button, new() { Name = "webapi" }).ClickAsync();
-                        await page.GetByText("sample", new() { Exact = true }).WaitForAsync(new() { Timeout = 30000 });
-                        _output.WriteLine("認可付き WebAPI 呼び出しを確認しました。");
                     }
-                    finally
+                    catch (TimeoutException)
                     {
-                        await page.CloseAsync();
+                        _output.WriteLine($"SPA のログインエラー: {await page.Locator(".text-error").InnerTextAsync()}");
+                        if (authResponse != null)
+                        {
+                            _output.WriteLine($"Login endpoint response: {(int)authResponse.Status} {await authResponse.TextAsync()}");
+                        }
+
+                        throw;
                     }
-                });
+
+                    await page.GetByText("PreferredUsername: admin").WaitForAsync(new() { Timeout = 30000 });
+                    _output.WriteLine("ログイン後の画面を確認しました。");
+
+                    await page.GetByRole(AriaRole.Button, new() { Name = "webapi" }).ClickAsync();
+                    await page.GetByText("sample", new() { Exact = true }).WaitForAsync(new() { Timeout = 30000 });
+                    _output.WriteLine("認可付き WebAPI 呼び出しを確認しました。");
+                }
+                finally
+                {
+                    await page.CloseAsync();
+                }
             }
         }
 
