@@ -14,33 +14,33 @@ graph LR
     DB[dbcontainer_test]
     API[webapi_test]
     MVC[mvc_test]
-    Container[mvc_container_test]
+    Playwright[playwright_test]
 
     Lint
     DB
     API
     MVC
-    Container
+    Playwright
 
     DB --> DeployMvc[mvc deploy]
     API --> DeployMvc
     MVC --> DeployMvc
-    Container --> DeployMvc
+    Playwright --> DeployMvc
 
     DB --> DeployApi[webapi deploy]
     API --> DeployApi
     MVC --> DeployApi
-    Container --> DeployApi
+    Playwright --> DeployApi
 
     DB --> DeployNuxt[nuxt deploy]
     API --> DeployNuxt
     MVC --> DeployNuxt
-    Container --> DeployNuxt
+    Playwright --> DeployNuxt
 
     DB --> DeploySpring[spring deploy]
     API --> DeploySpring
     MVC --> DeploySpring
-    Container --> DeploySpring
+    Playwright --> DeploySpring
 ```
 
 ## lint ジョブ
@@ -63,7 +63,7 @@ graph LR
 | `dbcontainer_test` | .NET 10.0 Release | PostgreSQL Testcontainer |
 | `webapi_test` | .NET 10.0 Release | PostgreSQL + Keycloak Testcontainers, Verify |
 | `mvc_test` | .NET 10.0 Release | Playwright ブラウザテスト |
-| `mvc_container_test` | .NET 10.0 Release | Docker ビルド + Playwright |
+| `playwright_test` | .NET 10.0 Release | Mvc / Mvc.Container / SPA + WebApi の Playwright テスト |
 
 ## デプロイジョブ
 

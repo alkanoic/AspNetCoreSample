@@ -18,6 +18,7 @@ env:
   TESTS_MVC_CONTAINER_LOCATION: "tests/AspNetCoreSample.Mvc.Container.Test"
   TESTS_GRPC_LOCATION: "tests/AspNetCoreSample.Grpc.Test"
   TESTS_DATAMODEL_LOCATION: "tests/AspNetCoreSample.DataModel.Test"
+  TESTS_SPA_LOCATION: "tests/AspNetCoreSample.Spa.Test"
 
 jobs:
   lint:
@@ -223,6 +224,30 @@ jobs:
       - name: Mvc Container Playwright tests
         run: dotnet test --configuration Release
         working-directory: ${{ env.TESTS_MVC_CONTAINER_LOCATION }}
+
+      - name: Set up Node.js for Nuxt
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22.x"
+
+      - name: Enable pnpm
+        run: corepack enable pnpm
+
+      - name: Install NuxtSample dependencies
+        working-directory: src/NuxtSample
+        run: pnpm install --frozen-lockfile
+
+      - name: SPA Build with dotnet
+        run: dotnet build --configuration Release --framework net10.0
+        working-directory: ${{ env.TESTS_SPA_LOCATION }}
+
+      - name: Playwright install for SPA
+        run: pwsh bin/Release/net10.0/playwright.ps1 install firefox --with-deps
+        working-directory: ${{ env.TESTS_SPA_LOCATION }}
+
+      - name: SPA + WebApi Playwright tests
+        run: dotnet test --configuration Release
+        working-directory: ${{ env.TESTS_SPA_LOCATION }}
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v6

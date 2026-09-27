@@ -425,4 +425,4 @@ dotnet test tests/AspNetCoreSample.Spa.Test
 - テストが異常終了して残ったコンテナは、Testcontainers の Resource Reaper（Ryuk）が削除する
 - `migrate/` の SQL はコンテナの初回起動時だけ実行される（データを変更するテストは実行順に依存させない）
 - イメージは `latest` タグのため、初回や更新時は pull に時間がかかる
-- CI（`main.yml` の `webapi_test` / `mvc_test`）も同じ方法で実行する
+- CI（`main.yml` の `playwright_test`）でも SPA + WebApi のブラウザーテストを実行する
