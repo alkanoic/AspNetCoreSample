@@ -1,0 +1,22 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "bonsai-ecs": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Bonsai 2 (ECS)",
+      "options": {
+        "baseURL": "http://YOUR_INTERNAL_ALB_DNS/v1",
+        "timeout": 600000
+      },
+      "models": {
+        "bonsai-2": {
+          "name": "Bonsai 2 (ECS)",
+          "limit": {
+            "context": 8192,
+            "output": 4096
+          }
+        }
+      }
+    }
+  }
+}
